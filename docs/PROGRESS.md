@@ -1,5 +1,12 @@
 # Progress
 
+Latest analysis milestone: [offline audit of existing results](EXISTING_RESULTS_AUDIT.md)
+and [missing-facts inventory](MISSING_FACTS_INVENTORY.md). All65 transcripts and the
+four organizer PDFs were reviewed with $0 new API spending. Source/representation
+gaps, genuine missing facts, interpretation candidates and supported controls are
+separate; no saved evaluation, label or runtime behavior changed. See also
+[lessons from the previous hackathon](PREVIOUS_HACKATHON_LESSONS.md).
+
 Latest focused core work: [claim dependencies and corrected advice](CLAIM_DEPENDENCY_RESULTS.md).
 Four original organizer failures now have valid assessments (two still provisional);
 the focused synthetic subset matches 10/10 provisional labels. All first outcomes

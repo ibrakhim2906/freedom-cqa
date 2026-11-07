@@ -1,0 +1,1291 @@
+{
+  "version": "1",
+  "purpose": "Source pointers for offline review; no desired scores and never inference input.",
+  "provenance": "Assistant-authored source mapping, not organizer annotations.",
+  "no_material_product_assertion_cases": [
+    "p1-ru-022",
+    "p1-ru-025"
+  ],
+  "call_occurrences_source": "artifacts/facts-audit-v1/calls-review.json",
+  "span_scope": "Chat spans plus five explicit call verification/private-state spans; remaining call product topics are merged from calls-review.json.",
+  "source_occurrences": [
+    {
+      "case_id": "p1-ru-001",
+      "fact_id": "F01",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m11"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-ru-002",
+      "fact_id": "F01",
+      "operator_message_ids": [
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5",
+        "m14"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "reasoning_or_commitment"
+    },
+    {
+      "case_id": "p1-ru-003",
+      "fact_id": "F01",
+      "operator_message_ids": [
+        "m13",
+        "m15"
+      ],
+      "request_message_ids": [
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m14"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-ru-027",
+      "fact_id": "F01",
+      "operator_message_ids": [
+        "m15"
+      ],
+      "request_message_ids": [
+        "m14"
+      ],
+      "outcome_message_ids": [
+        "m16"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-ru-027",
+      "fact_id": "F01",
+      "operator_message_ids": [
+        "m17",
+        "m20"
+      ],
+      "request_message_ids": [
+        "m16",
+        "m19"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-ru-030",
+      "fact_id": "F01",
+      "operator_message_ids": [
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m13"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-kz-001",
+      "fact_id": "F01",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1"
+      ],
+      "outcome_message_ids": [
+        "m11"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-en-003",
+      "fact_id": "F01",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m11"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-ru-003",
+      "fact_id": "F02",
+      "operator_message_ids": [],
+      "request_message_ids": [
+        "m1",
+        "m5",
+        "m10",
+        "m14"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "unanswered_no_external_fact_needed"
+    },
+    {
+      "case_id": "p1-ru-005",
+      "fact_id": "F02",
+      "operator_message_ids": [
+        "m10",
+        "m16"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "partial_answer_omission_assessable"
+    },
+    {
+      "case_id": "p1-ru-004",
+      "fact_id": "F03",
+      "operator_message_ids": [
+        "m10",
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m11"
+      ],
+      "outcome_message_ids": [
+        "m13"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-ru-005",
+      "fact_id": "F03",
+      "operator_message_ids": [
+        "m14"
+      ],
+      "request_message_ids": [
+        "m11"
+      ],
+      "outcome_message_ids": [
+        "m15"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-kz-002",
+      "fact_id": "F03",
+      "operator_message_ids": [
+        "m10",
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m11"
+      ],
+      "outcome_message_ids": [
+        "m13"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-en-005",
+      "fact_id": "F03",
+      "operator_message_ids": [
+        "m10",
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m11"
+      ],
+      "outcome_message_ids": [
+        "m13"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-ru-026",
+      "fact_id": "F03",
+      "operator_message_ids": [
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5",
+        "m11"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "vague_hint_no_external_fact_needed"
+    },
+    {
+      "case_id": "p1-ru-010",
+      "fact_id": "F04",
+      "operator_message_ids": [
+        "m21",
+        "m23",
+        "m26",
+        "m28"
+      ],
+      "request_message_ids": [
+        "m20",
+        "m22",
+        "m25",
+        "m27"
+      ],
+      "outcome_message_ids": [
+        "m24",
+        "m27"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-ru-011",
+      "fact_id": "F04",
+      "operator_message_ids": [
+        "m10",
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5",
+        "m11"
+      ],
+      "outcome_message_ids": [
+        "m13"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-ru-027",
+      "fact_id": "F04",
+      "operator_message_ids": [
+        "m11",
+        "m13",
+        "m22"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m12",
+        "m21"
+      ],
+      "outcome_message_ids": [
+        "m14",
+        "m23"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-kz-003",
+      "fact_id": "F04",
+      "operator_message_ids": [
+        "m22",
+        "m24"
+      ],
+      "request_message_ids": [
+        "m21",
+        "m23"
+      ],
+      "outcome_message_ids": [
+        "m25"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-kz-006",
+      "fact_id": "F04",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m11"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-en-004",
+      "fact_id": "F04",
+      "operator_message_ids": [
+        "m10",
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m11"
+      ],
+      "outcome_message_ids": [
+        "m13"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-en-006",
+      "fact_id": "F04",
+      "operator_message_ids": [
+        "m26",
+        "m28"
+      ],
+      "request_message_ids": [
+        "m25",
+        "m27"
+      ],
+      "outcome_message_ids": [
+        "m29"
+      ],
+      "evidence_class": "observed_task_outcome"
+    },
+    {
+      "case_id": "p1-ru-007",
+      "fact_id": "F05",
+      "operator_message_ids": [
+        "m11"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m12"
+      ],
+      "evidence_class": "observed_location_not_all_semantics"
+    },
+    {
+      "case_id": "p1-ru-028",
+      "fact_id": "F05",
+      "operator_message_ids": [
+        "m12",
+        "m14"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m13"
+      ],
+      "outcome_message_ids": [
+        "m13",
+        "m15"
+      ],
+      "evidence_class": "observed_location_not_all_semantics"
+    },
+    {
+      "case_id": "p1-kz-004",
+      "fact_id": "F05",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m11"
+      ],
+      "evidence_class": "observed_location_not_all_semantics"
+    },
+    {
+      "case_id": "p1-kz-005",
+      "fact_id": "F05",
+      "operator_message_ids": [
+        "m10",
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m11",
+        "m13"
+      ],
+      "evidence_class": "observed_location_not_all_semantics"
+    },
+    {
+      "case_id": "p1-en-007",
+      "fact_id": "F05",
+      "operator_message_ids": [
+        "m10",
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m11"
+      ],
+      "evidence_class": "observed_location_not_all_semantics"
+    },
+    {
+      "case_id": "p1-ru-007",
+      "fact_id": "F06",
+      "operator_message_ids": [],
+      "request_message_ids": [
+        "m5",
+        "m12"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "unanswered_no_external_fact_needed"
+    },
+    {
+      "case_id": "p1-ru-008",
+      "fact_id": "F06",
+      "operator_message_ids": [
+        "m10",
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m11"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-kz-004",
+      "fact_id": "F06",
+      "operator_message_ids": [
+        "m12"
+      ],
+      "request_message_ids": [
+        "m11"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-en-007",
+      "fact_id": "F06",
+      "operator_message_ids": [],
+      "request_message_ids": [
+        "m5",
+        "m11"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "unanswered_no_external_fact_needed"
+    },
+    {
+      "case_id": "p1-ru-009",
+      "fact_id": "F07",
+      "operator_message_ids": [
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m11",
+        "m15"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-ru-009",
+      "fact_id": "F08",
+      "operator_message_ids": [
+        "m12"
+      ],
+      "request_message_ids": [
+        "m13"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "official_rule_and_sequence"
+    },
+    {
+      "case_id": "p1-kz-015",
+      "fact_id": "F07",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m13"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-kz-015",
+      "fact_id": "F08",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m11"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "official_rule_and_sequence"
+    },
+    {
+      "case_id": "p1-en-014",
+      "fact_id": "F07",
+      "operator_message_ids": [
+        "m11"
+      ],
+      "request_message_ids": [
+        "m1"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-en-014",
+      "fact_id": "F08",
+      "operator_message_ids": [
+        "m11"
+      ],
+      "request_message_ids": [
+        "m12"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "official_rule_and_sequence"
+    },
+    {
+      "case_id": "p1-ru-006",
+      "fact_id": "F08",
+      "operator_message_ids": [
+        "m10",
+        "m13"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m12"
+      ],
+      "evidence_class": "official_rule_and_sequence"
+    },
+    {
+      "case_id": "p1-ru-010",
+      "fact_id": "F08",
+      "operator_message_ids": [
+        "m13",
+        "m16"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m15"
+      ],
+      "evidence_class": "official_rule_and_sequence"
+    },
+    {
+      "case_id": "p1-kz-003",
+      "fact_id": "F08",
+      "operator_message_ids": [
+        "m11",
+        "m14"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m13"
+      ],
+      "evidence_class": "official_rule_and_sequence"
+    },
+    {
+      "case_id": "p1-en-006",
+      "fact_id": "F08",
+      "operator_message_ids": [
+        "m11",
+        "m16"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m13"
+      ],
+      "evidence_class": "official_rule_and_sequence"
+    },
+    {
+      "case_id": "p1-ru-014",
+      "fact_id": "F09",
+      "operator_message_ids": [
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m13"
+      ],
+      "evidence_class": "observed_access_with_separate_assertions"
+    },
+    {
+      "case_id": "p1-ru-016",
+      "fact_id": "F09",
+      "operator_message_ids": [
+        "m10",
+        "m12",
+        "m14"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m11",
+        "m13"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-ru-029",
+      "fact_id": "F09",
+      "operator_message_ids": [
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m11"
+      ],
+      "outcome_message_ids": [
+        "m13"
+      ],
+      "evidence_class": "observed_access_with_separate_assertions"
+    },
+    {
+      "case_id": "p1-kz-008",
+      "fact_id": "F09",
+      "operator_message_ids": [
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m13"
+      ],
+      "evidence_class": "observed_access_with_separate_assertions"
+    },
+    {
+      "case_id": "p1-en-002",
+      "fact_id": "F09",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m11"
+      ],
+      "evidence_class": "observed_access_with_separate_assertions"
+    },
+    {
+      "case_id": "p1-en-015",
+      "fact_id": "F09",
+      "operator_message_ids": [
+        "m10",
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m11"
+      ],
+      "outcome_message_ids": [
+        "m13"
+      ],
+      "evidence_class": "observed_access_with_separate_assertions"
+    },
+    {
+      "case_id": "p1-ru-015",
+      "fact_id": "F10",
+      "operator_message_ids": [
+        "m10",
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5",
+        "m11"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-kz-007",
+      "fact_id": "F10",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-en-001",
+      "fact_id": "F10",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-ru-017",
+      "fact_id": "F11",
+      "operator_message_ids": [
+        "m13"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5",
+        "m10"
+      ],
+      "outcome_message_ids": [
+        "m14"
+      ],
+      "evidence_class": "observed_stage_only"
+    },
+    {
+      "case_id": "p1-ru-019",
+      "fact_id": "F11",
+      "operator_message_ids": [
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m13"
+      ],
+      "evidence_class": "observed_stage_only"
+    },
+    {
+      "case_id": "p1-ru-023",
+      "fact_id": "F11",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1"
+      ],
+      "outcome_message_ids": [
+        "m11"
+      ],
+      "evidence_class": "observed_stage_only"
+    },
+    {
+      "case_id": "p1-kz-009",
+      "fact_id": "F11",
+      "operator_message_ids": [
+        "m11",
+        "m13",
+        "m16",
+        "m18"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m12",
+        "m15",
+        "m17"
+      ],
+      "outcome_message_ids": [
+        "m12",
+        "m17"
+      ],
+      "evidence_class": "observed_stage_only"
+    },
+    {
+      "case_id": "p1-kz-013",
+      "fact_id": "F11",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1"
+      ],
+      "outcome_message_ids": [
+        "m11"
+      ],
+      "evidence_class": "observed_stage_only"
+    },
+    {
+      "case_id": "p1-en-008",
+      "fact_id": "F11",
+      "operator_message_ids": [
+        "m11",
+        "m13"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m12"
+      ],
+      "outcome_message_ids": [
+        "m12"
+      ],
+      "evidence_class": "observed_stage_only"
+    },
+    {
+      "case_id": "p1-en-013",
+      "fact_id": "F11",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m13"
+      ],
+      "outcome_message_ids": [
+        "m11"
+      ],
+      "evidence_class": "observed_stage_only"
+    },
+    {
+      "case_id": "p1-ru-020",
+      "fact_id": "F12",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m11"
+      ],
+      "evidence_class": "observed_control_or_action"
+    },
+    {
+      "case_id": "p1-kz-010",
+      "fact_id": "F12",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m11"
+      ],
+      "evidence_class": "observed_control_or_action"
+    },
+    {
+      "case_id": "p1-en-008",
+      "fact_id": "F12",
+      "operator_message_ids": [
+        "m16"
+      ],
+      "request_message_ids": [
+        "m15"
+      ],
+      "outcome_message_ids": [
+        "m17"
+      ],
+      "evidence_class": "observed_control_or_action"
+    },
+    {
+      "case_id": "p1-en-009",
+      "fact_id": "F12",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m11"
+      ],
+      "evidence_class": "observed_control_or_action"
+    },
+    {
+      "case_id": "p1-ru-020",
+      "fact_id": "F13",
+      "operator_message_ids": [
+        "m12"
+      ],
+      "request_message_ids": [
+        "m11"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-en-008",
+      "fact_id": "F13",
+      "operator_message_ids": [
+        "m18"
+      ],
+      "request_message_ids": [
+        "m17"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-ru-024",
+      "fact_id": "F14",
+      "operator_message_ids": [
+        "m10",
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5",
+        "m11"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-kz-011",
+      "fact_id": "F14",
+      "operator_message_ids": [
+        "m10",
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5",
+        "m11"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-en-010",
+      "fact_id": "F14",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-ru-012",
+      "fact_id": "F15",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-kz-014",
+      "fact_id": "F15",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-en-011",
+      "fact_id": "F15",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-ru-013",
+      "fact_id": "F16",
+      "operator_message_ids": [
+        "m10",
+        "m12"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-en-012",
+      "fact_id": "F16",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [
+        "m11"
+      ],
+      "evidence_class": "observed_requested_page"
+    },
+    {
+      "case_id": "p1-ru-021",
+      "fact_id": "F17",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "general_knowledge_policy_inconsistent"
+    },
+    {
+      "case_id": "p1-ru-018",
+      "fact_id": "F19",
+      "operator_message_ids": [
+        "m10"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m11"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "not_established"
+    },
+    {
+      "case_id": "p1-ru-002",
+      "fact_id": "F24",
+      "operator_message_ids": [
+        "m12",
+        "m15",
+        "m17",
+        "m19"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m14",
+        "m16"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "observable_next_step_not_completion"
+    },
+    {
+      "case_id": "p1-ru-006",
+      "fact_id": "F24",
+      "operator_message_ids": [
+        "m13",
+        "m15"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "observable_next_step_not_completion"
+    },
+    {
+      "case_id": "p1-ru-009",
+      "fact_id": "F24",
+      "operator_message_ids": [
+        "m16"
+      ],
+      "request_message_ids": [
+        "m15"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "observable_next_step_not_completion"
+    },
+    {
+      "case_id": "p1-ru-010",
+      "fact_id": "F24",
+      "operator_message_ids": [
+        "m16",
+        "m19",
+        "m30",
+        "m32"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m29"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "observable_next_step_not_completion"
+    },
+    {
+      "case_id": "p1-kz-003",
+      "fact_id": "F24",
+      "operator_message_ids": [
+        "m14",
+        "m17",
+        "m19",
+        "m26"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m16"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "observable_next_step_not_completion"
+    },
+    {
+      "case_id": "p1-kz-012",
+      "fact_id": "F24",
+      "operator_message_ids": [
+        "m10",
+        "m12",
+        "m14"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m5"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "observable_next_step_not_completion"
+    },
+    {
+      "case_id": "p1-kz-015",
+      "fact_id": "F24",
+      "operator_message_ids": [
+        "m14"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m13"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "observable_next_step_not_completion"
+    },
+    {
+      "case_id": "p1-en-006",
+      "fact_id": "F24",
+      "operator_message_ids": [
+        "m16",
+        "m19",
+        "m21",
+        "m23",
+        "m30"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m18",
+        "m22"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "observable_next_step_not_completion"
+    },
+    {
+      "case_id": "p1-en-014",
+      "fact_id": "F24",
+      "operator_message_ids": [
+        "m13"
+      ],
+      "request_message_ids": [
+        "m1",
+        "m14"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "observable_next_step_not_completion"
+    },
+    {
+      "case_id": "p4-ru-002",
+      "fact_id": "F08",
+      "operator_message_ids": [
+        "m12",
+        "m15"
+      ],
+      "request_message_ids": [
+        "m13",
+        "m14"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "official_rule_and_sequence"
+    },
+    {
+      "case_id": "p4-ru-003",
+      "fact_id": "F08",
+      "operator_message_ids": [
+        "m40",
+        "m49",
+        "m54",
+        "m65",
+        "m66",
+        "m68"
+      ],
+      "request_message_ids": [
+        "m41",
+        "m44",
+        "m58"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "official_rule_and_sequence"
+    },
+    {
+      "case_id": "p4-ru-004",
+      "fact_id": "F08",
+      "operator_message_ids": [
+        "m67",
+        "m71",
+        "m79",
+        "m90"
+      ],
+      "request_message_ids": [
+        "m75",
+        "m78"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "official_rule_and_sequence"
+    },
+    {
+      "case_id": "p4-ru-002",
+      "fact_id": "F07",
+      "operator_message_ids": [
+        "m12",
+        "m38"
+      ],
+      "request_message_ids": [
+        "m11"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "private_state_not_independently_verified"
+    },
+    {
+      "case_id": "p4-ru-004",
+      "fact_id": "F07",
+      "operator_message_ids": [
+        "m79",
+        "m90"
+      ],
+      "request_message_ids": [
+        "m85"
+      ],
+      "outcome_message_ids": [],
+      "evidence_class": "private_state_not_independently_verified"
+    }
+  ]
+}

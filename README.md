@@ -44,6 +44,11 @@ deductions and unresolved evidence. The focused checks cost $1.69 including the
 baseline; they do not establish organizer Ground Truth accuracy. The preceding
 [65-case review](docs/ORGANIZER_65_REVIEW.md) remains preserved unchanged.
 
+The subsequent [offline source audit](docs/EXISTING_RESULTS_AUDIT.md) reviews all
+65 source/result pairs and the supplied materials without paid calls or score
+changes. Its [missing-facts inventory](docs/MISSING_FACTS_INVENTORY.md) separates
+24 reusable evidence topics from case labels and team interpretation choices.
+
 The first real run is recorded in [baseline results](docs/BASELINE_RESULTS.md),
 with [all-run coverage and spending](docs/BENCHMARK_RUN_SUMMARY.md) and
 [reference-label review notes](docs/REFERENCE_REVIEW.md). These metrics are

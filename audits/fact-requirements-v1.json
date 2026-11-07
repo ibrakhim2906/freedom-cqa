@@ -1,0 +1,223 @@
+{
+  "version": "1",
+  "purpose": "Offline audit requirements, NOT an answer key or approved knowledge base. Never imported by runtime evaluator.",
+  "provenance": "Assistant source review; all proposed semantic findings remain distinct from organizer Ground Truth.",
+  "facts": [
+    {
+      "id": "F01",
+      "title": "Tariff location and temporal meaning",
+      "question_to_establish": "Where is the tariff shown in web/report views, and which date does each displayed tariff represent?",
+      "required_evidence": "Entity/platform-specific UI guide and report-field definition with applicable version/date.",
+      "available_material_status": "local_outcomes_only",
+      "priority": "high",
+      "limitation": "Finding a field confirms this interaction, not historical/current tariff semantics or an unused alternative route."
+    },
+    {
+      "id": "F02",
+      "title": "Trading and funding commissions",
+      "question_to_establish": "Which bank/broker charges apply to the specified funding or securities transaction?",
+      "required_evidence": "Applicable broker tariff plus transfer method, market, currency and bank conditions when relevant.",
+      "available_material_status": "not_supplied",
+      "priority": "medium",
+      "limitation": "An unanswered fee question can be identified without knowing the correct fee; never invent a fee or require irrelevant transaction fields."
+    },
+    {
+      "id": "F03",
+      "title": "Bank-transfer details and currencies",
+      "question_to_establish": "Where are the relevant bank-transfer requisites obtained and which currencies are supported?",
+      "required_evidence": "Platform funding guide scoped to entity/version and currency, or direct observed task outcome.",
+      "available_material_status": "local_outcomes_only",
+      "priority": "low",
+      "limitation": "Obtaining requisites is not proof a transfer settled or that all currencies/banks are supported."
+    },
+    {
+      "id": "F04",
+      "title": "Broker report generation",
+      "question_to_establish": "Where are reports downloaded and what do selected dates control?",
+      "required_evidence": "Report guide/schema or direct download confirmation for the requested report and period.",
+      "available_material_status": "local_outcomes_only",
+      "priority": "low",
+      "limitation": "A report download does not verify every financial figure or current tariff interpretation."
+    },
+    {
+      "id": "F05",
+      "title": "Personal-data update route",
+      "question_to_establish": "Which task updates questionnaire data rather than bank details, and what prerequisites apply?",
+      "required_evidence": "Applicable profile-update guide or a narrowly confirmed task outcome.",
+      "available_material_status": "scoped_external_reference_exists",
+      "priority": "high",
+      "limitation": "Cached guide is externally gathered, not organizer policy; context is absent in chats and the snapshot window is a team choice."
+    },
+    {
+      "id": "F06",
+      "title": "Withdrawal after profile update",
+      "question_to_establish": "Must the update execute before withdrawal can be retried, and what timing can be promised?",
+      "required_evidence": "Entity-specific withdrawal/update procedure and status semantics; actual account records for individual eligibility.",
+      "available_material_status": "not_supplied",
+      "priority": "high",
+      "limitation": "Opening/submitting an update does not prove withdrawal unlocked. Bot repetition is not policy."
+    },
+    {
+      "id": "F07",
+      "title": "Private account/order facts",
+      "question_to_establish": "Is a restriction, position, rejection reason or other private state actually present?",
+      "required_evidence": "Authorized account/order records or reliable system evidence for that exact account and time.",
+      "available_material_status": "private_records_absent",
+      "priority": "high",
+      "limitation": "Public FAQs cannot verify private state. The disclosure act and verification ordering can still be judged from the transcript."
+    },
+    {
+      "id": "F08",
+      "title": "Verification prerequisite for protected disclosure",
+      "question_to_establish": "Was identity confirmed before the protected disclosure/action?",
+      "required_evidence": "Organizer checklist criterion3 and source sequence establishing protected conduct and verification confirmation.",
+      "available_material_status": "official_rule_supplied",
+      "priority": "high",
+      "limitation": "No separate product manual is needed to apply the supplied grading prerequisite. Whether a particular action is protected may require case-specific context."
+    },
+    {
+      "id": "F09",
+      "title": "Information-site versus trading access",
+      "question_to_establish": "Which company site is informational and which web/app route serves the relevant trading account?",
+      "required_evidence": "Entity/domain/platform mapping or explicit successful access in this interaction.",
+      "available_material_status": "local_outcomes_only",
+      "priority": "high",
+      "limitation": "Language does not establish jurisdiction. Success on one route does not verify every alternative or a blanket no-login claim."
+    },
+    {
+      "id": "F10",
+      "title": "Login reuse after closure",
+      "question_to_establish": "Does the old login remain reserved after closing an account, and can/when it be reused?",
+      "required_evidence": "Official registration/account-closure username policy for the correct entity.",
+      "available_material_status": "not_supplied",
+      "priority": "high",
+      "limitation": "Thanking the agent or choosing another login does not establish permanence or release timing."
+    },
+    {
+      "id": "F11",
+      "title": "Security search and order navigation",
+      "question_to_establish": "How does a customer locate the intended bond/share and proceed toward an order?",
+      "required_evidence": "Applicable platform search/order guide or a narrowly confirmed search/opening outcome.",
+      "available_material_status": "local_outcomes_only",
+      "priority": "medium",
+      "limitation": "Seeing a search bar, opening Quotes, finding a security and submitting a trade are different outcomes."
+    },
+    {
+      "id": "F12",
+      "title": "Margin control location",
+      "question_to_establish": "Where can Use Margin be disabled before order submission?",
+      "required_evidence": "Order-entry guide or explicit confirmation for the particular control/action.",
+      "available_material_status": "local_outcomes_only",
+      "priority": "medium",
+      "limitation": "Finding the control is not explicit proof of disabling it, but a concrete correct next step may still satisfy the request."
+    },
+    {
+      "id": "F13",
+      "title": "Margin effect on existing holdings",
+      "question_to_establish": "Does changing an unsubmitted order setting affect existing positions?",
+      "required_evidence": "Applicable order/margin specification distinguishing new-order settings and existing positions.",
+      "available_material_status": "not_supplied",
+      "priority": "high",
+      "limitation": "The customer finding a checkbox cannot verify position effects; deferring the question is not answering it."
+    },
+    {
+      "id": "F14",
+      "title": "D-account versus trading account",
+      "question_to_establish": "Can D-account funds buy securities directly, and what route is appropriate when funds are there?",
+      "required_evidence": "Official product/account funding and trading eligibility documentation for the relevant entity.",
+      "available_material_status": "not_supplied",
+      "priority": "high",
+      "limitation": "Do not invent transfer procedures. A restriction claim and an actionable path around a stated obstacle are separate requirements."
+    },
+    {
+      "id": "F15",
+      "title": "Form1042-S language availability",
+      "question_to_establish": "In which languages does this provider supply the form, including requested Russian/Kazakh availability?",
+      "required_evidence": "Provider form/document policy; distinguish an original form from translations and guidance.",
+      "available_material_status": "not_supplied",
+      "priority": "high",
+      "limitation": "Provided in English does not logically establish English-only or no local-language version."
+    },
+    {
+      "id": "F16",
+      "title": "Company financial-statements navigation",
+      "question_to_establish": "Where are the holding/company financial statements, distinct from personal reports?",
+      "required_evidence": "Official investor-relations navigation or explicit confirmation of the requested page.",
+      "available_material_status": "local_outcomes_only",
+      "priority": "medium",
+      "limitation": "The presentation describes the holding but gives no Investors-to-Financial-Information menu specification."
+    },
+    {
+      "id": "F17",
+      "title": "Nasdaq versus NYSE explanation",
+      "question_to_establish": "Are they different exchanges and what supports the claimed sector comparison?",
+      "required_evidence": "Primary exchange descriptions or a separately stated general-knowledge evidence policy.",
+      "available_material_status": "related_background_only",
+      "priority": "medium",
+      "limitation": "Organizer presentation says FRHC trades on Nasdaq; it does not verify the operator sector comparison or classify NYSE."
+    },
+    {
+      "id": "F18",
+      "title": "Support and personal-manager service scope",
+      "question_to_establish": "Which advice/account-access services may support or a personal manager provide, and what eligibility applies?",
+      "required_evidence": "Entity-specific service mandate, permissions and manager eligibility policy.",
+      "available_material_status": "not_supplied",
+      "priority": "high",
+      "limitation": "A technical-support script does not verify portfolio thresholds or manager access permissions; marketing material is insufficient."
+    },
+    {
+      "id": "F19",
+      "title": "Security-specific exchange/OTC availability",
+      "question_to_establish": "Is the named instrument exchange-tradable, OTC-only, or restricted by jurisdiction, and why is an order book visible?",
+      "required_evidence": "Dated instrument eligibility/execution information for the correct entity/jurisdiction and actual rejection diagnostics.",
+      "available_material_status": "not_supplied",
+      "priority": "high",
+      "limitation": "Order rejection alone does not establish OTC-only status; internal colleague speech is not independent verification."
+    },
+    {
+      "id": "F20",
+      "title": "Trader/support contact and hours",
+      "question_to_establish": "Which trader/support contact route, order process, support opening hours and market session apply?",
+      "required_evidence": "Official desk contact/process/hours for the relevant entity, market and date.",
+      "available_material_status": "not_supplied",
+      "priority": "high",
+      "limitation": "Cached support-contact guide does not establish desk email, market-close assertions or minimum transaction fees."
+    },
+    {
+      "id": "F21",
+      "title": "Internal OTC commission claim",
+      "question_to_establish": "Are the internally discussed minimum25USD/2percent terms applicable?",
+      "required_evidence": "Dated OTC tariff, transaction type and entity.",
+      "available_material_status": "not_supplied",
+      "priority": "low",
+      "limitation": "This is internal consultation, not customer-facing advice; do not create a customer omission or deduction merely because the fee was not relayed."
+    },
+    {
+      "id": "F22",
+      "title": "Demo-account reset",
+      "question_to_establish": "Can/when a demo account be deleted or reset and what must the user do first?",
+      "required_evidence": "Registration/demo lifecycle procedure and actual action evidence for a claimed completed deletion.",
+      "available_material_status": "not_supplied",
+      "priority": "high",
+      "limitation": "Discussion of future deletion is not proof of a protected action completed; corrupted ASR terms must remain uncertain."
+    },
+    {
+      "id": "F23",
+      "title": "Citizenship/residence document selection",
+      "question_to_establish": "Which citizenship, passport and residence-permit fields apply to registration?",
+      "required_evidence": "Onboarding/KYC documentation scoped to citizenship/residence, entity and application version.",
+      "available_material_status": "not_supplied",
+      "priority": "high",
+      "limitation": "Do not treat unsupported registration guidance as verified legal/KYC advice merely because the customer understands it."
+    },
+    {
+      "id": "F24",
+      "title": "Investigation and follow-up commitments",
+      "question_to_establish": "Did the operator offer a concrete appropriate investigation/follow-up step, and did any promised action actually occur?",
+      "required_evidence": "Dialogue establishes the commitment; backend records would establish actual completion when that is a grading requirement.",
+      "available_material_status": "commitment_observable",
+      "priority": "medium",
+      "limitation": "The supplied rubric accepts an appropriate next step. Do not demand proof of eventual completion for every referral or turn every commitment into unverified policy."
+    }
+  ]
+}
