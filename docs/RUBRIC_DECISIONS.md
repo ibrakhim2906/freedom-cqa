@@ -4,9 +4,9 @@ These decisions record assistant recommendations accepted by the user during
 case review. They are not independent expert adjudication or organizer Ground Truth.
 Original checklist files, authored expectations, and benchmark results remain frozen.
 
-Current default: `checklists/freedom-reviewed-007.json`, version `1-reviewed-007`,
-containing R001 through R007. Seven review items were accepted by the user and two
-additional items follow accepted rules. Eleven items remain pending. Applications
+Current default: `checklists/freedom-reviewed-008.json`, version `1-reviewed-008`,
+containing R001 through R008. Eight review items were accepted by the user and two
+additional items follow accepted rules. Ten items remain pending. Applications
 of accepted rules are distinguished from separately user-adjudicated labels.
 
 ## R001: partial credit when a genuine secondary request is answered
@@ -187,7 +187,33 @@ weights, levels, N/A conditions, and saved results are unchanged. This is an
 assistant recommendation accepted by the user, not organizer Ground Truth. No
 paid evaluation was run.
 
-Consultation in `p1-ru-024` is the next pending item.
+Consultation in `p1-ru-024` was subsequently discussed and settled under R008.
+
+## R008: address an explicitly raised practical obstacle without inventing extra tasks
+
+Review item 10: `p1-ru-024`, consultation **10/20** under the user-accepted scope
+interpretation. Account choice is answered. The customer also explicitly raises
+funds being on the D-account; this was accepted as a substantial obstacle to the
+stated purchase goal rather than merely background context. No answer or appropriate
+next step for that obstacle is provided. Source messages: m1, m5, m10-m13.
+
+This was a genuinely disputed scope decision: a narrower account-selection reading
+could support full coverage. Record the chosen interpretation rather than treating
+the accepted label as independent proof of organizer intent.
+
+General interpretation: address substantial obstacles explicitly raised in relation
+to the customer's stated goal. An answer to an adjacent question does not automatically
+resolve them. Distinguish obstacles from background details; do not invent unrelated
+tasks or require a complete workflow merely because it could be useful. No specific
+transfer procedure or product mechanism is assumed without a supporting source.
+
+Applied in `checklists/freedom-reviewed-008.json`, version `1-reviewed-008`.
+Only consultation instructions are additionally clarified. Earlier versions, accepted
+rules, weights, scales, N/A conditions, and saved results are preserved. This is an
+assistant recommendation accepted by the user, not organizer Ground Truth. No paid
+evaluation was run.
+
+Needs clarification in `p1-en-006` is the next pending item.
 
 To use the original checklist explicitly for a comparison:
 
