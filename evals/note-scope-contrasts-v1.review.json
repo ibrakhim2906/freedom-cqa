@@ -1,0 +1,85 @@
+{
+  "kind": "prospective_assistant_source_review_not_organizer_ground_truth",
+  "human_expert_labels": false,
+  "organizer_ground_truth": false,
+  "input_author_and_reviewer_separate": true,
+  "reviewer_requested_model": "gpt-6.1-sol",
+  "reviewer_requested_effort": "medium",
+  "created_at_utc": "2026-11-07T19:00:34.145920+00:00",
+  "draft_adjustments": [
+    "Placed the complete audit after the operator reply it covers.",
+    "Stated no earlier backup creation explicitly, avoiding a snapshot-versus-history ambiguity.",
+    "Added an all-completions-and-prerequisite-positive source control before the expectation freeze; only m2 changes."
+  ],
+  "cases": [
+    {
+      "case_id": "note-scope-1",
+      "original_note_truth": "supported",
+      "backup_truth": "contradicted",
+      "semantic_checks": [
+        {
+          "id": "note-scope-1-S1",
+          "expectation": "Assess original-note completion over the full session and all routes; retain earlier shortcut success, which the later interval cannot negate."
+        },
+        {
+          "id": "note-scope-1-S2",
+          "expectation": "Negative completion requires complete initial no-save history plus the complete later no-save interval; one failed route alone is insufficient."
+        },
+        {
+          "id": "note-scope-1-S3",
+          "expectation": "Assess backup separately: true original saving does not excuse a false backup; no later action does not erase a backup expressly completed earlier."
+        },
+        {
+          "id": "note-scope-1-S4",
+          "expectation": "Use the supplied folder prerequisite and recorded state. Preserve the assurance deduction when pending; do not invent actual out-of-order backend execution or override earlier satisfaction with a redundant instruction."
+        }
+      ]
+    },
+    {
+      "case_id": "note-scope-2",
+      "original_note_truth": "contradicted",
+      "backup_truth": "contradicted",
+      "semantic_checks": [
+        {
+          "id": "note-scope-2-S1",
+          "expectation": "Assess original-note completion over the full session and all routes; retain earlier shortcut success, which the later interval cannot negate."
+        },
+        {
+          "id": "note-scope-2-S2",
+          "expectation": "Negative completion requires complete initial no-save history plus the complete later no-save interval; one failed route alone is insufficient."
+        },
+        {
+          "id": "note-scope-2-S3",
+          "expectation": "Assess backup separately: true original saving does not excuse a false backup; no later action does not erase a backup expressly completed earlier."
+        },
+        {
+          "id": "note-scope-2-S4",
+          "expectation": "Use the supplied folder prerequisite and recorded state. Preserve the assurance deduction when pending; do not invent actual out-of-order backend execution or override earlier satisfaction with a redundant instruction."
+        }
+      ]
+    },
+    {
+      "case_id": "note-scope-3",
+      "original_note_truth": "supported",
+      "backup_truth": "supported",
+      "semantic_checks": [
+        {
+          "id": "note-scope-3-S1",
+          "expectation": "Assess original-note completion over the full session and all routes; retain earlier shortcut success, which the later interval cannot negate."
+        },
+        {
+          "id": "note-scope-3-S2",
+          "expectation": "Negative completion requires complete initial no-save history plus the complete later no-save interval; one failed route alone is insufficient."
+        },
+        {
+          "id": "note-scope-3-S3",
+          "expectation": "Assess backup separately: true original saving does not excuse a false backup; no later action does not erase a backup expressly completed earlier."
+        },
+        {
+          "id": "note-scope-3-S4",
+          "expectation": "Use the supplied folder prerequisite and recorded state. Preserve the assurance deduction when pending; do not invent actual out-of-order backend execution or override earlier satisfaction with a redundant instruction."
+        }
+      ]
+    }
+  ]
+}

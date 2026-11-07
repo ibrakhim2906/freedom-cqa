@@ -288,7 +288,7 @@ class SemanticExclusion(StrictModel):
 
 
 class SemanticAudit(StrictModel):
-    version: Literal["coverage-v1", "coverage-v2", "coverage-v3", "coverage-v4"]
+    version: Literal["coverage-v1", "coverage-v2", "coverage-v3", "coverage-v4", "coverage-v5"]
     reviewed_message_ids: list[str]
     exclusions: list[SemanticExclusion]
 
@@ -307,7 +307,10 @@ class SourceCitationAudit(StrictModel):
     catalog_fingerprint: str
     # Bind the new persisted projection to its audit contract. Historical source
     # audits omit this; changing coverage-v4 to v3 cannot bypass group checks.
-    projection: Literal["derived-groups-v4"] | None = None
+    projection: Literal["derived-groups-v4", "derived-groups-and-reviews-v5"] | None = None
+    # V5 stores only the model's additional unquoted review declarations here.
+    # Effective judgment review lists are exact projections of explicit links.
+    additional_checked_message_ids: dict[str, list[str]] | None = None
     # JSON pointers into the persisted evaluation, mapped to explicitly selected
     # source spans. Exact quote strings come only from those immutable sources.
     selections: dict[str, str]

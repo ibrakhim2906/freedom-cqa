@@ -11,7 +11,14 @@ from test_span_schema import fixture as historical_fixture
 
 from cqa.evaluator import schema_for
 from cqa.source_spans import build_catalog
-from cqa.span_schema import SPAN_CONTRACT, bind_span_contract
+from cqa.span_schema import bind_span_contract as _bind_span_contract
+
+# V4 remains explicitly covered as a historical contract, including its hashes.
+SPAN_CONTRACT = "span-v4"
+
+
+def bind_span_contract(*args, contract=SPAN_CONTRACT):
+    return _bind_span_contract(*args, contract=contract)
 
 
 @pytest.fixture
@@ -60,7 +67,7 @@ def observed_claim(catalog, *, scope="task_completed", message="result"):
     return value
 
 
-def test_default_is_explicit_v4_and_does_not_mutate_base(source):
+def test_historical_v4_is_explicit_and_does_not_mutate_base(source):
     conversation, checklist, catalog, base, wire = source
     assert SPAN_CONTRACT == "span-v4"
     assert wire == bind_span_contract(base, conversation, checklist, catalog, contract="span-v4")
@@ -69,7 +76,7 @@ def test_default_is_explicit_v4_and_does_not_mutate_base(source):
     assert wire["properties"]["catalog_fingerprint"]["enum"] == [catalog.fingerprint]
     assert "contract_version" not in base["properties"]
     with pytest.raises(ValueError, match="Unsupported source-span contract"):
-        bind_span_contract(base, conversation, checklist, catalog, contract="span-v5")
+        bind_span_contract(base, conversation, checklist, catalog, contract="span-v999")
 
 
 @pytest.mark.parametrize("role,expected", [

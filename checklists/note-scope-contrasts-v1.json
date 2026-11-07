@@ -1,0 +1,52 @@
+{
+  "id": "note-quality",
+  "version": "1",
+  "title": "Fictional note completion and sequencing",
+  "instructions": [
+    "Use only the supplied fictional application records and procedure. Assess each completion assertion separately."
+  ],
+  "criteria": [
+    {
+      "id": "completion_accuracy",
+      "title": "Completion accuracy",
+      "instruction": "Select yes only when every material operator completion assertion is accurate. Select no when any material completion assertion is independently contradicted. Assess individual assertions separately even when a false companion determines the overall grade. If a genuinely grade-changing fact remains unverified, explain the uncertainty without inventing an outcome.",
+      "kind": "binary",
+      "weight": 70.0,
+      "levels": [
+        {
+          "value": "yes",
+          "fraction": 1.0,
+          "description": "Every material completion assertion is accurate."
+        },
+        {
+          "value": "no",
+          "fraction": 0.0,
+          "description": "At least one material completion assertion is false."
+        }
+      ],
+      "na_condition": null,
+      "channel_guidance": {}
+    },
+    {
+      "id": "sequence_order",
+      "title": "Prerequisite sequencing",
+      "instruction": "Select no when the operator explicitly assures completion of a dependent action while the applicable supplied prerequisite remains explicitly pending. Cite the prerequisite, the assurance and its chronological state evidence. This assesses an assurance against recorded pending prerequisites; it does not require evidence that the backend actually executed out of order. Select yes when no such violation is established. Preserve a genuine independent finding even when completion accuracy also fails.",
+      "kind": "binary",
+      "weight": 30.0,
+      "levels": [
+        {
+          "value": "yes",
+          "fraction": 1.0,
+          "description": "No prerequisite-assurance violation is established."
+        },
+        {
+          "value": "no",
+          "fraction": 0.0,
+          "description": "A dependent-completion assurance is given against an explicitly pending prerequisite."
+        }
+      ],
+      "na_condition": null,
+      "channel_guidance": {}
+    }
+  ]
+}

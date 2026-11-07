@@ -4,17 +4,24 @@ import json
 from copy import deepcopy
 
 import pytest
-from span_fixtures import novel_fixture, wire_for
+from span_fixtures import novel_fixture
+from span_fixtures import wire_for as _wire_for
 
 from cqa.atomic_dependencies import validate_atomic_dependencies
 from cqa.models import Evidence, SelectedSourceSpan
 from cqa.scoring import calculate_score, validate_evaluation
 from cqa.source_spans import SourceCatalog, build_catalog
 from cqa.span_transport import (
-    decode_span_evaluation,
     decode_span_evaluation_v3,
     validate_source_citations,
 )
+from cqa.span_transport import (
+    decode_span_evaluation_v4 as decode_span_evaluation,
+)
+
+
+def wire_for(*args, contract="span-v4"):
+    return _wire_for(*args, contract=contract)
 
 
 def decode(wire, conversation, checklist, *, historical=False):

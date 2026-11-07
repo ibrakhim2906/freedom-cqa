@@ -73,9 +73,9 @@ def validate_atomic_dependencies(result, conversation, checklist):
     premises. Flat proving fields must exactly expose all reachable proof leaves.
     Context is never a proof leaf, including when reached through another claim.
     """
-    if result.semantic_audit is None or result.semantic_audit.version not in {"coverage-v3", "coverage-v4"}:
+    if result.semantic_audit is None or result.semantic_audit.version not in {"coverage-v3", "coverage-v4", "coverage-v5"}:
         return
-    exact_groups = result.semantic_audit.version == "coverage-v4"
+    exact_groups = result.semantic_audit.version in {"coverage-v4", "coverage-v5"}
     if result.assertion_groups is None:
         raise ValueError(f"{result.semantic_audit.version} requires explicit assertion groups")
     if exact_groups and result.source_citations is None:

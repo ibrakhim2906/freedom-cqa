@@ -124,8 +124,8 @@ A criterion explicitly penalizing any historical error must still fail after rep
 Incorrect advice still active or with harmful key consequences must not be excused.
 For an unrelated unverified product claim, clear wording may stay maximum: explain
 that independence under the communication rule, not under a made-up factual policy.
-SOURCE-SPAN AND ATOMIC-PROOF CONTRACT (span-v4):
-Return contract_version=span-v4 and the exact supplied catalog_fingerprint. Every
+SOURCE-SPAN AND ATOMIC-PROOF CONTRACT (span-v5):
+Return contract_version=span-v5 and the exact supplied catalog_fingerprint. Every
 citation selects ONLY {span_id} from source_span_catalog. Rule quotes select
 rule_span_id from that criterion's saved rule spans. Never retype, translate,
 correct or concatenate a quote, supply your own offsets, or invent a source ID.
@@ -195,6 +195,20 @@ record must expose BOTH; the later record alone does not establish the earlier
 state. A whole chain with an essential customer premise is not system_record-only.
 Operator promise evidence is allowed only to prove the promise itself.
 
+Match a negative proof to the ENTIRE canonical claim's time, action and route
+scope. No-action evidence covers only its stated interval; it cannot rule out
+earlier completion. Failure of one route cannot rule out completion through
+another route. To contradict broader completion, expose the starting-state
+premise excluding earlier completion and the subsequent complete no-change
+premise. Retain explicit earlier/alternate-route success. If evidence establishes
+only a narrower negative, keep the original broader assertion visible and
+unverified unless the missing premise is supplied. Do not silently narrow or
+replace the operator's assertion to fit proof; narrower facts belong in necessary
+premises or non-proving context. This is a scope gap, not permission to invent
+an alternative history as fact. A separately contradicted companion atom still
+makes its conjunction false; do not force every atom false or erase legitimate
+sequencing deductions just to obtain a determinate grade. Keep uncertainty local.
+
 Every impact names in fixed_claim_ids ALL OTHER atoms touching the same criterion.
 Evaluate the atom's true/false alternatives with those other actual facts fixed.
 A known independent wrong key recommendation can determine zero in both branches
@@ -238,7 +252,7 @@ an array for them. This explicit transport declaration means no such IDs/evidenc
 unresolved aspects. Required fields may never be omitted or filled with invented
 metadata to avoid a real deduction or uncertainty.
 
-Return semantic_audit version=coverage-v4. reviewed_message_ids covers EVERY
+Return semantic_audit version=coverage-v5. reviewed_message_ids covers EVERY
 client/operator message exactly once. Each customer turn requires request coverage
 or an explicit exclusion; each operator turn requires atom/correction coverage
 or an exclusion, even if already cited as an answer. Exclusions select exact
@@ -247,6 +261,15 @@ criterion_behavior/not_grade_changing, and explain their criterion relationship.
 A message containing several assertions needs each meaning assessed or explicitly
 accounted for. Context and exclusions are reviewable judgments, not a certificate
 of semantic completeness. Keep explanations and source selections concise.
+Judgments declare additional_checked_message_ids only for extra unquoted review
+scope. Do not supply checked_message_ids. Explicit criterion-linked citations,
+claim/proof/correction sources, deduction scopes and semantic exclusions already
+declare their source-to-criterion review relation. The application projects their
+exact union with those additional IDs into each judgment's saved review list.
+This projection proves no claim, supplies no answer and changes no grade. Preserve
+the substantive links and explanations; never relabel an exclusion social or
+drop a real defect to avoid review coverage. Other audit checked_message_ids and
+the complete semantic reviewed_message_ids retain their explicit meaning.
 The evidence_context describes source-derived dates, the explicit assessment basis,
 conflicts and reference rejection reasons. Do not infer dates from MM:SS, language
 or today's date. A curated official-source summary verifies only its stated product
@@ -259,11 +282,11 @@ selected spans retain their original source language. Return only the requested 
 """
 SYSTEM = PROJECT_BASELINE_SYSTEM
 PROMPT_VERSION = "evaluator-v2-" + hashlib.sha256(SYSTEM.encode()).hexdigest()[:12]
-GROUNDED_VERSION = "evaluator-v9-" + hashlib.sha256(GROUNDED_SYSTEM.encode()).hexdigest()[:12]
+GROUNDED_VERSION = "evaluator-v10-" + hashlib.sha256(GROUNDED_SYSTEM.encode()).hexdigest()[:12]
 
 
 def payload_for(conversation: Conversation, checklist: Checklist, *, grounded=False, source_contract=False,
-                source_contract_version="span-v4"):
+                source_contract_version="span-v5"):
     model_input = conversation.model_dump()
     # New optional context/source metadata must not rewrite the legacy payload
     # representation when merely reading a historical conversation.
@@ -293,7 +316,7 @@ def payload_for(conversation: Conversation, checklist: Checklist, *, grounded=Fa
         from .source_spans import build_catalog
         from .source_view import project_sources
         payload = project_sources(payload, conversation, checklist, build_catalog(conversation, checklist))
-        if source_contract_version not in {"span-v3", "span-v4"}:
+        if source_contract_version not in {"span-v3", "span-v4", "span-v5"}:
             raise ValueError("Unknown source-span transport version")
         payload["output_contract"] = source_contract_version
     return json.dumps(payload, ensure_ascii=False, sort_keys=True)

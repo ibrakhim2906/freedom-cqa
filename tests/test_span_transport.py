@@ -25,8 +25,8 @@ def test_raw_transport_rejects_duplicate_fields_and_nonstandard_json_without_dis
     wire = wire_for(data, conversation, checklist)
     text = json.dumps(wire, ensure_ascii=False)
     if fault == "duplicate_version":
-        text = text.replace('"contract_version": "span-v4"',
-                            '"contract_version": "legacy-v0", "contract_version": "span-v4"', 1)
+        text = text.replace('"contract_version": "span-v5"',
+                            '"contract_version": "legacy-v0", "contract_version": "span-v5"', 1)
     elif fault == "duplicate_span":
         text = text.replace('"span_id": ', '"span_id": "invented-span", "span_id": ', 1)
     else:

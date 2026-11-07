@@ -6,6 +6,13 @@ Status: the local React/FastAPI workflow is implemented: conversation import,
 versioned checklists, real evaluations, evidence inspection, saved results and
 appeals with preserved AI/human history. The benchmark CLI remains available.
 
+The current [source contract v5](docs/SOURCE_CONTRACT_V5.md) derives review links
+from explicit source relations and requires negative proofs to match the full
+assertion scope. Historical results and frozen expectations remain preserved.
+The [six-case manual rerun](docs/MANUAL_DIAGNOSTICS_V4.md) records five strict
+passes, one retained rejection and remaining semantic qualifications, at $0 API
+cost. These diagnostics do not establish production accuracy or reliability.
+
 ## Run the application
 
 ```powershell

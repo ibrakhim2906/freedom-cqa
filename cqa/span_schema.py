@@ -5,7 +5,7 @@ from copy import deepcopy
 
 from .models import Evaluation
 
-SPAN_CONTRACT = "span-v4"
+SPAN_CONTRACT = "span-v5"
 HISTORICAL_SPAN_CONTRACT = "span-v3"
 
 
@@ -71,14 +71,14 @@ def _share_shapes(schema):
 def bind_span_contract(schema, conversation, checklist, catalog, *, contract=SPAN_CONTRACT):
     """Replace copied quotations with immutable citation IDs in a v2 base schema.
 
-    The current contract is v4. Historical validation must explicitly select v3;
-    its wire schema retains the original shapes and source permissions exactly.
+    The current contract is v5. Historical validation explicitly selects v3/v4;
+    their wire schemas retain the original shapes and source permissions exactly.
     Null collections mean a branch permits no values, rather than an optional
     field. The decoder normalizes only after validating the selected contract.
     """
-    if contract not in {SPAN_CONTRACT, HISTORICAL_SPAN_CONTRACT}:
+    if contract not in {SPAN_CONTRACT, "span-v4", HISTORICAL_SPAN_CONTRACT}:
         raise ValueError(f"Unsupported source-span contract: {contract!r}")
-    current = contract == SPAN_CONTRACT
+    current = contract != HISTORICAL_SPAN_CONTRACT
     catalog.assert_sources(conversation, checklist)
     wire = deepcopy(schema)
     definitions = wire["$defs"]
@@ -90,7 +90,28 @@ def bind_span_contract(schema, conversation, checklist, catalog, *, contract=SPA
     wire["properties"]["contract_version"] = {"type": "string", "enum": [contract]}
     wire["properties"]["catalog_fingerprint"] = {"type": "string", "enum": [catalog.fingerprint]}
     definitions["SemanticAudit"]["properties"]["version"] = {
-        "type": "string", "enum": ["coverage-v4" if current else "coverage-v3"]}
+        "type": "string", "enum": ["coverage-v5" if contract == SPAN_CONTRACT else
+                                 "coverage-v4" if current else "coverage-v3"]}
+
+    if contract == SPAN_CONTRACT:
+        def judgment_review_fields(node):
+            if "$ref" in node:
+                judgment_review_fields(definitions[node["$ref"].split("/")[-1]])
+            for branch in node.get("anyOf", []):
+                judgment_review_fields(branch)
+            if "properties" in node:
+                # These are known judgment schema positions, never the keyed
+                # criterion map: a criterion ID may itself match either name.
+                node["properties"] = {
+                    ("additional_checked_message_ids" if name == "checked_message_ids" else name): field
+                    for name, field in node["properties"].items()}
+                if "required" in node:
+                    node["required"] = ["additional_checked_message_ids" if name == "checked_message_ids" else name
+                                        for name in node["required"]]
+
+        judgment_review_fields(definitions["Judgment"])
+        for judgment in wire["properties"]["judgments"]["properties"].values():
+            judgment_review_fields(judgment)
 
     roles = {role: [m.id for m in conversation.messages if m.speaker == role]
              for role in ["client", "operator", "system", "bot"]}

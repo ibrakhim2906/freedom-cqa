@@ -1,0 +1,233 @@
+{
+  "kind": "isolated_manual_v5_diagnostics_not_api_benchmark",
+  "completed_at_utc": "2026-11-07T19:20:40.234056+00:00",
+  "prompt": "evaluator-v10-08c974f78057",
+  "source_contract": "span-v5",
+  "semantic_audit": "coverage-v5",
+  "requested_agent_settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none",
+    "override_explicit": true,
+    "source": "user explicitly requested Sol 6.1 medium for diagnostic agents"
+  },
+  "independent_review_requested_settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "initial_responses": 6,
+  "initial_strict_valid": 5,
+  "initial_strict_rejected": 1,
+  "original_CDE_initial_strict_valid": 3,
+  "new_contrast_initial_strict_valid": 2,
+  "repairs": 0,
+  "rows": [
+    {
+      "packet": "C",
+      "raw_sha256": "694a504b429ca9cf3a21191b0a3f05ef2bebe1d8e266f7562ce78298fcb52faf",
+      "raw_bytes": 42011,
+      "strict_validation": "passed",
+      "validation_error": null,
+      "matched_reference_judgments": 7,
+      "compared_reference_judgments": 8,
+      "accepted_conversation_score": null,
+      "independent_semantic_disposition": "semantic_pass",
+      "accepted_credit": true,
+      "qualification": "Review-link failure does not recur. Identity Yes differs from the unchanged needs_review reference; that alternative and management ASR/wording ambiguity were recorded before inference. Private status and closing remain unresolved.",
+      "api_calls": 0
+    },
+    {
+      "packet": "D",
+      "raw_sha256": "9d80ed3bbfa514e8217a3c305a9c09d4d6a28906f67517e49192703240e5b2b9",
+      "raw_bytes": 34857,
+      "strict_validation": "passed",
+      "validation_error": null,
+      "matched_reference_judgments": 8,
+      "compared_reference_judgments": 8,
+      "accepted_conversation_score": 46.92,
+      "independent_semantic_disposition": "semantic_pass",
+      "accepted_credit": true,
+      "qualification": "Independent review finds no material issue. Active wrong advice remains consultation 0; unannounced hold and assurance/prerequisite finding remain visible; actual backend execution stays unverified.",
+      "api_calls": 0
+    },
+    {
+      "packet": "E",
+      "raw_sha256": "f609dc0ed992aed3b3179559556047235294bf2648cb9ab3d2326ecd8a22c13b",
+      "raw_bytes": 24057,
+      "strict_validation": "passed",
+      "validation_error": null,
+      "matched_reference_judgments": 7,
+      "compared_reference_judgments": 7,
+      "accepted_conversation_score": null,
+      "independent_semantic_disposition": "semantic_qualified",
+      "accepted_credit": true,
+      "qualification": "Broader whole-session opening now remains unverified. Reviewer retains qualifications on no-client-action versus no-download-event coverage and applying the instructed route prerequisite to a broad session assertion. Hold independently preserves management 7; consultation ordinal remains unscored.",
+      "api_calls": 0
+    },
+    {
+      "packet": "F",
+      "raw_sha256": "2ed6636b0c00900b559d9cb1ff163fcaad5af55d0831a5d8acd24807c00807f0",
+      "raw_bytes": 11874,
+      "strict_validation": "failed",
+      "validation_error": "Dialogue observations cannot alone verify general product/policy truth",
+      "matched_reference_judgments": 0,
+      "compared_reference_judgments": 0,
+      "accepted_conversation_score": null,
+      "independent_semantic_disposition": "semantic_pass",
+      "accepted_credit": false,
+      "qualification": "Rejected by the unchanged runtime validator: a general_fact interaction completion is marked system_record, a combination allowed by the wire schema but rejected by the existing dialogue-observation guard. Source reasoning preserves prior shortcut success and false backup, but receives no accepted score or label credit.",
+      "api_calls": 0
+    },
+    {
+      "packet": "G",
+      "raw_sha256": "d77e304625d85d16087ffdbc52f56aeacb45d611ddf60c193fc2ccab00a828bb",
+      "raw_bytes": 16152,
+      "strict_validation": "passed",
+      "validation_error": null,
+      "matched_reference_judgments": 2,
+      "compared_reference_judgments": 2,
+      "accepted_conversation_score": 0.0,
+      "independent_semantic_disposition": "semantic_qualified",
+      "accepted_credit": true,
+      "qualification": "Actual full-session negatives and both No judgments are supported. The folder_step false branch wrongly retains the sequencing deduction when the canonical required-prerequisite proposition is false; actual known-prerequisite deduction survives.",
+      "api_calls": 0
+    },
+    {
+      "packet": "H",
+      "raw_sha256": "d28bacf78d23bb814035fcaf41503cb6dd228b9ddebb216436aa6464f5393e38",
+      "raw_bytes": 8748,
+      "strict_validation": "passed",
+      "validation_error": null,
+      "matched_reference_judgments": 2,
+      "compared_reference_judgments": 2,
+      "accepted_conversation_score": 100.0,
+      "independent_semantic_disposition": "semantic_pass",
+      "accepted_credit": true,
+      "qualification": "Both earlier completions and the already satisfied prerequisite survive later no-action and failed-route evidence. Positive control correctly has no deductions.",
+      "api_calls": 0
+    }
+  ],
+  "diagnostic_reference_comparison": {
+    "matched": 26,
+    "compared_in_accepted_responses": 27,
+    "frozen_judgments_total": 29,
+    "rejected_uncompared_judgments": 2,
+    "not_accuracy": "Assistant-authored provisional labels with retained C interpretation disagreement; rejected F receives no credit."
+  },
+  "original_expectations_sha256_unchanged": "e16b09eab3ec7639f960e2f01dff2dbd799646605a2f04ce0d0e00caeb3a5abe",
+  "new_scope_freeze_sha256_unchanged": "ed34046f62f8b1aba5216bd159858b04ad3efa7efe92313a578087556c333c71",
+  "original_freezes_unchanged": true,
+  "old_failed_results_promoted": false,
+  "manual_results_inserted_into_app": false,
+  "api_calls": 0,
+  "incremental_api_cost_usd": 0,
+  "ledger_before": {
+    "rows": 591,
+    "max_id": 591,
+    "settled_sum": 23.141316
+  },
+  "ledger_after": {
+    "rows": 591,
+    "max_id": 591,
+    "settled_sum": 23.141316
+  },
+  "tests": {
+    "python_passed": 703,
+    "existing_warnings": 1,
+    "ruff": "passed",
+    "prepared_requests": 82,
+    "max_protected_input_bytes": 194078,
+    "protected_input_cap_bytes": 200000,
+    "output_token_cap": 6000,
+    "historical_v3_and_v4_schema_payload_pairs_unchanged": 79,
+    "historical_api_scores_unchanged": 97,
+    "previous_manual_receipts_preserved": 10,
+    "original_frozen_labels": 110,
+    "original_complete_vectors": 12,
+    "new_targeted_frozen_labels": 6,
+    "new_targeted_complete_vectors": 3
+  },
+  "local_app_read_only_check": {
+    "restarted_with_current_code": true,
+    "root_http_status": 200,
+    "config_http_status": 200,
+    "evaluation_jobs_before_after": {
+      "completed": 9,
+      "failed": 4,
+      "queued_or_running": 0
+    }
+  },
+  "grade_increase_claimed": false,
+  "limitations": [
+    "Existing C/D/E development inputs and original expectations are preserved unchanged.",
+    "F/G/H are newly frozen targeted scope contrasts, not an untouched holdout or organizer Ground Truth.",
+    "One isolated first response per packet receives no validation feedback and no repair.",
+    "Manual tool-assisted responses do not measure API provider acceptance, latency, token costs, output caps or repeatability.",
+    "Five of six strict passes is not a production reliability estimate.",
+    "E proof/process scope remains qualified; G has a wrong counterfactual despite correct actual grades.",
+    "F semantic review does not override its strict rejection.",
+    "Manual tool-assisted generations do not reproduce the configured 6000-token output cap.",
+    "No new API provider acceptance, latency, cost, repeatability or organizer GT accuracy measurement."
+  ],
+  "source_receipts": [
+    {
+      "path": "artifacts/manual-chat-v4/protocol.frozen.json",
+      "sha256": "5f5c5e2d8d08d9692d720503d9c6f5768a307a9c09cc5f70fac1bde997cc79ee"
+    },
+    {
+      "path": "artifacts/manual-chat-v4/private-manifest.json",
+      "sha256": "4e64708c06cc7db65bb11abef8eb258f2e0c6f32173b0b5070ce4bc251f67c7d"
+    },
+    {
+      "path": "artifacts/manual-chat-v4/private-expectations.frozen.json",
+      "sha256": "2210c45bc2b8e5abb94eb27f1963cfd4f2bfe110bb8912a26a23154a934ef915"
+    },
+    {
+      "path": "artifacts/source-contract-v5/candidate-protocol.json",
+      "sha256": "a4ddc5c88880f77099a524de624ae0d4407df03e06ec508ae7ea58832e6c5ab6"
+    },
+    {
+      "path": "artifacts/manual-chat-v4/semantic-review-CDE.json",
+      "sha256": "da9133c76134f13ff540d73521f37c42e0827c1d3fb22963c0b578865fd88741"
+    },
+    {
+      "path": "artifacts/manual-chat-v4/semantic-review-FGH.json",
+      "sha256": "42cc00425814a19126a077c5f467a75b04952d8ff03745b2213a5c33072e3ffe"
+    },
+    {
+      "path": "artifacts/manual-chat-v4/results/C-694a504b429c/receipt.json",
+      "sha256": "5987b972a001b1f556b6f6761d7db239c69a3dd7b608177bd694c05863923ce0"
+    },
+    {
+      "path": "artifacts/manual-chat-v4/results/D-9d80ed3bbfa5/receipt.json",
+      "sha256": "112ea7b635025b3663ba752dfca735d23aa9bb63d601ccae90ffbfebb129c0d3"
+    },
+    {
+      "path": "artifacts/manual-chat-v4/results/E-f609dc0ed992/receipt.json",
+      "sha256": "39a22eb921563e5882d9ca617859d71e4b27615bd9b884c84b0aab00254d4802"
+    },
+    {
+      "path": "artifacts/manual-chat-v4/results/F-2ed6636b0c00/receipt.json",
+      "sha256": "8cd2b808bf80188ec3c1e08d83bb5075e24d5c1976e416b79499031403ca983d"
+    },
+    {
+      "path": "artifacts/manual-chat-v4/results/G-d77e304625d8/receipt.json",
+      "sha256": "6893f7ca4bd2a57b913b01543d57e2519d2c24d0cc06c7606ae7f8f67c8a5808"
+    },
+    {
+      "path": "artifacts/manual-chat-v4/results/H-d28bacf78d23/receipt.json",
+      "sha256": "01b887ea368d653c8187e8fe1d138058c2b8f383539e9238d1e811977a6ab745"
+    },
+    {
+      "path": "artifacts/manual-chat-v4/root-adjudication.json",
+      "sha256": "70b6eb8e8e465781473dea3504232eb23a8796bf176fc2b659ccd0481b2838c4"
+    },
+    {
+      "path": "artifacts/manual-chat-v4/summary.json",
+      "sha256": "47a4161c22756683d6da1973978fee6f0d82427bf261e2328a07a34d27f97893"
+    }
+  ],
+  "report": "docs/MANUAL_DIAGNOSTICS_V4.md",
+  "implementation": "docs/SOURCE_CONTRACT_V5.md"
+}

@@ -23,12 +23,12 @@ def proof(*premises):
             "explanation": "The explicitly listed source premises establish the stated canonical proposition."}
 
 
-def wire_for(data, conversation, checklist, *, contract="span-v4"):
+def wire_for(data, conversation, checklist, *, contract="span-v5"):
     """Serialize an authored fixture for an explicit wire version, never inference."""
     data = deepcopy(data)
-    assert contract in {"span-v3", "span-v4"}
-    assert data["semantic_audit"]["version"] in {"coverage-v3", "coverage-v4"}
-    data["semantic_audit"]["version"] = "coverage-v4" if contract == "span-v4" else "coverage-v3"
+    assert contract in {"span-v3", "span-v4", "span-v5"}
+    assert data["semantic_audit"]["version"] in {"coverage-v3", "coverage-v4", "coverage-v5"}
+    data["semantic_audit"]["version"] = contract.replace("span-", "coverage-")
     assert data["assertion_groups"] is not None
     catalog = build_catalog(conversation, checklist)
     indexed = {claim["claim_id"]: claim for claim in data["factual_claims"]}
@@ -94,6 +94,9 @@ def wire_for(data, conversation, checklist, *, contract="span-v4"):
     audits = {d["criterion_id"]: d for d in data.pop("deductions")}
     data["judgments"] = {j["criterion_id"]: {**j, "deduction": audits.get(j["criterion_id"])}
                          for j in data["judgments"]}
+    if contract == "span-v5":
+        for judgment in data["judgments"].values():
+            judgment["additional_checked_message_ids"] = judgment.pop("checked_message_ids")
     for claim in data["factual_claims"]:
         assert claim["claim_id"] and claim["assertion_group_id"] and "proof" in claim
         for impact in claim["assessment"]["impacts"]:
@@ -114,10 +117,10 @@ def wire_for(data, conversation, checklist, *, contract="span-v4"):
                     assert not item["evidence"] and not item["reference_evidence"] and not item["rule_evidence"]
                     for field in ["evidence", "reference_evidence", "rule_evidence"]:
                         item[field] = None
-                elif contract == "span-v4" and observation is None and claim["verification_scope"] != "commitment":
+                elif contract in {"span-v4", "span-v5"} and observation is None and claim["verification_scope"] != "commitment":
                     assert not item["evidence"], "A fixture cannot hide independent proof under observation=null"
                     item["evidence"] = None
-    if contract == "span-v4":
+    if contract in {"span-v4", "span-v5"}:
         for group in data["assertion_groups"]:
             group.pop("operator_evidence")
     for request in data["request_coverage"]:

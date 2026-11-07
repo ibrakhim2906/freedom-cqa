@@ -13,11 +13,13 @@ import jsonschema
 from .atomic_dependencies import validate_assertion_group_membership
 from .models import Evaluation
 from .output_contract import _require_explicit_fields
+from .review_projection import PROJECTION, project_review_links, validate_review_projection
 from .source_spans import VERSION, build_catalog
 
-CONTRACT = "span-v4"
+CONTRACT = "span-v5"
 _LIST_FIELDS = frozenset({
-    "evidence", "counterevidence", "checked_message_ids", "request_coverage", "factual_claims", "scope_notes",
+    "evidence", "counterevidence", "checked_message_ids", "additional_checked_message_ids",
+    "request_coverage", "factual_claims", "scope_notes",
     "operator_evidence", "dialogue_evidence", "context_evidence", "reference_evidence", "rule_evidence",
     "criterion_ids", "claim_ids", "fixed_claim_ids", "premises", "required_premise_ids", "assertion_groups",
     "reviewed_message_ids", "exclusions", "answer_message_ids", "request_message_ids", "withdrawal_message_ids",
@@ -62,8 +64,13 @@ def _citation_constraint(path, field):
 
 
 def decode_span_evaluation(text, conversation, checklist):
-    """Decode only the current span-v4 wire; never dispatch historical receipts."""
+    """Decode only the current span-v5 wire; never dispatch historical receipts."""
     return _decode_span_evaluation(text, conversation, checklist, contract=CONTRACT)
+
+
+def decode_span_evaluation_v4(text, conversation, checklist):
+    """Explicit historical span-v4 reader, retaining authored review declarations."""
+    return _decode_span_evaluation(text, conversation, checklist, contract="span-v4")
 
 
 def decode_span_evaluation_v3(text, conversation, checklist):
@@ -89,7 +96,7 @@ def _decode_span_evaluation(text, conversation, checklist, *, contract):
         jsonschema.Draft202012Validator(schema).validate(data)
     except jsonschema.ValidationError as error:
         raise ValueError("Span transport schema mismatch at " + _pointer(error.absolute_path)) from None
-    if contract == "span-v4":
+    if contract in {"span-v4", "span-v5"}:
         # This projection occurs only after the *entire* provider object passes
         # its wire schema. Links are declarations, never inferred from wording.
         # No-operator schemas explicitly use null for these forbidden arrays.
@@ -193,7 +200,7 @@ def _decode_span_evaluation(text, conversation, checklist, *, contract):
             # Explicit reference alias, not a second generated proposition and
             # not a claim that a contradicted proposition is true.
             claim["supported_proposition"] = claim["claim"]
-    judgments, deductions = [], []
+    judgments, deductions, additional_reviews = [], [], {}
     for cid, judgment in resolved["judgments"].items():
         if judgment["criterion_id"] != cid:
             raise ValueError("Judgment key and criterion ID must match")
@@ -202,6 +209,11 @@ def _decode_span_evaluation(text, conversation, checklist, *, contract):
             if deduction["criterion_id"] != cid:
                 raise ValueError("Inline deduction must belong to its judgment")
             deductions.append(deduction)
+        if contract == "span-v5":
+            additional_reviews[cid] = judgment.pop("additional_checked_message_ids")
+            # Model construction precedes the typed review projection. The wire
+            # cannot provide this persisted field; its complete union is derived.
+            judgment["checked_message_ids"] = []
         judgments.append(judgment)
     resolved["judgments"], resolved["deductions"] = judgments, deductions
     selections = {}
@@ -220,11 +232,15 @@ def _decode_span_evaluation(text, conversation, checklist, *, contract):
 
     collect(resolved)
     resolved["source_citations"] = {"version": VERSION, "catalog_fingerprint": catalog.fingerprint,
-                                    "projection": "derived-groups-v4" if contract == "span-v4" else None,
+                                    "projection": PROJECTION if contract == "span-v5" else
+                                                  "derived-groups-v4" if contract == "span-v4" else None,
+                                    "additional_checked_message_ids": additional_reviews if contract == "span-v5" else None,
                                     "selections": selections, "spans": {
         sid: {field: getattr(catalog.entries[sid], field) for field in ["kind", "source_id", "field", "role", "start", "end"]}
         for sid in sorted(set(selections.values()))}}
     result = Evaluation.model_validate(resolved)
+    if contract == "span-v5":
+        project_review_links(result, conversation, checklist)
     _require_explicit_fields(result)
     validate_source_citations(result, conversation, checklist)
     return result
@@ -232,19 +248,24 @@ def _decode_span_evaluation(text, conversation, checklist, *, contract):
 
 def validate_source_citations(result, conversation, checklist):
     current = (result.semantic_audit is not None
-               and result.semantic_audit.version in {"coverage-v3", "coverage-v4"})
+               and result.semantic_audit.version in {"coverage-v3", "coverage-v4", "coverage-v5"})
     if not current:
         if result.source_citations is not None or result.assertion_groups is not None or any(
             c.claim_id is not None or c.assertion_group_id is not None or c.proof is not None or
             c.assessment and any(i.fixed_claim_ids is not None for i in c.assessment.impacts)
             for c in result.factual_claims
         ):
-            raise ValueError("Source/atomic dependency extensions require coverage-v3 or coverage-v4; no contract downgrade")
+            raise ValueError("Source/atomic dependency extensions require coverage-v3, coverage-v4 or coverage-v5; no contract downgrade")
         return
     audit = result.source_citations
     if audit is None or audit.version != VERSION:
         raise ValueError("Source contract requires explicit source-citation provenance")
-    if result.semantic_audit.version == "coverage-v4":
+    if result.semantic_audit.version == "coverage-v5":
+        if audit.projection != PROJECTION:
+            raise ValueError("coverage-v5 requires explicit derived-groups-and-reviews-v5 source provenance")
+    elif audit.additional_checked_message_ids is not None or audit.projection == PROJECTION:
+        raise ValueError("Derived review provenance requires coverage-v5; no contract downgrade")
+    elif result.semantic_audit.version == "coverage-v4":
         if audit.projection != "derived-groups-v4":
             raise ValueError("coverage-v4 requires explicit derived-groups-v4 source provenance")
     elif audit.projection is not None:
@@ -293,6 +314,8 @@ def validate_source_citations(result, conversation, checklist):
     if set(audit.selections) != expected:
         raise ValueError("Source provenance must cover every quoted slot exactly, with no unused selections")
     _validate_span_dependencies(result, catalog)
+    if result.semantic_audit.version == "coverage-v5":
+        validate_review_projection(result, conversation, checklist)
 
 
 def _validate_span_dependencies(result, catalog):
@@ -338,14 +361,14 @@ def _validate_span_dependencies(result, catalog):
 
     for cid in indexed:
         leaves(cid)
-    exact_groups = result.semantic_audit.version == "coverage-v4"
+    exact_groups = result.semantic_audit.version in {"coverage-v4", "coverage-v5"}
     if exact_groups:
         validate_assertion_group_membership(
             ((claim.claim_id, claim.assertion_group_id) for claim in result.factual_claims),
             ((group.group_id, group.composition, group.claim_ids) for group in result.assertion_groups or []),
         )
         if result.assertion_groups is None:
-            raise ValueError("coverage-v4 requires explicit assertion groups")
+            raise ValueError("coverage-v4/coverage-v5 requires explicit assertion groups")
     for index, group in enumerate(result.assertion_groups or []):
         group_ids = selected(("assertion_groups", index, "operator_evidence"), group.operator_evidence)
         if exact_groups:
