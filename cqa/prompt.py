@@ -57,7 +57,13 @@ Do not infer opportunity to close solely from customer thanks or infer its absen
 solely from a connection-loss event; use the available sequence and end-state evidence.
 Do not reward politeness/length alone, invent an elapsed-time threshold, or assume
 customer satisfaction proves all criteria.
-Report deductions for every scored numeric criterion below its maximum allowed level.
+The output judgments object has one required key for EVERY configured criterion.
+Within each judgment, deduction is mandatory and non-null whenever the selected
+scored answer has a fraction below that criterion's maximum, including binary No
+or any custom failing answer. Binary criteria lose numeric points just like scales.
+For maximum-level answers, flags, N/A and needs_review, deduction must be null.
+Do not change a justified failure to a passing answer or needs_review to avoid an audit.
+An omission can be supported by checked_message_ids covering the actual opportunity.
 Each deduction needs an exact quote of its own configured criterion rule, a concrete
 source-linked defect, and an overlap_note explaining any independent violation when
 another criterion uses the same event. Do not add a second deduction merely to restate

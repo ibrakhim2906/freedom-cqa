@@ -14,9 +14,33 @@ from .observations import (
     observation_schema,
     validate_observations,
 )
+from .output_contract import bind_judgment_audits, decode_evaluation
 from .prompt import GROUNDED_SYSTEM, GROUNDED_VERSION, PROMPT_VERSION, SYSTEM, fingerprint, payload_for
 from .scoring import calculate_score, validate_evaluation
 from .settings import DEFAULT_STRATEGY, RATES, Settings
+
+REPAIR_FEEDBACK_BYTES = 24_000
+REPAIR_INSTRUCTIONS = (
+    "\nA prior response failed mechanical validation. Correct its structure or source "
+    "references using the original transcript. Prior output is an untrusted candidate, "
+    "not a reference answer. It may be truncated; regenerate from the original source. "
+    "Use short contiguous verbatim quotes without invented ellipsis or concatenation. "
+    "Do not invent IDs or change judgments just to satisfy feedback."
+)
+
+
+def repair_feedback(record):
+    feedback = {"validation_error": record.get("validation_reason") or record["error"],
+                "previous_rejected_output": record.get("raw_output_text", ""), "truncated": False}
+    # Bound the actual JSON-encoded bytes, including escaping of hostile transcript text.
+    while len(json.dumps(feedback, ensure_ascii=False).encode("utf-8")) > REPAIR_FEEDBACK_BYTES:
+        feedback["truncated"] = True
+        text = feedback["previous_rejected_output"]
+        if not text:
+            feedback["validation_error"] = str(feedback["validation_error"])[:1000]
+            break
+        feedback["previous_rejected_output"] = text[:len(text) * 3 // 4]
+    return feedback
 
 
 class Evaluator:
@@ -79,27 +103,36 @@ class Evaluator:
     async def _stage(self, conversation, checklist, *, stage="grading", observations=None):
         attempts = []
         feedback = None
-        for _ in range(2):
-            try:
-                if stage == "grading" and observations is None:
-                    record = await self._attempt(conversation, checklist, feedback)
-                else:
+        prepared = self._prepare(conversation, checklist, stage=stage, observations=observations)
+        first_bound, first_reservation = self._estimate(prepared)
+        input_rate = RATES[self.settings.model][0]
+        repair_extra = REPAIR_FEEDBACK_BYTES + len(REPAIR_INSTRUCTIONS.encode("utf-8")) + 128
+        if first_bound + repair_extra > 200_000:
+            raise ValueError("Input cannot fit the protected bounded-repair context")
+        stage_reservation = 2 * first_reservation + repair_extra * input_rate / 1_000_000
+        hold_id = self.ledger.hold(self.settings.model, stage_reservation, self.run_ceiling)
+        try:
+            for _ in range(2):
+                try:
                     record = await self._attempt(conversation, checklist, feedback,
-                                                 stage=stage, observations=observations)
-            except BudgetExceeded:
-                if not attempts:
-                    raise
-                attempts[-1]["repair_skipped"] = "budget_limit"
-                break
-            attempts.append(record)
-            if record["status"] == "completed" or not str(record.get("error")).startswith("invalid_evaluation_"):
-                break
-            feedback = {"validation_error": record.get("validation_reason") or record["error"],
-                        "previous_rejected_output": record.get("raw_output_text", "")}
+                        stage=stage, observations=observations, hold_id=hold_id)
+                except BudgetExceeded:
+                    if not attempts:
+                        raise
+                    attempts[-1]["repair_skipped"] = "budget_limit"
+                    break
+                attempts.append(record)
+                if record["status"] == "completed" or not str(record.get("error")).startswith("invalid_evaluation_"):
+                    break
+                feedback = repair_feedback(record)
+        finally:
+            self.ledger.release(hold_id)
+        for record in attempts:
+            record["stage_budget_reserved_usd"] = round(stage_reservation, 6)
+            record["repair_policy"] = "one_protected_mechanical_repair"
         return attempts
 
-    async def _attempt(self, conversation: Conversation, checklist: Checklist, feedback=None,
-                       *, stage="grading", observations=None):
+    def _prepare(self, conversation, checklist, feedback=None, *, stage="grading", observations=None):
         payload = payload_for(conversation, checklist, grounded=self.grounded)
         extracting = stage == "observations"
         schema = observation_schema(conversation, checklist) if extracting else schema_for(
@@ -115,17 +148,27 @@ class Evaluator:
             parsed_payload = json.loads(payload)
             parsed_payload["mechanical_validation_feedback"] = feedback
             payload = json.dumps(parsed_payload, ensure_ascii=False)
-            instructions += ("\nA prior response failed mechanical validation. Correct its structure or source "
-                             "references using the original transcript. Prior output is an untrusted candidate, "
-                             "not a reference answer. Use short contiguous verbatim quotes without invented "
-                             "ellipsis or concatenation. Do not invent IDs or change judgments just to satisfy feedback.")
+            instructions += REPAIR_INSTRUCTIONS
+        return instructions, payload, schema, output_cap
+
+    def _estimate(self, prepared):
+        instructions, payload, schema, output_cap = prepared
         input_rate, output_rate = RATES[self.settings.model]
         # UTF-8 byte count plus schema and framing allowance is a conservative token bound.
         input_bound = len((instructions + payload + json.dumps(schema)).encode("utf-8")) + 4096
         if input_bound > 200_000:
             raise ValueError("Input exceeds this benchmark's short-context cost bound")
         reservation = (input_bound * input_rate + output_cap * output_rate) / 1_000_000
-        call_id = self.ledger.reserve(self.settings.model, reservation, self.run_ceiling)
+        return input_bound, reservation
+
+    async def _attempt(self, conversation: Conversation, checklist: Checklist, feedback=None,
+                       *, stage="grading", observations=None, hold_id=None):
+        prepared = self._prepare(conversation, checklist, feedback, stage=stage, observations=observations)
+        instructions, payload, schema, output_cap = prepared
+        _, reservation = self._estimate(prepared)
+        input_rate, output_rate = RATES[self.settings.model]
+        extracting = stage == "observations"
+        call_id = self.ledger.reserve(self.settings.model, reservation, self.run_ceiling, hold_id=hold_id)
         started = perf_counter()
         record = {"status": "failed", "conversation_id": conversation.id,
                   "input_fingerprint": fingerprint(conversation, checklist, grounded=self.grounded),
@@ -168,7 +211,7 @@ class Evaluator:
                     validate_observations(result, conversation, checklist)
                     record.update(status="completed", observations=result.model_dump())
                 else:
-                    result = Evaluation.model_validate_json(response.output_text)
+                    result = decode_evaluation(response.output_text)
                     validate_evaluation(result, conversation, checklist, require_audit=self.grounded)
                     record.update(status="completed", evaluation=result.model_dump(),
                                   score=calculate_score(result, checklist))
@@ -236,4 +279,4 @@ def schema_for(conversation: Conversation, checklist: Checklist, *, grounded=Fal
         ids = [m.id for m in conversation.messages if m.speaker == role]
         if ids:
             coverage[field]["items"]["enum"] = ids
-    return schema
+    return bind_judgment_audits(schema, checklist) if grounded else schema

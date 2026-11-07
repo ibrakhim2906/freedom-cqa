@@ -115,7 +115,9 @@ def test_legacy_contract_remains_available_and_grounded_schema_is_strict():
     candidate = schema_for(conversation, rubric, grounded=True)
     assert PROMPT_VERSION == "evaluator-v2-452e92fc403a"
     assert set(original["properties"]) == {"judgments", "request_coverage", "scope_notes"}
-    assert "factual_claims" in candidate["required"] and "deductions" in candidate["required"]
+    assert "factual_claims" in candidate["required"]
+    assert "deductions" not in candidate["properties"]  # Audits now belong to their exact judgment.
+    assert candidate["properties"]["judgments"]["required"] == [c.id for c in rubric.criteria]
     assert "usable_reference_ids" not in json.loads(payload_for(conversation, rubric))
     for definition in [candidate, *candidate["$defs"].values()]:
         if definition.get("type") == "object":

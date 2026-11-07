@@ -4,12 +4,14 @@ import copy
 import json
 import time
 from typing import ClassVar
+from unittest.mock import AsyncMock
 
 import pytest
 from fastapi.testclient import TestClient
 
 from backend.app import create_app
 from backend.storage import Job
+from cqa.evaluator import Evaluator
 from cqa.ledger import BudgetExceeded, Ledger
 from cqa.models import Evaluation, Judgment
 from cqa.scoring import calculate_score
@@ -196,12 +198,20 @@ def test_restart_preserves_results_and_marks_inflight_calls_interrupted(tmp_path
         with app.state.store.session.begin() as session:
             saved = session.get(Job, job["id"])
             saved.status = "running"
+        grouped = Ledger(settings.ledger_path, 1, budget_group=job["batch_id"], group_limit=.5)
+        held = grouped.hold("test", .2, 1)
+        grouped.reserve("test", .05, 1, hold_id=held)  # Crash before usage was received.
+        other = Ledger(settings.ledger_path, 1)
+        cli_hold = other.hold("test", .1, 1)  # An unrelated CLI run must stay protected.
     reopened = create_app(settings=settings, database_path=path, evaluator_factory=TestOnlyEvaluator)
     with TestClient(reopened) as client:
         assert client.get(f"/api/conversations/{cid}").status_code == 200
         interrupted = client.get(f"/api/jobs/{job['id']}").json()
         assert interrupted["status"] == "interrupted" and interrupted["effective"] is None
         assert interrupted["record"]["billing_state"] == "unknown"
+        assert grouped.group_committed(job["batch_id"]) == pytest.approx(.051)
+        assert other.summary()["protected_allowance_usd"] == .1
+        other.release(cli_hold)
 
 
 def test_batch_budget_is_independent_from_other_batches_and_global_cap_is_still_enforced(tmp_path):
@@ -215,6 +225,29 @@ def test_batch_budget_is_independent_from_other_batches_and_global_cap_is_still_
     assert a.group_committed("a") == .01 and b.group_committed("b") == .08
     with pytest.raises(BudgetExceeded):
         b.reserve("test", .03, .15)
+
+
+def test_real_evaluator_budget_preflight_exposes_actionable_details_without_a_paid_call(tmp_path):
+    evaluators = []
+    def factory(settings, ledger, ceiling):
+        evaluator = Evaluator(settings, ledger, ceiling)
+        evaluator.client.responses.create = AsyncMock()
+        evaluators.append(evaluator)
+        return evaluator
+    settings = Settings(api_key="test-only", ledger_path=tmp_path / "usage.sqlite3", max_spend=1)
+    app = create_app(settings=settings, database_path=tmp_path / "app.sqlite3", evaluator_factory=factory)
+    with TestClient(app) as client:
+        cid, checklist_id = import_one(client), save_checklist(client)
+        queued = client.post("/api/evaluations", json={"conversation_ids": [cid], "checklist_id": checklist_id,
+            "request_id": "preflight", "budget_usd": .000001})
+        assert queued.status_code == 202
+        job = wait_for_job(client, queued.json()["job_ids"][0])
+        assert job["status"] == "failed" and job["record"]["attempt_count"] == 0
+        assert "bounded repair" in job["record"]["error_detail"]
+        assert job["record"]["budget_required_usd"] > job["record"]["budget_available_usd"]
+        assert job["record"]["billing_state"] == "not_submitted"
+        evaluators[0].client.responses.create.assert_not_called()
+        assert app.state.workflow.ledger.committed() == 0
 
 
 @pytest.mark.parametrize("payload", [{"data": None}, {"conversation": "invalid"}, {"data": {"records": [None]}},

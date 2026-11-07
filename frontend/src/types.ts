@@ -28,7 +28,8 @@ export type JobDetail = JobRow & {conversation: ConversationDetail; checklist: C
     deductions: {criterion_id: string; rule_quote: string; defect: string; overlap_note: string}[]};
     score: Score; error: string|null; model: string; prompt_version: string; workflow_version: string; response_id: string;
     usage: {estimated_cost_usd: number; input_tokens: number; output_tokens: number}|null;
-    attempt_count: number; latency_seconds: number; billing_state?: string}|null}
+    attempt_count: number; latency_seconds: number; billing_state?: string; validation_reason?: string;
+    repair_skipped?: string; error_detail?: string; budget_required_usd?: number; budget_available_usd?: number}|null}
 export type Config = {api_key_configured: boolean; model: string; strategy: string;
   ledger: {lifetime_committed_usd: number; lifetime_limit_usd: number}}
 export type BatchResult = {batch_id: string|null; job_ids: string[]; reused: string[]}

@@ -25,6 +25,10 @@ export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReferenc
       {job.status === 'running' && <p>Evaluating through the real OpenAI API… You can leave this page; the job continues.</p>}
       {terminal.has(job.status) && <button disabled={busy} onClick={onRetry}>{job.status === 'completed' ? 'Run again (billable)' : 'Retry (billable)'}</button>}
       {job.record?.error && <p role="alert" className={styles.error}>Evaluation failed: {job.record.error}. No substitute assessment was generated.</p>}
+      {job.record?.validation_reason && <p>Validation: {job.record.validation_reason}</p>}
+      {job.record?.repair_skipped && <p>Repair was not submitted: {job.record.repair_skipped}. A retry is a new paid attempt.</p>}
+      {job.record?.error_detail && <p>{job.record.error_detail}. No API request was submitted for this job.</p>}
+      {job.record?.budget_required_usd != null && <p>Required conservative allowance: {dollars(job.record.budget_required_usd)}; available: {dollars(job.record.budget_available_usd || 0)}. This includes one possible repair and is not an expected charge.</p>}
       {job.record?.usage && <p>{job.record.model} · {dollars(job.record.usage.estimated_cost_usd)} · {job.record.attempt_count} attempt(s) · {job.record.latency_seconds}s</p>}
       <a href={`/api/jobs/${job.id}/export`}>Export result and review history</a>
     </div>

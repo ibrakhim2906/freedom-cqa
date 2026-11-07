@@ -28,11 +28,15 @@ class Workflow:
                 "strategy": "grounded", "core_source_sha256": self.core_hash}
 
     async def start(self):
+        interrupted_groups = set()
         with self.store.session.begin() as session:
             for job in session.scalars(select(Job).where(Job.status == "running")):
+                interrupted_groups.add(job.batch_id)
                 job.status, job.finished_at = "interrupted", now()
                 job.record = self.failure("server_restarted_during_evaluation", billing="unknown")
             batch_ids = list(session.scalars(select(Job.batch_id).where(Job.status == "queued").distinct()))
+        for group_id in interrupted_groups:
+            self.ledger.release_interrupted_group(group_id)
         for batch_id in batch_ids:
             self.queue.put_nowait(batch_id)
         self.task = asyncio.create_task(self.worker())
@@ -133,8 +137,10 @@ class Workflow:
                     job.status, job.started_at = "running", now()
                 try:
                     record = await evaluator.evaluate(conversation, checklist)
-                except BudgetExceeded:
+                except BudgetExceeded as error:
                     record = self.failure("budget_limit")
+                    record.update(error_detail=str(error), budget_required_usd=error.required,
+                                  budget_available_usd=error.available)
                 except asyncio.CancelledError:
                     with self.store.session.begin() as session:
                         job = session.get(Job, job_id)

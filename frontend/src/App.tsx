@@ -15,7 +15,7 @@ function App() {
   const [conversations, setConversations] = useState<ConversationRow[]>([]), [checklists, setChecklists] = useState<ChecklistRow[]>([])
   const [checklistId, setChecklistId] = useState(''), [config, setConfig] = useState<Config>()
   const [conversation, setConversation] = useState<ConversationDetail>(), [job, setJob] = useState<JobDetail>(), [jobs, setJobs] = useState<JobRow[]>([])
-  const [selected, setSelected] = useState<string[]>([]), [budget, setBudget] = useState('0.20')
+  const [selected, setSelected] = useState<string[]>([]), [budget, setBudget] = useState('1.00')
   const [error, setError] = useState(''), [notice, setNotice] = useState(''), [busy, setBusy] = useState(false)
   const [importText, setImportText] = useState(''), [showImport, setShowImport] = useState(false)
   const [focus, setFocus] = useState<{ids: string[]; quote?: string}>({ids: []}), [reference, setReference] = useState<{ref: Reference; quote?: string}>()

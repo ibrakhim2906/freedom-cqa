@@ -74,6 +74,8 @@ def validate_audit(result, conversation, checklist, *, require_audit):
 
     deducted = set()
     for item in result.deductions:
+        if item.criterion_id in deducted:
+            raise ValueError("Duplicate deduction audits for one criterion are not allowed")
         criterion = criteria.get(item.criterion_id)
         if criterion is None or not item.defect.strip() or not item.overlap_note.strip():
             raise ValueError("Deduction needs a configured criterion, defect and overlap explanation")
@@ -100,7 +102,7 @@ def validate_audit(result, conversation, checklist, *, require_audit):
                 continue
             level = next(x for x in criterion.levels if x.value == judgment.answer)
             if level.fraction < max(x.fraction for x in criterion.levels) and cid not in deducted:
-                raise ValueError("Every numeric deduction requires a source-linked rule audit")
+                raise ValueError(f"Every numeric deduction requires a source-linked rule audit: {cid}")
 
     for claim in result.factual_claims:
         if not claim.claim.strip() or not claim.explanation.strip() or not claim.operator_evidence:

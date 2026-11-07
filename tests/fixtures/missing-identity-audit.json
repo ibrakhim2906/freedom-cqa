@@ -1,0 +1,307 @@
+{
+  "judgments": [
+    {
+      "criterion_id": "contact",
+      "status": "scored",
+      "answer": "yes",
+      "explanation": "The operator greeted the customer in Russian and introduced herself in her first reply.",
+      "evidence": [
+        {
+          "message_id": "m4",
+          "quote": "Здравствуйте, я Нина."
+        }
+      ],
+      "counterevidence": [],
+      "checked_message_ids": ["m1", "m2", "m3", "m4"],
+      "uncertainty": null
+    },
+    {
+      "criterion_id": "needs",
+      "status": "not_applicable",
+      "answer": null,
+      "explanation": "The initial request identified the withdrawal and the required report, period, and format. The reference confirms that the session already identified one account. No clarification of the customer's needs was necessary; verification is assessed separately.",
+      "evidence": [
+        {
+          "message_id": "m1",
+          "quote": "Подскажите статус моей заявки NS-631 на вывод и где скачать историю операций за октябрь в PDF."
+        }
+      ],
+      "counterevidence": [],
+      "checked_message_ids": ["m1", "m4", "m5", "m6", "m8", "m9", "m10"],
+      "uncertainty": null
+    },
+    {
+      "criterion_id": "identity",
+      "status": "scored",
+      "answer": "no",
+      "explanation": "The operator disclosed confidential withdrawal status before system confirmation. The customer's statement that verification steps were completed did not establish successful verification; m7 explicitly confirms that no earlier confirmation existed.",
+      "evidence": [
+        {
+          "message_id": "m6",
+          "quote": "По вашему счёту вижу: заявка NS-631 отклонена."
+        },
+        {
+          "message_id": "m7",
+          "quote": "Identity verification successfully confirmed now. There was no earlier confirmation in this conversation."
+        }
+      ],
+      "counterevidence": [
+        {
+          "message_id": "m4",
+          "quote": "Для проверки заявки сначала подтвердите личность."
+        },
+        {
+          "message_id": "m5",
+          "quote": "Я выполнил шаги проверки."
+        }
+      ],
+      "checked_message_ids": ["m4", "m5", "m6", "m7", "m8"],
+      "uncertainty": null
+    },
+    {
+      "criterion_id": "consultation",
+      "status": "scored",
+      "answer": "10",
+      "explanation": "The withdrawal status and report-download instructions were correct, and the customer confirmed downloading the report. However, the explicit follow-up asking why the withdrawal was declined received neither an answer nor a concrete next step.",
+      "evidence": [
+        {
+          "message_id": "m6",
+          "quote": "По вашему счёту вижу: заявка NS-631 отклонена."
+        },
+        {
+          "message_id": "m8",
+          "quote": "Для истории откройте Documents > Transactions, выберите October и PDF."
+        },
+        {
+          "message_id": "m9",
+          "quote": "А почему именно отклонили заявку? Это отдельный вопрос, причину я пока не знаю."
+        },
+        {
+          "message_id": "m10",
+          "quote": "Могу помочь ещё с чем-нибудь? До свидания!"
+        }
+      ],
+      "counterevidence": [
+        {
+          "message_id": "m9",
+          "quote": "Историю скачал."
+        }
+      ],
+      "checked_message_ids": ["m1", "m4", "m5", "m6", "m7", "m8", "m9", "m10"],
+      "uncertainty": null
+    },
+    {
+      "criterion_id": "empathy",
+      "status": "scored",
+      "answer": "yes",
+      "explanation": "The operator remained polite. The customer asked an additional factual question without expressing dissatisfaction or describing a separate inconvenience requiring an empathetic response. Its omission is assessed under consultation.",
+      "evidence": [
+        {
+          "message_id": "m4",
+          "quote": "Здравствуйте, я Нина."
+        },
+        {
+          "message_id": "m10",
+          "quote": "Могу помочь ещё с чем-нибудь? До свидания!"
+        }
+      ],
+      "counterevidence": [],
+      "checked_message_ids": ["m1", "m4", "m5", "m6", "m8", "m9", "m10"],
+      "uncertainty": null
+    },
+    {
+      "criterion_id": "management",
+      "status": "scored",
+      "answer": "10",
+      "explanation": "The messages were clear and coherent, with understandable report instructions and no announced waiting period requiring management. The unanswered follow-up is a content omission, and the premature disclosure is a verification failure; neither independently establishes a communication-quality defect here.",
+      "evidence": [
+        {
+          "message_id": "m4",
+          "quote": "Для проверки заявки сначала подтвердите личность."
+        },
+        {
+          "message_id": "m8",
+          "quote": "Для истории откройте Documents > Transactions, выберите October и PDF."
+        }
+      ],
+      "counterevidence": [],
+      "checked_message_ids": ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10"],
+      "uncertainty": null
+    },
+    {
+      "criterion_id": "closing",
+      "status": "scored",
+      "answer": "yes",
+      "explanation": "The operator offered further help and said goodbye. The unresolved question reduces consultation, but the configured closing behaviors were present.",
+      "evidence": [
+        {
+          "message_id": "m10",
+          "quote": "Могу помочь ещё с чем-нибудь? До свидания!"
+        }
+      ],
+      "counterevidence": [],
+      "checked_message_ids": ["m9", "m10"],
+      "uncertainty": null
+    },
+    {
+      "criterion_id": "serious",
+      "status": "scored",
+      "answer": "yes",
+      "explanation": "Confidential account status was disclosed before successful identity verification was confirmed. The supplied session reference explicitly prohibits this disclosure before the system event.",
+      "evidence": [
+        {
+          "message_id": "m6",
+          "quote": "По вашему счёту вижу: заявка NS-631 отклонена."
+        },
+        {
+          "message_id": "m7",
+          "quote": "Identity verification successfully confirmed now. There was no earlier confirmation in this conversation."
+        }
+      ],
+      "counterevidence": [
+        {
+          "message_id": "m5",
+          "quote": "Я выполнил шаги проверки."
+        }
+      ],
+      "checked_message_ids": ["m4", "m5", "m6", "m7", "m8", "m10"],
+      "uncertainty": null
+    }
+  ],
+  "request_coverage": [
+    {
+      "request": "Provide the status of withdrawal NS-631.",
+      "request_message_ids": ["m1"],
+      "status": "answered",
+      "answer_message_ids": ["m6"],
+      "explanation": "The operator correctly stated that the request was declined, although the disclosure occurred before verification confirmation.",
+      "withdrawal_message_ids": []
+    },
+    {
+      "request": "Explain where to download October transaction history in PDF.",
+      "request_message_ids": ["m1"],
+      "status": "answered",
+      "answer_message_ids": ["m8"],
+      "explanation": "The operator supplied the correct route and selections; the customer subsequently confirmed downloading the history.",
+      "withdrawal_message_ids": []
+    },
+    {
+      "request": "Explain the specific reason withdrawal NS-631 was declined.",
+      "request_message_ids": ["m9"],
+      "status": "unanswered",
+      "answer_message_ids": [],
+      "explanation": "The operator responded only with an offer of further help and a farewell, without explaining the reason or providing a concrete next step.",
+      "withdrawal_message_ids": []
+    }
+  ],
+  "scope_notes": [
+    "Only human-operator messages were credited as operator actions.",
+    "The supplied fictional Northstar reference matches the conversation scope and date.",
+    "The verification request and the customer's completion statement are not system confirmation; confirmation first appears in m7.",
+    "The serious-error flag does not automatically reduce consultation or management."
+  ],
+  "factual_claims": [
+    {
+      "claim": "Verification is required before checking the withdrawal request.",
+      "criterion_ids": ["identity", "serious"],
+      "operator_evidence": [
+        {
+          "message_id": "m4",
+          "quote": "Для проверки заявки сначала подтвердите личность."
+        }
+      ],
+      "status": "supported",
+      "material": true,
+      "reference_evidence": [
+        {
+          "reference_id": "northstar-session-facts",
+          "quote": "The operator may inspect or disclose them only AFTER a system event confirms successful identity verification."
+        }
+      ],
+      "dialogue_evidence": [
+        {
+          "message_id": "m7",
+          "quote": "Identity verification successfully confirmed now. There was no earlier confirmation in this conversation."
+        }
+      ],
+      "explanation": "The prerequisite was correctly stated, but the operator disclosed status before that prerequisite was confirmed."
+    },
+    {
+      "claim": "Withdrawal request NS-631 was declined.",
+      "criterion_ids": ["consultation", "identity", "serious"],
+      "operator_evidence": [
+        {
+          "message_id": "m6",
+          "quote": "По вашему счёту вижу: заявка NS-631 отклонена."
+        }
+      ],
+      "status": "supported",
+      "material": true,
+      "reference_evidence": [
+        {
+          "reference_id": "northstar-session-facts",
+          "quote": "Its withdrawal request NS-631 is declined because bank details are incomplete."
+        },
+        {
+          "reference_id": "northstar-session-facts",
+          "quote": "Request status and rejection reasons are confidential account data."
+        }
+      ],
+      "dialogue_evidence": [
+        {
+          "message_id": "m7",
+          "quote": "Identity verification successfully confirmed now. There was no earlier confirmation in this conversation."
+        }
+      ],
+      "explanation": "The status itself was accurate. Accuracy does not authorize its disclosure before verification confirmation. The reference's rejection reason was never communicated by the operator."
+    },
+    {
+      "claim": "October transaction history can be downloaded through Documents > Transactions by selecting October and PDF.",
+      "criterion_ids": ["consultation"],
+      "operator_evidence": [
+        {
+          "message_id": "m8",
+          "quote": "Для истории откройте Documents > Transactions, выберите October и PDF."
+        }
+      ],
+      "status": "supported",
+      "material": true,
+      "reference_evidence": [
+        {
+          "reference_id": "northstar-session-facts",
+          "quote": "To download October transaction history, open Documents > Transactions, select October and PDF."
+        }
+      ],
+      "dialogue_evidence": [
+        {
+          "message_id": "m9",
+          "quote": "Историю скачал."
+        }
+      ],
+      "explanation": "The instructions match the applicable reference, and the customer confirmed the download."
+    }
+  ],
+  "deductions": [
+    {
+      "criterion_id": "consultation",
+      "rule_quote": "Если один вопрос закрыт, а другой существенный вопрос остаётся открытым, применяется уровень частичного решения — 10; отдельная ошибочная ключевая рекомендация по-прежнему может требовать 0.",
+      "defect": "The operator answered the initial requests but left the explicit follow-up about the rejection reason unanswered, ending without a concrete next step.",
+      "evidence": [
+        {
+          "message_id": "m9",
+          "quote": "А почему именно отклонили заявку? Это отдельный вопрос, причину я пока не знаю."
+        },
+        {
+          "message_id": "m10",
+          "quote": "Могу помочь ещё с чем-нибудь? До свидания!"
+        },
+        {
+          "message_id": "m9",
+          "quote": "Историю скачал."
+        }
+      ],
+      "checked_message_ids": ["m1", "m6", "m7", "m8", "m9", "m10"],
+      "overlap_note": "This deduction concerns the unresolved rejection-reason question, not the premature confidential disclosure assessed under identity and the serious-error flag. The successful report download supports partial rather than zero credit. No separate management deduction is applied for the same omission."
+    }
+  ]
+}

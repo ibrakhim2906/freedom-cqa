@@ -80,6 +80,14 @@ The local worker processes calls sequentially. Job states and batches persist in
 
 The usage ledger now enforces both independent batch budgets and the configured
 lifetime cap. Concurrent batch accounting cannot spend another batch's allowance.
+Each evaluation stage atomically protects the first request plus one bounded
+mechanical repair before submitting either. The default batch allowance is $1.00;
+this is an authorization ceiling, not an expected evaluation charge. Insufficient
+allowance fails before a paid first request, with required/available amounts.
+Unused protected allowance is released on completion, error or cancellation. On
+application restart, unspent holds for interrupted batches are released, while
+submitted calls with unknown usage retain their full conservative reservation.
+Unrelated CLI holds are not released by application recovery.
 Unknown usage retains its full reservation. Provider credit exhaustion stops
 further queued submissions; no replacement scores are generated. A conservative
 maximum-token reservation can reject a job even if its eventual typical cost
@@ -131,6 +139,10 @@ restricts host/origin handling and is intended for local use; remote deployment
 would need authentication and durable single-owner/worker coordination.
 
 ## Verification performed
+
+The subsequent [reliability review](RELIABILITY_V2_RESULTS.md) replaces the
+old repair-budget behavior. It records fresh tests, the original audit failure's
+successful reevaluation, and a remaining semantic repeat-consistency weakness.
 
 - **77 pytest tests passed**, including workflow/API tests for immutable imports,
   checklist versions, cache reuse, errors/retries, review conflicts, human score
