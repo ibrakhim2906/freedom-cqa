@@ -29,7 +29,7 @@ quotas or a scoring advantage for either local or cloud models.
 - Check meaningful input and checklist changes alter the appropriate judgments.
 - Preserve evaluation provenance so live analysis and saved results can be distinguished.
 - Develop useful evidence and appeal workflows while keeping evaluation accuracy the main priority.
-- The actual eight-criterion operator checklist remains a separate required input.
+- The actual eight-criterion operator checklist has now been supplied and reviewed.
 
 The earlier 100-point judging rubric discussed in chat was hypothetical. It is
 not the organizer's rubric and must not be represented as official weights.

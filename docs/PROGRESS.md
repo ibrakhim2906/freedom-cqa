@@ -11,10 +11,13 @@
 
 ## Define the evaluation contract
 
-- [ ] Obtain the separate official checklist, including weights, scales, N/A, rounding, and serious-error rules.
+- [x] Obtain and review the official checklist, including weights, scales, N/A, rounding, and the separate serious-error flag.
 - [x] Select and document the frontend, backend, storage, and OpenAI API provider in STACK.md.
 - [x] Record the explicit runtime requirement: no offline evaluation fallback.
 - [x] Record the organizer's top-50 selection criteria and 10-transcript Ground Truth control stage in JUDGING.md.
+- [x] Inspect all 65 DEV transcripts and record data-specific risks in DATA_AUDIT.md.
+- [x] Record the organizer's call adaptation and flexible-checklist clarification in EVALUATION_DESIGN.md.
+- [ ] Review and agree on the proposed evaluation design and independent test strategy.
 - [ ] Select the exact OpenAI model using varied RU, KZ, and EN development cases.
 - [ ] Define checklist versions, transcript message IDs, evaluation results, and appeal records.
 - [ ] Define how missing reference procedures and unavailable audio affect judgments.
@@ -51,6 +54,6 @@
 ## Decisions still open
 
 - Exact OpenAI model, API access, and development spend limit.
-- The official checklist and any required supporting company procedures.
-- Audio analysis requirements once the actual criteria are available.
+- Supporting company procedures/reference sources and exact organizer comparison metric (not supplied).
+- Verified audio playback/access and optional audio-analysis scope.
 - Browser/computer-use behavior: the availability check stalled; WSL compatibility was not established.

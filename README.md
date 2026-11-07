@@ -51,7 +51,10 @@ in [the stack document](docs/STACK.md).
 
 - The student guide and Freedom introduction have been reviewed.
 - Access to the DEV API was verified: 65 conversations were returned.
-- The separate official eight-criterion checklist has not been supplied.
+- The official eight-criterion checklist has been supplied and reviewed.
+- All 65 DEV transcripts have been inspected; see [the data audit](docs/DATA_AUDIT.md).
+- See [the evaluation design for discussion](docs/EVALUATION_DESIGN.md), including
+  the organizer's chat/call clarification and our own test-dataset strategy.
 - Sample rubrics discussed in chat are illustrative, not official scoring rules.
 - Keep dataset records, call recordings, signed API URLs, and credentials outside Git.
 - The guide requests a public repository for submission; this repository starts private.

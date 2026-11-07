@@ -33,8 +33,8 @@ and backend processes.
   them with canned text based on a category or score.
 - Validate allowed values, required fields, and evidence references in code.
   Passing these checks does not establish semantic correctness.
-- Calculate weights, N/A redistribution, rounding, and any serious-error effects
-  in code according to the official checklist once supplied.
+- Calculate weights, N/A redistribution, and rounding in code according to the
+  supplied official checklist. Its serious-error flag is separate from the total.
 - Start with one model call per conversation covering the checklist. Add targeted
   verification only if development measurements show improved evaluation quality.
 - Record model identity, checklist/prompt versions, token usage, latency, and
@@ -42,8 +42,10 @@ and backend processes.
 
 The exact OpenAI model is not selected. Compare available candidates using varied
 Russian, Kazakh, and English development cases and human-reviewed criterion labels.
-Audio evaluation will be designed once the actual checklist establishes which
-criteria require recordings. Transcripts alone cannot establish diction or intonation.
+The official checklist and subsequent organizer clarification are now available.
+For calls, adapt communication assessment to spoken interaction. Audio can add
+evidence for pace, diction, and pronunciation; transcripts alone cannot establish
+those properties. The supplied audio URLs need playback resolution before use.
 
 ## Required runtime behavior: no offline evaluation fallback
 
@@ -76,7 +78,7 @@ Ground Truth; see [the organizer's selection criteria](JUDGING.md).
 ## Open implementation choices
 
 - Exact OpenAI model, API access, and an explicit development spend limit.
-- Official operator checklist, reference procedures, and audio-dependent criteria.
+- Approved reference procedures and verified audio playback/access.
 - Dependency versions, deployment target, and persistent-volume configuration.
 - Browser/computer-use verification in the actual Windows setup.
 
