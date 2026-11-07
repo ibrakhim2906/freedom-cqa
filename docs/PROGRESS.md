@@ -35,6 +35,10 @@
 - [x] Complete the 20-item calibration review, distinguishing user-accepted, derived, and assistant-only assessments; keep two items unscored for specific uncertainty.
 - [x] Save accepted interpretations in immutable checklist versions; retain original checklist and benchmark outputs.
 - [x] Define an explicit internal product grading rubric without claiming an organizer score or new measured accuracy.
+- [x] Freeze and run 117 updated-rubric cases (52 authored + all 65 organizer conversations), preserving label provenance and original results.
+- [x] Run a same-input original-checklist control on 24 cases and report mixed outcomes: better provisional-label agreement, worse synthetic score MAE and numeric coverage.
+- [x] Validate three fresh targeted empathy contrasts through the real API; preserve remaining uncertainty rather than claim independent Ground Truth accuracy.
+- [x] Record new benchmark spending ($4.145748 of the authorized $6) and limitations in CALIBRATED_BENCHMARK_RESULTS.md.
 - [ ] Define checklist versions, transcript message IDs, evaluation results, and appeal records.
 - [ ] Define how missing reference procedures and unavailable audio affect judgments.
 - [ ] Select a varied development subset and reserve fresh cases for checking changes.

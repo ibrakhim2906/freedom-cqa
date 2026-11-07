@@ -29,6 +29,10 @@ with [all-run coverage and spending](docs/BENCHMARK_RUN_SUMMARY.md) and
 [reference-label review notes](docs/REFERENCE_REVIEW.md). These metrics are
 development diagnostics, not organizer Ground Truth accuracy.
 
+The [updated-rubric benchmark](docs/CALIBRATED_BENCHMARK_RESULTS.md) covers 117 real
+API evaluations, a 24-case same-input control, and targeted checks. It reports
+criterion agreement separately from score error and the loss of numeric coverage.
+
 The [semantic review](docs/SEMANTIC_REVIEW.md) distinguishes suspected evaluator
 mistakes from ambiguous labels. Original datasets remain frozen;
 [structured review notes](evals/label-review-v2.json) do not override their expectations.
