@@ -4,9 +4,9 @@ These decisions record assistant recommendations accepted by the user during
 case review. They are not independent expert adjudication or organizer Ground Truth.
 Original checklist files, authored expectations, and benchmark results remain frozen.
 
-Current default: `checklists/freedom-reviewed-006.json`, version `1-reviewed-006`,
-containing R001 through R006. Six review items were accepted by the user and two
-additional items follow accepted rules. Twelve items remain pending. Applications
+Current default: `checklists/freedom-reviewed-007.json`, version `1-reviewed-007`,
+containing R001 through R007. Seven review items were accepted by the user and two
+additional items follow accepted rules. Eleven items remain pending. Applications
 of accepted rules are distinguished from separately user-adjudicated labels.
 
 ## R001: partial credit when a genuine secondary request is answered
@@ -164,7 +164,30 @@ weights, scales, and N/A conditions are preserved. The evaluator receives the
 general rule, never this case ID or the accepted case answer. Original expectations
 and saved results remain unchanged, and no paid reevaluation was performed.
 
-Consultation in `p1-ru-020` is the next pending item.
+Consultation in `p1-ru-020` was subsequently discussed and settled under R007.
+
+## R007: a vague deferral is not a concrete next step
+
+Review item 9: `p1-ru-020`, consultation **10/20**. The checkbox instructions
+resolve the initial request. The customer's substantial concern about existing
+holdings is explicitly deferred without a clear answer or actionable path to
+resolution. Source messages: m1, m10-m13. The customer's thanks does not explicitly
+withdraw the concern.
+
+General interpretation: merely saying an issue needs separate consideration is
+not a concrete next step. A substantial follow-up needs a supported answer or an
+understandable, proportionate route to resolving it. One resolved request plus an
+open substantial request fits 10. The existing 0 rule for an erroneous key
+recommendation is preserved. Do not invent additional mandatory fields, ticket
+references, or fixed deadlines as universal requirements for a valid next step.
+
+Applied in `checklists/freedom-reviewed-007.json`, version `1-reviewed-007`.
+Only consultation instructions are additionally clarified. Previous interpretations,
+weights, levels, N/A conditions, and saved results are unchanged. This is an
+assistant recommendation accepted by the user, not organizer Ground Truth. No
+paid evaluation was run.
+
+Consultation in `p1-ru-024` is the next pending item.
 
 To use the original checklist explicitly for a comparison:
 
