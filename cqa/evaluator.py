@@ -6,6 +6,7 @@ from time import perf_counter
 from openai import APIConnectionError, APIStatusError, AsyncOpenAI
 from pydantic import ValidationError
 
+from .grounding import evidence_context_for
 from .ledger import BudgetExceeded, Ledger
 from .models import Checklist, Conversation, Evaluation
 from .observations import (
@@ -185,6 +186,9 @@ class Evaluator:
                   "reasoning_effort": self.settings.effort, "ledger_call_id": call_id,
                   "reserved_usd": round(reservation, 6), "audio_analyzed": False,
                   "evaluation": None, "score": None, "error": None, "usage": None}
+        if self.grounded:
+            record["evidence_context"] = evidence_context_for(conversation)
+            record["assessment_context"] = record["evidence_context"]["assessment"]
         try:
             response = await self.client.responses.create(
                 model=self.settings.model, instructions=instructions, input=payload,

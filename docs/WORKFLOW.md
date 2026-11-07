@@ -64,11 +64,55 @@ call guidance, and allowed levels/fractions. Saving an existing ID/version with
 changed content is rejected; **Edit as new version** creates another version.
 Every evaluation is bound to the saved version, not an unsaved editor draft.
 
-Under a conversation's **Reference context**, an explicit matching platform scope
-and known date can attach the versioned official reference bundle. This creates
-a new source revision. It cannot overwrite existing scope/date or silently make
-historical sources current. References can also be supplied in imported canonical
-JSON. Quotes from the evaluator open the original message or reference text.
+Under a conversation's **Reference context**, choose the official pack, assessment
+basis and a rationale, then **Preview applicability (no API evaluation)**. The
+preview shows original date/provenance, selected product context and each usable or
+excluded source. **Apply as new revision** requires a current usable preview; the
+previous source and its saved assessments remain unchanged. Batch selection moves
+to the new revision so it uses the newly attached facts.
+
+There are two distinct bases:
+
+- **Actual conversation date:** confirm the matching product scope and supply the
+  actual date if it is not already known. Complete offset-aware ISO timestamps can
+  establish a date; MM:SS, language and today's date cannot. Existing dates/scopes
+  and source timestamp conflicts cannot be overwritten by this selection.
+- **Conditional snapshot review:** explicitly select the assumed product and the
+  source snapshot's date, with a rationale. The actual conversation date and scope
+  remain untouched, including unknowns. Every resulting assessment is marked
+  conditional in the UI, saved record, human decisions and full export. This does
+  not establish historical applicability.
+
+The nine official product references encode `date_basis=snapshot` and
+`snapshot_on=2026-11-07`, with no asserted policy validity interval. They can support
+the matching actual date or an explicit review against that snapshot. A snapshot
+assumption never extends a normal policy validity window. Wrong/missing context
+keeps sources unusable; no fallback date or entity is invented. See
+[official facts](OFFICIAL_PRODUCT_FACTS.md) for source limitations.
+
+The selected mode, rationale, scope, assessment date, pack ID/hash and exact source
+texts are frozen in the conversation input and included in its fingerprint. **Evaluate
+this revision** uses these facts in the real grounded request, while retrying an old
+job retains the old input. Quotes open the operator message or supplied reference;
+reference knowledge is never credited as an answer the operator gave. The same
+applicability helper drives preview, model payload, strict claim validation and
+appeal source selection. Unusable appeal sources are disabled with reasons.
+Older records without captured context show a separately labeled reconstructed
+inspection view; it is not presented as evidence sent to their original model.
+
+References/context can also be supplied in canonical JSON imports. Full review
+exports preserve conditional context. The organizer's fixed JSON1.0 adapter emits
+an explicit error for a conditional snapshot result rather than silently exporting
+it as a verified historical score.
+
+Offline integration validation on 2026-11-07: **252 tests passed**, including
+capture of the real evaluator's request preparation and strict deduction fixtures;
+frontend build/Ruff passed. Nine browser checks used intercepted API routes. A live
+free preview on localhost exposed all nine official references without modifying
+the selected source or starting an evaluation. All 65 saved organizer assessments
+were revalidated without score changes. No paid inference was run; the real usage
+ledger remained 548 rows and $19.694328 settled, for **$0 incremental API cost**.
+These checks establish wiring and deterministic validation, not new model accuracy.
 
 ## Evaluations, progress and spending
 

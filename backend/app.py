@@ -12,8 +12,13 @@ from sqlalchemy import select, update
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from cqa.evaluator import Evaluator
-from cqa.grounding import attach_reference_pack, reference_applicable
-from cqa.models import Checklist, Conversation
+from cqa.grounding import (
+    evidence_context_for,
+    reference_applicable,
+    reference_rejection_reasons,
+    select_reference_context,
+)
+from cqa.models import Checklist, Conversation, Reference
 from cqa.rubric import load_checklist
 from cqa.settings import ROOT, Settings
 
@@ -129,18 +134,40 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
     async def reference_packs():
         return [{"id": p.stem, **json.loads(p.read_text(encoding="utf-8"))} for p in sorted((ROOT / "references").glob("*.json"))]
 
-    @app.post("/api/conversations/{document_id}/references")
-    async def apply_reference(document_id: str, body: ReferenceRequest):
-        files = {p.stem: p for p in (ROOT / "references").glob("*.json")}
-        if body.pack_id not in files:
-            raise HTTPException(404, "Reference pack not found")
-        with store.session.begin() as session:
+    @app.get("/api/conversations/{document_id}/evidence-context")
+    async def conversation_evidence_context(document_id: str):
+        with store.session() as session:
             doc = require(session, Document, document_id)
             if doc.kind != "conversation":
                 raise HTTPException(404, "Conversation not found")
-            revised = attach_reference_pack(Conversation.model_validate(doc.content), files[body.pack_id],
-                                            body.scope, body.occurred_on)
-            new_doc, _ = store.document(session, "conversation", revised.model_dump(), doc.extra)
+            return evidence_context_for(Conversation.model_validate(doc.content))
+
+    def reference_candidate(doc, body, *, require_usable):
+        files = {p.stem: p for p in (ROOT / "references").glob("*.json")}
+        if body.pack_id not in files:
+            raise HTTPException(404, "Reference pack not found")
+        if doc.kind != "conversation":
+            raise HTTPException(404, "Conversation not found")
+        return select_reference_context(Conversation.model_validate(doc.content), files[body.pack_id], body.scope,
+            mode=body.mode, occurred_on=body.occurred_on, as_of=body.as_of, rationale=body.rationale,
+            pack_id=body.pack_id, require_usable=require_usable)
+
+    @app.post("/api/conversations/{document_id}/references/preview")
+    async def preview_reference(document_id: str, body: ReferenceRequest):
+        with store.session() as session:
+            doc = require(session, Document, document_id)
+            candidate = reference_candidate(doc, body, require_usable=False)
+            return evidence_context_for(candidate)
+
+    @app.post("/api/conversations/{document_id}/references")
+    async def apply_reference(document_id: str, body: ReferenceRequest):
+        with store.session.begin() as session:
+            doc = require(session, Document, document_id)
+            revised = reference_candidate(doc, body, require_usable=True)
+            if revised == Conversation.model_validate(doc.content):
+                return document_view(doc, True)
+            new_doc, _ = store.document(session, "conversation", revised.model_dump(),
+                                       doc.extra | {"reference_parent_revision_id": doc.id})
             return document_view(new_doc, True)
 
     @app.get("/api/checklists")
@@ -188,10 +215,31 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
             job = require(session, Job, job_id)
             conversation_doc, checklist_doc = session.get(Document, job.conversation_id), session.get(Document, job.checklist_id)
             appeals = list(session.scalars(select(Appeal).where(Appeal.job_id == job_id).order_by(Appeal.created_at)))
+            conversation = Conversation.model_validate(conversation_doc.content)
             return {**job_view(job), "record": job.record, "conversation": document_view(conversation_doc, True),
                     "runtime": session.get(Batch, job.batch_id).config,
                     "checklist": document_view(checklist_doc, True), "appeals": [appeal_view(a) for a in appeals],
-                    "effective": effective_result(job, Checklist.model_validate(checklist_doc.content), appeals)}
+                    "evidence_context": (job.record or {}).get("evidence_context") or evidence_context_for(conversation),
+                    "evidence_context_origin": ("captured_with_request" if (job.record or {}).get("evidence_context")
+                                                else "reconstructed_for_inspection"),
+                    "effective": effective_result(job, Checklist.model_validate(checklist_doc.content), appeals,
+                                                  conversation=conversation)}
+
+    @app.get("/api/jobs/{job_id}/reference-options")
+    async def review_reference_options(job_id: str):
+        with store.session() as session:
+            job = require(session, Job, job_id)
+            conversation = Conversation.model_validate(session.get(Document, job.conversation_id).content)
+            # The exact input version wins over a subsequently edited pack.
+            sources = {ref.id: ref for ref in conversation.references}
+            for path in sorted((ROOT / "references").glob("*.json")):
+                for raw in json.loads(path.read_text(encoding="utf-8"))["references"]:
+                    ref = Reference.model_validate(raw)
+                    sources.setdefault(ref.id, ref)
+            return {"references": [{"reference": ref.model_dump(),
+                "usable": reference_applicable(ref, conversation, derive_dates=True),
+                "rejection_reasons": reference_rejection_reasons(ref, conversation, derive_dates=True)}
+                for ref in sources.values()]}
 
     @app.get("/api/jobs/{job_id}/export")
     async def export(job_id: str):
@@ -259,16 +307,23 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
             checklist = Checklist.model_validate(session.get(Document, job.checklist_id).content)
             conversation = Conversation.model_validate(session.get(Document, job.conversation_id).content)
             appeals = list(session.scalars(select(Appeal).where(Appeal.job_id == job.id)))
-            before = next(j for j in effective_result(job, checklist, appeals)["judgments"]
+            before = next(j for j in effective_result(job, checklist, appeals, conversation=conversation)["judgments"]
                           if j["criterion_id"] == appeal.criterion_id)
             if body.decision == "accept":
                 if body.judgment is None or body.judgment.criterion_id != appeal.criterion_id:
                     raise ValueError("Accepting an appeal requires a full replacement judgment for that criterion")
                 before = validate_human_revision(job, checklist, conversation, appeals, body.judgment)
-                if any(not reference_applicable(ref, conversation) for ref in body.supporting_references):
+                if len({ref.id for ref in body.supporting_references}) != len(body.supporting_references):
+                    raise ValueError("Review references must have unique IDs")
+                frozen = {ref.id: ref for ref in conversation.references}
+                if any(ref.id in frozen and ref != frozen[ref.id] for ref in body.supporting_references):
+                    raise ValueError("A review source cannot replace a frozen reference with different content")
+                if any(not reference_applicable(ref, conversation, derive_dates=True) for ref in body.supporting_references):
                     raise ValueError("A review reference does not match the original conversation's scope/date")
             elif body.judgment is not None:
                 raise ValueError("A rejected appeal cannot replace the judgment")
+            elif body.supporting_references:
+                raise ValueError("Additional review sources require an accepted decision")
             updated = session.execute(update(Job).where(Job.id == job.id, Job.review_revision == body.expected_revision)
                                       .values(review_revision=body.expected_revision + 1))
             if updated.rowcount != 1:
@@ -278,6 +333,7 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
                 "revision": body.expected_revision + 1, "before": before,
                 "after": body.judgment.model_dump() if body.judgment else before,
                 "supporting_references": [r.model_dump() for r in body.supporting_references],
+                "assessment_context": evidence_context_for(conversation)["assessment"],
                 "source": "human_review"}
             return appeal_view(appeal)
 

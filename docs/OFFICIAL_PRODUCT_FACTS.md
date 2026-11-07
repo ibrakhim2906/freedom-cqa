@@ -52,22 +52,30 @@ an empathy, management or critical-error deduction.
 
 [The optional nine-reference pack](../references/freedom-global-products-20261107.json)
 uses scope `freedom-finance-global-platform`. The existing application lists it
-through its reference-pack endpoint; it is available for explicit selection without
-a server-code change. It contains concise **curated summaries**, clearly identified
+through its reference-pack endpoint. The workflow now previews and freezes explicit
+context before attaching it to a new revision. It contains concise **curated summaries**, clearly identified
 as such, with official links and source hashes. It contains no case IDs, labels or
 expected scores. The catalog and manual review notes are outside the reference-pack
 directory and are never loaded as evaluator inputs.
 
-The pack's Nov7-only bounds are a conservative **team snapshot assessment window**,
-not asserted policy effective dates. Use a confirmed matching context; never change
-a source conversation's date or infer its entity merely to pass the reference gate.
-An undated/historical transcript can be reviewed under a disclosed current-product
-assumption, but that does not finalize its original factual applicability.
+The initial same-day `valid_from/valid_until` representation has been replaced by
+explicit `date_basis=snapshot`, `snapshot_on=2026-11-07` and null policy bounds.
+Retrieval snapshots are not legal effective intervals. A matching actual date can
+use the source; an undated/historical transcript requires an explicit **conditional
+snapshot review** if that source snapshot is to be used. The separate assessment
+context never rewrites the actual date/scope and never finalizes original historical
+applicability. A snapshot review does not widen normal policy validity intervals.
 
 No pack was automatically attached to the organizer corpus. No evaluator request
 was sent, so provider acceptance, new output quality and response-length effects
 remain untested. This step improves the supplied evidence, not a measured benchmark
 accuracy figure.
+
+The integration is documented in [WORKFLOW.md](WORKFLOW.md). Offline tests capture
+the real evaluator's request preparation through import, context selection and
+queueing, and check frozen context through caching, retries, appeals and export.
+No case-specific grading branch, score override or new expected organizer label was
+introduced. No paid test establishes the new prompt's inference quality yet.
 
 ## Artifacts and verification
 

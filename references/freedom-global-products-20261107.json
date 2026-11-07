@@ -4,8 +4,8 @@
   "usage_notes": [
     "Optional explicit selection only; not automatically attached to imported conversations.",
     "Only use for a confirmed matching FFG/platform context. Do not infer entity from language/hostname.",
-    "The same-day validity bounds are our conservative snapshot assessment window, NOT legal effective dates.",
-    "Do not change a transcript date to make these sources applicable; undated/historical cases need a disclosed review assumption or actual applicability evidence.",
+    "snapshot_on records the reviewed source date, not legal policy validity. A known conversation on that date can use it; review of another/unknown date requires an explicit conditional snapshot context.",
+    "Never change a conversation date to fit sources. Snapshot review preserves the original date and scope, records the assumed product/as-of context and rationale, and keeps all assessments visibly conditional.",
     "Texts are team-curated summaries of linked official sources; they are not verbatim broker statements.",
     "No policy on post-closure login reservation/reuse is supplied."
   ],
@@ -13,92 +13,110 @@
     {
       "id": "accounts-update",
       "text": "Curated official-source summary: Eligible trading accounts beginning with 7 can submit a personal-data change in the Freedom Broker mobile app: Menu > Instructions > Personal Data > Change of details; the web route is Cabinet > Instructions > Change of details. Confirm sends it for checking; execution follows review. The guide gives no review/unlock deadline.",
-      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: accounts-update. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: accounts-update. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
       "source_url": "https://fbroker.kz/faq/question/how-can-i-update-my-data-3815",
       "retrieved_on": "2026-11-07",
       "scope": "freedom-finance-global-platform",
-      "valid_from": "2026-11-07",
-      "valid_until": "2026-11-07"
+      "valid_from": null,
+      "valid_until": null,
+      "date_basis": "snapshot",
+      "snapshot_on": "2026-11-07"
     },
     {
       "id": "accounts-requestionnaire",
       "text": "Curated official-source summary: The company may suspend withdrawal execution until current customer details are confirmed when requested data has not been supplied. Submitting an update does not itself mean it has been executed. This does not establish a guaranteed withdrawal, an unlock deadline, automatic resumption, or mandatory resubmission.",
-      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: accounts-requestionnaire. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: accounts-requestionnaire. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
       "source_url": "https://fbroker.kz/faq/question/updating-personal-data--requestionnaire-",
       "retrieved_on": "2026-11-07",
       "scope": "freedom-finance-global-platform",
-      "valid_from": "2026-11-07",
-      "valid_until": "2026-11-07"
+      "valid_from": null,
+      "valid_until": null,
+      "date_basis": "snapshot",
+      "snapshot_on": "2026-11-07"
     },
     {
       "id": "ffg-d-account-20261107",
       "text": "Curated official-source summary: D-account money cannot be used directly for trading securities. It must first be transferred to the trading account. Selecting a displayed account is different from transferring funds. This source does not establish an individual balance or transfer completion.",
-      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-d-account-20261107. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-d-account-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
       "source_url": "https://fbroker.kz/faq/question/savings-d-account2727",
       "retrieved_on": "2026-11-07",
       "scope": "freedom-finance-global-platform",
-      "valid_from": "2026-11-07",
-      "valid_until": "2026-11-07"
+      "valid_from": null,
+      "valid_until": null,
+      "date_basis": "snapshot",
+      "snapshot_on": "2026-11-07"
     },
     {
       "id": "tradernet-d-transfer-20261107",
       "text": "Curated official-source summary: The platform guide describes transfers in both directions between the trading and D accounts: select the source account, open non-trading orders > transfer between accounts, specify the amount and submit the instruction. No individual transfer deadline is established.",
-      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: tradernet-d-transfer-20261107. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: tradernet-d-transfer-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
       "source_url": "https://tradernet.global/faq/13616-kak-sdelat-perevod-mezhdu-schetami-%28torgoviid-schet%29?site_lang=ru",
       "retrieved_on": "2026-11-07",
       "scope": "freedom-finance-global-platform",
-      "valid_from": "2026-11-07",
-      "valid_until": "2026-11-07"
+      "valid_from": null,
+      "valid_until": null,
+      "date_basis": "snapshot",
+      "snapshot_on": "2026-11-07"
     },
     {
       "id": "ffg-1042-language-20261107",
       "text": "Curated official-source summary: For the explicitly identified FFG client service, the supplied Form1042-S is available only in English. The web trading platform provides Cabinet > Form1042-S > year selection > view/PDF download. This does not rule out translated guidance or establish another entity's policy.",
-      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-1042-language-20261107. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-1042-language-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
       "source_url": "https://fbroker.kz/faq/question/what-is-1042-s-form",
       "retrieved_on": "2026-11-07",
       "scope": "freedom-finance-global-platform",
-      "valid_from": "2026-11-07",
-      "valid_until": "2026-11-07"
+      "valid_from": null,
+      "valid_until": null,
+      "date_basis": "snapshot",
+      "snapshot_on": "2026-11-07"
     },
     {
       "id": "tradernet-margin-14230-20261107",
       "text": "Curated official-source summary: Use Margin is in order settings. The FAQ states that once enabled, the setting remains enabled for future trades across assets until disabled. It separately discusses repayment of borrowing and stop-out. It does not give a blanket guarantee about effects of disabling on existing holdings, debt or liquidation risk.",
-      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: tradernet-margin-14230-20261107. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: tradernet-margin-14230-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
       "source_url": "https://tradernet.global/faq/14230-margin-financing-negative-cash-balance?site_lang=ru",
       "retrieved_on": "2026-11-07",
       "scope": "freedom-finance-global-platform",
-      "valid_from": "2026-11-07",
-      "valid_until": "2026-11-07"
+      "valid_from": null,
+      "valid_until": null,
+      "date_basis": "snapshot",
+      "snapshot_on": "2026-11-07"
     },
     {
       "id": "ffg-annex7-current-20261107",
       "text": "Curated official-source summary: Annex7 links submission of an order with Use Margin activated to borrowing consent, subject to collateral/margin conditions. Ongoing uncovered-position obligations are separate. Approval is dated 2026-10-15, not an established effective interval. No universal existing-position effect of unticking is established here.",
-      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-annex7-current-20261107. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-annex7-current-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
       "source_url": "https://fbroker.kz/document/prilozenie-7",
       "retrieved_on": "2026-11-07",
       "scope": "freedom-finance-global-platform",
-      "valid_from": "2026-11-07",
-      "valid_until": "2026-11-07"
+      "valid_from": null,
+      "valid_until": null,
+      "date_basis": "snapshot",
+      "snapshot_on": "2026-11-07"
     },
     {
       "id": "ffg-tariff-location-20261107",
       "text": "Curated official-source summary: The FAQ says the active pricing plan is in Account Information in a generated broker report. It gives mobile Menu > Reports and Documents > Broker Reports, and web Cabinet > Broker Reports. It does not establish a tariff label under the name or the tariff-header semantics of an older-period report.",
-      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-tariff-location-20261107. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-tariff-location-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
       "source_url": "https://fbroker.kz/faq/question/how-to-find-out-your-tariff-2709",
       "retrieved_on": "2026-11-07",
       "scope": "freedom-finance-global-platform",
-      "valid_from": "2026-11-07",
-      "valid_until": "2026-11-07"
+      "valid_from": null,
+      "valid_until": null,
+      "date_basis": "snapshot",
+      "snapshot_on": "2026-11-07"
     },
     {
       "id": "ffg-report-fields-20261107",
       "text": "Curated official-source summary: Broker reports include operations and results for a selected period; Account Information includes a tariff plan. The selected transaction period does not by itself establish that the tariff header is historical or current. That header's time basis is not specified by this source.",
-      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-report-fields-20261107. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-report-fields-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
       "source_url": "https://fbroker.kz/faq/question/how-to-read-the-broker-report",
       "retrieved_on": "2026-11-07",
       "scope": "freedom-finance-global-platform",
-      "valid_from": "2026-11-07",
-      "valid_until": "2026-11-07"
+      "valid_from": null,
+      "valid_until": null,
+      "date_basis": "snapshot",
+      "snapshot_on": "2026-11-07"
     }
   ],
   "manifest": [

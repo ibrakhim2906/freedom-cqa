@@ -25,7 +25,10 @@ class RetryRequest(StrictModel):
 class ReferenceRequest(StrictModel):
     pack_id: str
     scope: str
-    occurred_on: str
+    mode: Literal["conversation_date", "snapshot_review"] = "conversation_date"
+    occurred_on: str | None = None
+    as_of: str | None = None
+    rationale: str = Field(min_length=1, max_length=3000)
 
 
 class AppealRequest(StrictModel):

@@ -73,7 +73,8 @@ def main():
         source, manifest = sources[ref.id], manifests[ref.id]
         assert ref.source_url == source["url"] == manifest["source_url"]
         assert ref.scope == pack["scope"] == "freedom-finance-global-platform"
-        assert ref.valid_from == ref.valid_until == ref.retrieved_on == "2026-11-07"
+        assert ref.valid_from is None and ref.valid_until is None
+        assert ref.date_basis == "snapshot" and ref.snapshot_on == ref.retrieved_on == "2026-11-07"
         assert "Curated official-source summary:" in ref.text
         assert digest_text(ref.text) == manifest["summary_sha256"]
         assert manifest["source_snapshot_sha256"] == source["snapshot_sha256"]

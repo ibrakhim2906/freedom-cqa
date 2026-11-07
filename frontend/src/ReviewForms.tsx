@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react'
-import type {Appeal, JobDetail, Judgment, Reference} from './types'
+import type {Appeal, JobDetail, Judgment, ReferenceOption} from './types'
 import {api} from './api'
+import {referenceDate} from './format'
 import styles from './App.module.css'
 
 type Shared = {job: JobDetail; onClose: () => void; onSaved: () => Promise<void>; onError: (s: string) => void}
@@ -26,13 +27,20 @@ export function ResolveForm({job, appeal, onClose, onSaved, onError}: Shared & {
   const [status, setStatus] = useState<Judgment['status']>(current.status), [answer, setAnswer] = useState(current.answer || criterion.levels[0].value)
   const [pending, setPending] = useState(false), [confirmed, setConfirmed] = useState(false)
   const [error, setError] = useState('')
-  const [references, setReferences] = useState<Reference[]>([]), [selectedReferences, setSelectedReferences] = useState<string[]>([])
-  useEffect(() => {api<{references: Reference[]}[]>('/reference-packs').then(packs => setReferences(packs.flatMap(p => p.references))).catch(e => onError(e.message))}, [onError])
+  const [references, setReferences] = useState<ReferenceOption[]>([]), [selectedReferences, setSelectedReferences] = useState<string[]>([])
+  const [loadingSources, setLoadingSources] = useState(true)
+  useEffect(() => {
+    let cancelled = false
+    api<{references: ReferenceOption[]}>(`/jobs/${job.id}/reference-options`).then(result => {
+      if (!cancelled) {setReferences(result.references); setSelectedReferences([]); setLoadingSources(false)}
+    }).catch(e => {if (!cancelled) {setError(e.message); onError(e.message); setLoadingSources(false)}})
+    return () => {cancelled = true}
+  }, [job.id, onError])
   return <div className={styles.overlay}><form className={styles.dialog} onSubmit={async e => {e.preventDefault(); setPending(true); try {
     const replacement: Judgment = {...current, status, answer: status === 'scored' ? answer : null,
       explanation: rationale, checked_message_ids: job.conversation.content.messages.map(m => m.id), uncertainty: status === 'needs_review' ? rationale : null}
     await api(`/appeals/${appeal.id}/resolve`, {decision, reviewer, rationale, expected_revision: job.review_revision, judgment: decision === 'accept' ? replacement : null,
-      supporting_references: references.filter(r => selectedReferences.includes(r.id))}); await onSaved()
+      supporting_references: decision === 'accept' ? references.filter(r => r.usable && selectedReferences.includes(r.reference.id)).map(r => r.reference) : []}); await onSaved()
   } catch (e) {setError((e as Error).message); onError((e as Error).message)} finally {setPending(false)} }}>
     <button type="button" className={styles.close} onClick={onClose}>Close review</button><h2>Review appeal: {appeal.criterion_id}</h2>
     {error && <p role="alert" className={styles.error}>{error}</p>}
@@ -42,8 +50,10 @@ export function ResolveForm({job, appeal, onClose, onSaved, onError}: Shared & {
       {status === 'scored' && <label>Answer<select aria-label="Reviewed answer" value={answer} onChange={e => setAnswer(e.target.value)}>{criterion.levels.map(l => <option key={l.value} value={l.value}>{l.value} · {l.description}</option>)}</select></label>}</div>}
     <label>Reviewer<input aria-label="Reviewer name" required value={reviewer} onChange={e => setReviewer(e.target.value)}/></label>
     <label>Decision rationale<textarea aria-label="Decision rationale" required value={rationale} onChange={e => setRationale(e.target.value)}/></label>
-    {decision === 'accept' && <fieldset><legend>Additional reference evidence</legend><p>Selected sources are saved with this human decision. Original AI inputs stay unchanged. Scope and date must match.</p>
-      {references.map(r => <label key={r.id}><input type="checkbox" checked={selectedReferences.includes(r.id)} onChange={e => setSelectedReferences(old => e.target.checked ? [...old, r.id] : old.filter(id => id !== r.id))}/>{r.id} · {r.valid_from}–{r.valid_until}</label>)}</fieldset>}
+    {decision === 'accept' && <fieldset><legend>Additional reference evidence</legend><p>Selected sources are saved with this human decision. Original AI inputs stay unchanged. Only sources applicable to this saved assessment context can be selected.</p>
+      {loadingSources && <p>Checking source applicability…</p>}
+      {references.map(({reference: r, usable, rejection_reasons: reasons}) => <label key={r.id}><input type="checkbox" disabled={!usable || loadingSources} checked={usable && selectedReferences.includes(r.id)} onChange={e => setSelectedReferences(old => e.target.checked ? [...old, r.id] : old.filter(id => id !== r.id))}/>
+        {r.id} · {referenceDate(r)} · {usable ? 'Usable' : `Unavailable — ${reasons.join(', ').replaceAll('_', ' ')}`}</label>)}</fieldset>}
     <label><input type="checkbox" checked={confirmed} onChange={e => setConfirmed(e.target.checked)}/> I reviewed the criterion, the full source transcript and the appeal evidence.</label>
     <p>The original AI output stays unchanged. Accepted decisions recalculate the final score and are marked as human review.</p>
     <button type="submit" disabled={!confirmed || pending}>Save review decision</button>

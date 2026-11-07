@@ -2,8 +2,10 @@ import copy
 
 import pytest
 
+from cqa.grounding import select_reference_context
 from cqa.models import Conversation, Deduction, Evaluation, Judgment, Message
 from cqa.rubric import official_checklist
+from cqa.settings import ROOT
 from cqa.submission import build_submission, validate_submission
 
 
@@ -110,3 +112,16 @@ def test_dev_preserves_all_65_original_ids_including_missing_assessments():
     assert len(payload["results"]) == 65
     assert [r["conversation_id"] for r in payload["results"]] == [c.id for c in dev]
     assert all(r["status"] == "error" and r["score"] is None for r in payload["results"])
+
+
+def test_conditional_snapshot_context_cannot_be_lost_in_official_score_only_export():
+    originals, entries = fixtures()
+    original = originals[0]
+    _, rubric, record = entries[original.id]
+    reviewed = select_reference_context(original, ROOT / "references/freedom-global-products-20261107.json",
+        "freedom-finance-global-platform", mode="snapshot_review", as_of="2026-11-07",
+        rationale="Explicit hypothetical product review; actual entity/date remains unknown.")
+    entries[original.id] = reviewed, rubric, record
+    row = build_submission(originals, entries, "Fixture team", "prod")["results"][0]
+    assert row["status"] == "error" and row["score"] is None
+    assert "Conditional snapshot review" in row["error"]

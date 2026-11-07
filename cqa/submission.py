@@ -3,6 +3,7 @@
 import hashlib
 from decimal import ROUND_HALF_UP, Decimal
 
+from .grounding import evidence_context_for
 from .models import Evaluation
 from .rubric import official_checklist
 from .scoring import calculate_score, validate_evaluation
@@ -37,6 +38,10 @@ def result_for(original, evaluated, checklist, record):
             raise ValueError("Submission checklist weights and allowed levels must match the organizer")
     if record.get("status") != "completed" or not record.get("evaluation"):
         return error_result(original.id, record.get("error") or "No completed model assessment available")
+    if evidence_context_for(evaluated)["assessment"]["conditional"] or (
+        record.get("assessment_context") or {}).get("conditional"):
+        return error_result(original.id,
+            "Conditional snapshot review does not establish historical applicability; use the full review export")
     result = Evaluation.model_validate(record["evaluation"])
     validate_evaluation(result, evaluated, checklist, require_audit=True)
     unresolved = [j.criterion_id for j in result.judgments if j.status == "needs_review"]

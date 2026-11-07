@@ -16,11 +16,16 @@ export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReferenc
   onAppeal: (id: string) => void; onResolve: (a: Appeal) => void;
 }) {
   const effective = job.effective, checklist = job.checklist.content
+  const assessment = effective?.assessment_context || job.record?.assessment_context || job.evidence_context?.assessment
   const flagged = Object.values(effective?.score.flags || {}).includes('yes')
   const flagUncertain = Object.values(effective?.score.flags || {}).includes('needs_review')
   return <>
     <div className={styles.card}><b data-testid="job-status">{job.status}</b> · {date(job.created_at)}
       <p>Checklist: {checklist.title} · {checklist.version}</p>
+      {assessment?.conditional && <div className={styles.warning} data-testid="conditional-assessment"><b>Conditional snapshot assessment</b>
+        <p>Assumed product scope: {assessment.scope} · Source snapshot as of {assessment.as_of}.</p>
+        <p>Actual conversation date: {job.evidence_context?.temporal.occurred_on || job.conversation.content.occurred_on || 'unknown'}. This review does not verify historical policy applicability.</p>
+        {assessment.rationale && <p>{assessment.rationale}</p>}</div>}
       {job.status === 'queued' && <button onClick={onCancel}>Cancel queued evaluation</button>}
       {job.status === 'running' && <p>Evaluating through the real OpenAI API… You can leave this page; the job continues.</p>}
       {terminal.has(job.status) && <button disabled={busy} onClick={onRetry}>{job.status === 'completed' ? 'Run again (billable)' : 'Retry (billable)'}</button>}
@@ -34,7 +39,7 @@ export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReferenc
     </div>
     {effective && <>
       <div className={styles.score} data-testid="score"><strong>{effective.score.total === null ? 'Provisional' : `${effective.score.total}/100`}</strong>
-        <span>{effective.source === 'human_review' ? `Human-reviewed · ${effective.accepted_revisions} accepted revision(s)` : 'Saved AI assessment'}</span>
+        <span>{assessment?.conditional ? 'Conditional result · ' : ''}{effective.source === 'human_review' ? `Human-reviewed · ${effective.accepted_revisions} accepted revision(s)` : 'Saved AI assessment'}</span>
         {effective.score.provisional && <span>Allowed score range: {effective.score.score_bounds.lower}–{effective.score.score_bounds.upper}. Needs review: {effective.score.unresolved_criteria.join(', ')}</span>}
         {effective.source === 'human_review' && <span>Original AI total: {job.record?.score.total ?? 'provisional'}. Original output is preserved.</span>}
       </div>
@@ -64,6 +69,13 @@ export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReferenc
       })}
       <details className={styles.card}><summary>Customer request coverage · original AI analysis</summary>{job.record?.evaluation.request_coverage.map((r, i) => <div key={i}><b>{r.status}: {r.request}</b><p>{r.explanation}</p><button onClick={() => onEvidence([], [...r.request_message_ids, ...r.answer_message_ids])}>Show request and answer</button></div>)}</details>
       {job.record?.evaluation.scope_notes.map((n, i) => <p className={styles.muted} key={i}>{n}</p>)}
+      {job.evidence_context && <details className={styles.card}><summary>{job.evidence_context_origin === 'captured_with_request' ? 'Context captured with the assessment request' : 'Reconstructed context for inspection'}</summary>
+        {job.evidence_context_origin !== 'captured_with_request' && <p>The saved result has no captured reference context. This view uses the preserved input and current inspection rules; it does not establish which source eligibility information the original model received.</p>}
+        <p>Actual date: {job.evidence_context.temporal.occurred_on || 'unknown'} · {job.evidence_context.temporal.origin.replaceAll('_', ' ')}.</p>
+        <p>Assessment: {job.evidence_context.assessment.mode.replaceAll('_', ' ')} · {job.evidence_context.assessment.scope || 'scope unknown'} · {job.evidence_context.assessment.as_of || 'date unknown'}</p>
+        {job.evidence_context.assessment.pack_id && <p>Source pack: {job.evidence_context.assessment.pack_id} · {job.evidence_context.assessment.pack_sha256}</p>}
+        {job.evidence_context.references.map(r => <p key={r.reference_id}>{r.reference_id}: {r.usable ? 'Usable' : `Unavailable — ${r.rejection_reasons.join(', ').replaceAll('_', ' ')}`}</p>)}
+      </details>}
       <h2>Appeals & decisions ({job.appeals.length})</h2>{job.appeals.map(a => <article key={a.id} className={styles.card} data-testid={`appeal-${a.criterion_id}`}>
         <b>{a.criterion_id} · {a.status}</b><p>{a.author}: {a.reason}</p><button onClick={() => onEvidence([], a.message_ids)}>Show appeal evidence</button>
         {a.status === 'open' ? <button onClick={() => onResolve(a)}>Review appeal</button> : <><p>{a.resolution?.reviewer}: {a.resolution?.rationale}</p><p>Before: {a.resolution?.before.answer ?? a.resolution?.before.status} → After: {a.resolution?.after.answer ?? a.resolution?.after.status}</p>

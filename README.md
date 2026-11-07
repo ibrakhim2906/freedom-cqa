@@ -17,7 +17,8 @@ See [workflow, startup and verification details](docs/WORKFLOW.md) for imports,
 reference context, spending limits, review decisions and remaining limitations.
 
 The [official product-facts research](docs/OFFICIAL_PRODUCT_FACTS.md) adds a scoped,
-optional reference pack. [Five complete assessment reviews](docs/COMPLETE_ASSESSMENT_REVIEW.md)
+optional reference pack integrated with [scope/date preview, immutable evaluation inputs and appeals](docs/WORKFLOW.md).
+[Five complete assessment reviews](docs/COMPLETE_ASSESSMENT_REVIEW.md)
 show how those facts affect useful judgments while preserving genuine deductions
 and unresolved evidence. These are conditional manual reviews, not new benchmark results.
 

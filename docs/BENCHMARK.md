@@ -80,3 +80,19 @@ Schema and evidence-reference checks verify legal values and verbatim quotes,
 not the semantic quality of those citations. Evidence entailment and subjective
 label boundaries still need review. A perfect diagnostic result is not a reason
 to claim organizer Ground Truth accuracy or a hackathon score.
+
+## Explicit official-source context
+
+The optional official pack uses a source snapshot date, not a policy effective
+interval. The UI's free preview is described in [WORKFLOW.md](WORKFLOW.md).
+For a future **billable** CLI run, select `--reference-pack` together with
+`--reference-scope` and `--reference-rationale`. Actual-date assessment uses
+`--reference-mode conversation_date` and a known `--conversation-date` (or a date
+already established by the input). `--as-of` is reserved for an explicitly
+conditional `--reference-mode snapshot_review`; it never changes the source date.
+
+The chosen context and exact references are frozen in the suite and fingerprinted.
+Reports mark `conditional_snapshot_review` and each row's `assessment_context`.
+Any comparison in that mode concerns a hypothetical product snapshot, not proven
+historical applicability or organizer accuracy. No paid run was made for this
+integration.

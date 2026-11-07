@@ -29,14 +29,46 @@ class Reference(StrictModel):
     scope: str | None = None
     valid_from: str | None = None
     valid_until: str | None = None
+    # Historical references retain their original validity-window semantics.
+    # A retrieved snapshot supplies evidence only at its explicit snapshot date.
+    date_basis: Literal["policy_validity", "snapshot"] = "policy_validity"
+    snapshot_on: str | None = None
 
     @model_validator(mode="after")
     def valid_dates(self):
-        for value in [self.retrieved_on, self.valid_from, self.valid_until]:
+        for value in [self.retrieved_on, self.valid_from, self.valid_until, self.snapshot_on]:
             if value is not None:
                 validate_iso_date(value)
         if self.valid_from and self.valid_until and self.valid_from > self.valid_until:
             raise ValueError("Reference validity window is reversed")
+        if self.date_basis == "snapshot":
+            if self.snapshot_on is None:
+                raise ValueError("Snapshot references require an explicit snapshot_on date")
+            if self.valid_from is not None or self.valid_until is not None:
+                raise ValueError("Snapshot dates must not be presented as policy validity intervals")
+        elif self.snapshot_on is not None:
+            raise ValueError("Only snapshot references may set snapshot_on")
+        return self
+
+
+class ReferenceContext(StrictModel):
+    mode: Literal["conversation_date", "snapshot_review"]
+    scope: str
+    as_of: str | None = None
+    rationale: str
+    pack_id: str
+    pack_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+    @model_validator(mode="after")
+    def explicit_context(self):
+        if not all(value.strip() for value in [self.scope, self.rationale, self.pack_id]):
+            raise ValueError("Reference context needs a scope, rationale and pack ID")
+        if self.as_of is not None:
+            validate_iso_date(self.as_of)
+        if self.mode == "snapshot_review" and self.as_of is None:
+            raise ValueError("Snapshot review requires an explicit as_of date")
+        if self.mode == "conversation_date" and self.as_of is not None:
+            raise ValueError("Actual conversation context cannot substitute an assessment date")
         return self
 
 
@@ -49,6 +81,7 @@ class Conversation(StrictModel):
     knowledge_scope: str | None = None
     occurred_on: str | None = None
     occurred_on_origin: Literal["supplied", "source_iso_timestamps"] | None = None
+    reference_context: ReferenceContext | None = None
 
     @model_validator(mode="after")
     def unique_messages(self):

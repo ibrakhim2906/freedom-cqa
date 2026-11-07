@@ -98,6 +98,25 @@ def wait_for_job(client, job_id):
     pytest.fail("Test worker did not finish")
 
 
+def test_historical_result_context_is_identified_as_reconstructed_without_rewriting_record(setup):
+    client, app, _, _ = setup
+    cid, checklist_id = import_one(client), save_checklist(client)
+    result = run(client, cid, checklist_id)
+    job = wait_for_job(client, result["job_ids"][0])
+    assert job["evidence_context_origin"] == "captured_with_request"
+    with app.state.store.session.begin() as session:
+        stored = session.get(Job, job["id"])
+        legacy_record = {k: v for k, v in stored.record.items()
+                         if k not in {"evidence_context", "assessment_context"}}
+        stored.record = legacy_record
+    inspected = client.get(f"/api/jobs/{job['id']}").json()
+    assert inspected["evidence_context_origin"] == "reconstructed_for_inspection"
+    assert inspected["record"] == legacy_record
+    exported = client.get(f"/api/jobs/{job['id']}/export").json()
+    assert exported["evidence_context_origin"] == "reconstructed_for_inspection"
+    assert exported["record"] == legacy_record
+
+
 def test_import_is_atomic_idempotent_and_preserves_revisions(setup):
     client, _, _, _ = setup
     first = import_one(client)

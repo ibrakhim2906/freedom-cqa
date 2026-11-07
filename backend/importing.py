@@ -37,7 +37,8 @@ def parse_import(content):
                     messages=[Message(id=m.get("id", f"m{i}"), timestamp=m["timestamp"], speaker=m["speaker"], text=m["text"])
                               for i, m in enumerate(row["transcript"], 1)],
                     references=row.get("references", []), knowledge_scope=row.get("knowledge_scope"),
-                    occurred_on=row.get("occurred_on"), occurred_on_origin=row.get("occurred_on_origin"))
+                    occurred_on=row.get("occurred_on"), occurred_on_origin=row.get("occurred_on_origin"),
+                    reference_context=row.get("reference_context"))
             else:
                 conversation = Conversation.model_validate({k: v for k, v in row.items() if k in Conversation.model_fields})
             if len(conversation.messages) > 10_000 or not conversation.id.strip():

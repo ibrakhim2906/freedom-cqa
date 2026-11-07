@@ -2,9 +2,10 @@ import {useCallback, useEffect, useState} from 'react'
 import type {Appeal, BatchResult, Checklist, ChecklistRow, Config, ConversationDetail, ConversationRow, Evidence, JobDetail, JobRow, Reference} from './types'
 import {api} from './api'
 import {Assessment, Highlighted} from './Assessment'
-import {date, dollars, safeLink, terminal} from './format'
+import {date, dollars, referenceDate, safeLink, terminal} from './format'
 import {ChecklistEditor, newCriterion} from './Checklists'
 import {AppealForm, ResolveForm} from './ReviewForms'
+import {ReferenceContext} from './ReferenceContext'
 import styles from './App.module.css'
 
 function App() {
@@ -131,7 +132,7 @@ function App() {
         {!conversations.length && <p>Import conversations to begin. No prepared evaluations are loaded.</p>}</aside>
         <section className={styles.transcript}>{source ? <><div className={styles.sectionHeading}><h2>{source.external_id}</h2><span>{source.language} · {source.channel}</span></div>
           <div className={styles.row}><button onClick={() => {setImportText(JSON.stringify(source.content, null, 2)); setShowImport(true)}}>Edit / import new revision</button><button disabled={busy} onClick={() => run([source.id])}>Evaluate this revision</button></div>
-          <ReferenceContext source={source} onApplied={async id => {await refresh(); chooseConversation(id)}} onError={setError}/>
+          <ReferenceContext key={source.id} source={source} onApplied={async id => {await refresh(); setSelected(old => [...new Set(old.map(selectedId => selectedId === source.id ? id : selectedId))]); chooseConversation(id)}} onError={setError}/>
           {source.metadata.recording_url && <a href={safeLink(source.metadata.recording_url)} target="_blank" rel="noreferrer">Open original recording</a>}
           {source.channel === 'voice call' && <p className={styles.muted}>Transcript assessment only. Audio, diction and pronunciation have not been analyzed.</p>}
           {source.content.messages.map(m => <article id={`message-${m.id}`} data-testid={`message-${m.id}`} key={m.id} className={`${styles.message} ${styles[m.speaker] || ''} ${focus.ids.includes(m.id) ? styles.highlight : ''}`}>
@@ -142,25 +143,14 @@ function App() {
           {job ? <Assessment job={job} busy={busy} onRetry={retry} onCancel={() => act(async () => {await api(`/jobs/${job.id}/cancel`, {}); await refreshJob()})} onEvidence={evidence} onReference={(ref, quote) => setReference({ref, quote})} onAppeal={setAppealCriterion} onResolve={setResolveAppeal}/> : <p className={styles.empty}>Run an evaluation or select a saved result. Loading a saved result makes no API call.</p>}
         </section></main></>}
     {reference && <div className={styles.overlay}><section className={styles.dialog}><button className={styles.close} onClick={() => setReference(undefined)}>Close reference</button><h2>{reference.ref.id}</h2><p>{reference.ref.provenance}</p>
-      <p>Scope: {reference.ref.scope || 'Explicitly supplied facts'} · Window: {reference.ref.valid_from || 'unspecified'}–{reference.ref.valid_until || 'unspecified'}</p>
+      <p>Scope: {reference.ref.scope || 'Explicitly supplied facts'} · {referenceDate(reference.ref)}</p>
       {safeLink(reference.ref.source_url) && <a href={safeLink(reference.ref.source_url)} target="_blank" rel="noreferrer">Original source</a>}
       <p className={styles.sourceText}>{reference.quote ? <Highlighted text={reference.ref.text} quote={reference.quote}/> : reference.ref.text}</p></section></div>}
     {appealCriterion && job && <AppealForm job={job} criterionId={appealCriterion} onClose={() => setAppealCriterion(undefined)} onSaved={async () => {await refreshJob(); setAppealCriterion(undefined)}} onError={setError}/>}
-    {resolveAppeal && job && <ResolveForm job={job} appeal={resolveAppeal} onClose={() => setResolveAppeal(undefined)} onSaved={async () => {await refreshJob(); setResolveAppeal(undefined)}} onError={setError}/>}
+    {resolveAppeal && job && <ResolveForm key={`${job.id}-${resolveAppeal.id}`} job={job} appeal={resolveAppeal} onClose={() => setResolveAppeal(undefined)} onSaved={async () => {await refreshJob(); setResolveAppeal(undefined)}} onError={setError}/>}
   </div>
 }
 
-function ReferenceContext({source, onApplied, onError}: {source: ConversationDetail; onApplied: (id: string) => Promise<void>; onError: (s: string) => void}) {
-  const [packs, setPacks] = useState<{id: string; scope: string; references: Reference[]}[]>([]), [selected, setSelected] = useState(''), [on, setOn] = useState(''), [pending, setPending] = useState(false)
-  useEffect(() => {api<typeof packs>('/reference-packs').then(setPacks).catch(e => onError(e.message))}, [onError])
-  return <details className={styles.context}><summary>Reference context · {source.reference_count} attached</summary><p>Creates a new conversation revision. Select a matching platform and a known conversation date.</p>
-    <select aria-label="Reference pack" value={selected} onChange={e => setSelected(e.target.value)}><option value="">Choose reference pack</option>{packs.map(p => <option key={p.id} value={p.id}>{p.id} · {p.scope}</option>)}</select>
-    <label>Known conversation date<input aria-label="Known conversation date" type="date" value={on} onChange={e => setOn(e.target.value)}/></label>
-    <button disabled={!selected || !on || pending} onClick={async () => {setPending(true); try {const value = await api<ConversationDetail>(`/conversations/${source.id}/references`, {pack_id: selected, scope: packs.find(p => p.id === selected)!.scope, occurred_on: on}); await onApplied(value.id)} catch (e) {onError((e as Error).message)} finally {setPending(false)}}}>Apply as new revision</button>
-    {source.content.knowledge_scope && <p>Selected scope: {source.content.knowledge_scope}; date: {source.content.occurred_on || 'unknown'}</p>}
-    {packs.find(p => p.id === selected)?.references.map(r => <p key={r.id}>{r.id} · {r.valid_from}–{r.valid_until} · {r.source_url}</p>)}
-  </details>
-}
 function History({onSelect}: {onSelect: (j: JobRow) => void}) {
   const [jobs, setJobs] = useState<JobRow[]>([]), [error, setError] = useState('')
   useEffect(() => {api<JobRow[]>('/jobs').then(setJobs).catch(e => setError(e.message))}, [])

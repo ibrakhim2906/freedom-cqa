@@ -5,6 +5,7 @@ from dataclasses import replace
 from sqlalchemy import select
 
 from cqa.evaluator import Evaluator, schema_for
+from cqa.grounding import evidence_context_for
 from cqa.ledger import BudgetExceeded, Ledger
 from cqa.models import Checklist, Conversation, Evaluation, Judgment
 from cqa.prompt import fingerprint
@@ -151,6 +152,8 @@ class Workflow:
                     record = self.failure("evaluator_" + type(error).__name__, billing="unknown")
                 with self.store.session.begin() as session:
                     job = session.get(Job, job_id)
+                    record["evidence_context"] = evidence_context_for(conversation)
+                    record["assessment_context"] = record["evidence_context"]["assessment"]
                     job.record, job.status, job.finished_at = record, record["status"], now()
                     if record.get("api_error_code") in {"credit_balance_exhausted", "insufficient_quota"}:
                         for pending in session.scalars(select(Job).where(Job.status == "queued")):
@@ -168,7 +171,7 @@ class Workflow:
                 await evaluator.close()
 
 
-def effective_result(job, checklist, appeals):
+def effective_result(job, checklist, appeals, *, conversation=None):
     if not job.record or job.status != "completed":
         return None
     original = Evaluation.model_validate(job.record["evaluation"])
@@ -181,11 +184,13 @@ def effective_result(job, checklist, appeals):
                           scope_notes=original.scope_notes)
     return {"judgments": [j.model_dump() for j in reviewed.judgments],
             "score": calculate_score(reviewed, checklist),
+            "assessment_context": (job.record.get("assessment_context") or
+                (evidence_context_for(conversation)["assessment"] if conversation is not None else None)),
             "source": "human_review" if revisions else "ai_original", "accepted_revisions": len(revisions)}
 
 
 def validate_human_revision(job, checklist, conversation, appeals, replacement):
-    current = effective_result(job, checklist, appeals)
+    current = effective_result(job, checklist, appeals, conversation=conversation)
     judgments = [replacement if j["criterion_id"] == replacement.criterion_id else Judgment.model_validate(j)
                  for j in current["judgments"]]
     result = Evaluation(judgments=judgments, request_coverage=[], scope_notes=[])

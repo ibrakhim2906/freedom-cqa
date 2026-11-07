@@ -2,8 +2,7 @@ import hashlib
 import json
 
 from .baseline_prompt import PROJECT_BASELINE_SYSTEM
-from .context import derive_temporal_context
-from .grounding import reference_applicable, reference_rejection_reasons
+from .grounding import evidence_context_for
 from .models import Checklist, Conversation
 
 GROUNDED_SYSTEM = """You evaluate the HUMAN OPERATOR using the supplied configurable checklist.
@@ -72,10 +71,18 @@ an unanswered request or a factual error in different words. Follow the checklis
 actual boundary rules; flags are separate from numeric deductions.
 Report factual_claims for material product/procedure assertions by the OPERATOR that
 affect assessment. Quote the operator assertion and the applicable supplied reference.
-Reference scope must match knowledge_scope; dated reference windows require occurred_on
-within that window. Missing context, expired/wrong-scope sources, unrelated sources,
-or source silence cannot establish truth or falsity. Retrieved_on alone is not a policy
-effective date. Contradicted means actual incompatible evidence, not merely no source.
+Use only references marked usable in evidence_context. Reference scope must match
+the declared applicable context. A policy_validity reference uses the actual conversation
+date and its validity window. A snapshot reference supplies evidence at snapshot_on,
+not a legal policy interval. In conversation_date mode its snapshot must match the
+actual source date; do not invent one. In snapshot_review mode the explicitly selected
+as_of date permits a CONDITIONAL current-product review, preserving the actual date
+and actual knowledge_scope. State that assumption in scope_notes; it does not establish
+historical entity/date applicability. A snapshot-review date never expands a normal
+policy validity interval. Source-date conflicts still block reference use.
+Missing context, expired/wrong-scope sources, unrelated sources, or source silence
+cannot establish truth or falsity. Retrieved_on alone is not a policy effective date.
+Contradicted means actual incompatible evidence, not merely no source.
 If a material specialized fact (including a specific fee, timing guarantee, eligibility
 condition, or unconfirmed interface route) cannot be verified, report unverified and
 needs_review for the criteria whose grade depends on it. Do not penalize other criteria
@@ -153,37 +160,45 @@ silently disappear because the final route worked. Keep grade-independent assert
 and normative conduct distinguishable. Never classify a material unresolved fact as
 social or immaterial just to pass validation. Exclusions are reviewable decisions,
 not a semantic-completeness certificate. Keep quotes and explanations concise.
-The evidence_context describes source-derived dates, conflicts and reference
-rejection reasons. Do not infer dates from MM:SS, language or today's date. Retrieval
-date is not an effective policy date; do not override scope/validity or a source-date
-conflict. Keep uncertainty local and retain all independently justified deductions.
+The evidence_context describes source-derived dates, the explicit assessment basis,
+conflicts and reference rejection reasons. Do not infer dates from MM:SS, language
+or today's date. A curated official-source summary verifies only its stated product
+proposition; never count its text as a reply or next step the operator gave. An available
+fact does not close an unanswered request or erase a legitimate independent deduction.
+Do not override scope, snapshot date, policy validity or source-date conflicts. Keep
+uncertainty local and retain all independently justified deductions.
 Use concise, specific explanations in English;
 quotes must remain verbatim in the original language. Return only the requested JSON.
 """
 SYSTEM = PROJECT_BASELINE_SYSTEM
 PROMPT_VERSION = "evaluator-v2-" + hashlib.sha256(SYSTEM.encode()).hexdigest()[:12]
-GROUNDED_VERSION = "evaluator-v5-" + hashlib.sha256(GROUNDED_SYSTEM.encode()).hexdigest()[:12]
+GROUNDED_VERSION = "evaluator-v6-" + hashlib.sha256(GROUNDED_SYSTEM.encode()).hexdigest()[:12]
 
 
 def payload_for(conversation: Conversation, checklist: Checklist, *, grounded=False):
     model_input = conversation.model_dump()
+    # New optional context/source metadata must not rewrite the legacy payload
+    # representation when merely reading a historical conversation.
+    if model_input["reference_context"] is None:
+        model_input.pop("reference_context")
+    for reference in model_input["references"]:
+        if reference["date_basis"] == "policy_validity":
+            reference.pop("date_basis")
+        if reference["snapshot_on"] is None:
+            reference.pop("snapshot_on")
     # Diagnostic IDs can reveal the intended failure (e.g. identity-after).
     # Keep identifiers for joining results outside the model's inference context.
     model_input["id"] = "conversation"
     payload = {"checklist": checklist.model_dump(), "conversation": model_input,
                "audio_available_to_evaluator": False}
     if grounded:
-        temporal = derive_temporal_context(conversation)
+        evidence_context = evidence_context_for(conversation)
         # Source timestamps are already in the complete conversation; avoid
         # duplicating every timestamp in the billable request.
-        temporal = {k: v for k, v in temporal.items() if k not in {"source_timestamps", "unusable_timestamps"}}
-        payload["evidence_context"] = {"temporal": temporal,
-            "rule_authority": "The selected checklist defines grading requirements, not external product/account truth.",
-            "references": [{"reference_id": r.id, "usable": reference_applicable(r, conversation, derive_dates=True),
-                            "rejection_reasons": reference_rejection_reasons(r, conversation, derive_dates=True)}
-                           for r in conversation.references]}
-        payload["usable_reference_ids"] = [r.id for r in conversation.references
-                                           if reference_applicable(r, conversation, derive_dates=True)]
+        evidence_context["temporal"] = {k: v for k, v in evidence_context["temporal"].items()
+                                        if k not in {"source_timestamps", "unusable_timestamps"}}
+        payload["evidence_context"] = evidence_context
+        payload["usable_reference_ids"] = [r["reference_id"] for r in evidence_context["references"] if r["usable"]]
     return json.dumps(payload, ensure_ascii=False, sort_keys=True)
 
 

@@ -8,7 +8,7 @@ from uuid import uuid4
 
 from .datasets import load_cases, load_suite
 from .evaluator import Evaluator
-from .grounding import attach_reference_pack
+from .grounding import evidence_context_for, select_reference_context
 from .ledger import BudgetExceeded, Ledger
 from .metrics import compare_case, summarize
 from .rubric import load_checklist
@@ -36,12 +36,16 @@ async def benchmark(args):
         cases = cases[:args.limit]
     reference_pack = getattr(args, "reference_pack", None)
     reference_scope, as_of = getattr(args, "reference_scope", None), getattr(args, "as_of", None)
+    reference_mode = getattr(args, "reference_mode", "conversation_date")
+    conversation_date = getattr(args, "conversation_date", None)
+    reference_rationale = getattr(args, "reference_rationale", None)
     if reference_pack:
-        if not reference_scope or not as_of:
-            raise ValueError("A reference pack requires explicit --reference-scope and --as-of context")
-        cases = [c.model_copy(update={"conversation": attach_reference_pack(
-            c.conversation, ROOT / reference_pack, reference_scope, as_of)}) for c in cases]
-    elif reference_scope or as_of:
+        if not reference_scope or not reference_rationale:
+            raise ValueError("A reference pack requires explicit --reference-scope and --reference-rationale")
+        cases = [c.model_copy(update={"conversation": select_reference_context(
+            c.conversation, ROOT / reference_pack, reference_scope, mode=reference_mode,
+            occurred_on=conversation_date, as_of=as_of, rationale=reference_rationale)}) for c in cases]
+    elif reference_scope or as_of or conversation_date or reference_rationale or reference_mode != "conversation_date":
         raise ValueError("Reference scope/date options require --reference-pack")
     if not cases:
         raise ValueError("Suite selection is empty")
@@ -74,6 +78,8 @@ async def benchmark(args):
         path.read_bytes() for path in sorted((ROOT / "cqa").glob("*.py")))).hexdigest()
     metadata["reference_pack_sha256"] = (hashlib.sha256((ROOT / reference_pack).read_bytes()).hexdigest()
                                          if reference_pack else None)
+    metadata["conditional_snapshot_review"] = any(
+        evidence_context_for(c.conversation)["assessment"]["conditional"] for c in cases)
     # Freeze exactly what was selected BEFORE any model result is seen, outside inference.
     output.with_suffix(".suite.jsonl").write_text("".join(c.model_dump_json() + "\n" for c in cases), encoding="utf-8")
     semaphore = asyncio.Semaphore(settings.concurrency)
@@ -92,6 +98,7 @@ async def benchmark(args):
                    "label_provenance": case.label_provenance, "language": case.conversation.language,
                    "channel": case.conversation.channel, "record": record,
                    "comparison": compare_case(case, record, selected)}
+            row["assessment_context"] = evidence_context_for(case.conversation)["assessment"]
             rows.append(row)
             save_report(output, rows, metadata, ledger)
             checks = row["comparison"]["checks"]
@@ -127,7 +134,10 @@ def main():
     run.add_argument("--checklist")
     run.add_argument("--reference-pack", help="Explicit scoped reference bundle; no implicit product/entity selection")
     run.add_argument("--reference-scope")
-    run.add_argument("--as-of", help="Explicit YYYY-MM-DD assessment date for the selected reference bundle")
+    run.add_argument("--reference-mode", choices=["conversation_date", "snapshot_review"], default="conversation_date")
+    run.add_argument("--conversation-date", help="Known actual YYYY-MM-DD conversation date; never an assessment date")
+    run.add_argument("--as-of", help="Explicit source-snapshot review date; requires --reference-mode snapshot_review")
+    run.add_argument("--reference-rationale", help="Why the selected entity/date or conditional snapshot context applies")
     run.add_argument("--budget-usd", type=float, default=1.0)
     run.add_argument("--output", default="artifacts/benchmark/baseline-v1.json")
     args = parser.parse_args()
