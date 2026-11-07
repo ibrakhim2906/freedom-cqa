@@ -228,6 +228,34 @@
       "source_conversation_sha256": "5dfc7430b21a372db9467332b8dbcbb8dcd272c4c7c2f9c29482e1aa2830be32",
       "applied_checklist": "checklists/freedom-reviewed-008.json",
       "applied_checklist_version": "1-reviewed-008"
+    },
+    {
+      "id": "R009",
+      "review_item": 11,
+      "rule_id": "R009",
+      "case_id": "p1-en-006",
+      "criterion_id": "needs",
+      "status": "scored",
+      "answer": "yes",
+      "review_method": "assistant_proposed_user_accepted",
+      "organizer_ground_truth": false,
+      "independent_expert_review": false,
+      "evidence_message_ids": [
+        "m1",
+        "m13",
+        "m14",
+        "m15",
+        "m16",
+        "m18",
+        "m19",
+        "m20",
+        "m21"
+      ],
+      "reason": "Currency is clarified before the initial referral and timing is collected and added progressively. The supplied evidence does not establish that timing was required before opening the referral; a deduction would introduce an unsupported prerequisite.",
+      "reference_status": "Referral policy not independently verified. If an applicable policy establishes timing as a mandatory prerequisite, the judgment must be revisited.",
+      "source_conversation_sha256": "2ddd854209b9cc2256b4f2339d8ac1b51780f9011a1a4b91ab3db47e4c39ccd5",
+      "applied_checklist": "checklists/freedom-reviewed-009.json",
+      "applied_checklist_version": "1-reviewed-009"
     }
   ]
 }

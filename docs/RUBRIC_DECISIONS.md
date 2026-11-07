@@ -4,9 +4,9 @@ These decisions record assistant recommendations accepted by the user during
 case review. They are not independent expert adjudication or organizer Ground Truth.
 Original checklist files, authored expectations, and benchmark results remain frozen.
 
-Current default: `checklists/freedom-reviewed-008.json`, version `1-reviewed-008`,
-containing R001 through R008. Eight review items were accepted by the user and two
-additional items follow accepted rules. Ten items remain pending. Applications
+Current default: `checklists/freedom-reviewed-009.json`, version `1-reviewed-009`,
+containing R001 through R009. Nine review items were accepted by the user and two
+additional items follow accepted rules. Nine items remain pending. Applications
 of accepted rules are distinguished from separately user-adjudicated labels.
 
 ## R001: partial credit when a genuine secondary request is answered
@@ -213,7 +213,30 @@ rules, weights, scales, N/A conditions, and saved results are preserved. This is
 assistant recommendation accepted by the user, not organizer Ground Truth. No paid
 evaluation was run.
 
-Needs clarification in `p1-en-006` is the next pending item.
+Needs clarification in `p1-en-006` was subsequently discussed and settled under R009.
+
+## R009: distinguish useful information from a prerequisite to an earlier action
+
+Review item 11: `p1-en-006`, needs **Yes**. Currency is clarified before initial
+referral; timing is gathered and attached later. No supplied evidence establishes
+timing as a prerequisite to creating the referral. Source messages: m1, m13-m16,
+m18-m21. The applicable referral procedure is not independently verified; an actual
+policy requiring timing first would change this judgment.
+
+General interpretation: obtain missing information before advice or actions that
+depend on it. Other relevant information may be collected progressively. Mere
+usefulness is not proof of a prerequisite. A deduction for late clarification must
+identify the earlier dependent action and the evidence establishing that dependency;
+do not invent required workflow fields. A demonstrably missing prerequisite still
+requires No.
+
+Applied in `checklists/freedom-reviewed-009.json`, version `1-reviewed-009`.
+Only needs instructions are additionally clarified; the accepted N/A time anchor,
+all other criterion definitions, weights, levels, earlier versions, and saved results
+are preserved. This records an assistant recommendation accepted by the user, not
+organizer Ground Truth. No paid evaluation was run.
+
+Closing in `p1-en-009` is the next pending item.
 
 To use the original checklist explicitly for a comparison:
 
