@@ -173,5 +173,8 @@ grounded evaluator and scorer. The local browser workflow has been exercised
 through real API calls and reference-backed human review.
 
 The current [evidence contract](docs/EVIDENCE_CONTRACT_V2.md) strictly separates
-answer proof, omission context and claim observations. Its candidate verification
-is offline; the frozen six-case baseline and prior API results remain unchanged.
+answer proof, omission context and claim observations. The updated evaluator
+has [a six-case live result](docs/EVIDENCE_CONTRACT_V2_LIVE_RESULTS.md): six valid
+first-attempt assessments and 48/48 frozen provisional judgments matched. The
+frozen baseline and prior API results remain unchanged; broader reliability is
+still unmeasured.

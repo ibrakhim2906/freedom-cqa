@@ -111,3 +111,8 @@ original verifier intentionally also pins the old engine and therefore rejects
 this engine change. Use `uv run python -m scripts.verify_evidence_contract_candidate`
 for the separate, free candidate check against the unchanged frozen inputs and
 expectations. It does not replace the original manifest or perform inference.
+
+The subsequent [v2 live acceptance run](EVIDENCE_CONTRACT_V2_LIVE_RESULTS.md)
+completed all six unchanged cases on the first attempt, matching all 48 frozen
+provisional judgments, at $0.3560597 in reconciled token-priced usage. Full review
+retains one compound-claim diagnostic and explicitly untested generalization.

@@ -86,11 +86,14 @@ without changing failed statuses. A candidate protocol can be written to a new
 ignored artifact path with `--record`, then checked with `--check-protocol`.
 It records a separate prompt/schema/source identity and constructs no API client.
 
-This change has not been tested through paid inference. Offline schema checks,
+At the offline milestone this change had not been tested through paid inference.
+The subsequent [authorized six-case live run](EVIDENCE_CONTRACT_V2_LIVE_RESULTS.md)
+produced six valid first-attempt assessments with all 48 frozen judgments matched;
+it is a separate record and does not rewrite the baseline. Offline schema checks,
 saved-record validation and mocked UI checks establish structural behavior, not
 provider acceptance, semantic completeness, live model stability or organizer
 Ground Truth accuracy. The prior real run remains four valid outputs and two
-failures until an explicitly authorized new run measures otherwise.
+failures under its original engine.
 
 Verification for this change: 340 pytest tests passed; Ruff and the frontend
 production build passed. Frontend lint has existing non-failing React warnings.
@@ -103,6 +106,7 @@ All 65 saved organizer evaluations, using the previously declared four later
 rechecks, validate with exactly unchanged scores: 36 numeric and 29 provisional.
 Those mixed historical v3/v4 records predate semantic audits; this establishes
 compatibility, not v2 inference quality. The four accepted frozen-suite results
-also revalidate unchanged. All ten preserved file hashes match and the usage
-ledger remains at 556 rows: zero additional calls and $0 incremental API cost.
+also revalidate unchanged. At that offline milestone all ten preserved file
+hashes matched and the usage ledger remained at 556 rows: zero additional calls
+and $0 incremental API cost for those offline checks.
 Private evidence is under `artifacts/evidence-contract-v2/`.
