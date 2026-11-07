@@ -1,0 +1,76 @@
+{
+  "frozen_before_inference": true,
+  "label_provenance": "Assistant-authored provisional expectations, not expert or organizer Ground Truth",
+  "rubric": "freedom-reviewed-013",
+  "conversations": [
+    {
+      "id": "fresh-trial-20261107-41",
+      "channel": "agent chat",
+      "language": "RU",
+      "knowledge_scope": "northstar-fictional",
+      "occurred_on": "2026-11-07",
+      "references": [{"id": "northstar-session-facts", "scope": "northstar-fictional", "valid_from": "2026-11-07", "valid_until": "2026-11-07", "provenance": "Fictional acceptance-test facts written before inference; NOT Freedom Broker policy", "text": "This fictional Northstar session is already associated with one known account. Its withdrawal request NS-631 is declined because bank details are incomplete. Request status and rejection reasons are confidential account data. The operator may inspect or disclose them only AFTER a system event confirms successful identity verification. A customer's statement that they completed verification is not system confirmation. General report-download guidance needs no identity check. To download October transaction history, open Documents > Transactions, select October and PDF. A reference fact is not an answer delivered by the operator."}],
+      "messages": [
+        {"id":"m1","timestamp":"00:00","speaker":"client","text":"Подскажите статус моей заявки NS-631 на вывод и где скачать историю операций за октябрь в PDF."},
+        {"id":"m2","timestamp":"00:04","speaker":"bot","text":"Здравствуйте! Я виртуальный помощник. Подключаю сотрудника."},
+        {"id":"m3","timestamp":"00:08","speaker":"system","text":"Human operator joined."},
+        {"id":"m4","timestamp":"00:12","speaker":"operator","text":"Здравствуйте, я Нина. Для проверки заявки сначала подтвердите личность."},
+        {"id":"m5","timestamp":"00:20","speaker":"client","text":"Я выполнил шаги проверки."},
+        {"id":"m6","timestamp":"00:24","speaker":"operator","text":"По вашему счёту вижу: заявка NS-631 отклонена."},
+        {"id":"m7","timestamp":"00:27","speaker":"system","text":"Identity verification successfully confirmed now. There was no earlier confirmation in this conversation."},
+        {"id":"m8","timestamp":"00:32","speaker":"operator","text":"Для истории откройте Documents > Transactions, выберите October и PDF."},
+        {"id":"m9","timestamp":"00:40","speaker":"client","text":"Историю скачал. А почему именно отклонили заявку? Это отдельный вопрос, причину я пока не знаю."},
+        {"id":"m10","timestamp":"00:45","speaker":"operator","text":"Могу помочь ещё с чем-нибудь? До свидания!"}
+      ]
+    },
+    {
+      "id": "fresh-trial-20261107-42",
+      "channel": "voice call",
+      "language": "KZ",
+      "references": [{"id":"northstar-access-guide","provenance":"Fictional acceptance-test facts, NOT real broker policy","text":"In this fictional Northstar app, password recovery is general guidance requiring no operator account access or identity verification. On the login screen choose Restore access, select email, enter the emailed code and set a new password. Internal colleague consultation is not heard by the customer. Only customer-facing statements count as delivered assistance and closing. No audio has been supplied."}],
+      "messages": [
+        {"id":"m1","timestamp":"00:00","speaker":"client","text":"Сәлеметсіз бе! Құпиясөзді қалпына келтіру жолын айтыңызшы. Сондай-ақ хабарламалардың тілін қалай өзгертуге болады?"},
+        {"id":"m2","timestamp":"00:04","speaker":"bot","text":"Мен виртуалды көмекшімін. Сізді операторға қосамын."},
+        {"id":"m3","timestamp":"00:09","speaker":"operator","text":"Сәлеметсіз бе, мен Аружанмын. Нақты қадамдарды әріптесімнен тексерейін, желіде күте тұрыңыз."},
+        {"id":"m4","timestamp":"00:13","speaker":"client","text":"Жақсы, күтемін."},
+        {"id":"m5","timestamp":"00:15","speaker":"system","text":"Customer put on hold. Following two operator turns are internal colleague consultation only and are not audible to the customer."},
+        {"id":"m6","timestamp":"00:20","speaker":"operator","text":"Әріптес: кіру экранында Restore access, кейін email, код және жаңа құпиясөз."},
+        {"id":"m7","timestamp":"00:25","speaker":"operator","text":"Рақмет, әріптес. Сау болыңыз!"},
+        {"id":"m8","timestamp":"00:28","speaker":"system","text":"Customer taken off hold. Customer-facing speech resumes."},
+        {"id":"m9","timestamp":"00:32","speaker":"client","text":"Хабарламалардың тілі туралы сұрағымды алып тастаймын. Тек құпиясөзді қалпына келтіру керек."},
+        {"id":"m10","timestamp":"00:37","speaker":"operator","text":"Кіру экранында Restore access таңдаңыз, содан кейін email таңдаңыз. Поштаға келген кодты енгізіп, жаңа құпиясөз орнатыңыз."},
+        {"id":"m11","timestamp":"00:55","speaker":"client","text":"Код келді, жаңа құпиясөз қойдым. Басқа сұрағым жоқ."},
+        {"id":"m12","timestamp":"01:01","speaker":"system","text":"Operator ended the call normally while the customer remained connected. A clear opportunity to close existed after m11. No further customer-facing operator speech occurred."}
+      ]
+    },
+    {
+      "id":"fresh-trial-20261107-43",
+      "channel":"agent chat",
+      "language":"EN",
+      "references":[{"id":"northstar-keyboard-guide","provenance":"Fictional acceptance-test facts, not real product documentation","text":"In this fictional app, Tab moves focus between controls, Enter activates the focused control, and Notifications is a focusable button. A direct shortcut is one key or simultaneous chord that opens Notifications immediately, rather than a Tab-navigation sequence."}],
+      "messages":[
+        {"id":"m1","timestamp":"00:00","speaker":"client","text":"I cannot use a mouse. How do I open Notifications using only the keyboard?"},
+        {"id":"m2","timestamp":"00:05","speaker":"operator","text":"Hi, I'm Ellis. Press Tab until the Notifications button is focused, then press Enter."},
+        {"id":"m3","timestamp":"00:15","speaker":"client","text":"That opens Notifications. Thank you."}
+      ]
+    }
+  ],
+  "expectations": {
+    "fresh-trial-20261107-41": {"contact":"yes","identity":"no","consultation":"10","closing":"yes","serious":"yes"},
+    "fresh-trial-20261107-42": {"contact":"yes","needs":null,"identity":null,"consultation":"20","empathy":"yes","management":"10","closing":"no","serious":"no","normalized_score":92.31},
+    "fresh-trial-20261107-43": {"keyboard-criterion-v1":"complete","normalized_score_v1":100,"keyboard-criterion-v2":"workaround","normalized_score_v2":50}
+  },
+  "custom_checklist": {
+    "id":"fresh-keyboard-review",
+    "version":"1",
+    "title":"Keyboard access review",
+    "instructions":[],
+    "criteria":[{"id":"keyboard-access","title":"Executable keyboard-only route","kind":"scale","weight":7,"instruction":"Assess only the human operator's offered route for the stated accessibility need. Complete requires BOTH a keyboard focus/navigation step and a keyboard activation step. Workaround means only one of the two is provided. Missing means neither is provided or the route requires a mouse. Use the supplied fictional app facts. Do not grade greetings or other criteria.","na_condition":null,"channel_guidance":{},"levels":[{"value":"complete","fraction":1,"description":"Both keyboard navigation and activation are explicit."},{"value":"workaround","fraction":0.5,"description":"Only navigation or only activation is explicit."},{"value":"missing","fraction":0,"description":"Neither is explicit, or mouse use is required."}]}]
+  },
+  "custom_revision": {
+    "version":"2",
+    "instruction":"Assess whether the HUMAN operator provided a DIRECT keyboard shortcut to open Notifications. Complete requires a single key or simultaneous key chord that opens Notifications immediately. A working multi-step Tab-navigation plus Enter route is a workaround and receives half credit. Missing means neither a direct shortcut nor a working keyboard workaround. Use supplied fictional app facts. Do not grade greetings or other criteria.",
+    "levels":[{"value":"complete","fraction":1,"description":"Direct single-key or simultaneous-key shortcut is provided."},{"value":"workaround","fraction":0.5,"description":"Working Tab-navigation and Enter route but no direct shortcut."},{"value":"missing","fraction":0,"description":"Neither direct shortcut nor working keyboard route."}]
+  },
+  "limits":"Case 41 has only partial reference judgments; do not infer whole-score accuracy. Source facts and expected labels are provisional and assistant-authored. Do not tune implementation during this acceptance review. Existing internal 60/15/15/5/5 grading weights remain unchanged."
+}
