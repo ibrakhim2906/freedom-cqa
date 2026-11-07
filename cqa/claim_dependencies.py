@@ -8,7 +8,7 @@ judgments; a plausible explanation is not independent expert validation.
 from .grounding import reference_applicable
 
 
-def validate_claim_assessment(claim, conversation, criteria, judgments, check_quotes):
+def validate_claim_assessment(claim, conversation, criteria, judgments, check_quotes, *, derive_dates=False):
     assessment = claim.assessment
     messages = {m.id: m for m in conversation.messages}
     order = {m.id: i for i, m in enumerate(conversation.messages)}
@@ -37,7 +37,7 @@ def validate_claim_assessment(claim, conversation, criteria, judgments, check_qu
         for citation in correction.reference_evidence:
             ref = refs.get(citation.reference_id)
             if (ref is None or not citation.quote.strip() or citation.quote not in ref.text
-                    or not reference_applicable(ref, conversation)):
+                    or not reference_applicable(ref, conversation, derive_dates=derive_dates)):
                 raise ValueError("Correction requires a verbatim applicable reference")
         if not (correction.outcome_evidence or correction.reference_evidence):
             raise ValueError("Operator self-correction alone does not independently establish recovery")

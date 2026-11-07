@@ -2,7 +2,8 @@ import hashlib
 import json
 
 from .baseline_prompt import PROJECT_BASELINE_SYSTEM
-from .grounding import reference_applicable
+from .context import derive_temporal_context
+from .grounding import reference_applicable, reference_rejection_reasons
 from .models import Checklist, Conversation
 
 GROUNDED_SYSTEM = """You evaluate the HUMAN OPERATOR using the supplied configurable checklist.
@@ -116,12 +117,52 @@ A criterion explicitly penalizing any historical error must still fail after rep
 Incorrect advice still active or with harmful key consequences must not be excused.
 For an unrelated unverified product claim, clear wording may stay maximum: explain
 that independence under the communication rule, not under a made-up factual policy.
+EVIDENCE CLASSES AND SOURCE COVERAGE:
+The supplied checklist is the source of expected grading behavior. Use
+evidence_kind=grading_rule, verification_scope=grading_rule and exact rule_evidence
+for an operator assertion about that expectation. A rule requiring verification
+before a protected disclosure does not need another external policy. Its application
+still requires transcript evidence of protected conduct and verification ordering.
+Checklist rules cannot establish fees, account state, market access or other product
+truth. Separate product_fact, account_state, general_fact and workflow_commitment.
+Use policy scope for general rules, private_record for private state, interaction
+for narrowly observed task outcomes, and commitment for a stated next-step promise.
+A promise/investigation referral is observable conduct, not proof of backend completion.
+For supported claims based on observations, set supported_proposition to exactly the
+narrow claim being supported and observation_scope to reported_state/control_visible/
+action_completed/task_completed/system_record as appropriate. A customer finding a
+control does not prove completing the action or a general policy. A customer report
+does not independently verify private account state. Supported policy claims need
+applicable references; grading requirements use their supplied rule instead.
+Every request needs support with basis=explicit/implied/next_step/none/withdrawn,
+exact source evidence, inference (non-null for implied answers), and unresolved_aspects.
+An answered request cannot retain unresolved aspects; use partial/unanswered when
+needed. An implied answer must actually entail the requested conclusion. A positive
+statement about one option does not establish that alternatives are unavailable.
+Do not demand literal keyword matching or completed tasks where a correct concrete
+next step satisfies the configured criterion. Mere thanks does not withdraw a question.
+Return semantic_audit version=coverage-v1. reviewed_message_ids must cover EVERY
+client/operator message exactly once, including late follow-ups and internal speech.
+Each customer turn must appear in request_coverage or an exact-quoted exclusion;
+each operator turn must appear in factual_claims or an exclusion, even when it is
+also cited as an answer. Exclusions name social/context_or_confirmation/
+observable_commitment/criterion_behavior/not_grade_changing, the concrete reason,
+and related criteria where relevant. Multiple assertions in one turn need separate
+claim treatment or explicit exclusion reasoning; an initial wrong route must not
+silently disappear because the final route worked. Keep grade-independent assertions
+and normative conduct distinguishable. Never classify a material unresolved fact as
+social or immaterial just to pass validation. Exclusions are reviewable decisions,
+not a semantic-completeness certificate. Keep quotes and explanations concise.
+The evidence_context describes source-derived dates, conflicts and reference
+rejection reasons. Do not infer dates from MM:SS, language or today's date. Retrieval
+date is not an effective policy date; do not override scope/validity or a source-date
+conflict. Keep uncertainty local and retain all independently justified deductions.
 Use concise, specific explanations in English;
 quotes must remain verbatim in the original language. Return only the requested JSON.
 """
 SYSTEM = PROJECT_BASELINE_SYSTEM
 PROMPT_VERSION = "evaluator-v2-" + hashlib.sha256(SYSTEM.encode()).hexdigest()[:12]
-GROUNDED_VERSION = "evaluator-v4-" + hashlib.sha256(GROUNDED_SYSTEM.encode()).hexdigest()[:12]
+GROUNDED_VERSION = "evaluator-v5-" + hashlib.sha256(GROUNDED_SYSTEM.encode()).hexdigest()[:12]
 
 
 def payload_for(conversation: Conversation, checklist: Checklist, *, grounded=False):
@@ -132,7 +173,17 @@ def payload_for(conversation: Conversation, checklist: Checklist, *, grounded=Fa
     payload = {"checklist": checklist.model_dump(), "conversation": model_input,
                "audio_available_to_evaluator": False}
     if grounded:
-        payload["usable_reference_ids"] = [r.id for r in conversation.references if reference_applicable(r, conversation)]
+        temporal = derive_temporal_context(conversation)
+        # Source timestamps are already in the complete conversation; avoid
+        # duplicating every timestamp in the billable request.
+        temporal = {k: v for k, v in temporal.items() if k not in {"source_timestamps", "unusable_timestamps"}}
+        payload["evidence_context"] = {"temporal": temporal,
+            "rule_authority": "The selected checklist defines grading requirements, not external product/account truth.",
+            "references": [{"reference_id": r.id, "usable": reference_applicable(r, conversation, derive_dates=True),
+                            "rejection_reasons": reference_rejection_reasons(r, conversation, derive_dates=True)}
+                           for r in conversation.references]}
+        payload["usable_reference_ids"] = [r.id for r in conversation.references
+                                           if reference_applicable(r, conversation, derive_dates=True)]
     return json.dumps(payload, ensure_ascii=False, sort_keys=True)
 
 

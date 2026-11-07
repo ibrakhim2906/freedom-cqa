@@ -3,6 +3,7 @@ from decimal import ROUND_HALF_UP, Decimal
 from .claim_dependencies import validate_claim_assessment
 from .grounding import reference_applicable
 from .models import Checklist, Conversation, Evaluation
+from .semantic_coverage import validate_semantic_coverage
 
 
 def validate_evaluation(result: Evaluation, conversation: Conversation, checklist: Checklist, *, require_audit=False):
@@ -57,6 +58,7 @@ def validate_evaluation(result: Evaluation, conversation: Conversation, checklis
         elif request.withdrawal_message_ids:
             raise ValueError("Only withdrawn requests may have withdrawal evidence")
     validate_audit(result, conversation, checklist, require_audit=require_audit)
+    validate_semantic_coverage(result, conversation, checklist)
 
 
 def validate_audit(result, conversation, checklist, *, require_audit):
@@ -116,12 +118,31 @@ def validate_audit(result, conversation, checklist, *, require_audit):
             ref = references.get(citation.reference_id)
             if ref is None or not citation.quote.strip() or citation.quote not in ref.text:
                 raise ValueError("Reference quote must occur verbatim in the supplied reference")
-            if claim.status != "unverified" and not reference_applicable(ref, conversation):
+            if claim.status != "unverified" and not reference_applicable(
+                ref, conversation, derive_dates=result.semantic_audit is not None
+            ):
                 raise ValueError("Out-of-scope or out-of-date source cannot verify a claim")
-        if claim.status != "unverified" and not (claim.reference_evidence or claim.dialogue_evidence):
+        for citation in claim.rule_evidence:
+            criterion = criteria.get(citation.criterion_id)
+            if criterion is None or citation.criterion_id not in claim.criterion_ids:
+                raise ValueError("Rule evidence must identify a related configured criterion")
+            rules = [criterion.instruction, *[x.description for x in criterion.levels],
+                     *criterion.channel_guidance.values()]
+            if not citation.quote.strip() or not any(citation.quote in text for text in rules):
+                raise ValueError("Rule evidence must quote the supplied checklist verbatim")
+        if claim.rule_evidence and claim.evidence_kind != "grading_rule":
+            raise ValueError("Checklist rules cannot verify product or account facts")
+        if claim.evidence_kind == "grading_rule" and not claim.rule_evidence:
+            raise ValueError("A grading-rule claim needs its supplied rule source")
+        commitment = (result.semantic_audit is not None and claim.evidence_kind == "workflow_commitment"
+                      and claim.verification_scope == "commitment" and claim.status == "supported")
+        if claim.status != "unverified" and not (
+            claim.reference_evidence or claim.dialogue_evidence or claim.rule_evidence or commitment
+        ):
             raise ValueError("Verified claims require reference or customer/system evidence")
         if claim.assessment is not None:
-            validate_claim_assessment(claim, conversation, criteria, judgments, check_quotes)
+            validate_claim_assessment(claim, conversation, criteria, judgments, check_quotes,
+                                      derive_dates=result.semantic_audit is not None)
             continue
         # Preserve validation semantics for frozen historical evaluations.
         if claim.material and claim.status == "unverified" and any(

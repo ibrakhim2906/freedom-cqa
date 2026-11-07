@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+from .context import with_source_date
 from .models import Conversation, Expectation, Message, TestCase
 from .settings import ROOT
 
@@ -54,8 +55,10 @@ def organizer_cases(*, representative=False):
         cases.append(TestCase(id=row["conversation_id"], family="organizer-" + row["conversation_id"],
             source="organizer", label_provenance="ai_authored_provisional" if expected else "unlabelled",
             tags=[row["channel"]],
-            conversation=Conversation(id=row["conversation_id"], channel=row["channel"], language=row["language"],
-                messages=[Message(id=f"m{i}", **turn) for i, turn in enumerate(row["transcript"], 1)]),
+            conversation=with_source_date(Conversation(id=row["conversation_id"], channel=row["channel"], language=row["language"],
+                messages=[Message(id=f"m{i}", **turn) for i, turn in enumerate(row["transcript"], 1)],
+                references=row.get("references", []), knowledge_scope=row.get("knowledge_scope"),
+                occurred_on=row.get("occurred_on"), occurred_on_origin=row.get("occurred_on_origin"))),
             expectations=[Expectation(criterion_id=k, status="not_applicable" if v is None else "scored",
                 answer=v, rationale=reason) for k, (v, reason) in expected.items()]))
     return cases

@@ -1,5 +1,10 @@
 # Progress
 
+Latest implementation milestone: [evidence context and semantic coverage](EVIDENCE_CONTEXT_COVERAGE_RESULTS.md).
+Fresh source-date derivation, rule-versus-product evidence, explicit answer support
+and source dispositions are implemented. 212 local tests pass; all65 saved scores
+remain unchanged. No paid API tests were run; live accuracy/coverage is unmeasured.
+
 Latest analysis milestone: [offline audit of existing results](EXISTING_RESULTS_AUDIT.md)
 and [missing-facts inventory](MISSING_FACTS_INVENTORY.md). All65 transcripts and the
 four organizer PDFs were reviewed with $0 new API spending. Source/representation

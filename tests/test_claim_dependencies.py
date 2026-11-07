@@ -44,6 +44,8 @@ def fixture(case_id="route-recovery-corrected", *, answer="20", status="contradi
         data["deductions"] = [{"criterion_id": cid, "rule_quote": criterion.instruction[:20],
             "defect": "Configured rule penalizes a historical error.", "evidence": [{"message_id": "m2", "quote": original.text}],
             "checked_message_ids": ["m2", "m3", "m4", "m5"], "overlap_note": "No other deduction is inferred."}]
+    data["factual_claims"][0].update(evidence_kind="product_fact", rule_evidence=[],
+        observation_scope="none", supported_proposition=None, verification_scope="policy")
     return case.conversation, checklist, data, cid
 
 

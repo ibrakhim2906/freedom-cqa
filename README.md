@@ -49,6 +49,11 @@ The subsequent [offline source audit](docs/EXISTING_RESULTS_AUDIT.md) reviews al
 changes. Its [missing-facts inventory](docs/MISSING_FACTS_INVENTORY.md) separates
 24 reusable evidence topics from case labels and team interpretation choices.
 
+The [evidence-context and semantic-coverage implementation](docs/EVIDENCE_CONTEXT_COVERAGE_RESULTS.md)
+adds source-date provenance, grading-rule evidence, explicit answer support and
+inspectable source exclusions. It passed local compatibility and rejection checks
+without paid API calls; live model quality and provider acceptance remain untested.
+
 The first real run is recorded in [baseline results](docs/BASELINE_RESULTS.md),
 with [all-run coverage and spending](docs/BENCHMARK_RUN_SUMMARY.md) and
 [reference-label review notes](docs/REFERENCE_REVIEW.md). These metrics are

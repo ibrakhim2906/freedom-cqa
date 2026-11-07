@@ -52,6 +52,23 @@ def corrected_wire():
                             "evidence": claim["operator_evidence"], "checked_message_ids": judgment["checked_message_ids"],
                             "explanation": "Supported factual advice; security ordering is independently established."})
         claim["assessment"] = {"lifecycle": "active", "correction": None, "impacts": impacts}
+        claim["supported_proposition"] = claim["claim"]
+        claim["observation_scope"] = "system_record"
+    data["factual_claims"][0].update(evidence_kind="grading_rule", verification_scope="grading_rule",
+        rule_evidence=[{"criterion_id": "identity", "quote": identity.instruction}])
+    data["factual_claims"][1].update(evidence_kind="account_state", verification_scope="private_record")
+    data["factual_claims"][2].update(verification_scope="interaction", observation_scope="task_completed")
+    messages = {m.id: m for m in conversation.messages}
+    for request in data["request_coverage"]:
+        request["support"] = {"basis": "explicit" if request["status"] == "answered" else "none",
+            "evidence": [{"message_id": mid, "quote": messages[mid].text} for mid in request["answer_message_ids"]],
+            "inference": None, "unresolved_aspects": [] if request["status"] == "answered" else [request["request"]]}
+    data["semantic_audit"] = {"version": "coverage-v1", "reviewed_message_ids": [
+        m.id for m in conversation.messages if m.speaker in {"client", "operator"}], "exclusions": [
+        {"evidence": {"message_id": "m5", "quote": messages["m5"].text}, "reason": "context_or_confirmation",
+         "criterion_ids": ["identity"], "explanation": "Customer describes performing the verification steps; source confirmation is separate."},
+        {"evidence": {"message_id": "m10", "quote": messages["m10"].text}, "reason": "social",
+         "criterion_ids": ["closing"], "explanation": "Further-help offer and farewell, not product truth."}]}
     return conversation, checklist, data
 
 
@@ -95,6 +112,56 @@ def test_inline_audits_keep_semantic_validation_and_reject_duplicates():
     result.deductions.append(result.deductions[0])
     with pytest.raises(ValueError, match="Duplicate deduction"):
         validate_evaluation(result, conversation, checklist, require_audit=True)
+
+
+def test_supplied_grading_requirement_does_not_need_a_second_product_policy_source():
+    conversation, checklist, wire = corrected_wire()
+    rule = wire["factual_claims"][0]
+    rule["reference_evidence"], rule["dialogue_evidence"] = [], []
+    result = decode_evaluation(json.dumps(wire), require_semantic_coverage=True)
+    validate_evaluation(result, conversation, checklist, require_audit=True)
+    assert next(j for j in result.judgments if j.criterion_id == "identity").answer == "no"
+    assert next(j for j in result.judgments if j.criterion_id == "serious").answer == "yes"
+
+
+@pytest.mark.parametrize("fault", ["invented_rule", "unrelated_rule", "product_truth_from_rule", "wrong_scope"])
+def test_rules_cannot_be_used_as_fake_product_or_account_evidence(fault):
+    conversation, checklist, wire = corrected_wire()
+    claim = wire["factual_claims"][0]
+    if fault == "invented_rule":
+        claim["rule_evidence"][0]["quote"] = "Broker fees are always zero."
+    elif fault == "unrelated_rule":
+        claim["rule_evidence"][0]["criterion_id"] = "contact"
+    elif fault == "product_truth_from_rule":
+        claim["evidence_kind"] = "product_fact"
+    else:
+        claim["verification_scope"] = "private_record"
+    result = decode_evaluation(json.dumps(wire), require_semantic_coverage=True)
+    with pytest.raises(ValueError):
+        validate_evaluation(result, conversation, checklist, require_audit=True)
+
+
+def test_new_provider_contract_cannot_omit_semantic_review_or_answer_support():
+    conversation, checklist, wire = corrected_wire()
+    schema = schema_for(conversation, checklist, grounded=True)
+    for fault in ["ledger", "answer_support", "evidence_kind"]:
+        bad = copy.deepcopy(wire)
+        if fault == "ledger":
+            bad["semantic_audit"] = None
+        elif fault == "answer_support":
+            bad["request_coverage"][0]["support"] = None
+        else:
+            bad["factual_claims"][0].pop("evidence_kind")
+        with pytest.raises(jsonschema.ValidationError):
+            jsonschema.validate(bad, schema)
+        with pytest.raises(ValueError):
+            decode_evaluation(json.dumps(bad), require_semantic_coverage=True)
+
+    def has_defaults(node):
+        if isinstance(node, dict):
+            return "default" in node or any(has_defaults(v) for v in node.values())
+        return isinstance(node, list) and any(has_defaults(v) for v in node)
+    assert not has_defaults(schema)
 
 
 def test_repair_is_preflighted_and_protected_against_concurrent_spending(tmp_path):

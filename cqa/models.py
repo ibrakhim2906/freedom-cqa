@@ -48,6 +48,7 @@ class Conversation(StrictModel):
     references: list[Reference] = Field(default_factory=list)
     knowledge_scope: str | None = None
     occurred_on: str | None = None
+    occurred_on_origin: Literal["supplied", "source_iso_timestamps"] | None = None
 
     @model_validator(mode="after")
     def unique_messages(self):
@@ -116,6 +117,13 @@ class Judgment(StrictModel):
     uncertainty: str | None
 
 
+class AnswerSupport(StrictModel):
+    basis: Literal["explicit", "implied", "next_step", "none", "withdrawn"]
+    evidence: list[Evidence]
+    inference: str | None
+    unresolved_aspects: list[str]
+
+
 class RequestCoverage(StrictModel):
     request: str
     request_message_ids: list[str]
@@ -124,10 +132,16 @@ class RequestCoverage(StrictModel):
     explanation: str
     # Default preserves the ability to read historical v1 evaluation records.
     withdrawal_message_ids: list[str] = Field(default_factory=list)
+    support: AnswerSupport | None = None
 
 
 class ReferenceEvidence(StrictModel):
     reference_id: str
+    quote: str
+
+
+class RuleEvidence(StrictModel):
+    criterion_id: str
     quote: str
 
 
@@ -172,6 +186,11 @@ class FactualClaim(StrictModel):
     # Historical records retain the original conservative dependency contract.
     # The current provider schema requires a non-null assessment for every claim.
     assessment: ClaimAssessment | None = None
+    evidence_kind: Literal["product_fact", "account_state", "grading_rule", "workflow_commitment", "general_fact"] = "product_fact"
+    rule_evidence: list[RuleEvidence] = Field(default_factory=list)
+    observation_scope: Literal["none", "reported_state", "control_visible", "action_completed", "task_completed", "system_record"] = "none"
+    supported_proposition: str | None = None
+    verification_scope: Literal["interaction", "policy", "private_record", "grading_rule", "commitment"] = "policy"
 
 
 class Deduction(StrictModel):
@@ -183,6 +202,19 @@ class Deduction(StrictModel):
     overlap_note: str
 
 
+class SemanticExclusion(StrictModel):
+    evidence: Evidence
+    reason: Literal["social", "context_or_confirmation", "observable_commitment", "criterion_behavior", "not_grade_changing"]
+    criterion_ids: list[str]
+    explanation: str
+
+
+class SemanticAudit(StrictModel):
+    version: Literal["coverage-v1"]
+    reviewed_message_ids: list[str]
+    exclusions: list[SemanticExclusion]
+
+
 class Evaluation(StrictModel):
     judgments: list[Judgment]
     request_coverage: list[RequestCoverage]
@@ -190,6 +222,7 @@ class Evaluation(StrictModel):
     # Defaults allow reading frozen historical results, not omitting new API fields.
     factual_claims: list[FactualClaim] = Field(default_factory=list)
     deductions: list[Deduction] = Field(default_factory=list)
+    semantic_audit: SemanticAudit | None = None
 
 
 class Expectation(StrictModel):

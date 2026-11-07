@@ -51,7 +51,7 @@ def bind_judgment_audits(schema, checklist):
     return schema
 
 
-def decode_evaluation(text, *, require_claim_dependencies=False):
+def decode_evaluation(text, *, require_claim_dependencies=False, require_semantic_coverage=False):
     import json
 
     data = json.loads(text)
@@ -74,6 +74,12 @@ def decode_evaluation(text, *, require_claim_dependencies=False):
             judgments.append(item)
         data["judgments"], data["deductions"] = judgments, deductions
     result = Evaluation.model_validate(data)
-    if require_claim_dependencies and any(c.assessment is None for c in result.factual_claims):
+    if (require_claim_dependencies or require_semantic_coverage) and any(c.assessment is None for c in result.factual_claims):
         raise ValueError("Current claim contract requires an explicit dependency assessment for every claim")
+    if require_semantic_coverage:
+        if result.semantic_audit is None or any(r.support is None for r in result.request_coverage):
+            raise ValueError("Current semantic contract requires a source ledger and explicit answer support")
+        required = {"evidence_kind", "rule_evidence", "observation_scope", "supported_proposition", "verification_scope"}
+        if any(not required <= set(c) for c in data.get("factual_claims", [])):
+            raise ValueError("Current semantic contract requires explicit evidence classes and observation scope")
     return result

@@ -1,5 +1,6 @@
 import json
 
+from cqa.context import derive_temporal_context, with_source_date
 from cqa.models import Conversation, Message
 
 
@@ -36,7 +37,7 @@ def parse_import(content):
                     messages=[Message(id=m.get("id", f"m{i}"), timestamp=m["timestamp"], speaker=m["speaker"], text=m["text"])
                               for i, m in enumerate(row["transcript"], 1)],
                     references=row.get("references", []), knowledge_scope=row.get("knowledge_scope"),
-                    occurred_on=row.get("occurred_on"))
+                    occurred_on=row.get("occurred_on"), occurred_on_origin=row.get("occurred_on_origin"))
             else:
                 conversation = Conversation.model_validate({k: v for k, v in row.items() if k in Conversation.model_fields})
             if len(conversation.messages) > 10_000 or not conversation.id.strip():
@@ -44,10 +45,13 @@ def parse_import(content):
             for message in conversation.messages:
                 if not message.id.strip() or not message.text.strip():
                     raise ValueError("Message IDs and text must be nonempty")
+            temporal_context = derive_temporal_context(conversation)
+            conversation = with_source_date(conversation)
             recording = row.get("audio_url") or row.get("recording_url") or row.get("audio_link")
             if recording and not isinstance(recording, str):
                 recording = None
             extra = {"recording_url": recording} if recording and recording.startswith(("https://", "http://")) else {}
+            extra["temporal_context"] = temporal_context
             result.append((conversation, extra))
         except (ValueError, KeyError, TypeError) as error:
             raise ValueError(f"Conversation {index} is invalid: check ID, channel, language, message roles and fields") from error

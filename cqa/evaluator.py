@@ -180,7 +180,7 @@ class Evaluator:
                                      if extracting else self.workflow_version), "model": self.settings.model,
                   "strategy": self.strategy, "stage": stage, "max_output_tokens": output_cap,
                   "audit_contract_enabled": self.grounded,
-                  "claim_contract_version": "dependencies-v1" if self.grounded else "legacy",
+                  "claim_contract_version": "evidence-coverage-v1" if self.grounded else "legacy",
                   "workflow_version": self.workflow_version,
                   "reasoning_effort": self.settings.effort, "ledger_call_id": call_id,
                   "reserved_usd": round(reservation, 6), "audio_analyzed": False,
@@ -213,7 +213,8 @@ class Evaluator:
                     validate_observations(result, conversation, checklist)
                     record.update(status="completed", observations=result.model_dump())
                 else:
-                    result = decode_evaluation(response.output_text, require_claim_dependencies=self.grounded)
+                    result = decode_evaluation(response.output_text, require_claim_dependencies=self.grounded,
+                                               require_semantic_coverage=self.grounded)
                     validate_evaluation(result, conversation, checklist, require_audit=self.grounded)
                     record.update(status="completed", evaluation=result.model_dump(),
                                   score=calculate_score(result, checklist))
@@ -256,6 +257,19 @@ def schema_for(conversation: Conversation, checklist: Checklist, *, grounded=Fal
     judgment["criterion_id"]["enum"] = [c.id for c in checklist.criteria]
     judgment["checked_message_ids"]["items"]["enum"] = message_ids
     if grounded:
+        schema["properties"]["semantic_audit"] = {"$ref": "#/$defs/SemanticAudit"}
+        definitions["SemanticAudit"]["properties"]["version"] = {"type": "string", "enum": ["coverage-v1"]}
+        definitions["RequestCoverage"]["properties"]["support"] = {"$ref": "#/$defs/AnswerSupport"}
+        substantive_ids = [m.id for m in conversation.messages if m.speaker in {"client", "operator"}]
+        if substantive_ids:
+            definitions["SemanticAudit"]["properties"]["reviewed_message_ids"]["items"]["enum"] = substantive_ids
+        else:
+            definitions["SemanticAudit"]["properties"]["reviewed_message_ids"]["maxItems"] = 0
+        for name in ["RuleEvidence", "SemanticExclusion"]:
+            properties = definitions[name]["properties"]
+            properties["criterion_id" if name == "RuleEvidence" else "criterion_ids"][
+                "enum" if name == "RuleEvidence" else "items"] = (
+                    [c.id for c in checklist.criteria] if name == "RuleEvidence" else {"type": "string", "enum": [c.id for c in checklist.criteria]})
         deduction = definitions["Deduction"]["properties"]
         deduction["criterion_id"]["enum"] = [c.id for c in checklist.criteria]
         deduction["checked_message_ids"]["items"]["enum"] = message_ids
@@ -286,12 +300,14 @@ def schema_for(conversation: Conversation, checklist: Checklist, *, grounded=Fal
             for name in ["FactualClaim", "ClaimCorrection"]:
                 definitions[name]["properties"]["reference_evidence"]["maxItems"] = 0
     else:
-        for field in ["deductions", "factual_claims"]:
+        for field in ["deductions", "factual_claims", "semantic_audit"]:
             schema["properties"].pop(field)
             schema["required"].remove(field)
         for name in ["Deduction", "FactualClaim", "ReferenceEvidence", "ClaimOutcome", "ClaimImpact",
-                     "ClaimCorrection", "ClaimAssessment"]:
+                     "ClaimCorrection", "ClaimAssessment", "RuleEvidence", "SemanticAudit", "SemanticExclusion", "AnswerSupport"]:
             definitions.pop(name)
+        definitions["RequestCoverage"]["properties"].pop("support")
+        definitions["RequestCoverage"]["required"].remove("support")
     values = sorted({level.value for c in checklist.criteria for level in c.levels})
     for option in judgment["answer"]["anyOf"]:
         if option.get("type") == "string":
@@ -305,4 +321,16 @@ def schema_for(conversation: Conversation, checklist: Checklist, *, grounded=Fal
         ids = [m.id for m in conversation.messages if m.speaker == role]
         if ids:
             coverage[field]["items"]["enum"] = ids
-    return bind_judgment_audits(schema, checklist) if grounded else schema
+    wire = bind_judgment_audits(schema, checklist) if grounded else schema
+    # Pydantic defaults are for historical deserialization, never optional/default
+    # fields in the provider's strict transport contract.
+    def remove_defaults(node):
+        if isinstance(node, dict):
+            node.pop("default", None)
+            for value in node.values():
+                remove_defaults(value)
+        elif isinstance(node, list):
+            for value in node:
+                remove_defaults(value)
+    remove_defaults(wire)
+    return wire
