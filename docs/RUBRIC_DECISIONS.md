@@ -4,9 +4,10 @@ These decisions record assistant recommendations accepted by the user during
 case review. They are not independent expert adjudication or organizer Ground Truth.
 Original checklist files, authored expectations, and benchmark results remain frozen.
 
-Current default: `checklists/freedom-reviewed-009.json`, version `1-reviewed-009`,
-containing R001 through R009. Nine review items were accepted by the user and two
-additional items follow accepted rules. Nine items remain pending. Applications
+Current default: `checklists/freedom-reviewed-010.json`, version `1-reviewed-010`,
+containing R001 through R010. Ten review dispositions were accepted by the user and
+two additional items follow accepted rules. Eleven items have scored decisions;
+one is explicitly unresolved (`needs_review`). Eight items remain pending. Applications
 of accepted rules are distinguished from separately user-adjudicated labels.
 
 ## R001: partial credit when a genuine secondary request is answered
@@ -236,7 +237,33 @@ all other criterion definitions, weights, levels, earlier versions, and saved re
 are preserved. This records an assistant recommendation accepted by the user, not
 organizer Ground Truth. No paid evaluation was run.
 
-Closing in `p1-en-009` is the next pending item.
+Closing in `p1-en-009` was subsequently discussed and marked uncertain under R010.
+
+## R010: preserve uncertainty when closing opportunity cannot be established
+
+Review item 12: `p1-en-009`, closing **needs_review**, answer null. The client thanks
+the operator at 02:24 and an external connection-loss event follows at 02:42. No
+operator closing occurs between them. Source messages: m10-m12. The 18-second gap
+does not establish an opportunity under any supplied timing rule, and connection
+loss alone does not prove that there was no opportunity.
+
+The user explicitly accepted uncertainty rather than a scored No or N/A. This is
+a reviewed disposition of an unresolved criterion, not a completed numeric reference
+label or an organizer grade. Keep an evaluation total provisional and report the
+unresolved case in coverage; do not exclude it to inflate claimed accuracy.
+
+General interpretation: use No for supported missed closing opportunities and
+N/A for supported interruptions before opportunity. If source evidence cannot
+distinguish those conditions, identify the specific uncertainty with needs_review.
+Do not invent elapsed-time thresholds or use uncertainty to avoid a clear omission
+when the operator demonstrably had an opportunity.
+
+Applied in `checklists/freedom-reviewed-010.json`, version `1-reviewed-010`.
+Only closing instructions are additionally clarified; its official Yes/No levels,
+N/A condition, weight, all earlier interpretations, and original results are preserved.
+No previous evaluation was edited or rerun. No paid API call was made.
+
+Consultation in `p1-kz-013` is the next pending item.
 
 To use the original checklist explicitly for a comparison:
 
