@@ -177,4 +177,6 @@ answer proof, omission context and claim observations. The updated evaluator
 has [a six-case live result](docs/EVIDENCE_CONTRACT_V2_LIVE_RESULTS.md): six valid
 first-attempt assessments and 48/48 frozen provisional judgments matched. The
 frozen baseline and prior API results remain unchanged; broader reliability is
-still unmeasured.
+tested in a [fresh repeated-run experiment](docs/FRESH_REPEAT_V1_RESULTS.md).
+That run failed its reliability gate: 18/24 first-pass and 22/24 final valid outputs;
+evidence-chain and compound-counterfactual precision also remain open.

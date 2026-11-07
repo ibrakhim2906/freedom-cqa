@@ -1,0 +1,2896 @@
+{
+  "schema_version": "1.0",
+  "kind": "prospective_fresh_repeated_live_experiment_not_ground_truth_accuracy",
+  "acceptance": "failed_reliability_gate",
+  "freeze_commit": "535feaf",
+  "runtime_commit": "4b1bb16",
+  "prompt_version": "evaluator-v7-0d77742ac102",
+  "run_date": "2026-11-07",
+  "runtime_or_expectations_changed_during_run": false,
+  "configuration": {
+    "model": "gpt-6.1-sol",
+    "effort": "medium",
+    "max_output_tokens": 6000,
+    "timeout_seconds": 120,
+    "max_concurrency": 2,
+    "max_mechanical_repairs_per_sample": 1,
+    "original_shared_budget_usd": 3.5
+  },
+  "metrics": {
+    "kind": "frozen_fresh_repeat_metrics_not_ground_truth_accuracy",
+    "planned_samples": 24,
+    "recorded_samples": 24,
+    "actual_api_attempts": 29,
+    "first_pass_valid": 18,
+    "bounded_final_valid": 22,
+    "mechanical_repairs": 5,
+    "initial_labeled_comparisons": {
+      "matched": 141,
+      "denominator": 186
+    },
+    "final_end_to_end_labeled_comparisons": {
+      "matched": 172,
+      "denominator": 186
+    },
+    "accepted_only_labeled_comparisons": {
+      "matched": 172,
+      "denominator": 172
+    },
+    "final_statuses": {
+      "completed": 22,
+      "failed": 2
+    },
+    "attempt_errors": {
+      "response_incomplete": 1,
+      "Observation proposition must equal the narrowly supported claim": 3,
+      "Claim evidence kind and verification scope must agree": 2,
+      "Semantic support needs a verbatim quote from the correct source role": 1
+    },
+    "all_64_cells_in_stability": true,
+    "unscored_numeric_cells": [
+      "frv1-01.consultation",
+      "frv1-05.consultation"
+    ],
+    "cases": [
+      {
+        "case_id": "frv1-01",
+        "three_valid": true,
+        "full_vector_stable_3_of_3": false,
+        "three_labeled_correct": true,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 84.62,
+            "matched": 7,
+            "checked": 7
+          },
+          {
+            "round": 2,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 84.62,
+            "matched": 7,
+            "checked": 7
+          },
+          {
+            "round": 3,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "15"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 76.92,
+            "matched": 7,
+            "checked": 7
+          }
+        ]
+      },
+      {
+        "case_id": "frv1-02",
+        "three_valid": true,
+        "full_vector_stable_3_of_3": true,
+        "three_labeled_correct": true,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 84.62,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 2,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 84.62,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 3,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 84.62,
+            "matched": 8,
+            "checked": 8
+          }
+        ]
+      },
+      {
+        "case_id": "frv1-03",
+        "three_valid": true,
+        "full_vector_stable_3_of_3": true,
+        "three_labeled_correct": true,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "no"
+              ],
+              [
+                "consultation",
+                "needs_review",
+                null
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": null,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 2,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "no"
+              ],
+              [
+                "consultation",
+                "needs_review",
+                null
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": null,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 3,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "no"
+              ],
+              [
+                "consultation",
+                "needs_review",
+                null
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": null,
+            "matched": 8,
+            "checked": 8
+          }
+        ]
+      },
+      {
+        "case_id": "frv1-04",
+        "three_valid": true,
+        "full_vector_stable_3_of_3": true,
+        "three_labeled_correct": true,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "no"
+              ],
+              [
+                "consultation",
+                "needs_review",
+                null
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": null,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 2,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "no"
+              ],
+              [
+                "consultation",
+                "needs_review",
+                null
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": null,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 3,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "no"
+              ],
+              [
+                "consultation",
+                "needs_review",
+                null
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": null,
+            "matched": 8,
+            "checked": 8
+          }
+        ]
+      },
+      {
+        "case_id": "frv1-05",
+        "three_valid": false,
+        "full_vector_stable_3_of_3": false,
+        "three_labeled_correct": false,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "failed",
+            "attempts": 1,
+            "vector": null,
+            "score": null,
+            "matched": 0,
+            "checked": 7
+          },
+          {
+            "round": 2,
+            "status": "failed",
+            "attempts": 2,
+            "vector": null,
+            "score": null,
+            "matched": 0,
+            "checked": 7
+          },
+          {
+            "round": 3,
+            "status": "completed",
+            "attempts": 2,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "0"
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 62.31,
+            "matched": 7,
+            "checked": 7
+          }
+        ]
+      },
+      {
+        "case_id": "frv1-06",
+        "three_valid": true,
+        "full_vector_stable_3_of_3": true,
+        "three_labeled_correct": true,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "completed",
+            "attempts": 2,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 93.08,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 2,
+            "status": "completed",
+            "attempts": 2,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 93.08,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 3,
+            "status": "completed",
+            "attempts": 2,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 93.08,
+            "matched": 8,
+            "checked": 8
+          }
+        ]
+      },
+      {
+        "case_id": "frv1-07",
+        "three_valid": true,
+        "full_vector_stable_3_of_3": true,
+        "three_labeled_correct": true,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 77.69,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 2,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 77.69,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 3,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 77.69,
+            "matched": 8,
+            "checked": 8
+          }
+        ]
+      },
+      {
+        "case_id": "frv1-08",
+        "three_valid": true,
+        "full_vector_stable_3_of_3": true,
+        "three_labeled_correct": true,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "0"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 46.92,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 2,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "0"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 46.92,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 3,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "0"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 46.92,
+            "matched": 8,
+            "checked": 8
+          }
+        ]
+      }
+    ],
+    "rounds": [
+      {
+        "round": 1,
+        "final_valid": 7,
+        "matched": 55,
+        "denominator": 62,
+        "first_valid": 6
+      },
+      {
+        "round": 2,
+        "final_valid": 7,
+        "matched": 55,
+        "denominator": 62,
+        "first_valid": 6
+      },
+      {
+        "round": 3,
+        "final_valid": 8,
+        "matched": 62,
+        "denominator": 62,
+        "first_valid": 6
+      }
+    ],
+    "limitations": [
+      "Known fixed rubric and new authored scenarios; provisional AI labels, not expert Ground Truth.",
+      "Two pre-declared ordinal cells excluded from reference agreement/error, but retained in semantic review/stability.",
+      "Failed samples get no agreement or stable credit; accepted-only metrics are explicitly conditional."
+    ],
+    "full_vector_stable_cases": 6,
+    "three_valid_labeled_correct_cases": 7,
+    "pairwise_full_vector_agreement_including_invalid_as_failure": {
+      "matched": 19,
+      "denominator": 24
+    },
+    "pairwise_criterion_agreement_including_invalid_as_failure": {
+      "matched": 166,
+      "denominator": 192
+    },
+    "numeric_error": {
+      "measured": 12,
+      "planned_eligible_numeric_samples": 12,
+      "mean_absolute_error": 0.0
+    }
+  },
+  "base_execution_metrics": {
+    "kind": "frozen_fresh_repeat_metrics_not_ground_truth_accuracy",
+    "planned_samples": 24,
+    "recorded_samples": 24,
+    "actual_api_attempts": 28,
+    "first_pass_valid": 17,
+    "bounded_final_valid": 21,
+    "mechanical_repairs": 5,
+    "initial_labeled_comparisons": {
+      "matched": 133,
+      "denominator": 186
+    },
+    "final_end_to_end_labeled_comparisons": {
+      "matched": 164,
+      "denominator": 186
+    },
+    "accepted_only_labeled_comparisons": {
+      "matched": 164,
+      "denominator": 164
+    },
+    "final_statuses": {
+      "completed": 21,
+      "failed": 2,
+      "skipped_budget": 1
+    },
+    "attempt_errors": {
+      "response_incomplete": 1,
+      "Observation proposition must equal the narrowly supported claim": 3,
+      "Claim evidence kind and verification scope must agree": 2,
+      "Semantic support needs a verbatim quote from the correct source role": 1
+    },
+    "all_64_cells_in_stability": true,
+    "unscored_numeric_cells": [
+      "frv1-01.consultation",
+      "frv1-05.consultation"
+    ],
+    "cases": [
+      {
+        "case_id": "frv1-01",
+        "three_valid": true,
+        "full_vector_stable_3_of_3": false,
+        "three_labeled_correct": true,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 84.62,
+            "matched": 7,
+            "checked": 7
+          },
+          {
+            "round": 2,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 84.62,
+            "matched": 7,
+            "checked": 7
+          },
+          {
+            "round": 3,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "15"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 76.92,
+            "matched": 7,
+            "checked": 7
+          }
+        ]
+      },
+      {
+        "case_id": "frv1-02",
+        "three_valid": true,
+        "full_vector_stable_3_of_3": true,
+        "three_labeled_correct": true,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 84.62,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 2,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 84.62,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 3,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 84.62,
+            "matched": 8,
+            "checked": 8
+          }
+        ]
+      },
+      {
+        "case_id": "frv1-03",
+        "three_valid": true,
+        "full_vector_stable_3_of_3": true,
+        "three_labeled_correct": true,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "no"
+              ],
+              [
+                "consultation",
+                "needs_review",
+                null
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": null,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 2,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "no"
+              ],
+              [
+                "consultation",
+                "needs_review",
+                null
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": null,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 3,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "no"
+              ],
+              [
+                "consultation",
+                "needs_review",
+                null
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": null,
+            "matched": 8,
+            "checked": 8
+          }
+        ]
+      },
+      {
+        "case_id": "frv1-04",
+        "three_valid": true,
+        "full_vector_stable_3_of_3": true,
+        "three_labeled_correct": true,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "no"
+              ],
+              [
+                "consultation",
+                "needs_review",
+                null
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": null,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 2,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "no"
+              ],
+              [
+                "consultation",
+                "needs_review",
+                null
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": null,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 3,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "no"
+              ],
+              [
+                "consultation",
+                "needs_review",
+                null
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "10"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": null,
+            "matched": 8,
+            "checked": 8
+          }
+        ]
+      },
+      {
+        "case_id": "frv1-05",
+        "three_valid": false,
+        "full_vector_stable_3_of_3": false,
+        "three_labeled_correct": false,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "failed",
+            "attempts": 1,
+            "vector": null,
+            "score": null,
+            "matched": 0,
+            "checked": 7
+          },
+          {
+            "round": 2,
+            "status": "failed",
+            "attempts": 2,
+            "vector": null,
+            "score": null,
+            "matched": 0,
+            "checked": 7
+          },
+          {
+            "round": 3,
+            "status": "completed",
+            "attempts": 2,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "0"
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 62.31,
+            "matched": 7,
+            "checked": 7
+          }
+        ]
+      },
+      {
+        "case_id": "frv1-06",
+        "three_valid": true,
+        "full_vector_stable_3_of_3": true,
+        "three_labeled_correct": true,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "completed",
+            "attempts": 2,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 93.08,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 2,
+            "status": "completed",
+            "attempts": 2,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 93.08,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 3,
+            "status": "completed",
+            "attempts": 2,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "yes"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 93.08,
+            "matched": 8,
+            "checked": 8
+          }
+        ]
+      },
+      {
+        "case_id": "frv1-07",
+        "three_valid": false,
+        "full_vector_stable_3_of_3": false,
+        "three_labeled_correct": false,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 77.69,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 2,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "20"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 77.69,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 3,
+            "status": "skipped_budget",
+            "attempts": 0,
+            "vector": null,
+            "score": null,
+            "matched": 0,
+            "checked": 8
+          }
+        ]
+      },
+      {
+        "case_id": "frv1-08",
+        "three_valid": true,
+        "full_vector_stable_3_of_3": true,
+        "three_labeled_correct": true,
+        "rounds": [
+          {
+            "round": 1,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "0"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 46.92,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 2,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "0"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 46.92,
+            "matched": 8,
+            "checked": 8
+          },
+          {
+            "round": 3,
+            "status": "completed",
+            "attempts": 1,
+            "vector": [
+              [
+                "closing",
+                "scored",
+                "yes"
+              ],
+              [
+                "consultation",
+                "scored",
+                "0"
+              ],
+              [
+                "contact",
+                "scored",
+                "no"
+              ],
+              [
+                "empathy",
+                "scored",
+                "yes"
+              ],
+              [
+                "identity",
+                "not_applicable",
+                null
+              ],
+              [
+                "management",
+                "scored",
+                "7"
+              ],
+              [
+                "needs",
+                "not_applicable",
+                null
+              ],
+              [
+                "serious",
+                "scored",
+                "no"
+              ]
+            ],
+            "score": 46.92,
+            "matched": 8,
+            "checked": 8
+          }
+        ]
+      }
+    ],
+    "rounds": [
+      {
+        "round": 1,
+        "final_valid": 7,
+        "matched": 55,
+        "denominator": 62,
+        "first_valid": 6
+      },
+      {
+        "round": 2,
+        "final_valid": 7,
+        "matched": 55,
+        "denominator": 62,
+        "first_valid": 6
+      },
+      {
+        "round": 3,
+        "final_valid": 7,
+        "matched": 54,
+        "denominator": 62,
+        "first_valid": 5
+      }
+    ],
+    "limitations": [
+      "Known fixed rubric and new authored scenarios; provisional AI labels, not expert Ground Truth.",
+      "Two pre-declared ordinal cells excluded from reference agreement/error, but retained in semantic review/stability.",
+      "Failed samples get no agreement or stable credit; accepted-only metrics are explicitly conditional."
+    ],
+    "full_vector_stable_cases": 5,
+    "three_valid_labeled_correct_cases": 6,
+    "pairwise_full_vector_agreement_including_invalid_as_failure": {
+      "matched": 17,
+      "denominator": 24
+    },
+    "pairwise_criterion_agreement_including_invalid_as_failure": {
+      "matched": 150,
+      "denominator": 192
+    },
+    "numeric_error": {
+      "measured": 11,
+      "planned_eligible_numeric_samples": 12,
+      "mean_absolute_error": 0.0
+    }
+  },
+  "semantic_review": {
+    "accepted_assessments_reviewed": 22,
+    "selected_judgments_read": 176,
+    "blocking_wrong_selected_grade_findings_in_accepted_records": 0,
+    "scheduled_semantic_check_instances": 93,
+    "pass": 83,
+    "qualified": 2,
+    "unassessable_rejected_outputs": 8,
+    "additional_audit_quality_diagnostics_retained": true,
+    "reviewers_saw_frozen_expectations": true,
+    "independent_human_expert_ground_truth": false,
+    "first_half_summary": {
+      "complete_assessments_reviewed": 12,
+      "selected_judgments_read": 96,
+      "strict_revalidated": 12,
+      "labeled_pairs_checked": 93,
+      "labeled_pairs_matched": 93,
+      "semantic_checks_read": 48,
+      "semantic_checks_pass": 48,
+      "assessment_verdict_counts": {
+        "pass": 10,
+        "qualified": 2
+      },
+      "blocking_selected_grade_findings": 0,
+      "nonblocking_diagnostics": 2,
+      "full_vectors_stable_cases": 3,
+      "pairwise_criterion_matches": 94,
+      "pairwise_criterion_total": 96
+    },
+    "second_half_summary": {
+      "scheduled_draws": 12,
+      "valid_final_draws": 10,
+      "failed_final_draws": 2,
+      "first_pass_valid_draws": 6,
+      "mechanical_repairs": 5,
+      "labeled_comparisons_scheduled": 93,
+      "labeled_comparisons_matched": 79,
+      "selected_judgments_manually_reviewed_in_accepted_records": 80,
+      "claims_manually_reviewed_in_accepted_records": 24,
+      "deductions_manually_reviewed_in_accepted_records": 20,
+      "request_entries_manually_reviewed_in_accepted_records": 20,
+      "semantic_checks_scheduled": 45,
+      "semantic_checks_pass": 35,
+      "semantic_checks_qualified": 2,
+      "semantic_checks_unassessable_invalid": 8,
+      "blocking_wrong_selected_grade_findings_in_accepted_records": 0,
+      "three_valid_stable_case_vectors": 3,
+      "first_pass_stability_warning": "All3 positive-observation draws need mechanical repairs; final grade stability does not imply first-pass reliability."
+    },
+    "first_half_findings": [
+      {
+        "round": 3,
+        "case_id": "frv1-01",
+        "severity": "repeatability",
+        "path": "judgments[consultation]",
+        "finding": "Exact same input yields20,20,15. This must remain in all-output stability, although the cell was excluded from gold agreement before inference."
+      },
+      {
+        "round": 2,
+        "case_id": "frv1-02",
+        "severity": "nonblocking",
+        "path": "judgments[contact].counterevidence[0]",
+        "finding": "Navigation instructions do not counter the missing-introduction finding. This is an irrelevant citation despite being verbatim."
+      },
+      {
+        "round": 2,
+        "case_id": "frv1-03",
+        "severity": "nonblocking",
+        "path": "factual_claims[2].assessment.impacts[0]",
+        "finding": "False-branch interpretation drifts across repeats (0 in round1, needs_review in round2) while actual grade stays provisional. A compound process proposition does not identify which component is hypothesized false."
+      }
+    ],
+    "second_half_findings": [
+      {
+        "id": "B-F01",
+        "severity": "operational_failure",
+        "samples": [
+          "1:frv1-05"
+        ],
+        "finding": "Incomplete response at6000 tokens with19,905 trailing whitespace characters, last meaningful location next_step.support.unresolved_aspects opening bracket. Do not assume that raising cap alone fixes a likely constrained-generation stall. No accepted score."
+      },
+      {
+        "id": "B-F02",
+        "severity": "repeatable_contract_fragility",
+        "samples": [
+          "1:frv1-06",
+          "2:frv1-06",
+          "3:frv1-06"
+        ],
+        "finding": "All3 initial positive-observation outputs rejected for exact claim/proposition wording inequality despite narrow semantically compatible propositions. Each sole mechanical repair succeeds with unchanged eight-grade vector. Strict equality preserved; no initial accepted credit."
+      },
+      {
+        "id": "B-F03",
+        "severity": "operational_failure",
+        "samples": [
+          "2:frv1-05"
+        ],
+        "finding": "Initial evidence_kind account_state/interaction mismatch; sole repair fixes to general_fact/interaction but adds nonverbatim duplicate greeting exclusion. Both remain rejected, no accepted score."
+      },
+      {
+        "id": "B-F04",
+        "severity": "qualified_evidence_chain",
+        "samples": [
+          "3:frv1-05"
+        ],
+        "finding": "Correct contradicted completion depends on client m3 negative state AND system m7 no later actions. Only m7 is declared dialogue proof, while essential m3 is non-proving context. Full explanation/impact cites both, but declared primary proof alone does not establish earlier state."
+      },
+      {
+        "id": "B-F05",
+        "severity": "qualified_counterfactual_granularity",
+        "samples": [
+          "3:frv1-07"
+        ],
+        "finding": "Final supported compound combines review/execution with no-deadline fact under false-to0. Only the ancillary deadline clause being false need not imply wrong key advice. R1 separated it with false-to15 andR2 excluded it as non-grade-changing. Selected consultation20 remains defensible."
+      },
+      {
+        "id": "B-F06",
+        "severity": "fixture_evidence_limit_not_relabeling",
+        "samples": [
+          "1:frv1-05",
+          "2:frv1-05",
+          "3:frv1-05"
+        ],
+        "finding": "Negative training fixture does not independently verify exact filename/Downloads route. Raw route-factual uncertainty is distinguishable from the pre-declared ordinal grading ambiguity. Known false final completion still can independently determine0; no freeze/output changed."
+      }
+    ]
+  },
+  "cost": {
+    "totals": {
+      "provider_requests": 29,
+      "initial_requests": 24,
+      "repair_requests": 5,
+      "provider_statuses": {
+        "completed": 28,
+        "incomplete": 1
+      },
+      "evaluation_attempt_statuses": {
+        "completed": 22,
+        "failed": 7
+      },
+      "truncated_requests": 1,
+      "input_tokens": 596698,
+      "ordinary_input_tokens": 87,
+      "cached_input_tokens": 443500,
+      "cache_write_tokens": 153111,
+      "cache_write_30m_tokens": 153111,
+      "cache_write_12h_tokens": 0,
+      "output_tokens": 128431,
+      "reasoning_tokens_included_in_output": 7967,
+      "ordinary_input_cost_usd": "0.000174",
+      "cached_input_cost_usd": "0.0443500",
+      "cache_write_30m_cost_usd": "0.3827775",
+      "cache_write_12h_cost_usd": "0.00",
+      "input_cost_usd": "0.4273015",
+      "output_cost_usd": "1.28431",
+      "token_priced_cost_usd": "1.7116115",
+      "ledger_uncached_only_cost_usd": "2.477706",
+      "ledger_minus_token_priced_cost_usd": "0.7660945",
+      "initial_requests_cost_usd": "1.3463056",
+      "repair_requests_cost_usd": "0.3653059",
+      "failed_evaluation_attempts_cost_usd": "0.4148027",
+      "truncated_requests_cost_usd": "0.107121"
+    },
+    "rounds": [
+      {
+        "provider_requests": 9,
+        "initial_requests": 8,
+        "repair_requests": 1,
+        "provider_statuses": {
+          "completed": 8,
+          "incomplete": 1
+        },
+        "evaluation_attempt_statuses": {
+          "completed": 7,
+          "failed": 2
+        },
+        "truncated_requests": 1,
+        "input_tokens": 182968,
+        "ordinary_input_tokens": 27,
+        "cached_input_tokens": 68572,
+        "cache_write_tokens": 114369,
+        "cache_write_30m_tokens": 114369,
+        "cache_write_12h_tokens": 0,
+        "output_tokens": 40891,
+        "reasoning_tokens_included_in_output": 2834,
+        "ordinary_input_cost_usd": "0.000054",
+        "cached_input_cost_usd": "0.0068572",
+        "cache_write_30m_cost_usd": "0.2859225",
+        "cache_write_12h_cost_usd": "0.00",
+        "input_cost_usd": "0.2928337",
+        "output_cost_usd": "0.40891",
+        "token_priced_cost_usd": "0.7017437",
+        "ledger_uncached_only_cost_usd": "0.774846",
+        "ledger_minus_token_priced_cost_usd": "0.0731023",
+        "initial_requests_cost_usd": "0.6028952",
+        "repair_requests_cost_usd": "0.0988485",
+        "failed_evaluation_attempts_cost_usd": "0.1623048",
+        "truncated_requests_cost_usd": "0.107121",
+        "round": 1,
+        "planned_samples": 8,
+        "final_sample_statuses": {
+          "completed": 7,
+          "failed": 1
+        }
+      },
+      {
+        "provider_requests": 10,
+        "initial_requests": 8,
+        "repair_requests": 2,
+        "provider_statuses": {
+          "completed": 10
+        },
+        "evaluation_attempt_statuses": {
+          "completed": 7,
+          "failed": 3
+        },
+        "truncated_requests": 0,
+        "input_tokens": 206964,
+        "ordinary_input_tokens": 30,
+        "cached_input_tokens": 187464,
+        "cache_write_tokens": 19470,
+        "cache_write_30m_tokens": 19470,
+        "cache_write_12h_tokens": 0,
+        "output_tokens": 44121,
+        "reasoning_tokens_included_in_output": 2794,
+        "ordinary_input_cost_usd": "0.000060",
+        "cached_input_cost_usd": "0.0187464",
+        "cache_write_30m_cost_usd": "0.0486750",
+        "cache_write_12h_cost_usd": "0.00",
+        "input_cost_usd": "0.0674814",
+        "output_cost_usd": "0.44121",
+        "token_priced_cost_usd": "0.5086914",
+        "ledger_uncached_only_cost_usd": "0.855138",
+        "ledger_minus_token_priced_cost_usd": "0.3464466",
+        "initial_requests_cost_usd": "0.3759952",
+        "repair_requests_cost_usd": "0.1326962",
+        "failed_evaluation_attempts_cost_usd": "0.1619355",
+        "truncated_requests_cost_usd": "0",
+        "round": 2,
+        "planned_samples": 8,
+        "final_sample_statuses": {
+          "completed": 7,
+          "failed": 1
+        }
+      },
+      {
+        "provider_requests": 10,
+        "initial_requests": 8,
+        "repair_requests": 2,
+        "provider_statuses": {
+          "completed": 10
+        },
+        "evaluation_attempt_statuses": {
+          "failed": 2,
+          "completed": 8
+        },
+        "truncated_requests": 0,
+        "input_tokens": 206766,
+        "ordinary_input_tokens": 30,
+        "cached_input_tokens": 187464,
+        "cache_write_tokens": 19272,
+        "cache_write_30m_tokens": 19272,
+        "cache_write_12h_tokens": 0,
+        "output_tokens": 43419,
+        "reasoning_tokens_included_in_output": 2339,
+        "ordinary_input_cost_usd": "0.000060",
+        "cached_input_cost_usd": "0.0187464",
+        "cache_write_30m_cost_usd": "0.0481800",
+        "cache_write_12h_cost_usd": "0.00",
+        "input_cost_usd": "0.0669864",
+        "output_cost_usd": "0.43419",
+        "token_priced_cost_usd": "0.5011764",
+        "ledger_uncached_only_cost_usd": "0.847722",
+        "ledger_minus_token_priced_cost_usd": "0.3465456",
+        "initial_requests_cost_usd": "0.3674152",
+        "repair_requests_cost_usd": "0.1337612",
+        "failed_evaluation_attempts_cost_usd": "0.0905624",
+        "truncated_requests_cost_usd": "0",
+        "round": 3,
+        "planned_samples": 8,
+        "final_sample_statuses": {
+          "completed": 8
+        }
+      }
+    ],
+    "invoice_limitation": "Provider token usage priced at official rates, not independently retrieved invoice/debit.",
+    "pricing_sources": {
+      "model": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
+      "cache": "https://developers.openai.com/api/docs/guides/prompt-caching"
+    }
+  },
+  "scheduling_continuation": {
+    "sample": [
+      3,
+      "frv1-07"
+    ],
+    "reason": "Only unsubmitted sample after concurrent protected holds; submitted when existing allowance became available.",
+    "original_result_and_skip_preserved": true,
+    "failed_paid_samples_resubmitted": false,
+    "same_original_budget_group_and_cap": true,
+    "budget_increased": false,
+    "all_24_initial_sample_pairs_submitted_exactly_once": true
+  },
+  "verification": {
+    "strictly_revalidated_valid_results": 22,
+    "failed_results_still_unaccepted": 2,
+    "provider_responses": 29,
+    "unique_initial_samples": 24,
+    "repairs": 5,
+    "old_preserved_file_hashes_match": 10,
+    "new_freeze_unchanged": true,
+    "runtime_sources_unchanged": true,
+    "original_base_budget_skip_unchanged": true,
+    "only_unsent_sample_continued": true,
+    "same_original_budget_cap_and_group": true,
+    "semantic_entailment_requires_separate_review": true
+  },
+  "limitations": [
+    "Eight fresh authored stress scenarios and three repeats each, not independent expert/organizer Ground Truth.",
+    "Two numeric consultation boundaries excluded before inference; all64 cells retained in stability.",
+    "Case07 final-correction grade is prospective team adjudication, not a hidden organizer rule.",
+    "Negative training fixture does not independently verify filename/Downloads route; genuine truth uncertainty is distinct from ordinal ambiguity.",
+    "All eight conversations are chats, with no audio or positive identity/serious-error controls.",
+    "Accepted-only100% agreement excludes invalid outputs and cannot establish broad95-100 product quality."
+  ],
+  "source_sha256": [
+    {
+      "path": "evals/fresh-repeat-v1.jsonl",
+      "sha256": "4728edfedbc0c3b5e7a69d9cca920961ec981f31a10d4658c6898055ff25f02b"
+    },
+    {
+      "path": "evals/fresh-repeat-v1.review.json",
+      "sha256": "c0fac7e5e855d04b2dc192b4497ab24223fedf9d0ef53dc253e0d4d4779e8d75"
+    },
+    {
+      "path": "evals/fresh-repeat-v1.freeze.json",
+      "sha256": "3e9cb140a9152364096d27a73d73fc8308a1c0f028a3a9bcfcf1ce3527c0320d"
+    },
+    {
+      "path": "docs/FRESH_REPEAT_V1.md",
+      "sha256": "2495ec8ed60643833017c710a49fe2b00dcc91f52ee17d5a7a31ed39cad18b42"
+    },
+    {
+      "path": "scripts/verify_fresh_repeat.py",
+      "sha256": "5b704a99be1a1464959ce6b70b4c44c2fe0a6c25e0d4bddc28aaf4d3a62e2eea"
+    },
+    {
+      "path": "artifacts/fresh-repeat-live-v1/benchmark.json",
+      "sha256": "80d9f332c4d50bc44be1d744e47e5a66dd1dbeb5e7e5ed919240446fd43139f0"
+    },
+    {
+      "path": "artifacts/fresh-repeat-live-v1/completed-schedule.json",
+      "sha256": "3213f7c55feab27c16d46169a259c8ba0903ba8b7c24e7d66981f19441ad0935"
+    },
+    {
+      "path": "artifacts/fresh-repeat-live-v1/continuation.json",
+      "sha256": "e728c631c181484ed47b7a45b48f9d41a3bd4f2bf51626138f986ae7faa3f172"
+    },
+    {
+      "path": "artifacts/fresh-repeat-live-v1/continuation-protocol.json",
+      "sha256": "ef26741dc23a4af5e30bf8c80479c8b5cdcdde4b06eb275a25813675afb7ec18"
+    },
+    {
+      "path": "artifacts/fresh-repeat-live-v1/provider-usage.jsonl",
+      "sha256": "4f8bf94c799e3b059d1de45cfb77928e7bc47f0aa9ac842d694301b15d5e182a"
+    },
+    {
+      "path": "artifacts/fresh-repeat-live-v1/continuation-provider-usage.jsonl",
+      "sha256": "42169743328dce9314d8b90d59f53764a11236ab64ac650d0c048ac313862c5f"
+    },
+    {
+      "path": "artifacts/fresh-repeat-live-v1/cost-reconciliation.json",
+      "sha256": "1dff2e3b0e44d88ada44d764b89d1844dcdd697ded405d2de095fbd0a3510197"
+    },
+    {
+      "path": "artifacts/fresh-repeat-live-v1/review-01-04.json",
+      "sha256": "09c47bed7e6cab069864318f83f6100ea292f6f20dcc9866490b740d213f2894"
+    },
+    {
+      "path": "artifacts/fresh-repeat-live-v1/review-05-08.json",
+      "sha256": "e6ce1e3da13b272ab81bab0195d352be1cd6890437822a85a19a65b1b9d94eb6"
+    },
+    {
+      "path": "artifacts/fresh-repeat-live-v1/verification.json",
+      "sha256": "ad670c1b42574f78847646f0e7eac7abd5920d8b0036ff7694006714500e1545"
+    },
+    {
+      "path": "artifacts/fresh-repeat-live-v1/metrics.json",
+      "sha256": "5f1430afc139c6c7c517787ecaab8367d1787673bed51da0d77e5f10ff997a9f"
+    }
+  ]
+}

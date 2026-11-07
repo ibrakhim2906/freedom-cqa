@@ -116,3 +116,9 @@ The subsequent [v2 live acceptance run](EVIDENCE_CONTRACT_V2_LIVE_RESULTS.md)
 completed all six unchanged cases on the first attempt, matching all 48 frozen
 provisional judgments, at $0.3560597 in reconciled token-priced usage. Full review
 retains one compound-claim diagnostic and explicitly untested generalization.
+
+The [fresh eight-case, three-repeat experiment](FRESH_REPEAT_V1_RESULTS.md) then
+failed its reliability gate: 18/24 first-pass and 22/24 final valid assessments,
+five repairs, 172/186 end-to-end frozen-label matches, and 6/8 fully stable case
+vectors. Actual token-priced cost was $1.7116115. The report preserves failures,
+pre-declared ordinal ambiguities and evidence/counterfactual quality findings.

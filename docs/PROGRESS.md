@@ -93,6 +93,8 @@ is unchanged; no new corpus-wide accuracy claim is made.
 
 ## Prepare submission
 
+- [x] Freeze and run eight fresh cases three times with unchanged engine, including mixed-truth claims, positive observations and corrected advice. Reliability gate failed: 18/24 first-pass,22/24 final valid, five repairs, two retained failures, 6/8 stable vectors; $1.7116115 token-priced cost. See FRESH_REPEAT_V1_RESULTS.md before claiming robustness.
+
 - [x] Document reproducible local installation and startup in WORKFLOW.md and scripts/start-local.ps1.
 - [ ] Verify the complete browser workflow on the final code.
 - [ ] Demonstrate RU, KZ, and EN cases, N/A handling, an appeal, and a live criterion change.
