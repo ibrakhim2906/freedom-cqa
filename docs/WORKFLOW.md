@@ -58,7 +58,7 @@ labelled as not audio-analyzed.
 
 ## Checklists and reference context
 
-The default is reviewed-013 and the grounded single-call evaluator. The checklist
+The default is reviewed-015 and the grounded evaluator with one protected mechanical repair. The checklist
 editor supports arbitrary criteria, instructions, kinds, weights, N/A conditions,
 call guidance, and allowed levels/fractions. Saving an existing ID/version with
 changed content is rejected; **Edit as new version** creates another version.

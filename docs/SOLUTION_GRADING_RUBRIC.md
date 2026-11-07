@@ -117,6 +117,12 @@ guarantee the organizer's score or selection decision.
 
 ## Current evidence and gaps
 
+The following paragraphs are the historical pre-workflow snapshot. Current
+implementation and measurements are in [WORKFLOW.md](WORKFLOW.md) and
+[BOUNDARY_VALIDATION_RESULTS.md](BOUNDARY_VALIDATION_RESULTS.md). The scoring
+weights and thresholds above remain unchanged; development agreement is not
+independent organizer Ground Truth.
+
 The CLI, deterministic scorer, source-reference validation and real API benchmark
 history exist. Runtime criteria outside the original eight have been tested. The
 20-item calibration pass is complete: 13 assistant proposals accepted by the user,

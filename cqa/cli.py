@@ -4,6 +4,7 @@ import hashlib
 import json
 from dataclasses import replace
 from datetime import UTC, datetime
+from uuid import uuid4
 
 from .datasets import load_cases, load_suite
 from .evaluator import Evaluator
@@ -53,9 +54,11 @@ async def benchmark(args):
         raise ValueError("Output already exists; use a new filename to preserve previous evidence")
     output.parent.mkdir(parents=True, exist_ok=True)
     checklist = load_checklist(args.checklist)
-    ledger = Ledger(settings.ledger_path, settings.max_spend)
+    budget_group = "benchmark-" + str(uuid4())
+    ledger = Ledger(settings.ledger_path, settings.max_spend, budget_group=budget_group,
+                    group_limit=args.budget_usd)
     before = ledger.committed()
-    ceiling = min(settings.max_spend, before + args.budget_usd)
+    ceiling = settings.max_spend
     strategy = getattr(args, "strategy", DEFAULT_STRATEGY)
     evaluator = Evaluator(settings, ledger, ceiling, strategy=strategy)
     metadata = {"started_at": datetime.now(UTC).isoformat(),
@@ -64,6 +67,7 @@ async def benchmark(args):
                 "max_output_tokens": settings.max_output_tokens, "concurrency": settings.concurrency,
                 "timeout_seconds": settings.timeout,
                 "run_budget_usd": args.budget_usd, "lifetime_committed_before_usd": before,
+                "budget_group": budget_group,
                 "suite_sha256": hashlib.sha256("\n".join(c.model_dump_json() for c in cases).encode()).hexdigest(),
                 "selected_case_ids": [c.id for c in cases], "complete": False}
     metadata["evaluator_source_sha256"] = hashlib.sha256(b"\n".join(

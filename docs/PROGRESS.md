@@ -82,7 +82,7 @@
 ## Decisions still open
 
 - Broader model comparisons are not complete; the tested default remains gpt-6.1-sol at medium reasoning.
-- The authorized local lifetime cap is $9.427742; commitment after grounded validation is $9.166096. Do not reset usage or infer authorization from account balance alone.
+- The user subsequently authorized continued API work without the old spending restriction. At the boundary-validation milestone, ledger commitment is $13.581918 and the ignored local ceiling is $19.302438. These are local accounting figures, not a live provider balance; never reset usage.
 - Broader product-reference coverage and source context for undated organizer inputs remain incomplete. Three scoped official platform guides are available.
 - The exact organizer comparison formula is not supplied; the organizer explicitly discourages guessing it.
 - Verified audio playback/access and optional audio-analysis scope.

@@ -386,3 +386,20 @@ The grounded output contract requires each numeric deduction to quote its config
 rule, cite source evidence or a checked omission span, and explain overlap. Code
 validates the citations and rule existence; semantic independence still requires
 correct model interpretation. It never removes all overlapping deductions mechanically.
+
+## R014-R015: operational communication boundaries and discovery separation
+
+Implemented at the user's request to fix observed empathy/management instability
+without suppressing legitimate deductions. These are team interpretations, not
+new organizer Ground Truth. Reviewed-014 clarifies neutral requests versus explicit
+distress, concrete acknowledgment, and the independently evidenced prerequisite/
+clarity/wait severity procedure. It is preserved as a rejected intermediate version:
+full-vector repeats exposed incorrect discovery deductions for identity confirmation.
+
+Reviewed-015 additionally distinguishes request/task clarification from identity
+permission. Missing verification alone does not fail discovery when the task and
+account are already identified. A truly missing task prerequisite still can fail
+discovery alongside management. The final version passed its frozen contrasts,
+known-source regressions, designated repeats and organizer partial-label checks and
+is now default. Weights, allowed levels and earlier judgments were not overwritten.
+See [complete validation evidence](BOUNDARY_VALIDATION_RESULTS.md).

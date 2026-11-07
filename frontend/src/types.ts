@@ -31,5 +31,6 @@ export type JobDetail = JobRow & {conversation: ConversationDetail; checklist: C
     attempt_count: number; latency_seconds: number; billing_state?: string; validation_reason?: string;
     repair_skipped?: string; error_detail?: string; budget_required_usd?: number; budget_available_usd?: number}|null}
 export type Config = {api_key_configured: boolean; model: string; strategy: string;
+  default_checklist: {id: string; version: string};
   ledger: {lifetime_committed_usd: number; lifetime_limit_usd: number}}
 export type BatchResult = {batch_id: string|null; job_ids: string[]; reused: string[]}

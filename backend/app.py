@@ -96,6 +96,7 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
         except ValueError:
             configured = False
         return {"api_key_configured": configured, "model": settings.model, "strategy": "grounded",
+                "default_checklist": {"id": load_checklist().id, "version": load_checklist().version},
                 "ledger": workflow.ledger.summary(), "worker_concurrency": 1,
                 "audio_analysis_available": False}
 

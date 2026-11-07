@@ -25,7 +25,7 @@ function App() {
   const refresh = useCallback(async () => {
     const [cs, lists, cfg] = await Promise.all([api<ConversationRow[]>('/conversations'), api<ChecklistRow[]>('/checklists'), api<Config>('/config')])
     setConversations(cs); setChecklists(lists); setConfig(cfg)
-    setChecklistId(old => old || lists.find(c => c.version === '1-reviewed-013')?.id || lists[0]?.id || '')
+    setChecklistId(old => old || lists.find(c => c.external_id === cfg.default_checklist.id && c.version === cfg.default_checklist.version)?.id || lists[0]?.id || '')
   }, [])
   async function act(work: () => Promise<void>) {
     setError(''); setBusy(true)

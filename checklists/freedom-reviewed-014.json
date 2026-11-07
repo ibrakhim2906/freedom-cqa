@@ -1,0 +1,211 @@
+{
+  "id": "freedom-chat-quality",
+  "version": "1-reviewed-014",
+  "title": "Чек-лист качества чатов",
+  "instructions": [
+    "Source: CQA_Chat_Quality_Checklist.pdf, pages 1-3; organizer call clarification 2026-11-07.",
+    "N/A разрешён только при выполнении явно указанного условия критерия.",
+    "Для пропущенного действия укажите место, где оно ожидалось. Для N/A объясните условие.",
+    "Порог первой реакции в 3 минуты, теги и вложения в оценку не входят.",
+    "Грубые ошибки отмечаются отдельно и не обнуляют итог.",
+    "Для звонков применяйте аналогичную логику, адаптируя письменную коммуникацию к устной речи.",
+    "TEAM CALIBRATION: R001-R012 are assistant recommendations accepted by the user. The final five review assessments are separately recorded as provisional assistant judgments at the user request, not additional user-adjudicated rules. None are organizer Ground Truth. Other unresolved proposals are not adopted."
+  ],
+  "criteria": [
+    {
+      "id": "contact",
+      "title": "Установление контакта",
+      "instruction": "Да — оператор поздоровался на языке клиента и представился в первом ответе.",
+      "kind": "binary",
+      "weight": 10.0,
+      "levels": [
+        {
+          "value": "yes",
+          "fraction": 1.0,
+          "description": "Да"
+        },
+        {
+          "value": "no",
+          "fraction": 0.0,
+          "description": "Нет"
+        }
+      ],
+      "na_condition": null,
+      "channel_guidance": {}
+    },
+    {
+      "id": "needs",
+      "title": "Выявление потребности",
+      "instruction": "Да — оператор учёл известные детали и уточнил недостающее до ответа. Согласованная интерпретация R002: сведения, уже полученные ботом или сообщённые клиентом до подключения оператора, считаются известными оператору. Оцените, использовал ли оператор эти сведения и уточнил ли реально недостающее до зависимого ответа или действия. Не требуйте повторять вопросы бота: корректного использования уже собранных сведений достаточно, если больше ничего не требуется уточнять. Сам факт, что первоначально данных не хватало, не означает Нет; ненужный повтор уже отвеченного вопроса вместо учёта известного — нарушение. Согласованная интерпретация R009: недостающие сведения необходимо уточнить до ответа или действия, которое от них зависит; другие полезные сведения могут собираться постепенно. Полезность информации не делает её автоматически обязательной предпосылкой первоначального направления на проверку. Для отрицательной оценки позднего уточнения укажите, почему конкретное ранее выполненное действие или данный ответ требовал этих сведений по доступной политике или по смыслу самого действия. Не придумывайте обязательные поля процесса. Если подтверждено, что необходимые сведения отсутствовали до зависимого действия, ставьте Нет.",
+      "kind": "binary",
+      "weight": 15.0,
+      "levels": [
+        {
+          "value": "yes",
+          "fraction": 1.0,
+          "description": "Да"
+        },
+        {
+          "value": "no",
+          "fraction": 0.0,
+          "description": "Нет"
+        }
+      ],
+      "na_condition": "Данных для ответа хватало с самого начала. Согласованная интерпретация R002: начало — первое существенное обращение клиента во всём диалоге, включая этап бота, а не момент подключения оператора. Данные, полученные после уточнения бота, не считаются доступными с самого начала.",
+      "channel_guidance": {}
+    },
+    {
+      "id": "identity",
+      "title": "Идентификация",
+      "instruction": "Да — проверка личности подтверждена до раскрытия данных или защищённого действия. Если требовалась проверка личности перед защищённым действием и она не подтверждена в чате, ставьте Нет. Общий вопрос о тарифах не требует идентификации.",
+      "kind": "binary",
+      "weight": 20.0,
+      "levels": [
+        {
+          "value": "yes",
+          "fraction": 1.0,
+          "description": "Да"
+        },
+        {
+          "value": "no",
+          "fraction": 0.0,
+          "description": "Нет"
+        }
+      ],
+      "na_condition": "Запрос не требовал идентификации.",
+      "channel_guidance": {}
+    },
+    {
+      "id": "consultation",
+      "title": "Корректная и полная консультация",
+      "instruction": "Оцените ответ или следующий шаг. Консультация оценивает, правильно и полно ли решён запрос. Ясный ответ на один из двух важных вопросов может получить высокий балл за ведение диалога и частичный за консультацию. Согласованная командная интерпретация R001: оценивайте все действующие запросы клиента. Если оператор конкретно и по существу ответил на один реальный вторичный запрос, но основной существенный вопрос остался без ответа и корректного следующего шага, это частично закрытый запрос — 10. Сам по себе пропуск основного вопроса не отменяет частичный результат. Это не отменяет 0 при ошибочной ключевой рекомендации; общая или нерелевантная реплика не считается конкретно решённым вторичным запросом. Ответ бота не засчитывается как действие оператора. Согласованная интерпретация R006: содержательный ответ может быть неявным, если из фактических слов оператора или конкретного подходящего следующего шага ясно следует ответ на практический вопрос клиента. Не требуйте повторения вопроса, отдельного «да/нет» или определённой ключевой фразы. Произвольный обходной путь не закрывает отдельный существенный вопрос, если фактически его не разрешает. Не достраивайте непрозвучавшие обещания, сроки или правила продукта; проверяйте фактическую правильность по доступным источникам. Само утверждение оператора не является независимым подтверждением политики компании. Согласованная интерпретация R007: неопределённое откладывание вроде «этот вопрос нужно рассматривать отдельно» само по себе не является конкретным следующим шагом. Существенный дополнительный вопрос остаётся открытым, пока не дан обоснованный ответ или понятный соразмерный запросу путь к его разрешению. Вежливое завершение или благодарность клиента сами по себе не отменяют открытый вопрос. Если один вопрос закрыт, а другой существенный вопрос остаётся открытым, применяется уровень частичного решения — 10; отдельная ошибочная ключевая рекомендация по-прежнему может требовать 0. Согласованная интерпретация R008: оценивайте, устраняет ли ответ явно обозначенное клиентом препятствие к его заявленной цели. Если существенное препятствие остаётся без содержательного ответа или подходящего следующего шага, ответ на смежный вопрос не закрывает его автоматически. Отличайте такое препятствие от простой контекстной детали. Не добавляйте несвязанные задачи и не требуйте полного описания всего процесса только потому, что оно могло бы быть полезным. Не придумывайте конкретный способ перевода средств или обязательную процедуру без подтверждающего источника. Согласованная интерпретация R011: оценивайте полноту и корректность консультации по собственным условиям этого критерия. Отдельный флаг грубой ошибки не доказывает автоматически неверный ответ, незакрытый запрос или неподходящий следующий шаг. Для снижения консультации укажите именно такое независимое нарушение. Если то же поведение действительно делает ответ неверным, оставляет существенный запрос открытым или делает следующий шаг неподходящим, учтите это последствие. Грубую ошибку при этом обязательно сохраняйте отдельным флагом; она не обнуляет и не ограничивает числовой итог сама по себе. Согласованная интерпретация R012: перед снижением за неполноту укажите конкретный незакрытый запрос или необходимый недостающий шаг. Отказ от несвязанного предложения и отсутствие явного подтверждения успеха сами по себе не доказывают неполноту консультации. При этом учитывайте реальный контекст, явно обозначенные препятствия и повторно выраженную незакрытую потребность; не закрывайте существенный вопрос автоматически только потому, что ранее была дана какая-либо инструкция.",
+      "kind": "scale",
+      "weight": 20.0,
+      "levels": [
+        {
+          "value": "20",
+          "fraction": 1.0,
+          "description": "Все существенные вопросы закрыты или дан корректный следующий шаг."
+        },
+        {
+          "value": "15",
+          "fraction": 0.75,
+          "description": "Основной вопрос решён, пропущена второстепенная деталь."
+        },
+        {
+          "value": "10",
+          "fraction": 0.5,
+          "description": "Часть запроса закрыта, существенный вопрос остался открытым."
+        },
+        {
+          "value": "5",
+          "fraction": 0.25,
+          "description": "Есть общая подсказка, но клиенту всё ещё непонятно, как действовать."
+        },
+        {
+          "value": "0",
+          "fraction": 0.0,
+          "description": "Ответа по существу нет или ключевая рекомендация ошибочна."
+        }
+      ],
+      "na_condition": "Чат закончился до того, как клиент сформулировал запрос.",
+      "channel_guidance": {}
+    },
+    {
+      "id": "empathy",
+      "title": "Эмпатия и клиентоориентированность",
+      "instruction": "Да — оператор вежлив и, если клиент выразил недовольство или описал неудобство, отреагировал на конкретную проблему. Согласованная интерпретация R003: уважительное признание конкретной трудности и практическое действие, направленное на её устранение, могут быть достаточной реакцией. Явное извинение или определённая эмоциональная формулировка не обязательны. Одна дежурная фраза или общая вежливость без реакции на конкретную проблему недостаточны. Полезный ответ сам по себе не компенсирует грубость или игнорирование выраженного недовольства. Нарушение другого критерия не означает автоматически провал эмпатии: для него нужна отдельная причина по данному критерию. Согласованная интерпретация R005: признание трудности может быть неявным, когда оператор использует поправку клиента в конкретном корректирующем ответе, направленном на эту трудность. Отдельная фраза «понимаю» или «понял» не обязательна. Подтвердите реакцию конкретным содержанием ответа или действия, а не одним лишь успешным исходом разговора. Предыдущие требования вежливости и реакции на выраженное недовольство сохраняются. Team interpretation R014, decision procedure: First check whether HUMAN operator language is disrespectful or dismissive. Then identify any CUSTOMER statement explicitly expressing dissatisfaction, distress, or a concrete experienced inconvenience, and the operator response AFTER that cue. A neutral factual request, a factual correction, or a reminder that a question has not yet been answered is not by itself such a cue. Do not infer customer distress or an experienced inconvenience solely from an account status described by the operator. A complaint about being ignored or a described practical consequence can be a cue even without an emotion word. If the operator is courteous and no qualifying cue exists, select Yes even when a separate substantial question remains unanswered. If a qualifying cue exists, select Yes when the operator acknowledges the particular difficulty and responds with relevant practical help; a concrete corrective action using the customer's correction can itself be acknowledgment. Select No for disrespect, dismissal, or a qualifying cue left without a relevant response. Earlier politeness does not erase a later ignored cue. Before selecting No, quote the actual disrespect or customer cue and identify the subsequent response/checked omission span. State what makes that cue more than a neutral request; an unanswered request alone is not the empathy defect. Do not demand a formulaic apology or hide a clear failure as needs_review.",
+      "kind": "binary",
+      "weight": 15.0,
+      "levels": [
+        {
+          "value": "yes",
+          "fraction": 1.0,
+          "description": "Да"
+        },
+        {
+          "value": "no",
+          "fraction": 0.0,
+          "description": "Нет"
+        }
+      ],
+      "na_condition": null,
+      "channel_guidance": {}
+    },
+    {
+      "id": "management",
+      "title": "Управление диалогом, скорость и грамотность",
+      "instruction": "Оцените ясность, порядок ответов и предупреждение об ожидании. Согласованная интерпретация R004: один ненужный вопрос, из-за которого клиент повторяет уже сообщённые сведения, но затем получает понятные инструкции и может продолжить, соответствует одному заметному сбою — 7. Повтор клиентом известных сведений сам по себе не равнозначен необходимости переспрашивать из-за неясной формулировки или порядка объяснений; для уровня 4 укажите именно такую необходимость уточнения. Обоснованное подтверждение неоднозначных или изменившихся сведений не считается ненужным повтором само по себе. Оценивайте реальный сбой по данному критерию независимо от оценки выявления потребности. Team interpretation R013: Content omissions and factual mistakes belong to consultation and do not by themselves reduce management. Ending a conversation while a question remains unanswered is a content omission, not an additional management defect solely for that reason. Deduct management only for a separately evidenced clarity, wording, coherence, explicit prerequisite sequencing, redundant-question, or announced-wait failure under this criterion. A correct answer may still have poor wording; an incorrect answer can be clearly worded. Do not suppress genuine independent violations. Team interpretation R014, decision procedure: Independently identify communication/process events before selecting a level. A content omission or wrong factual recommendation alone is not a management defect. A prerequisite-sequencing defect IS independently scoreable when ALL three are established: (1) the operator or an applicable supplied reference explicitly establishes a particular prerequisite BEFORE a dependent action, (2) the dependent action is actually performed or explicitly claimed, and (3) the source sequence shows the prerequisite was not yet satisfied. Cite the prerequisite, dependent action, and missing/late confirmation. This applies even if the same event also violates identity or needs; do not automatically suppress it because another criterion deducted. The existence of another criterion's failure is not itself source evidence of a sequencing defect. For one such lapse, one unnecessary repeat question, or an explicit unannounced wait, select 7 if the remaining wording is understandable and the conversation can continue. Customer confusion is NOT required for this level. Select 4 when a customer must ask for clarification BECAUSE OF unclear wording or instruction order; a new substantive factual question or a repeated unanswered content request is not that clarification. Select 0 only when incoherent or contradictory communication makes the dialogue impossible to follow. Select 10 when none of those independently evidenced defects exists. If multiple levels apply, use the most severe justified level, not an arithmetic average. An announced wait is not a wait-management defect; do not invent time thresholds or infer diction from transcript text. Explain the concrete communication defect and its level, or explicitly distinguish content-only defects from management. Preserve real overlapping deductions.",
+      "kind": "scale",
+      "weight": 15.0,
+      "levels": [
+        {
+          "value": "10",
+          "fraction": 1.0,
+          "description": "Ответы ясные и связные. Если было явное ожидание, оператор предупредил."
+        },
+        {
+          "value": "7",
+          "fraction": 0.7,
+          "description": "Один заметный сбой, но клиент может понять ответ и продолжить."
+        },
+        {
+          "value": "4",
+          "fraction": 0.4,
+          "description": "Клиенту приходится переспрашивать из-за формулировок или порядка ответов."
+        },
+        {
+          "value": "0",
+          "fraction": 0.0,
+          "description": "Из-за бессвязных или противоречивых реплик ход диалога непонятен."
+        }
+      ],
+      "na_condition": null,
+      "channel_guidance": {
+        "voice call": "Оценивать логичность ведения разговора, понятность объяснений, отсутствие неуместных выражений, корректность речевых формулировок и управление паузами. Темп, дикцию и произношение оценивать только при наличии анализируемого аудио."
+      }
+    },
+    {
+      "id": "closing",
+      "title": "Завершение",
+      "instruction": "Да — оператор подвёл итог или предложил дальнейшую помощь и попрощался. Согласованная интерпретация R010: Нет требует подтверждённой возможности завершить разговор при отсутствии требуемого завершения. N/A требует подтверждения, что разговор прервался до такой возможности. Если доступная запись не позволяет различить эти ситуации, используйте needs_review с конкретным описанием неопределённости и answer=null, не подменяя её N/A. Благодарность клиента сама по себе не доказывает возможность ответа, а потеря соединения сама по себе не доказывает её отсутствие. Не придумывайте фиксированный временной порог. Если отсутствие обязательного действия при имевшейся возможности очевидно, это Нет, а не неопределённость.",
+      "kind": "binary",
+      "weight": 5.0,
+      "levels": [
+        {
+          "value": "yes",
+          "fraction": 1.0,
+          "description": "Да"
+        },
+        {
+          "value": "no",
+          "fraction": 0.0,
+          "description": "Нет"
+        }
+      ],
+      "na_condition": "Чат оборвался до возможности его завершить.",
+      "channel_guidance": {}
+    },
+    {
+      "id": "serious",
+      "title": "Грубые ошибки",
+      "instruction": "Да — выявлено оскорбление клиента, предложение платной услуги в обход компании или раскрытие конфиденциальной информации. Нет — ни одно из трёх не выявлено. Предложение перевести деньги оператору лично для инвестирования или платной частной консультации достаточно само по себе: согласие клиента или перевод не требуются.",
+      "kind": "flag",
+      "weight": 0.0,
+      "levels": [
+        {
+          "value": "yes",
+          "fraction": 0.0,
+          "description": "Да"
+        },
+        {
+          "value": "no",
+          "fraction": 0.0,
+          "description": "Нет"
+        }
+      ],
+      "na_condition": null,
+      "channel_guidance": {}
+    }
+  ]
+}
