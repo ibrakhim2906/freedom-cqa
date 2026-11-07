@@ -1,5 +1,8 @@
 # Real API run summary — 2026-11-07
 
+Historical snapshot before the semantic-review phase. Later comparison costs and
+findings are recorded separately in [SEMANTIC_REVIEW.md](SEMANTIC_REVIEW.md).
+
 Model: `gpt-6.1-sol`, medium reasoning. All inference used the actual OpenAI API.
 The local key and raw organizer data remain Git-ignored. No offline fallback was used.
 
@@ -64,7 +67,8 @@ Total estimated cost across **111 API attempts**: **$2.688466**, including the
 initial $0.020458 smoke call. The ledger contains 106 completed and 5 rejected
 attempts, no outstanding reservations, and no unknown-usage attempts. The configured
 lifetime cap is **$3.50**. These are estimates at published token rates, not an API invoice.
-No additional paid calls were made after completing these runs.
+No further paid calls were made in this initial coverage phase. Later semantic
+comparisons are accounted for separately rather than overwriting these results.
 
 Detailed private evidence is in ignored `artifacts/benchmark/`:
 

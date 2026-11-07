@@ -1,0 +1,71 @@
+{
+  "version": "2",
+  "provenance": "AI review of original provisional labels; NOT human or organizer adjudication",
+  "application": "Review notes only. Never passed to inference and never automatically replace frozen expectations.",
+  "entries": [
+    {
+      "case_ids": ["review-en-missing-policy-answer"],
+      "criterion_id": "consultation",
+      "status": "disputed_next_step_sufficiency",
+      "original": {"status": "scored", "answer": "10"},
+      "candidate": null,
+      "reason": "The old-name reuse explanation is absent, but a correct alternative registration step is supplied. The checklist accepts a correct next step. Determine whether this independently resolves the waiting question rather than treating the intended negative label as unquestionable. The observed 10-to-20 change remains a disagreement."
+    },
+    {
+      "case_ids": ["auth-en-secondary-detail"],
+      "criterion_id": "consultation",
+      "status": "candidate_label_correction",
+      "original": {"status": "scored", "answer": "15"},
+      "candidate": {"status": "scored", "answer": "20"},
+      "reason": "The customer explicitly withdrew the optional filename question after downloading. A cancelled request is not an outstanding omission. Original benchmark remains unchanged."
+    },
+    {
+      "case_ids": ["p1-en-009"],
+      "criterion_id": "closing",
+      "status": "disputed_applicability",
+      "original": {"status": "not_applicable", "answer": null},
+      "candidate": null,
+      "reason": "Connection loss after thanks does not explicitly establish whether time or opportunity to close existed. Exact N/A is not a strong reference label."
+    },
+    {
+      "case_ids": ["p1-ru-014", "p1-kz-008"],
+      "criterion_id": "needs",
+      "status": "undefined_scope_boundary",
+      "original": null,
+      "candidate": null,
+      "reason": "Near-equivalent handoff contexts received N/A and No. Define whether the checklist's beginning refers to initial customer contact or human operator entry before treating either as a settled reference."
+    },
+    {
+      "case_ids": ["p1-en-006"],
+      "criterion_id": "needs",
+      "status": "unsupported_deduction_review",
+      "original": null,
+      "candidate": null,
+      "reason": "The earlier deduction assumes transfer timing is a prerequisite to referral, but no supplied policy establishes that dependency. Distinguish progressive clarification from premature advice."
+    },
+    {
+      "case_ids": ["review-en-outstanding-detail"],
+      "criterion_id": "consultation",
+      "status": "disputed_severity",
+      "original": {"status": "scored", "answer": "15"},
+      "candidate": null,
+      "reason": "Filename is secondary to the completed download, but the customer explicitly repeats it. Its materiality is not independently adjudicated. Preserve 15-versus-10 disagreement."
+    },
+    {
+      "case_ids": ["review-en-outstanding-detail", "review-en-required-ticker-missing"],
+      "criterion_id": "empathy",
+      "status": "disputed_overlap",
+      "original": {"status": "scored", "answer": "yes"},
+      "candidate": null,
+      "reason": "Determine whether the utterance describes an inconvenience requiring specific acknowledgment, or only an unanswered informational request. Politeness alone is insufficient when the former is present."
+    },
+    {
+      "case_ids": ["review-en-required-ticker-missing"],
+      "criterion_id": "management",
+      "status": "disputed_severity",
+      "original": {"status": "scored", "answer": "10"},
+      "candidate": null,
+      "reason": "Claimed submission before receipt of a required identifier can be an independently observable sequencing lapse, even though wording is clear. Do not force full management marks merely to separate it from consultation."
+    }
+  ]
+}

@@ -1,7 +1,8 @@
 # Evaluation design for discussion
 
-Status: recommended design informed by the full DEV transcript audit. This is
-not an implemented or validated evaluator and is not a promise of a judge score.
+Status: design informed by the full DEV transcript audit. The initial evaluator,
+scorer, and benchmark harness are implemented; the complete product workflow and
+independent accuracy validation remain unfinished. This is not a promise of a judge score.
 
 User deadline: 2026-11-08 12:00, Astana time (UTC+05:00).
 Prioritize a working, measured evaluation path early enough to integrate and

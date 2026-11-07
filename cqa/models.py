@@ -93,9 +93,11 @@ class Judgment(StrictModel):
 class RequestCoverage(StrictModel):
     request: str
     request_message_ids: list[str]
-    status: Literal["answered", "partial", "unanswered", "next_step"]
+    status: Literal["answered", "partial", "unanswered", "next_step", "withdrawn"]
     answer_message_ids: list[str]
     explanation: str
+    # Default preserves the ability to read historical v1 evaluation records.
+    withdrawal_message_ids: list[str] = Field(default_factory=list)
 
 
 class Evaluation(StrictModel):

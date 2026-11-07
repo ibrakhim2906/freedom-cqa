@@ -32,6 +32,8 @@ def validate_evaluation(result: Evaluation, conversation: Conversation, checklis
         if any(mid not in messages for mid in judgment.checked_message_ids):
             raise ValueError("Checked span references a nonexistent message")
     for request in result.request_coverage:
+        if not request.request.strip() or not request.explanation.strip():
+            raise ValueError("Request coverage needs a substantive request and explanation")
         if not request.request_message_ids or any(
             mid not in messages or messages[mid].speaker != "client" for mid in request.request_message_ids
         ):
@@ -40,6 +42,18 @@ def validate_evaluation(result: Evaluation, conversation: Conversation, checklis
             raise ValueError("Request answers must reference operator messages")
         if request.status in {"answered", "next_step"} and not request.answer_message_ids:
             raise ValueError("An answered request or next step needs operator evidence")
+        if any(mid not in messages or messages[mid].speaker != "client" for mid in request.withdrawal_message_ids):
+            raise ValueError("Withdrawals must reference actual customer messages")
+        if request.status == "withdrawn":
+            if not request.withdrawal_message_ids:
+                raise ValueError("A withdrawn request needs customer withdrawal evidence")
+            order = {m.id: i for i, m in enumerate(conversation.messages)}
+            if min(order[mid] for mid in request.withdrawal_message_ids) < min(
+                order[mid] for mid in request.request_message_ids
+            ):
+                raise ValueError("Withdrawal cannot precede the request")
+        elif request.withdrawal_message_ids:
+            raise ValueError("Only withdrawn requests may have withdrawal evidence")
 
 
 def calculate_score(result: Evaluation, checklist: Checklist):

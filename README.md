@@ -23,6 +23,21 @@ with [all-run coverage and spending](docs/BENCHMARK_RUN_SUMMARY.md) and
 [reference-label review notes](docs/REFERENCE_REVIEW.md). These metrics are
 development diagnostics, not organizer Ground Truth accuracy.
 
+The [semantic review](docs/SEMANTIC_REVIEW.md) distinguishes suspected evaluator
+mistakes from ambiguous labels. Original datasets remain frozen;
+[structured review notes](evals/label-review-v2.json) do not override their expectations.
+
+To compare a frozen custom diagnostic file with bounded concurrency:
+
+```powershell
+uv run cqa benchmark --cases-file evals/review-v2.jsonl --concurrency 1 --budget-usd 0.40 --output artifacts/benchmark/my-review-run.json
+```
+
+Each new evaluation is billable. Reopening saved results should reuse the saved
+evaluation when web persistence is implemented. Observed organizer averages before
+the semantic comparison were approximately $0.026/chat and $0.046/call transcript,
+excluding hosting and audio transcription; longer inputs and repairs cost more.
+
 ## Product goal
 
 Let a quality reviewer configure a checklist, evaluate an operator's conversation,

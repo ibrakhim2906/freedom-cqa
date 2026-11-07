@@ -2,9 +2,10 @@ import argparse
 import asyncio
 import hashlib
 import json
+from dataclasses import replace
 from datetime import UTC, datetime
 
-from .datasets import load_suite
+from .datasets import load_cases, load_suite
 from .evaluator import Evaluator
 from .ledger import BudgetExceeded, Ledger
 from .metrics import compare_case, summarize
@@ -20,8 +21,11 @@ def save_report(path, rows, metadata, ledger):
 
 async def benchmark(args):
     settings = Settings.load(args.model)
+    if args.concurrency is not None:
+        settings = replace(settings, concurrency=args.concurrency)
+        settings.validate()
     settings.require_key()
-    cases = load_suite(args.suite)
+    cases = load_cases(ROOT / args.cases_file) if args.cases_file else load_suite(args.suite)
     if args.case:
         cases = [c for c in cases if c.id in args.case]
         if {c.id for c in cases} != set(args.case):
@@ -43,8 +47,11 @@ async def benchmark(args):
     before = ledger.committed()
     ceiling = min(settings.max_spend, before + args.budget_usd)
     evaluator = Evaluator(settings, ledger, ceiling)
-    metadata = {"started_at": datetime.now(UTC).isoformat(), "suite": args.suite,
+    metadata = {"started_at": datetime.now(UTC).isoformat(),
+                "suite": "case-file" if args.cases_file else args.suite,
                 "model": settings.model, "reasoning_effort": settings.effort,
+                "max_output_tokens": settings.max_output_tokens, "concurrency": settings.concurrency,
+                "timeout_seconds": settings.timeout,
                 "run_budget_usd": args.budget_usd, "lifetime_committed_before_usd": before,
                 "suite_sha256": hashlib.sha256("\n".join(c.model_dump_json() for c in cases).encode()).hexdigest(),
                 "selected_case_ids": [c.id for c in cases], "complete": False}
@@ -95,6 +102,8 @@ def main():
     run = sub.add_parser("benchmark")
     run.add_argument("--suite", choices=["authored", "organizer", "organizer-sample", "combined"], default="combined")
     run.add_argument("--case", action="append")
+    run.add_argument("--cases-file", help="Frozen JSONL diagnostics; expectations stay outside inference")
+    run.add_argument("--concurrency", type=int, help="Override local concurrency (1-8) for this run")
     run.add_argument("--limit", type=int)
     run.add_argument("--model")
     run.add_argument("--checklist")

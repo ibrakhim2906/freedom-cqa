@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 from .models import Conversation, Expectation, Message, TestCase
 from .settings import ROOT
@@ -28,8 +29,15 @@ ORGANIZER_EXPECTATIONS = {
 
 
 def authored_cases():
-    path = ROOT / "evals/authored-v1.jsonl"
-    return [TestCase.model_validate_json(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    return load_cases(ROOT / "evals/authored-v1.jsonl")
+
+
+def load_cases(path: str | Path):
+    cases = [TestCase.model_validate_json(line) for line in Path(path).read_text(encoding="utf-8").splitlines()
+             if line.strip()]
+    if not cases or len({c.id for c in cases}) != len(cases):
+        raise ValueError("Case file must contain nonempty, unique case IDs")
+    return cases
 
 
 def organizer_cases(*, representative=False):

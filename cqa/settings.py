@@ -24,7 +24,7 @@ class Settings:
     effort: str = "medium"
     max_output_tokens: int = 6000
     timeout: float = 120.0
-    max_spend: float = 20.0
+    max_spend: float = 3.5
     concurrency: int = 3
     ledger_path: Path = ROOT / "data/runtime/usage.sqlite3"
 
@@ -37,7 +37,7 @@ class Settings:
             effort=values.get("CQA_REASONING_EFFORT") or "medium",
             max_output_tokens=int(values.get("CQA_MAX_OUTPUT_TOKENS") or 6000),
             timeout=float(values.get("CQA_TIMEOUT_SECONDS") or 120),
-            max_spend=float(values.get("CQA_MAX_SPEND_USD") or 20),
+            max_spend=float(values.get("CQA_MAX_SPEND_USD") or 3.5),
             concurrency=int(values.get("CQA_CONCURRENCY") or 3),
         )
         settings.validate()

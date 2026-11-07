@@ -140,8 +140,12 @@ def schema_for(conversation: Conversation, checklist: Checklist):
     for option in judgment["answer"]["anyOf"]:
         if option.get("type") == "string":
             option["enum"] = values
-    coverage = definitions["RequestCoverage"]["properties"]
-    for field, role in [("request_message_ids", "client"), ("answer_message_ids", "operator")]:
+    coverage_definition = definitions["RequestCoverage"]
+    coverage = coverage_definition["properties"]
+    # Strict API schema requires every property; historical records may omit the new field.
+    coverage_definition["required"] = list(coverage)
+    for field, role in [("request_message_ids", "client"), ("answer_message_ids", "operator"),
+                        ("withdrawal_message_ids", "client")]:
         ids = [m.id for m in conversation.messages if m.speaker == role]
         if ids:
             coverage[field]["items"]["enum"] = ids

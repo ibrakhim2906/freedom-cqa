@@ -27,7 +27,11 @@
 - [x] Record results and reference-label issues in BASELINE_RESULTS.md and REFERENCE_REVIEW.md.
 - [x] Constrain source IDs in the response schema and add one explicitly recorded validation repair; recheck five rejected cases.
 - [x] Obtain validated evaluations for all 65 organizer transcripts across the original and follow-up runs; preserve one provisional total.
-- [x] Record all-run spending and coverage in BENCHMARK_RUN_SUMMARY.md; stop API calls at $2.688466 estimated usage.
+- [x] Record the initial coverage phase in BENCHMARK_RUN_SUMMARY.md ($2.688466 estimated usage).
+- [x] Review organizer judgment evidence and distinguish ambiguous labels from evaluator errors in SEMANTIC_REVIEW.md.
+- [x] Freeze 12 new paired development cases and compare v1/v2 through the real API without rewriting original expectations.
+- [x] Add explicit customer withdrawal evidence and missing-information dependency guidance; preserve two genuine-omission organizer controls.
+- [x] Record that original-rubric RU/KZ N/A inconsistency remains; provide a separately marked scope-clarification draft rather than silently changing official wording.
 - [ ] Define checklist versions, transcript message IDs, evaluation results, and appeal records.
 - [ ] Define how missing reference procedures and unavailable audio affect judgments.
 - [ ] Select a varied development subset and reserve fresh cases for checking changes.
