@@ -47,9 +47,9 @@ def prepare(output: Path):
         "message IDs and a short rule-based reason. Use only the listed levels; N/A needs",
         "its stated condition. Record ambiguous interpretation separately rather than guessing.",
         "Do not infer audio properties from these transcripts. Audio has not been analyzed.", "",
-        "For needs applicability, explicitly state whether 'beginning' means the first",
-        "substantive customer request or entry of the human operator. This is unsettled",
-        "in the supplied wording. The separate v2 draft adopts the first interpretation.", "",
+        "For needs applicability, use the displayed versioned checklist's time anchor.",
+        "The original supplied wording did not explicitly settle this scope. Team",
+        "decision R002 adopts the first substantive customer request, including the bot phase.", "",
         "Reply format: case ID / criterion / status / answer / message IDs / reason.", ""]
     entries = []
     for cid, targets in SELECTION.items():

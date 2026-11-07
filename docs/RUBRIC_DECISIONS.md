@@ -4,6 +4,9 @@ These decisions record assistant recommendations accepted by the user during
 case review. They are not independent expert adjudication or organizer Ground Truth.
 Original checklist files, authored expectations, and benchmark results remain frozen.
 
+Current default: `checklists/freedom-reviewed-002.json`, version `1-reviewed-002`,
+containing R001 and R002. Two review items are accepted; 18 remain pending.
+
 ## R001: partial credit when a genuine secondary request is answered
 
 Accepted case: `p1-ru-003`, consultation **10/20**. The tariff-location question
@@ -17,10 +20,9 @@ substantial question remains unresolved. This matches the checklist's 10 level.
 An incorrect key recommendation can still justify 0; unrelated responses, vague
 hints, and a bot's answer do not count as a concrete operator resolution.
 
-Applied in `checklists/freedom-reviewed-001.json`, version `1-reviewed-001`, now
-the default for new evaluations. Weights, allowed levels, N/A conditions, and the
-other seven criteria are unchanged. The default contains only this accepted
-clarification; the N/A-scope draft remains unaccepted and is not activated.
+First applied in `checklists/freedom-reviewed-001.json`, version `1-reviewed-001`,
+retained unchanged. That version only clarified consultation; it did not activate
+the N/A-scope draft. R002 subsequently adopts a time anchor in a new version.
 
 The production evaluator receives the generalized checklist instruction, never
 the case ID or this case's accepted answer. Arithmetic and evaluator code are
@@ -28,8 +30,33 @@ unchanged apart from which saved checklist is loaded by default. No paid call
 was made and no previous evaluation score was edited.
 
 Machine-readable decisions: `evals/review-decisions-v1.json`. The private review
-manifest records one accepted item and 19 pending items. Acceptance was assisted
+manifest records accepted and pending items. Acceptance was assisted
 by the model's explanation and should not be described as a blind human judgment.
+
+## R002: anchor needs N/A at the initial substantive customer request
+
+Accepted case: `p1-ru-014`, needs **No**. The initial customer request did not
+identify the website. The bot then obtained this detail before handoff, but the
+human operator asked for it again. Source messages: m1, m4, m5, m9, m10, m11.
+
+General interpretation: for the checklist's "enough information from the beginning"
+condition, beginning means the first substantive customer request in the complete
+conversation, including the bot phase. Information collected later does not
+retroactively satisfy that condition merely because it is available at human entry.
+
+The human operator must nevertheless use everything already known at handoff.
+There is no requirement to repeat the bot's questions. Initial missing information
+alone does not imply No: an operator can satisfy the criterion by correctly using
+the clarified context and obtaining anything still needed before dependent advice.
+
+Applied in `checklists/freedom-reviewed-002.json`, version `1-reviewed-002`.
+R001 is preserved. Only needs wording and its N/A anchor are additionally clarified;
+weights, allowed levels, and other criteria are unchanged. This is an accepted team
+interpretation of ambiguous source wording, not an organizer clarification.
+
+No saved score was edited or recomputed. New evaluations use this version unless
+another checklist is explicitly selected. Other review items, including empathy
+in the same conversation, remain pending until discussed.
 
 To use the original checklist explicitly for a comparison:
 
