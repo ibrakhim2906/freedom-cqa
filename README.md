@@ -20,13 +20,32 @@ decision history. Support Russian, Kazakh, and English.
 - Show unresolved evaluation failures explicitly; do not substitute generic judgments.
 - Preserve checklist versions, original evaluations, and human review decisions.
 - Verify the final displayed assessment using paraphrases and controlled evidence changes.
+- Use the real API evaluation path; there is no offline evaluation fallback.
+
+## Selected stack
+
+React, TypeScript, Vite, and CSS Modules for the frontend; Python, FastAPI, and
+Pydantic for the backend; SQLite with SQLAlchemy for storage; OpenAI API for
+evaluation; pytest and Playwright for testing. The exact model remains to be selected.
+
+See [the stack and evaluation policy](docs/STACK.md) for responsibilities, failure
+handling, and the first implementation milestone.
+
+## Selection priorities
+
+Accuracy against organizer Ground Truth on 10 unseen transcripts is the main
+top-50 selection criterion. Functionality, usability, genuine analysis of new
+inputs, and diversity of technical approaches also inform selection.
+See [the organizer announcement](docs/JUDGING.md); no official numeric weights
+have been supplied.
 
 ## Development environment
 
 Use the Windows-native desktop agent and this Windows checkout initially.
 The earlier browser/computer-use limitation with a WSL-hosted project has not
 been verified as resolved in this session. WSL is available for targeted commands
-if useful. The application stack and model provider remain to be selected.
+if useful. The selected stack and unresolved implementation choices are recorded
+in [the stack document](docs/STACK.md).
 
 ## Materials and open questions
 

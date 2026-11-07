@@ -12,7 +12,10 @@
 ## Define the evaluation contract
 
 - [ ] Obtain the separate official checklist, including weights, scales, N/A, rounding, and serious-error rules.
-- [ ] Discuss and select the frontend, backend, storage, and model provider.
+- [x] Select and document the frontend, backend, storage, and OpenAI API provider in STACK.md.
+- [x] Record the explicit runtime requirement: no offline evaluation fallback.
+- [x] Record the organizer's top-50 selection criteria and 10-transcript Ground Truth control stage in JUDGING.md.
+- [ ] Select the exact OpenAI model using varied RU, KZ, and EN development cases.
 - [ ] Define checklist versions, transcript message IDs, evaluation results, and appeal records.
 - [ ] Define how missing reference procedures and unavailable audio affect judgments.
 - [ ] Select a varied development subset and reserve fresh cases for checking changes.
@@ -47,7 +50,7 @@
 
 ## Decisions still open
 
-- Application stack and model provider.
+- Exact OpenAI model, API access, and development spend limit.
 - The official checklist and any required supporting company procedures.
 - Audio analysis requirements once the actual criteria are available.
 - Browser/computer-use behavior: the availability check stalled; WSL compatibility was not established.
