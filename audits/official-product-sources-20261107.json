@@ -1,0 +1,649 @@
+{
+  "schema_version": "1.0",
+  "kind": "official_source_catalog_not_score_labels",
+  "researched_on": "2026-11-07",
+  "paid_model_calls": 0,
+  "applicability_policy": [
+    "Page update, publication, approval, retrieval and legal effective dates are distinct.",
+    "No effective interval was established by this research. Do not fabricate historical validity.",
+    "Unknown entity/date in original chats remains unknown. A source finding is not a transcript answer.",
+    "Absence of a rule on an opened page does not prove that rule false."
+  ],
+  "sources": [
+    {
+      "id": "accounts-requestionnaire",
+      "url": "https://fbroker.kz/faq/question/updating-personal-data--requestionnaire-",
+      "title": "Обновление персональных данных (переанкетирование)",
+      "issuer_scope": {
+        "publisher_footer": "Freedom Finance Global PLC; AFSA-A-LA-2020-0019",
+        "platform": "Freedom Broker",
+        "page_qualifier": "Freedom Broker",
+        "body_entities": [
+          "Freedom Finance Global",
+          "АО Freedom Finance"
+        ],
+        "applicability": "General platform guide with entity-specific document-language distinctions. Its AIFC discussion and Global footer do not independently establish the AO entity's legal regime or every account's restriction."
+      },
+      "fact_ids": [
+        "F06"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": "2026-09-28",
+      "publication_date": null,
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "If requested information is not provided, the company may temporarily suspend withdrawal instructions until current client details are confirmed.",
+        "The personal-data change instruction is submitted for consideration with required information and documents."
+      ],
+      "short_quote": "приостановить исполнение поручений на вывод денежных средств до подтверждения актуальности сведений клиента.",
+      "does_not_establish": [
+        "A guaranteed time for approval or restriction removal after submission.",
+        "That submission itself completes verification, or that every affected customer has this restriction.",
+        "Whether the existing withdrawal resumes automatically, a new instruction is needed, or another restriction applies."
+      ],
+      "limits": [
+        "Page update is not a legal effective date; no historical validity interval is supplied."
+      ],
+      "evidence_locator": "Sections about failure to update information and submitting a Change of details instruction; entity-language note; footer.",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "12ff92a6320acf77a95dfd735388469b6be869d7ff140a9c8da0c35a2ac19cd9"
+    },
+    {
+      "id": "accounts-update",
+      "url": "https://fbroker.kz/faq/question/how-can-i-update-my-data-3815",
+      "title": "Как актуализировать свои данные?",
+      "issuer_scope": {
+        "publisher_footer": "Freedom Finance Global PLC; AFSA-A-LA-2020-0019",
+        "platform": "Freedom Broker mobile application and web platform",
+        "page_qualifier": "Freedom Broker",
+        "applicability": "The procedure explicitly requires a trading account whose number begins with 7. Do not apply to arbitrary broker accounts."
+      },
+      "fact_ids": [
+        "F06",
+        "F05"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": "2026-09-22",
+      "publication_date": null,
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "Eligible trading accounts can submit a personal-data change instruction through the mobile or web platform, with security session and supporting documents.",
+        "Confirm submits the instruction for checking; execution follows checking."
+      ],
+      "short_quote": "После проверки поручение будет исполнено.",
+      "does_not_establish": [
+        "The time of withdrawal re-enablement, any approval SLA, or whether a new withdrawal instruction is required."
+      ],
+      "limits": [
+        "The account-number qualifier matters; page update does not supply historical validity."
+      ],
+      "evidence_locator": "Numbered update steps 1-5, eligibility warning, and footer.",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "a75bb49490bbcc480420acba6b50369bf036919818c9b61e8d008daa08d1cc34"
+    },
+    {
+      "id": "accounts-withdrawal-methods",
+      "url": "https://fbroker.kz/faq/question/methods-for-withdrawing-funds-from-a-brokerage-account",
+      "title": "Способы перевода средств с брокерского счета",
+      "issuer_scope": {
+        "publisher_footer": "Freedom Finance Global PLC; AFSA-A-LA-2020-0019",
+        "platform": "Freedom Broker",
+        "page_qualifier": "Клиенты FF Global",
+        "applicability": "Explicitly FF Global brokerage-account withdrawal guidance."
+      },
+      "fact_ids": [
+        "F06"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": "2026-09-22",
+      "publication_date": null,
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "A bank-account withdrawal must be to an account owned by the brokerage customer.",
+        "A card withdrawal is limited to a saved card previously used for account funding."
+      ],
+      "short_quote": null,
+      "does_not_establish": [
+        "That satisfying the profile-update requirement satisfies every withdrawal condition, or any post-update unlock time."
+      ],
+      "limits": [
+        "Context only; this page does not answer the unresolved profile-update timing question."
+      ],
+      "evidence_locator": "FF Global qualifier, opening bank/card requirements, and Global footer.",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "1bc9b542f71cd532f99c37147a7a2325e67f0dfec46690aaecd7d15815546556"
+    },
+    {
+      "id": "accounts-withdrawal-times",
+      "url": "https://fbroker.kz/faq/question/withdrawal-processing-time",
+      "title": "Сроки обработки перевода средств",
+      "issuer_scope": {
+        "publisher_footer": "Freedom Finance Global PLC; AFSA-A-LA-2020-0019",
+        "platform": "Freedom Broker",
+        "page_qualifier": "Клиенты FF Global",
+        "applicability": "Explicitly FF Global transfer-processing guidance."
+      },
+      "fact_ids": [
+        "F06"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": "2026-09-22",
+      "publication_date": null,
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "For bank transfers, the stated dispatch period is five working days after the instruction; bank and intermediary processing are separate.",
+        "Card transfers described as instant can remain in processing for additional checking, stated as up to three working days."
+      ],
+      "short_quote": null,
+      "does_not_establish": [
+        "The duration of profile-update review or when a data-related withdrawal restriction is removed."
+      ],
+      "limits": [
+        "Do not substitute these transfer times for a profile-update SLA."
+      ],
+      "evidence_locator": "FF Global qualifier, bank/card processing sections, and footer.",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "29a0b5c9686a4c0171ba418ba8a89c794c954d47070a80af22f3b39f4b58dde9"
+    },
+    {
+      "id": "accounts-close",
+      "url": "https://fbroker.kz/faq/question/how-to-close-an-account-3825",
+      "title": "Как закрыть счет?",
+      "issuer_scope": {
+        "publisher_footer": "Freedom Finance Global PLC; AFSA-A-LA-2020-0019",
+        "platform": "Freedom Broker mobile application; tradernet.global web platform",
+        "page_qualifier": "Клиенты FF Global",
+        "applicability": "Explicitly FF Global account-closure guidance."
+      },
+      "fact_ids": [
+        "F10"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": "2026-09-22",
+      "publication_date": null,
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "The guide describes submitting an account-closure instruction through the mobile or tradernet.global web interface."
+      ],
+      "short_quote": null,
+      "does_not_establish": [
+        "Whether a closed account's login stays reserved, permanently or temporarily.",
+        "Whether a username becomes available again, or whether another login is a valid re-registration route for the particular customer."
+      ],
+      "limits": [
+        "No post-closure login rule was found on this page; absence here is not evidence of the rule's truth or falsity."
+      ],
+      "evidence_locator": "FF Global qualifier, app/web closure instructions, and Global footer.",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "9280e89d9f4b2cc2a76500d983dca37b52f239228dd62290a8596a48b9e9d0d5"
+    },
+    {
+      "id": "accounts-login",
+      "url": "https://fbroker.kz/faq/question/how-to-log-in-to-the-personal-account-",
+      "title": "Как войти в личный кабинет?",
+      "issuer_scope": {
+        "publisher_footer": "Freedom Finance Global PLC; AFSA-A-LA-2020-0019",
+        "platform": "Freedom Broker mobile application",
+        "page_qualifier": "В приложении / На сайте; retrieved text describes the mobile application",
+        "applicability": "General platform login instructions; no username-retention policy."
+      },
+      "fact_ids": [
+        "F10"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": "2026-09-22",
+      "publication_date": null,
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "The mobile guide allows login by registered email and password or registered phone with SMS code, followed by account selection when applicable."
+      ],
+      "short_quote": null,
+      "does_not_establish": [
+        "Whether a username remains occupied after closure, when it is released, or how a closed-account customer should register again."
+      ],
+      "limits": [
+        "Authorization and username allocation are different questions. This guide cannot settle F10."
+      ],
+      "evidence_locator": "Login methods and account-selection steps; Global footer.",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "bbe6086535b114225ddb09482d6e3b5af8159c710307ebff7835b0a34a02bb33"
+    },
+    {
+      "id": "ffg-d-account-20261107",
+      "url": "https://fbroker.kz/faq/question/savings-d-account2727",
+      "title": "Специальный накопительный субсчет (D-счет)",
+      "issuer_scope": "Freedom Finance Global PLC. Page explicitly labels Clients FF Global and names the entity; not Freedom Bank deposit or another group entity.",
+      "fact_ids": [
+        "F14"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": "2026-09-22",
+      "publication_date": null,
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "The D-account is an accumulation subaccount opened with the FFG brokerage/trading account.",
+        "D-account money cannot be used for trading; trading requires a transfer to the trading account.",
+        "The stated D-account uses include keeping funds, funding the trading account and withdrawing money."
+      ],
+      "short_quote": "деньги нельзя использовать для торговли",
+      "does_not_establish": [
+        "Actual individual balances or instrument eligibility",
+        "A guaranteed historical interval for undated chats"
+      ],
+      "limits": "Apply only with established FFG entity/product scope; update date is not an effective date.",
+      "evidence_locator": "Article body and entity qualifier/footer",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "ded3e9ed75faac34bad5e403193798ccee9831c23a813d523744fd7e63dbbbcd"
+    },
+    {
+      "id": "ffg-account-selection-20261107",
+      "url": "https://fbroker.kz/faq/question/account-selection",
+      "title": "Выбор счета",
+      "issuer_scope": "Freedom Finance Global PLC official footer; Freedom Broker mobile platform.",
+      "fact_ids": [
+        "F14"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": "2026-09-22",
+      "publication_date": null,
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "The INVEST CARD example selects the D-prefixed accumulation account and then sends funds to the trading account.",
+        "Mobile account selection is described through Menu and the account above the customer name."
+      ],
+      "short_quote": "переключиться на накопительный счет D7***** и отправить деньги на торговый счет 7*****",
+      "does_not_establish": [
+        "Switching the displayed account alone transfers money",
+        "Universal account configurations or historical UI state"
+      ],
+      "limits": "A mobile UI guide, not a rule for every platform version.",
+      "evidence_locator": "Article body and entity qualifier/footer",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "7d88e90c4a48ce5253fcc467e68e3f5c7286337435b94deef0bc6c6ef2587cf2"
+    },
+    {
+      "id": "tradernet-d-transfer-20261107",
+      "url": "https://tradernet.global/faq/13616-kak-sdelat-perevod-mezhdu-schetami-%28torgoviid-schet%29?site_lang=ru",
+      "title": "Как сделать перевод между счетами (торговый/D-счет)",
+      "issuer_scope": "Tradernet Global / Freedom Finance Global PLC platform FAQ.",
+      "fact_ids": [
+        "F14"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": null,
+      "publication_date": null,
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "The FAQ describes transfers in both directions between trading and D accounts.",
+        "Its path is account selection, non-trading orders, inter-account transfer, amount and submitted instruction."
+      ],
+      "short_quote": "Меню – Неторговые поручения – Перевод между счетами",
+      "does_not_establish": [
+        "Guaranteed transfer timing for an individual customer",
+        "Identical menu labels in every mobile/web version"
+      ],
+      "limits": "Do not borrow rate examples. No historical effective date established.",
+      "evidence_locator": "Article body and entity qualifier/footer",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "c17e680b10e78acf2ae4c73030faf386d42eed9027b7fc47fe169bd759a7a977"
+    },
+    {
+      "id": "ffg-annex7-current-20261107",
+      "url": "https://fbroker.kz/document/prilozenie-7",
+      "title": "Annex 7: Margin Loans Transactions Rules",
+      "issuer_scope": "Freedom Finance Global PLC, explicitly named legal document.",
+      "fact_ids": [
+        "F13",
+        "F12"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": null,
+      "publication_date": null,
+      "document_approval_date": "2026-10-15",
+      "effective_date": null,
+      "facts": [
+        "Pages2/24 link Use Margin activation to increased order capacity subject to collateral and margin conditions.",
+        "Pages6/28 tie consent to submitting an order with Use Margin activated.",
+        "Collateral and uncovered-position obligations are treated separately from the order-entry option."
+      ],
+      "short_quote": "automatically confirms the Client’s consent",
+      "does_not_establish": [
+        "Unticking necessarily closes an existing position",
+        "A universal guarantee of no effects on existing debt, margin requirements or liquidation risk"
+      ],
+      "limits": "Approval date is not asserted as effective date. This current served document does not itself establish the full historical applicability interval.",
+      "evidence_locator": [
+        1,
+        2,
+        6,
+        24,
+        28
+      ],
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "675466fe30b148ba74a1b8046d6513ec793e82ea0f80445fba3e9c6010e07dc1"
+    },
+    {
+      "id": "tradernet-margin-14230-20261107",
+      "url": "https://tradernet.global/faq/14230-margin-financing-negative-cash-balance?site_lang=ru",
+      "title": "Маржинальное финансирование и отрицательный остаток на счете",
+      "issuer_scope": "Public Tradernet Global page; embedded company configuration names Freedom Finance Global PLC and AFSA-A-LA-2020-0019.",
+      "fact_ids": [
+        "F13",
+        "F12"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": null,
+      "publication_date": "2023-12-13",
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "The article locates Use Margin under order settings.",
+        "It says the enabled state persists for future trades across assets until disabled.",
+        "It separately describes repaying existing borrowing through sufficient cash and possible stop-out liquidation under insufficient collateral."
+      ],
+      "short_quote": "маржинальная торговля останется включенной для всех будущих сделок по всем активам",
+      "does_not_establish": [
+        "Disabling necessarily closes an existing position",
+        "A blanket no-effect guarantee for existing holdings/debt"
+      ],
+      "limits": "Account-specific consequences remain unresolved. Publication date is not a historical validity guarantee.",
+      "evidence_locator": "Article body and entity qualifier/footer",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "4d08110c0d826c05b2461729a974e4fc0ad6e018518d5c4104652fe1ffb9363d"
+    },
+    {
+      "id": "ffg-1042-language-20261107",
+      "url": "https://fbroker.kz/faq/question/what-is-1042-s-form",
+      "title": "Что такое форма 1042-S, как ее получить и чем она полезна",
+      "issuer_scope": "Freedom Finance Global PLC clients, explicitly named in the article and FF Global client tag; not all Freedom entities.",
+      "fact_ids": [
+        "F15"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": "2026-09-22",
+      "publication_date": null,
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "For the expressly identified FFG client service, the article states that the supplied Form1042-S is available only in English.",
+        "The documented retrieval route uses the web trading platform, Cabinet, Form1042-S, then year selection and viewing or PDF download."
+      ],
+      "short_quote": "доступна только на английском языке",
+      "does_not_establish": [
+        "Whether translated instructions, unofficial translations or individual translation assistance are available.",
+        "Language policies of Freedom Finance JSC or other brokers/entities.",
+        "An actual effective-from interval or the issuer/date of an undated transcript."
+      ],
+      "limits": [
+        "Current official FAQ statement with an update date, not a legal effective-date declaration. Apply only after establishing relevant provider scope."
+      ],
+      "evidence_locator": "Article body and entity qualifier/footer",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "88cae0f2a9002a6bff0c0680a7862b195d65e4bcd65f5c6b9148c44e5d6d03a4"
+    },
+    {
+      "id": "ffg-tariff-location-20261107",
+      "url": "https://fbroker.kz/faq/question/how-to-find-out-your-tariff-2709",
+      "title": "Как узнать свой тариф?",
+      "issuer_scope": "Freedom Broker platform guidance linking tradernet.global; page footer identifies Freedom Finance Global PLC, while body uses the platform brand. Do not infer applicability to every broker entity.",
+      "fact_ids": [
+        "F01"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": "2026-11-02",
+      "publication_date": null,
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "The FAQ describes finding the active pricing plan in the Account Information section of a generated broker report.",
+        "It gives mobile Menu > Reports and Documents > Broker Reports, and web Cabinet > Broker Reports, followed by report generation."
+      ],
+      "short_quote": "В нём будет указан ваш действующий тарифный план.",
+      "does_not_establish": [
+        "A direct tariff label under the customer name in Cabinet.",
+        "Which tariff a newly generated past-period report displays if a plan changed during or after that period.",
+        "That routes not listed on this page are impossible."
+      ],
+      "limits": [
+        "Page body is platform guidance; matching entity/platform context is still required. Update date is not a validity window."
+      ],
+      "evidence_locator": "Article body and entity qualifier/footer",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "d5d811afe0a3d74d89fdf70e63655229783c3653e7b28fc5cc61472061dfd71e"
+    },
+    {
+      "id": "ffg-report-fields-20261107",
+      "url": "https://fbroker.kz/faq/question/how-to-read-the-broker-report",
+      "title": "Как читать Отчет брокера?",
+      "issuer_scope": "Freedom Broker report documentation; footer Freedom Finance Global PLC, body platform-branded.",
+      "fact_ids": [
+        "F01",
+        "F04"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": "2026-09-22",
+      "publication_date": null,
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "The broker report describes transactions, cash movements, commissions, corporate actions and results for the selected period.",
+        "The Account Information section includes the client account type, client data, tariff plan and service parameters."
+      ],
+      "short_quote": "за выбранный период",
+      "does_not_establish": [
+        "Whether the tariff header is historical, current or effective on a particular cut-off date.",
+        "A guarantee that every report field has the same temporal semantics as transaction rows."
+      ],
+      "limits": [
+        "Do not infer a historical tariff snapshot solely from the selected-period description."
+      ],
+      "evidence_locator": "Article body and entity qualifier/footer",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "0c6fcfb01013cb4dbbbcce14a12c50b8b655420b932045141e67933c19f68404"
+    },
+    {
+      "id": "ffg-report-generation-20261107",
+      "url": "https://fbroker.kz/faq/question/generating-the-broker-report-and-the-depositary-report",
+      "title": "Формирование Отчета брокера и Отчета депозитария",
+      "issuer_scope": "Freedom Broker mobile/web report guidance, linking tradernet.global; footer Freedom Finance Global PLC.",
+      "fact_ids": [
+        "F01",
+        "F04"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": "2026-10-02",
+      "publication_date": null,
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "Users select the report type and reporting period before generation in mobile or web.",
+        "The stamped company report has an additional end-date restriction; this is not stated as a universal restriction on all unstamped reports."
+      ],
+      "short_quote": "укажите отчетный период",
+      "does_not_establish": [
+        "Whether a tariff shown inside a generated past-period report is the current or prior tariff.",
+        "That an arbitrary selected date range certifies the report contents or customer account state."
+      ],
+      "limits": [
+        "Stamped-report prerequisites must not be transferred to every ordinary report."
+      ],
+      "evidence_locator": "Article body and entity qualifier/footer",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "dd0a3ac248c99b3234c54d909740b17e6efdf8187faa8bbde93a97c6b7a4ddd3"
+    },
+    {
+      "id": "ffg-report-obtain-20261107",
+      "url": "https://fbroker.kz/faq/question/how-to-obtain-a-broker-s-report-3814",
+      "title": "Как получить отчет брокера?",
+      "issuer_scope": "Freedom Broker platform/document instructions, footer Freedom Finance Global PLC.",
+      "fact_ids": [
+        "F04"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": "2026-09-22",
+      "publication_date": null,
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "The customer can choose a reporting period and obtain a broker report through the platform, support/manager request, or document-order route."
+      ],
+      "short_quote": "Период отчета вы можете задать самостоятельно.",
+      "does_not_establish": [
+        "The temporal meaning of tariff data in the report.",
+        "A requirement that the operator verify every financial figure before providing general navigation."
+      ],
+      "limits": [
+        "Alternative documented routes do not invalidate other proven successful routes."
+      ],
+      "evidence_locator": "Article body and entity qualifier/footer",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "a58c1e586f7fb86aaf28db75e79e6111ea323a5e29340ef34cad5d10905d761b"
+    },
+    {
+      "id": "ffg-student-tariff-view-20261107",
+      "url": "https://fbroker.kz/faq/question/student-tariff",
+      "title": "Тариф «Студенческий»",
+      "issuer_scope": "Student-tariff article explicitly defines its Company as Freedom Finance Global PLC. The navigation appears in that program FAQ.",
+      "fact_ids": [
+        "F01"
+      ],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": "2026-11-02",
+      "publication_date": null,
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "Within the FFG student-program FAQ, the active tariff can be checked in mobile account-settings tariff-change navigation or web Cabinet > Tariff."
+      ],
+      "short_quote": "В веб-платформе: Кабинет → Тариф.",
+      "does_not_establish": [
+        "A label under the customer name.",
+        "That the student program applies to all customers or that its commercial terms answer unrelated tariff questions.",
+        "Historical report-header tariff semantics."
+      ],
+      "limits": [
+        "Use the navigation statement within its documented context; do not generalize student pricing or eligibility."
+      ],
+      "evidence_locator": "Article body and entity qualifier/footer",
+      "retrieval_method": "Official article read in full; public HTML/PDF cache where available. Search snippets alone were not used.",
+      "snapshot_sha256": "7490f3bb459acbb8b4b8c3f00cd3312d6c56bf4a0635a4c84633a8aaf041c068"
+    },
+    {
+      "id": "freedom-entity-map-20261107",
+      "url": "https://fbroker.kz/news/49002-napominanie-informaciia-o-brokerskix-kompaniiax-ekosistemy-freedom-holding-corp-ru-2",
+      "title": "Напоминание: информация о брокерских компаниях экосистемы Freedom Holding Corp.",
+      "issuer_scope": "Official fbroker.kz news; publisher Freedom Finance Global PLC; article distinguishes FFG PLC and Freedom Finance JSC.",
+      "fact_ids": [],
+      "retrieved_on": "2026-11-07",
+      "page_updated_on": null,
+      "publication_date": "2026-03-18",
+      "document_approval_date": null,
+      "effective_date": null,
+      "facts": [
+        "Freedom Finance Global PLC and Freedom Finance JSC are distinct brokerage entities.",
+        "The article identifies Freedom Broker as an application for FFG clients; the host publishes ecosystem information involving more than one entity."
+      ],
+      "short_quote": null,
+      "does_not_establish": [
+        "The entity or product-policy period of any individual transcript.",
+        "That hostname or conversation language alone identifies the customer's broker."
+      ],
+      "limits": [
+        "Company structure context, not an account-specific policy."
+      ],
+      "evidence_locator": "Separate company descriptions and application paragraph",
+      "retrieval_method": "Official article opened and public HTML cached.",
+      "snapshot_sha256": "145ca6bc4620344b03a8983e49a7a3e14c849f04a29cbfba9e6e68d094ad55a5"
+    }
+  ],
+  "topic_resolutions": [
+    {
+      "fact_id": "F14",
+      "status": "resolved_for_explicit_ffg_snapshot_scope",
+      "source_ids": [
+        "ffg-d-account-20261107",
+        "tradernet-d-transfer-20261107"
+      ],
+      "finding": "D funds must be transferred to the trading account for securities trading; display selection alone does not transfer funds."
+    },
+    {
+      "fact_id": "F15",
+      "status": "resolved_for_explicit_ffg_snapshot_scope",
+      "source_ids": [
+        "ffg-1042-language-20261107"
+      ],
+      "finding": "The broker-supplied Form1042-S is English-only; this says nothing about translated guidance."
+    },
+    {
+      "fact_id": "F05",
+      "status": "documented_platform_route",
+      "source_ids": [
+        "accounts-update"
+      ],
+      "finding": "Personal-data changes are submitted for review; execution follows checking. The specified route is for eligible trading accounts."
+    },
+    {
+      "fact_id": "F06",
+      "status": "prerequisite_resolved_remaining_details_open",
+      "source_ids": [
+        "accounts-requestionnaire",
+        "accounts-update"
+      ],
+      "finding": "Data confirmation can gate withdrawals. No unlock SLA, guaranteed withdrawal, automatic resumption or mandatory resubmission rule was found."
+    },
+    {
+      "fact_id": "F10",
+      "status": "unresolved",
+      "source_ids": [
+        "accounts-close",
+        "accounts-login"
+      ],
+      "finding": "Login reservation/reuse after account closure is not established. Do not call it true or false from these pages."
+    },
+    {
+      "fact_id": "F12",
+      "status": "documented_platform_control",
+      "source_ids": [
+        "tradernet-margin-14230-20261107"
+      ],
+      "finding": "Use Margin is an order setting; the article says its enabled state persists for future trades until disabled."
+    },
+    {
+      "fact_id": "F13",
+      "status": "partial_existing_position_guarantee_unresolved",
+      "source_ids": [
+        "tradernet-margin-14230-20261107",
+        "ffg-annex7-current-20261107"
+      ],
+      "finding": "Order-entry margin consent and ongoing borrowing/collateral are separate. No universal no-effect or forced-close guarantee for existing positions was established."
+    },
+    {
+      "fact_id": "F01",
+      "status": "location_partly_resolved_temporal_semantics_open",
+      "source_ids": [
+        "ffg-tariff-location-20261107",
+        "ffg-report-fields-20261107",
+        "ffg-student-tariff-view-20261107"
+      ],
+      "finding": "Official routes identify the active tariff through a report and a context-qualified Tariff view. Under-name placement and past-period header semantics remain unverified."
+    },
+    {
+      "fact_id": "F04",
+      "status": "documented_report_route_and_period",
+      "source_ids": [
+        "ffg-report-generation-20261107",
+        "ffg-report-obtain-20261107"
+      ],
+      "finding": "Users select a reporting period; this alone does not establish the time basis of every report field."
+    }
+  ]
+}

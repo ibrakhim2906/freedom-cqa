@@ -2,6 +2,8 @@
 
 This is a source/evidence inventory, not a knowledge base, expected-score file or new benchmark. It is never loaded by the runtime evaluator. No model inference was run and no score, label, checklist or evaluator behavior was changed.
 
+Subsequent official-source research is recorded in [OFFICIAL_PRODUCT_FACTS.md](OFFICIAL_PRODUCT_FACTS.md), with [five complete conditional reviews](COMPLETE_ASSESSMENT_REVIEW.md). The inventory below remains the original audit snapshot; later findings do not rewrite its source records or the original evaluations.
+
 All 65 supplied source transcripts (1,268 messages) were reviewed, together with the four organizer PDFs, organizer clarifications recorded in the project, and the three previously collected platform guides. Call recording links were registered; recordings were not listened to.
 
 ## What the materials establish

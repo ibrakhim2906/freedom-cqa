@@ -1,0 +1,730 @@
+{
+  "schema_version": "1.0",
+  "kind": "assistant_manual_end_to_end_review_not_ground_truth",
+  "reviewed_on": "2026-11-07",
+  "paid_model_calls": 0,
+  "source_result_file": "artifacts/organizer-65-v1/merged.json",
+  "source_transcripts_file": "artifacts/organizer-65-v1/merged.suite.jsonl",
+  "checklist_file": "checklists/freedom-reviewed-015.json",
+  "review_context": {
+    "type": "conditional_current_product_review",
+    "assumption": "For recommendations depending on researched facts, assume the described product is the matching FFG/Freedom Broker platform under the reviewed snapshot. This is NOT established metadata of the original chats.",
+    "original_entity_and_date": "unknown_preserved",
+    "policy_historical_effective_interval": "not_established",
+    "no_automatic_application": true,
+    "unchanged": [
+      "source transcripts",
+      "frozen results",
+      "benchmark labels",
+      "rubric weights",
+      "evaluator code"
+    ]
+  },
+  "cases": [
+    {
+      "case_id": "p1-kz-004",
+      "topic": "Profile update before a new withdrawal attempt",
+      "source_ids": [
+        "accounts-update",
+        "accounts-requestionnaire"
+      ],
+      "disposition": "accept_consultation_under_disclosed_scope_and_narrow_inference",
+      "requests": [
+        {
+          "source_message_ids": [
+            "m1",
+            "m5"
+          ],
+          "operator_answer_ids": [
+            "m10"
+          ],
+          "coverage": "explicit",
+          "finding": "Update navigation is given; m11 confirms locating the section, not execution of the update."
+        },
+        {
+          "source_message_ids": [
+            "m11"
+          ],
+          "operator_answer_ids": [
+            "m12"
+          ],
+          "coverage": "implied",
+          "finding": "The immediate-after-submission question is answered by requiring completed update/instruction first. This is a conditional next step, not an instant unlock or withdrawal-success promise."
+        }
+      ],
+      "fact_checks": [
+        {
+          "operator_message_ids": [
+            "m10"
+          ],
+          "finding": "The official eligible-account update route corroborates the instructions; the customer also found the section."
+        },
+        {
+          "operator_message_ids": [
+            "m12"
+          ],
+          "finding": "Review precedes execution; confirmation can gate withdrawals. Accept applying again after completion as a narrow contextual next step, not a sourced universal resubmission rule."
+        }
+      ],
+      "judgments": [
+        {
+          "criterion_id": "contact",
+          "status": "scored",
+          "answer": "yes",
+          "source_message_ids": [
+            "m10"
+          ],
+          "reason": "First human reply greets in Kazakh and introduces Aybek."
+        },
+        {
+          "criterion_id": "needs",
+          "status": "not_applicable",
+          "answer": null,
+          "source_message_ids": [
+            "m1",
+            "m5",
+            "m10"
+          ],
+          "reason": "Initial data-update obstacle is sufficient for general navigation; no missing protected task detail is established."
+        },
+        {
+          "criterion_id": "identity",
+          "status": "not_applicable",
+          "answer": null,
+          "source_message_ids": [
+            "m10",
+            "m12"
+          ],
+          "reason": "General guidance only; no protected disclosure or performed account action."
+        },
+        {
+          "criterion_id": "consultation",
+          "status": "scored",
+          "answer": "20",
+          "source_message_ids": [
+            "m1",
+            "m5",
+            "m10",
+            "m11",
+            "m12",
+            "m13"
+          ],
+          "reason": "Both route and submission-versus-completion question are addressed. Do not require a universal resubmission rule for an ordinary conditional next step. No guaranteed unlock, successful withdrawal or mandatory new order is asserted."
+        },
+        {
+          "criterion_id": "empathy",
+          "status": "scored",
+          "answer": "yes",
+          "source_message_ids": [
+            "m1",
+            "m10",
+            "m12"
+          ],
+          "reason": "Polite practical response addresses the reported withdrawal obstacle; no formulaic apology is necessary."
+        },
+        {
+          "criterion_id": "management",
+          "status": "scored",
+          "answer": "10",
+          "source_message_ids": [
+            "m10",
+            "m11",
+            "m12"
+          ],
+          "reason": "Instructions and completion condition are clear. A substantive follow-up is not evidence of confusing wording."
+        },
+        {
+          "criterion_id": "closing",
+          "status": "scored",
+          "answer": "no",
+          "source_message_ids": [
+            "m12",
+            "m13",
+            "m14"
+          ],
+          "reason": "Farewell opportunity is demonstrated, but m14 has no recap or offer of further help. The earlier substantive answer is not a closing recap."
+        },
+        {
+          "criterion_id": "serious",
+          "status": "scored",
+          "answer": "no",
+          "source_message_ids": [
+            "m10",
+            "m12",
+            "m14"
+          ],
+          "reason": "No insult, private paid offer or confidential disclosure in any human turn."
+        }
+      ],
+      "coaching": "Keep the distinction between submitting and completing the update. Add a brief outcome recap or offer of help before farewell; promise no unlock deadline without an applicable policy.",
+      "appeal": "A consultation objection based solely on lack of a universal resubmission rule is reasonable to accept under the stated context. Reject removal of the separate closing deduction on this evidence.",
+      "open_issues": [
+        "Original chat entity/date is unknown; do not apply the snapshot silently.",
+        "No actual update execution, account unlock or successful withdrawal is observed."
+      ]
+    },
+    {
+      "case_id": "p1-ru-024",
+      "topic": "Funds on D-account while trying to buy securities",
+      "source_ids": [
+        "ffg-d-account-20261107",
+        "ffg-account-selection-20261107",
+        "tradernet-d-transfer-20261107"
+      ],
+      "disposition": "partial_consultation_preserve_missing_next_step",
+      "requests": [
+        {
+          "source_message_ids": [
+            "m1",
+            "m11"
+          ],
+          "operator_answer_ids": [
+            "m10",
+            "m12"
+          ],
+          "coverage": "explicit",
+          "finding": "The operator correctly identifies the trading account for securities purchases."
+        },
+        {
+          "source_message_ids": [
+            "m5"
+          ],
+          "operator_answer_ids": [],
+          "coverage": "none",
+          "finding": "Funds on D are an explicit obstacle to the purchase goal. No transfer action or suitable next step is supplied; account selection alone does not move funds."
+        }
+      ],
+      "fact_checks": [
+        {
+          "operator_message_ids": [
+            "m10",
+            "m12"
+          ],
+          "finding": "D funds cannot trade directly and must move to the trading account. The source verifies the recommendation, not that the customer has done this."
+        }
+      ],
+      "judgments": [
+        {
+          "criterion_id": "contact",
+          "status": "scored",
+          "answer": "yes",
+          "source_message_ids": [
+            "m10"
+          ],
+          "reason": "First human reply greets in Russian and introduces Sveta."
+        },
+        {
+          "criterion_id": "needs",
+          "status": "not_applicable",
+          "answer": null,
+          "source_message_ids": [
+            "m1",
+            "m5"
+          ],
+          "reason": "The initial account-choice request contains enough task information for general advice; a later obstacle needs an answer rather than another discovery question."
+        },
+        {
+          "criterion_id": "identity",
+          "status": "not_applicable",
+          "answer": null,
+          "source_message_ids": [
+            "m10",
+            "m12"
+          ],
+          "reason": "General account-type explanation without protected account data/action."
+        },
+        {
+          "criterion_id": "consultation",
+          "status": "scored",
+          "answer": "10",
+          "source_message_ids": [
+            "m1",
+            "m5",
+            "m10",
+            "m11",
+            "m12",
+            "m13",
+            "m14"
+          ],
+          "reason": "Correct account choice earns partial credit. The explicit D-funds obstacle lacks the transfer step. Do not credit the reference's explanation as something the operator said, or require every menu detail."
+        },
+        {
+          "criterion_id": "empathy",
+          "status": "scored",
+          "answer": "yes",
+          "source_message_ids": [
+            "m1",
+            "m5",
+            "m10",
+            "m14"
+          ],
+          "reason": "Courteous handling of neutral questions; the omission alone is not an independent empathy defect."
+        },
+        {
+          "criterion_id": "management",
+          "status": "scored",
+          "answer": "10",
+          "source_message_ids": [
+            "m10",
+            "m11",
+            "m12"
+          ],
+          "reason": "The replies are understandable; no separate confusing wording, redundant question or sequencing failure is established."
+        },
+        {
+          "criterion_id": "closing",
+          "status": "scored",
+          "answer": "no",
+          "source_message_ids": [
+            "m13",
+            "m14"
+          ],
+          "reason": "The actual farewell proves opportunity, but lacks recap or an offer of further help."
+        },
+        {
+          "criterion_id": "serious",
+          "status": "scored",
+          "answer": "no",
+          "source_message_ids": [
+            "m10",
+            "m12",
+            "m14"
+          ],
+          "reason": "No defined serious error in any human turn."
+        }
+      ],
+      "coaching": "Explain that the customer must transfer the needed funds from D to the trading account before buying. Account display selection alone is insufficient; a full tutorial is unnecessary unless needed. Add a proper closing.",
+      "appeal": "Reject a full-credit appeal based only on correct account selection or customer thanks: m5's material obstacle remains open. Preserve empathy and management credit unless an independent defect is shown.",
+      "open_issues": [
+        "Original entity/date applicability remains unknown; 10 is a conditional manual recommendation, not a new model result.",
+        "The customer's balance, transfer completion and instrument eligibility are not established."
+      ]
+    },
+    {
+      "case_id": "p1-ru-012",
+      "topic": "Whether the supplied Form1042-S has a Russian version",
+      "source_ids": [
+        "ffg-1042-language-20261107"
+      ],
+      "disposition": "accept_contextual_consultation_keep_closing_review",
+      "requests": [
+        {
+          "source_message_ids": [
+            "m1",
+            "m5"
+          ],
+          "operator_answer_ids": [
+            "m10"
+          ],
+          "coverage": "implied",
+          "finding": "English is stated immediately after the Russian-version question; m11 explicitly says that is everything wanted. This contextual answer is accepted under R006. The nonexclusive wording is counterevidence; source exclusivity alone would not create an operator answer."
+        }
+      ],
+      "fact_checks": [
+        {
+          "operator_message_ids": [
+            "m10"
+          ],
+          "finding": "Official FFG guidance independently establishes English-only provision. It does not establish that translated help or another entity's form is unavailable."
+        }
+      ],
+      "judgments": [
+        {
+          "criterion_id": "contact",
+          "status": "scored",
+          "answer": "yes",
+          "source_message_ids": [
+            "m10"
+          ],
+          "reason": "First human reply greets in Russian and introduces Ilya."
+        },
+        {
+          "criterion_id": "needs",
+          "status": "not_applicable",
+          "answer": null,
+          "source_message_ids": [
+            "m1",
+            "m5"
+          ],
+          "reason": "The named form and language question are sufficiently specified from the first substantive request."
+        },
+        {
+          "criterion_id": "identity",
+          "status": "not_applicable",
+          "answer": null,
+          "source_message_ids": [
+            "m10"
+          ],
+          "reason": "General form-language guidance without personal tax/account disclosure."
+        },
+        {
+          "criterion_id": "consultation",
+          "status": "scored",
+          "answer": "20",
+          "source_message_ids": [
+            "m1",
+            "m5",
+            "m10",
+            "m11"
+          ],
+          "reason": "Accept the immediate-context English answer to the Russian-version question under R006, with explicit customer completion and independently corroborated English-only policy. No magic yes/no phrase is required. Record that m10 does not literally say only."
+        },
+        {
+          "criterion_id": "empathy",
+          "status": "scored",
+          "answer": "yes",
+          "source_message_ids": [
+            "m1",
+            "m5",
+            "m10",
+            "m11"
+          ],
+          "reason": "Courteous response; no qualifying distress or inconvenience cue requiring a separate reaction."
+        },
+        {
+          "criterion_id": "management",
+          "status": "scored",
+          "answer": "10",
+          "source_message_ids": [
+            "m10",
+            "m11",
+            "m12"
+          ],
+          "reason": "Concise understandable answer; no independent process or wording defect shown."
+        },
+        {
+          "criterion_id": "closing",
+          "status": "needs_review",
+          "answer": null,
+          "source_message_ids": [
+            "m10",
+            "m11",
+            "m12"
+          ],
+          "reason": "No farewell is recorded, then connection is lost. The 18-second gap is not an organizer-defined opportunity threshold; No versus N/A remains unresolved."
+        },
+        {
+          "criterion_id": "serious",
+          "status": "scored",
+          "answer": "no",
+          "source_message_ids": [
+            "m10"
+          ],
+          "reason": "No defined serious error in the human reply."
+        }
+      ],
+      "coaching": "An explicit 'the broker provides this form only in English' would remove ambiguity. For quality review, inspect actual disconnect/opportunity evidence before choosing closing No or N/A.",
+      "appeal": "Accept the contextual-answer reading under matching policy scope; do not force a consultation deduction for omitting a keyword. Keep the closing dispute open rather than inferring opportunity from elapsed seconds.",
+      "open_issues": [
+        "Original entity/date applicability is unknown.",
+        "Closing opportunity is not established; no final numeric total is certified even after conditional consultation acceptance."
+      ]
+    },
+    {
+      "case_id": "p1-ru-015",
+      "topic": "An occupied login after closing an old account",
+      "source_ids": [
+        "accounts-close",
+        "accounts-login"
+      ],
+      "disposition": "retain_material_fact_review_no_invented_omission",
+      "requests": [
+        {
+          "source_message_ids": [
+            "m1",
+            "m5"
+          ],
+          "operator_answer_ids": [
+            "m10"
+          ],
+          "coverage": "explicit_unverified",
+          "finding": "A cause and another-login recommendation are provided, but the login-retention policy is not independently established."
+        },
+        {
+          "source_message_ids": [
+            "m11"
+          ],
+          "operator_answer_ids": [
+            "m12"
+          ],
+          "coverage": "implied_unverified",
+          "finding": "Choosing another login now practically answers whether to wait. Do not invent an additional omission; the recommendation's factual basis is the remaining issue."
+        }
+      ],
+      "fact_checks": [
+        {
+          "operator_message_ids": [
+            "m10",
+            "m12"
+          ],
+          "finding": "Closure/login guides do not establish reservation, release timing or re-registration eligibility. An occupied-login error does not prove its cause. Source silence is not proof of falsity, and the operator never establishes permanent non-reusability."
+        }
+      ],
+      "judgments": [
+        {
+          "criterion_id": "contact",
+          "status": "scored",
+          "answer": "yes",
+          "source_message_ids": [
+            "m10"
+          ],
+          "reason": "First human reply greets in Russian and introduces Dina."
+        },
+        {
+          "criterion_id": "needs",
+          "status": "not_applicable",
+          "answer": null,
+          "source_message_ids": [
+            "m1",
+            "m5"
+          ],
+          "reason": "Initial registration, occupied-login and closed-account context sufficiently specify the general request."
+        },
+        {
+          "criterion_id": "identity",
+          "status": "not_applicable",
+          "answer": null,
+          "source_message_ids": [
+            "m10",
+            "m12"
+          ],
+          "reason": "General retention explanation, no private account lookup/disclosure or protected performed action is recorded."
+        },
+        {
+          "criterion_id": "consultation",
+          "status": "needs_review",
+          "answer": null,
+          "source_message_ids": [
+            "m1",
+            "m5",
+            "m10",
+            "m11",
+            "m12"
+          ],
+          "reason": "Coverage is substantively adequate if the asserted policy is correct, but post-closure login retention and the dependent remedy remain unverified. Do not score false from absence of a source or infer permanent retention."
+        },
+        {
+          "criterion_id": "empathy",
+          "status": "scored",
+          "answer": "yes",
+          "source_message_ids": [
+            "m1",
+            "m10",
+            "m12"
+          ],
+          "reason": "Courteous practical response addresses the registration obstacle; no separate dismissive behavior shown."
+        },
+        {
+          "criterion_id": "management",
+          "status": "scored",
+          "answer": "10",
+          "source_message_ids": [
+            "m10",
+            "m11",
+            "m12"
+          ],
+          "reason": "Language and next action are clear; factual uncertainty alone is not a management failure."
+        },
+        {
+          "criterion_id": "closing",
+          "status": "scored",
+          "answer": "yes",
+          "source_message_ids": [
+            "m12"
+          ],
+          "reason": "Final reply restates the next action and includes a farewell."
+        },
+        {
+          "criterion_id": "serious",
+          "status": "scored",
+          "answer": "no",
+          "source_message_ids": [
+            "m10",
+            "m12"
+          ],
+          "reason": "No defined serious error in either human turn."
+        }
+      ],
+      "coaching": "Verify the post-closure login rule through an applicable official procedure or authorized service record before confidently attributing the cause. Preserve the useful next-action recap.",
+      "appeal": "Keep the fact-dependent consultation dispute open. A claim that the waiting question was simply ignored is not supported; a claim that the retention policy has been verified is also unsupported.",
+      "open_issues": [
+        "An authoritative post-closure login reservation/reuse rule is still missing.",
+        "Original entity/date and individual account cause are not independently established."
+      ]
+    },
+    {
+      "case_id": "p1-en-008",
+      "topic": "Stock navigation, margin checkbox and existing holdings",
+      "source_ids": [
+        "tradernet-margin-14230-20261107",
+        "ffg-annex7-current-20261107"
+      ],
+      "disposition": "partial_consultation_no_invented_current_order_contradiction",
+      "requests": [
+        {
+          "source_message_ids": [
+            "m1",
+            "m5"
+          ],
+          "operator_answer_ids": [
+            "m11"
+          ],
+          "coverage": "explicit_observed",
+          "finding": "Ticker guidance leads to a single result at m12. This supports the observed search, not instrument suitability or trade success."
+        },
+        {
+          "source_message_ids": [
+            "m12"
+          ],
+          "operator_answer_ids": [
+            "m13"
+          ],
+          "coverage": "explicit",
+          "finding": "Order-entry next step is given; the customer is just looking and no order completion is required."
+        },
+        {
+          "source_message_ids": [
+            "m15"
+          ],
+          "operator_answer_ids": [
+            "m16"
+          ],
+          "coverage": "explicit_observed_control",
+          "finding": "The source corroborates Order Settings. m17 confirms finding it, not completing unticking or changing an account position."
+        },
+        {
+          "source_message_ids": [
+            "m17"
+          ],
+          "operator_answer_ids": [],
+          "coverage": "none",
+          "finding": "m18 does not explain the effect on existing holdings or give a concrete resolution path. m19 postpones a new order and does not withdraw this question."
+        }
+      ],
+      "fact_checks": [
+        {
+          "operator_message_ids": [
+            "m11",
+            "m13"
+          ],
+          "finding": "Observed search success provides narrow evidence; it does not prove every UI route or trade outcome."
+        },
+        {
+          "operator_message_ids": [
+            "m16",
+            "m18"
+          ],
+          "finding": "Margin is an order-entry control with a documented persistent enabled state. Applicability to a current order does not imply ONLY that order. No actual contradiction or universal existing-holdings effect is established."
+        }
+      ],
+      "judgments": [
+        {
+          "criterion_id": "contact",
+          "status": "scored",
+          "answer": "yes",
+          "source_message_ids": [
+            "m11"
+          ],
+          "reason": "First human reply greets in English and introduces Sofia."
+        },
+        {
+          "criterion_id": "needs",
+          "status": "not_applicable",
+          "answer": null,
+          "source_message_ids": [
+            "m1",
+            "m5",
+            "m10",
+            "m11"
+          ],
+          "reason": "The operator gives general search guidance, not a security selection for the customer; the actual ticker is not a necessary missing detail."
+        },
+        {
+          "criterion_id": "identity",
+          "status": "not_applicable",
+          "answer": null,
+          "source_message_ids": [
+            "m11",
+            "m13",
+            "m16",
+            "m18"
+          ],
+          "reason": "Only general navigation/setting discussion; no protected action or private-position disclosure."
+        },
+        {
+          "criterion_id": "consultation",
+          "status": "scored",
+          "answer": "10",
+          "source_message_ids": [
+            "m11",
+            "m12",
+            "m13",
+            "m15",
+            "m16",
+            "m17",
+            "m18",
+            "m19",
+            "m20"
+          ],
+          "reason": "Real search/setting assistance earns partial credit, but the substantial existing-position question lacks an answer or suitable next step. Do not insert only into current-order wording, treat delaying submission as withdrawal, or invent a key factual error requiring 0."
+        },
+        {
+          "criterion_id": "empathy",
+          "status": "scored",
+          "answer": "yes",
+          "source_message_ids": [
+            "m5",
+            "m11",
+            "m17",
+            "m18",
+            "m20"
+          ],
+          "reason": "Inexperience and neutral follow-ups do not by themselves establish a distress cue. Politeness is present; the omission has no independent empathy consequence here."
+        },
+        {
+          "criterion_id": "management",
+          "status": "scored",
+          "answer": "10",
+          "source_message_ids": [
+            "m11",
+            "m13",
+            "m16",
+            "m17",
+            "m18"
+          ],
+          "reason": "Instructions are understandable and sequential. No separate redundancy, unclear-wording or prerequisite-sequencing defect is established."
+        },
+        {
+          "criterion_id": "closing",
+          "status": "scored",
+          "answer": "no",
+          "source_message_ids": [
+            "m18",
+            "m19",
+            "m20"
+          ],
+          "reason": "An actual farewell proves opportunity, but no recap or further-help offer accompanies it."
+        },
+        {
+          "criterion_id": "serious",
+          "status": "scored",
+          "answer": "no",
+          "source_message_ids": [
+            "m11",
+            "m13",
+            "m16",
+            "m18",
+            "m20"
+          ],
+          "reason": "No defined serious error in any human turn."
+        }
+      ],
+      "coaching": "Answer the general existing-position question from an applicable margin rule, or give a concrete route to an authorized position/debt review. Do not promise that unticking is universally harmless. Add a proper closing.",
+      "appeal": "Reject full consultation credit while the holdings question is open. Also reject a proposed 0 based on an invented only-current-order claim. Preserve independent communication credit.",
+      "open_issues": [
+        "Original chat entity/date is unknown; proposed 10 is conditional on reviewed platform scope.",
+        "The policy does not establish a universal effect of disabling margin on existing positions or debt; no private position state is available."
+      ]
+    }
+  ]
+}

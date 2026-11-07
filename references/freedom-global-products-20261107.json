@@ -1,0 +1,160 @@
+{
+  "scope": "freedom-finance-global-platform",
+  "title": "FFG product guidance — reviewed snapshot 2026-11-07",
+  "usage_notes": [
+    "Optional explicit selection only; not automatically attached to imported conversations.",
+    "Only use for a confirmed matching FFG/platform context. Do not infer entity from language/hostname.",
+    "The same-day validity bounds are our conservative snapshot assessment window, NOT legal effective dates.",
+    "Do not change a transcript date to make these sources applicable; undated/historical cases need a disclosed review assumption or actual applicability evidence.",
+    "Texts are team-curated summaries of linked official sources; they are not verbatim broker statements.",
+    "No policy on post-closure login reservation/reuse is supplied."
+  ],
+  "references": [
+    {
+      "id": "accounts-update",
+      "text": "Curated official-source summary: Eligible trading accounts beginning with 7 can submit a personal-data change in the Freedom Broker mobile app: Menu > Instructions > Personal Data > Change of details; the web route is Cabinet > Instructions > Change of details. Confirm sends it for checking; execution follows review. The guide gives no review/unlock deadline.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: accounts-update. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "source_url": "https://fbroker.kz/faq/question/how-can-i-update-my-data-3815",
+      "retrieved_on": "2026-11-07",
+      "scope": "freedom-finance-global-platform",
+      "valid_from": "2026-11-07",
+      "valid_until": "2026-11-07"
+    },
+    {
+      "id": "accounts-requestionnaire",
+      "text": "Curated official-source summary: The company may suspend withdrawal execution until current customer details are confirmed when requested data has not been supplied. Submitting an update does not itself mean it has been executed. This does not establish a guaranteed withdrawal, an unlock deadline, automatic resumption, or mandatory resubmission.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: accounts-requestionnaire. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "source_url": "https://fbroker.kz/faq/question/updating-personal-data--requestionnaire-",
+      "retrieved_on": "2026-11-07",
+      "scope": "freedom-finance-global-platform",
+      "valid_from": "2026-11-07",
+      "valid_until": "2026-11-07"
+    },
+    {
+      "id": "ffg-d-account-20261107",
+      "text": "Curated official-source summary: D-account money cannot be used directly for trading securities. It must first be transferred to the trading account. Selecting a displayed account is different from transferring funds. This source does not establish an individual balance or transfer completion.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-d-account-20261107. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "source_url": "https://fbroker.kz/faq/question/savings-d-account2727",
+      "retrieved_on": "2026-11-07",
+      "scope": "freedom-finance-global-platform",
+      "valid_from": "2026-11-07",
+      "valid_until": "2026-11-07"
+    },
+    {
+      "id": "tradernet-d-transfer-20261107",
+      "text": "Curated official-source summary: The platform guide describes transfers in both directions between the trading and D accounts: select the source account, open non-trading orders > transfer between accounts, specify the amount and submit the instruction. No individual transfer deadline is established.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: tradernet-d-transfer-20261107. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "source_url": "https://tradernet.global/faq/13616-kak-sdelat-perevod-mezhdu-schetami-%28torgoviid-schet%29?site_lang=ru",
+      "retrieved_on": "2026-11-07",
+      "scope": "freedom-finance-global-platform",
+      "valid_from": "2026-11-07",
+      "valid_until": "2026-11-07"
+    },
+    {
+      "id": "ffg-1042-language-20261107",
+      "text": "Curated official-source summary: For the explicitly identified FFG client service, the supplied Form1042-S is available only in English. The web trading platform provides Cabinet > Form1042-S > year selection > view/PDF download. This does not rule out translated guidance or establish another entity's policy.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-1042-language-20261107. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "source_url": "https://fbroker.kz/faq/question/what-is-1042-s-form",
+      "retrieved_on": "2026-11-07",
+      "scope": "freedom-finance-global-platform",
+      "valid_from": "2026-11-07",
+      "valid_until": "2026-11-07"
+    },
+    {
+      "id": "tradernet-margin-14230-20261107",
+      "text": "Curated official-source summary: Use Margin is in order settings. The FAQ states that once enabled, the setting remains enabled for future trades across assets until disabled. It separately discusses repayment of borrowing and stop-out. It does not give a blanket guarantee about effects of disabling on existing holdings, debt or liquidation risk.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: tradernet-margin-14230-20261107. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "source_url": "https://tradernet.global/faq/14230-margin-financing-negative-cash-balance?site_lang=ru",
+      "retrieved_on": "2026-11-07",
+      "scope": "freedom-finance-global-platform",
+      "valid_from": "2026-11-07",
+      "valid_until": "2026-11-07"
+    },
+    {
+      "id": "ffg-annex7-current-20261107",
+      "text": "Curated official-source summary: Annex7 links submission of an order with Use Margin activated to borrowing consent, subject to collateral/margin conditions. Ongoing uncovered-position obligations are separate. Approval is dated 2026-10-15, not an established effective interval. No universal existing-position effect of unticking is established here.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-annex7-current-20261107. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "source_url": "https://fbroker.kz/document/prilozenie-7",
+      "retrieved_on": "2026-11-07",
+      "scope": "freedom-finance-global-platform",
+      "valid_from": "2026-11-07",
+      "valid_until": "2026-11-07"
+    },
+    {
+      "id": "ffg-tariff-location-20261107",
+      "text": "Curated official-source summary: The FAQ says the active pricing plan is in Account Information in a generated broker report. It gives mobile Menu > Reports and Documents > Broker Reports, and web Cabinet > Broker Reports. It does not establish a tariff label under the name or the tariff-header semantics of an older-period report.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-tariff-location-20261107. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "source_url": "https://fbroker.kz/faq/question/how-to-find-out-your-tariff-2709",
+      "retrieved_on": "2026-11-07",
+      "scope": "freedom-finance-global-platform",
+      "valid_from": "2026-11-07",
+      "valid_until": "2026-11-07"
+    },
+    {
+      "id": "ffg-report-fields-20261107",
+      "text": "Curated official-source summary: Broker reports include operations and results for a selected period; Account Information includes a tariff plan. The selected transaction period does not by itself establish that the tariff header is historical or current. That header's time basis is not specified by this source.",
+      "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-report-fields-20261107. Entity/platform qualifiers in catalog apply. Snapshot assessment window is a team constraint; actual historical policy validity is not established.",
+      "source_url": "https://fbroker.kz/faq/question/how-to-read-the-broker-report",
+      "retrieved_on": "2026-11-07",
+      "scope": "freedom-finance-global-platform",
+      "valid_from": "2026-11-07",
+      "valid_until": "2026-11-07"
+    }
+  ],
+  "manifest": [
+    {
+      "id": "accounts-update",
+      "source_url": "https://fbroker.kz/faq/question/how-can-i-update-my-data-3815",
+      "source_snapshot_sha256": "a75bb49490bbcc480420acba6b50369bf036919818c9b61e8d008daa08d1cc34",
+      "summary_sha256": "04cf836b8de6930313e37caf201afe14792e52479b6358a690c3962ba8389dc9"
+    },
+    {
+      "id": "accounts-requestionnaire",
+      "source_url": "https://fbroker.kz/faq/question/updating-personal-data--requestionnaire-",
+      "source_snapshot_sha256": "12ff92a6320acf77a95dfd735388469b6be869d7ff140a9c8da0c35a2ac19cd9",
+      "summary_sha256": "52b6e7257a439c6e4d151456efafd5d2d3211df1ee5dcde07062aff6c3f660d4"
+    },
+    {
+      "id": "ffg-d-account-20261107",
+      "source_url": "https://fbroker.kz/faq/question/savings-d-account2727",
+      "source_snapshot_sha256": "ded3e9ed75faac34bad5e403193798ccee9831c23a813d523744fd7e63dbbbcd",
+      "summary_sha256": "cdf627f7a1249a9734affe2ba2aa56e94967eccc8b1ee6ce50680c169b2538da"
+    },
+    {
+      "id": "tradernet-d-transfer-20261107",
+      "source_url": "https://tradernet.global/faq/13616-kak-sdelat-perevod-mezhdu-schetami-%28torgoviid-schet%29?site_lang=ru",
+      "source_snapshot_sha256": "c17e680b10e78acf2ae4c73030faf386d42eed9027b7fc47fe169bd759a7a977",
+      "summary_sha256": "f6cc4afe27aaa099dffa0765f79aa2beb82e0888d23db8380fd020c710a7cfc3"
+    },
+    {
+      "id": "ffg-1042-language-20261107",
+      "source_url": "https://fbroker.kz/faq/question/what-is-1042-s-form",
+      "source_snapshot_sha256": "88cae0f2a9002a6bff0c0680a7862b195d65e4bcd65f5c6b9148c44e5d6d03a4",
+      "summary_sha256": "6f4870b8b61f7c39fc587f1f0c4d2dff4bb6d84e7a01ff17138545fb09dff32e"
+    },
+    {
+      "id": "tradernet-margin-14230-20261107",
+      "source_url": "https://tradernet.global/faq/14230-margin-financing-negative-cash-balance?site_lang=ru",
+      "source_snapshot_sha256": "4d08110c0d826c05b2461729a974e4fc0ad6e018518d5c4104652fe1ffb9363d",
+      "summary_sha256": "da74147a2cd8e2505e228d709aaed6ed3e2b250f465c1951d33c8e63645a193a"
+    },
+    {
+      "id": "ffg-annex7-current-20261107",
+      "source_url": "https://fbroker.kz/document/prilozenie-7",
+      "source_snapshot_sha256": "675466fe30b148ba74a1b8046d6513ec793e82ea0f80445fba3e9c6010e07dc1",
+      "summary_sha256": "61eeeb98cee831e788a7cb0eceab90df509ce68b3e610b38c0a6421047fba260"
+    },
+    {
+      "id": "ffg-tariff-location-20261107",
+      "source_url": "https://fbroker.kz/faq/question/how-to-find-out-your-tariff-2709",
+      "source_snapshot_sha256": "d5d811afe0a3d74d89fdf70e63655229783c3653e7b28fc5cc61472061dfd71e",
+      "summary_sha256": "1c13cb32ec43f3b7390a1c26b5c5d588cb9abd19891c2e4827eb21d1756e7c8a"
+    },
+    {
+      "id": "ffg-report-fields-20261107",
+      "source_url": "https://fbroker.kz/faq/question/how-to-read-the-broker-report",
+      "source_snapshot_sha256": "0c6fcfb01013cb4dbbbcce14a12c50b8b655420b932045141e67933c19f68404",
+      "summary_sha256": "a60d0cd10057ff8147c38fa192e27b4cb50f961be01aeec43e4784292ec09fe9"
+    }
+  ]
+}
