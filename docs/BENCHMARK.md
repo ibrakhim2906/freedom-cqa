@@ -102,4 +102,6 @@ include all 48 provisional labels and separate semantic checks. The free command
 `uv run python -m scripts.verify_official_acceptance` checks the immutable hashes,
 expected arithmetic, source context and label isolation without inference. Replay
 their existing per-case references/context; global reference overrides would defeat
-the deliberately incompatible-source control. Paid execution remains paused.
+the deliberately incompatible-source control. The [first authorized real run](OFFICIAL_FACTS_ACCEPTANCE_V1_RESULTS.md)
+is preserved separately: six initial evaluations, two allowed repairs, four valid
+outputs and two failures. No post-result relabeling or repeat run was performed.

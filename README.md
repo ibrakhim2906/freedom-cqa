@@ -25,7 +25,10 @@ and unresolved evidence. These are conditional manual reviews, not new benchmark
 The [six-case acceptance suite](docs/OFFICIAL_FACTS_ACCEPTANCE_V1.md) freezes all
 48 provisional expected judgments before paid inference. Verify the pinned inputs,
 sources and label isolation for free with `uv run python -m scripts.verify_official_acceptance`.
-No API run has been authorized for this suite.
+The [first authorized real run](docs/OFFICIAL_FACTS_ACCEPTANCE_V1_RESULTS.md)
+produced four valid assessments and two strict evidence-contract failures. It cost
+$0.5133 using provider-reported tokens and cache-aware pricing. The original
+expectations and freeze remain unchanged.
 
 ## Evaluator quick start
 
