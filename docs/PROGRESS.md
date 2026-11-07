@@ -19,6 +19,11 @@
 - [x] Record the organizer's call adaptation and flexible-checklist clarification in EVALUATION_DESIGN.md.
 - [ ] Review and agree on the proposed evaluation design and independent test strategy.
 - [ ] Select the exact OpenAI model using varied RU, KZ, and EN development cases.
+- [x] Implement the initial configurable evaluator and scorer with no offline fallback.
+- [x] Author 40 fictional diagnostic cases with explicitly provisional expected judgments.
+- [x] Keep all 65 organizer records available and select 15 representative cases for the first combined benchmark.
+- [x] Verify the real OpenAI structured-output path with one temporal-identification smoke case.
+- [ ] Run and review the complete first benchmark; no competition accuracy claim until measured.
 - [ ] Define checklist versions, transcript message IDs, evaluation results, and appeal records.
 - [ ] Define how missing reference procedures and unavailable audio affect judgments.
 - [ ] Select a varied development subset and reserve fresh cases for checking changes.

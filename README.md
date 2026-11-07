@@ -2,7 +2,21 @@
 
 Conversation Quality Analytics prototype for the Freedom Broker hackathon.
 
-Status: project setup and design. The application has not been implemented yet.
+Status: the initial API evaluator, deterministic scorer, diagnostic dataset, and
+benchmark CLI are implemented. The frontend and appeal workflow are not implemented yet.
+
+## Evaluator quick start
+
+```powershell
+uv sync --dev
+# Configure OPENAI_API_KEY in the Git-ignored .env file.
+uv run cqa check-config
+uv run pytest -q
+uv run cqa benchmark --suite combined --budget-usd 2 --output artifacts/benchmark/baseline-v1.json
+```
+
+See [benchmark setup, data provenance, and result interpretation](docs/BENCHMARK.md).
+There is no offline evaluation fallback.
 
 ## Product goal
 
@@ -62,4 +76,4 @@ in [the stack document](docs/STACK.md).
 ## Progress
 
 See [the progress checklist](docs/PROGRESS.md). Use small commits for reviewable
-milestones. There is no application startup command yet.
+milestones. The CLI runs the evaluator; the web application is not scaffolded yet.

@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "freedom-cqa"
+version = "0.1.0"
+description = "Evidence-grounded configurable conversation evaluation"
+requires-python = ">=3.12"
+dependencies = ["openai>=2,<3", "pydantic>=2.10,<3", "python-dotenv>=1,<2"]
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "httpx>=0.28,<1", "ruff>=0.12"]
+
+[project.scripts]
+cqa = "cqa.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["cqa"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
