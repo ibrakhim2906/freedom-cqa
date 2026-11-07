@@ -19,6 +19,11 @@ export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReferenc
   const assessment = effective?.assessment_context || job.record?.assessment_context || job.evidence_context?.assessment
   const flagged = Object.values(effective?.score.flags || {}).includes('yes')
   const flagUncertain = Object.values(effective?.score.flags || {}).includes('needs_review')
+  function omissionRange(start: string, end: string) {
+    const messages = job.conversation.content.messages
+    const first = messages.findIndex(m => m.id === start), last = messages.findIndex(m => m.id === end)
+    return first < 0 || last < first ? [] : messages.slice(first, last + 1).map(m => m.id)
+  }
   return <>
     <div className={styles.card}><b data-testid="job-status">{job.status}</b> · {date(job.created_at)}
       <p>Checklist: {checklist.title} · {checklist.version}</p>
@@ -60,14 +65,39 @@ export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReferenc
           <details><summary>Configured rule and original AI audit</summary><p>{c.instruction}</p>
             {job.record?.evaluation.deductions.filter(d => d.criterion_id === c.id).map((d, i) => <div key={i}><blockquote>{d.rule_quote}</blockquote><p>{d.defect}</p><p>{d.overlap_note}</p></div>)}
             {job.record?.evaluation.factual_claims.filter(f => f.criterion_ids.includes(c.id)).map((f, i) => <div className={styles.fact} key={i}>
-              <b>{f.status}</b><p>{f.claim}</p><p>{f.explanation}</p><EvidenceButtons items={[...f.operator_evidence, ...f.dialogue_evidence]} onClick={onEvidence}/>
+              <b>{f.status}</b><p>{f.claim}</p><p>{f.explanation}</p>
+              {f.verification_scope && <p>Verification scope: {f.verification_scope.replaceAll('_', ' ')}</p>}
+              <small>Operator assertion</small><EvidenceButtons items={f.operator_evidence} onClick={onEvidence}/>
+              {f.dialogue_evidence.length > 0 && <><small>Recorded dialogue evidence</small>
+                <p>Declared observation scope: {f.observation_scope?.replaceAll('_', ' ') || 'not recorded'}</p>
+                {f.supported_proposition && <p>Declared observation proposition: {f.supported_proposition}</p>}
+                <EvidenceButtons items={f.dialogue_evidence} onClick={onEvidence}/></>}
+              {!f.dialogue_evidence.length && f.supported_proposition && <p>Declared supported proposition: {f.supported_proposition}</p>}
+              {!!f.context_evidence?.length && <><small>Customer/system context — not independent verification</small>
+                <EvidenceButtons items={f.context_evidence} onClick={onEvidence}/></>}
               {f.reference_evidence.map((r, n) => <button key={n} onClick={() => {const ref = job.conversation.content.references.find(x => x.id === r.reference_id); if (ref) onReference(ref, r.quote)}}>Reference: {r.reference_id} — {r.quote}</button>)}
             </div>)}
             {changed && <p>These audits belong to the original AI result. The human decision is recorded below.</p>}
           </details>
         </article>
       })}
-      <details className={styles.card}><summary>Customer request coverage · original AI analysis</summary>{job.record?.evaluation.request_coverage.map((r, i) => <div key={i}><b>{r.status}: {r.request}</b><p>{r.explanation}</p><button onClick={() => onEvidence([], [...r.request_message_ids, ...r.answer_message_ids])}>Show request and answer</button></div>)}</details>
+      <details className={styles.card}><summary>Customer request coverage · original AI analysis</summary>{job.record?.evaluation.request_coverage.map((r, i) => {
+        const support = r.support, omission = support?.omission
+        const interval = omission ? omissionRange(omission.start_message_id, omission.end_message_id) : []
+        return <div key={i}><b>{r.status}: {r.request}</b><p>{r.explanation}</p>
+          <button onClick={() => onEvidence([], [...r.request_message_ids, ...r.answer_message_ids])}>Show linked request and operator turns</button>
+          {support && <>
+            {support.basis === 'none' ? <p>No operator answer recorded.</p> : <><p>{support.basis === 'withdrawn' ? 'Customer withdrawal evidence' : `Operator answer evidence (${support.basis.replaceAll('_', ' ')})`}</p>
+              <EvidenceButtons items={support.evidence} onClick={onEvidence}/></>}
+            {support.inference && <p>Answer inference: {support.inference}</p>}
+            {support.unresolved_aspects.length > 0 && <p>Still unanswered: {support.unresolved_aspects.join('; ')}</p>}
+          </>}
+          {omission && <div><p>Interval checked for missing answer: {omission.start_message_id}–{omission.end_message_id}</p>
+            <button disabled={!interval.length} onClick={() => onEvidence([], interval)}>Show complete omission review interval</button>
+            <p>Context for the missing answer — not operator answer proof</p><EvidenceButtons items={omission.context_evidence} onClick={onEvidence}/>
+          </div>}
+        </div>
+      })}</details>
       {job.record?.evaluation.scope_notes.map((n, i) => <p className={styles.muted} key={i}>{n}</p>)}
       {job.evidence_context && <details className={styles.card}><summary>{job.evidence_context_origin === 'captured_with_request' ? 'Context captured with the assessment request' : 'Reconstructed context for inspection'}</summary>
         {job.evidence_context_origin !== 'captured_with_request' && <p>The saved result has no captured reference context. This view uses the preserved input and current inspection rules; it does not establish which source eligibility information the original model received.</p>}

@@ -142,13 +142,40 @@ control does not prove completing the action or a general policy. A customer rep
 does not independently verify private account state. Supported policy claims need
 applicable references; grading requirements use their supplied rule instead.
 Every request needs support with basis=explicit/implied/next_step/none/withdrawn,
-exact source evidence, inference (non-null for implied answers), and unresolved_aspects.
+exact source evidence, inference (non-null only for implied answers), unresolved_aspects,
+and an explicitly supplied omission field. Positive support.evidence is ONLY actual
+operator answer proof linked in answer_message_ids. Customer confirmation is not an
+operator answer: put non-proving customer context in the source ledger or claim context.
 An answered request cannot retain unresolved aspects; use partial/unanswered when
 needed. An implied answer must actually entail the requested conclusion. A positive
 statement about one option does not establish that alternatives are unavailable.
 Do not demand literal keyword matching or completed tasks where a correct concrete
 next step satisfies the configured criterion. Mere thanks does not withdraw a question.
-Return semantic_audit version=coverage-v1. reviewed_message_ids must cover EVERY
+For an unanswered request, use basis=none, answer_message_ids=[], support.evidence=[],
+inference=null and name the unresolved aspects. Explain absence with support.omission,
+not by inventing or linking a nonanswer as an answer. The omission object has
+start_message_id (the earliest linked customer request), end_message_id (the last
+original source turn), and context_evidence (verbatim contextual quotes within that
+inclusive interval). This declares the whole opportunity span was checked. Context
+quotes may come from any source role; they do NOT become operator answer proof.
+Partial requests need real positive operator evidence AND an omission interval for
+their remaining aspects. Answered, next_step and withdrawn requests use omission=null.
+For withdrawal, support.evidence quotes only the linked customer withdrawal and
+answer_message_ids=[]; the customer must actually cancel the request. Do not relabel
+an unanswered request or justified deduction to escape these evidence requirements.
+Every factual claim must explicitly supply context_evidence. It holds customer/system
+reports or acknowledgments that are NOT used as independent verification. It never
+verifies policy, private account truth or completed actions. By contrast, nonempty
+dialogue_evidence declares observational support and REQUIRES observation_scope other
+than none plus a nonempty supported_proposition, even if an applicable policy reference
+also supports the claim. State exactly the narrow observed proposition: finding a
+control shows control visibility, not completion or a general policy. Keep reference
+proof for policy and system-only private-record requirements. Without observational
+evidence use dialogue_evidence=[], observation_scope=none; supported_proposition is
+normally null, except the independently stated commitment proposition required for
+verification_scope=commitment. Never infer metadata or promote context to observation
+just to satisfy the contract. Separate assertions when their support or truth differs.
+Return semantic_audit version=coverage-v2. reviewed_message_ids must cover EVERY
 client/operator message exactly once, including late follow-ups and internal speech.
 Each customer turn must appear in request_coverage or an exact-quoted exclusion;
 each operator turn must appear in factual_claims or an exclusion, even when it is
@@ -172,7 +199,7 @@ quotes must remain verbatim in the original language. Return only the requested 
 """
 SYSTEM = PROJECT_BASELINE_SYSTEM
 PROMPT_VERSION = "evaluator-v2-" + hashlib.sha256(SYSTEM.encode()).hexdigest()[:12]
-GROUNDED_VERSION = "evaluator-v6-" + hashlib.sha256(GROUNDED_SYSTEM.encode()).hexdigest()[:12]
+GROUNDED_VERSION = "evaluator-v7-" + hashlib.sha256(GROUNDED_SYSTEM.encode()).hexdigest()[:12]
 
 
 def payload_for(conversation: Conversation, checklist: Checklist, *, grounded=False):

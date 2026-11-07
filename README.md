@@ -171,3 +171,7 @@ in [the stack document](docs/STACK.md).
 See [the progress checklist](docs/PROGRESS.md). The application and CLI share the
 grounded evaluator and scorer. The local browser workflow has been exercised
 through real API calls and reference-backed human review.
+
+The current [evidence contract](docs/EVIDENCE_CONTRACT_V2.md) strictly separates
+answer proof, omission context and claim observations. Its candidate verification
+is offline; the frozen six-case baseline and prior API results remain unchanged.

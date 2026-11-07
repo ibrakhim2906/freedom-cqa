@@ -58,12 +58,28 @@ def corrected_wire():
         rule_evidence=[{"criterion_id": "identity", "quote": identity.instruction}])
     data["factual_claims"][1].update(evidence_kind="account_state", verification_scope="private_record")
     data["factual_claims"][2].update(verification_scope="interaction", observation_scope="task_completed")
+    # Explicit current-wire fixture; the original rejected file stays unchanged.
+    # Identity confirmation is context for the normative/private-reference claims,
+    # not independent proof of those propositions.
+    for claim in data["factual_claims"][:2]:
+        claim["context_evidence"] = claim["dialogue_evidence"]
+        claim["dialogue_evidence"] = []
+        claim["observation_scope"] = "none"
+        claim["supported_proposition"] = None
     messages = {m.id: m for m in conversation.messages}
     for request in data["request_coverage"]:
+        positive = request["status"] == "answered"
+        previous_ids = request["answer_message_ids"]
+        if not positive:
+            request["answer_message_ids"] = []
         request["support"] = {"basis": "explicit" if request["status"] == "answered" else "none",
             "evidence": [{"message_id": mid, "quote": messages[mid].text} for mid in request["answer_message_ids"]],
-            "inference": None, "unresolved_aspects": [] if request["status"] == "answered" else [request["request"]]}
-    data["semantic_audit"] = {"version": "coverage-v1", "reviewed_message_ids": [
+            "inference": None, "unresolved_aspects": [] if positive else [request["request"]],
+            "omission": None if positive else {
+                "start_message_id": min(request["request_message_ids"], key=lambda mid: list(messages).index(mid)),
+                "end_message_id": conversation.messages[-1].id,
+                "context_evidence": [{"message_id": mid, "quote": messages[mid].text} for mid in previous_ids]}}
+    data["semantic_audit"] = {"version": "coverage-v2", "reviewed_message_ids": [
         m.id for m in conversation.messages if m.speaker in {"client", "operator"}], "exclusions": [
         {"evidence": {"message_id": "m5", "quote": messages["m5"].text}, "reason": "context_or_confirmation",
          "criterion_ids": ["identity"], "explanation": "Customer describes performing the verification steps; source confirmation is separate."},

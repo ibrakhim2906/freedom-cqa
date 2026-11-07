@@ -160,17 +160,22 @@ def test_provider_requires_new_contract_but_old_saved_records_keep_legacy_valida
     with pytest.raises(ValueError, match="contradicted claims cannot"):
         validate(data, conversation, checklist)
     schema = schema_for(conversation, checklist, grounded=True)
-    claim_schema = schema["$defs"]["FactualClaim"]
+    claim_schema = {"$defs": schema["$defs"], "$ref": "#/$defs/FactualClaim"}
+    claim["context_evidence"] = []
     with pytest.raises(jsonschema.ValidationError):
-        jsonschema.validate(claim, {**schema, **claim_schema})
+        jsonschema.validate(claim, claim_schema)
 
 
 @pytest.mark.parametrize("field", ["dialogue_evidence", "operator_evidence", "correction_outcome"])
 def test_provider_schema_prevents_wrong_role_claim_citations(field):
     conversation, checklist, data, _ = fixture()
     schema = schema_for(conversation, checklist, grounded=True)
-    claim_schema = {**schema, **schema["$defs"]["FactualClaim"]}
+    claim_schema = {"$defs": schema["$defs"], "$ref": "#/$defs/FactualClaim"}
     claim = data["factual_claims"][0]
+    claim["context_evidence"] = []
+    if field == "dialogue_evidence":
+        claim.update(dialogue_evidence=claim["assessment"]["correction"]["outcome_evidence"],
+                     observation_scope="task_completed", supported_proposition="The customer downloaded the report.")
     jsonschema.validate(claim, claim_schema)
     if field == "dialogue_evidence":
         claim[field] = claim["operator_evidence"]

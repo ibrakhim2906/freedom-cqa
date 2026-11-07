@@ -150,11 +150,21 @@ class Judgment(StrictModel):
     uncertainty: str | None
 
 
+class OmissionSupport(StrictModel):
+    # The interval covers the complete opportunity after the linked request.
+    # Its quotes are context for absence, never proof that an answer was given.
+    start_message_id: str
+    end_message_id: str
+    context_evidence: list[Evidence]
+
+
 class AnswerSupport(StrictModel):
     basis: Literal["explicit", "implied", "next_step", "none", "withdrawn"]
     evidence: list[Evidence]
     inference: str | None
     unresolved_aspects: list[str]
+    # Default is historical deserialization only; fresh v2 output must supply it.
+    omission: OmissionSupport | None = None
 
 
 class RequestCoverage(StrictModel):
@@ -224,6 +234,9 @@ class FactualClaim(StrictModel):
     observation_scope: Literal["none", "reported_state", "control_visible", "action_completed", "task_completed", "system_record"] = "none"
     supported_proposition: str | None = None
     verification_scope: Literal["interaction", "policy", "private_record", "grading_rule", "commitment"] = "policy"
+    # Customer reports/acknowledgments that do not independently verify the claim.
+    # Keep these separate from observation proof in dialogue_evidence.
+    context_evidence: list[Evidence] = Field(default_factory=list)
 
 
 class Deduction(StrictModel):
@@ -243,7 +256,7 @@ class SemanticExclusion(StrictModel):
 
 
 class SemanticAudit(StrictModel):
-    version: Literal["coverage-v1"]
+    version: Literal["coverage-v1", "coverage-v2"]
     reviewed_message_ids: list[str]
     exclusions: list[SemanticExclusion]
 

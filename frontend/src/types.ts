@@ -1,4 +1,13 @@
 export type Evidence = {message_id: string; quote: string}
+export type OmissionSupport = {start_message_id: string; end_message_id: string; context_evidence: Evidence[]}
+export type AnswerSupport = {basis: 'explicit'|'implied'|'next_step'|'none'|'withdrawn'; evidence: Evidence[];
+  inference: string|null; unresolved_aspects: string[]; omission?: OmissionSupport|null}
+export type RequestCoverage = {request: string; status: string; request_message_ids: string[];
+  answer_message_ids: string[]; explanation: string; support?: AnswerSupport|null}
+export type FactualClaim = {claim: string; criterion_ids: string[]; status: string; explanation: string;
+  operator_evidence: Evidence[]; dialogue_evidence: Evidence[]; context_evidence?: Evidence[];
+  reference_evidence: {reference_id: string; quote: string}[]; observation_scope?: string;
+  supported_proposition?: string|null; verification_scope?: string}
 export type Judgment = {criterion_id: string; status: 'scored'|'not_applicable'|'needs_review'; answer: string|null;
   explanation: string; evidence: Evidence[]; counterevidence: Evidence[]; checked_message_ids: string[]; uncertainty: string|null}
 export type Criterion = {id: string; title: string; instruction: string; kind: 'binary'|'scale'|'flag'; weight: number;
@@ -36,10 +45,8 @@ export type JobDetail = JobRow & {conversation: ConversationDetail; checklist: C
   evidence_context?: EvidenceContext;
   evidence_context_origin?: 'captured_with_request'|'reconstructed_for_inspection';
   effective: {judgments: Judgment[]; score: Score; source: string; accepted_revisions: number; assessment_context?: AssessmentContext}|null;
-  record: {evaluation: {judgments: Judgment[]; scope_notes: string[]; request_coverage: {request: string; status: string;
-    request_message_ids: string[]; answer_message_ids: string[]; explanation: string}[];
-    factual_claims: {claim: string; criterion_ids: string[]; status: string; explanation: string; operator_evidence: Evidence[];
-      dialogue_evidence: Evidence[]; reference_evidence: {reference_id: string; quote: string}[]}[];
+  record: {evaluation: {judgments: Judgment[]; scope_notes: string[]; request_coverage: RequestCoverage[];
+    factual_claims: FactualClaim[];
     deductions: {criterion_id: string; rule_quote: string; defect: string; overlap_note: string}[]};
     score: Score; error: string|null; model: string; prompt_version: string; workflow_version: string; response_id: string;
     usage: {estimated_cost_usd: number; input_tokens: number; output_tokens: number}|null;

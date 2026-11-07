@@ -7,6 +7,53 @@ that every clause was correctly classified or that an implication is sound.
 from .grounding import reference_applicable
 
 
+def _validate_request_v2(request, index, conversation, messages, order):
+    """Keep positive answer proof separate from a checked omission interval."""
+    path = f"request_coverage[{index}].support"
+    support = request.support
+    if support is None:
+        raise ValueError(f"{path}: coverage-v2 requires explicit support")
+    for name in ["request_message_ids", "answer_message_ids", "withdrawal_message_ids"]:
+        values = getattr(request, name)
+        if len(values) != len(set(values)):
+            raise ValueError(f"request_coverage[{index}].{name}: duplicate message IDs")
+    if support.basis != "implied" and support.inference is not None:
+        raise ValueError(f"{path}.inference: only an implied answer may declare an inference")
+    if request.status == "unanswered":
+        if request.answer_message_ids or support.evidence:
+            raise ValueError(f"{path}.evidence: unanswered requests have no positive answer evidence; use omission.context_evidence")
+        if support.basis != "none" or not support.unresolved_aspects:
+            raise ValueError(f"{path}: unanswered requests require basis=none and unresolved aspects")
+    elif request.status == "withdrawn":
+        if request.answer_message_ids or support.unresolved_aspects:
+            raise ValueError(f"{path}: withdrawn requests cannot claim an answer or outstanding aspects")
+    elif request.status in {"answered", "partial", "next_step"}:
+        if not request.answer_message_ids:
+            raise ValueError(f"request_coverage[{index}].answer_message_ids: positive support needs an operator answer")
+        if request.status == "next_step" and support.unresolved_aspects:
+            raise ValueError(f"{path}.unresolved_aspects: a declared next step cannot retain unanswered aspects")
+
+    missing = request.status in {"partial", "unanswered"}
+    if missing != (support.omission is not None):
+        raise ValueError(f"{path}.omission: partial/unanswered requests require an omission interval; other statuses require null")
+    if not missing:
+        return
+    omission = support.omission
+    if not request.request_message_ids or any(mid not in messages for mid in request.request_message_ids):
+        raise ValueError(f"request_coverage[{index}].request_message_ids: omission needs actual customer request sources")
+    start, end = omission.start_message_id, omission.end_message_id
+    if start not in messages or end not in messages:
+        raise ValueError(f"{path}.omission: interval endpoints must be actual source messages")
+    earliest = min(request.request_message_ids, key=order.__getitem__)
+    if start != earliest or end != conversation.messages[-1].id or order[start] > order[end]:
+        raise ValueError(f"{path}.omission: interval must cover the earliest linked request through the final source turn")
+    for evidence in omission.context_evidence:
+        message = messages.get(evidence.message_id)
+        if (message is None or not evidence.quote.strip() or evidence.quote not in message.text
+                or not order[start] <= order[evidence.message_id] <= order[end]):
+            raise ValueError(f"{path}.omission.context_evidence: quote must be verbatim inside the complete checked interval")
+
+
 def validate_semantic_coverage(result, conversation, checklist):
     audit = result.semantic_audit
     if audit is None:
@@ -14,6 +61,11 @@ def validate_semantic_coverage(result, conversation, checklist):
         # separately requires this field for newly generated grounded results.
         return
     messages = {m.id: m for m in conversation.messages}
+    order = {m.id: i for i, m in enumerate(conversation.messages)}
+    current = audit.version == "coverage-v2"
+    if not current and (any(r.support and r.support.omission is not None for r in result.request_coverage)
+                        or any(c.context_evidence for c in result.factual_claims)):
+        raise ValueError("Omission/context evidence requires the coverage-v2 contract")
     expected = {m.id for m in conversation.messages if m.speaker in {"client", "operator"}}
     reviewed = audit.reviewed_message_ids
     if len(reviewed) != len(set(reviewed)) or set(reviewed) != expected:
@@ -54,13 +106,15 @@ def validate_semantic_coverage(result, conversation, checklist):
         excluded.add(item.evidence.message_id)
 
     requested = set()
-    for request in result.request_coverage:
+    for index, request in enumerate(result.request_coverage):
         if any(mid not in messages or messages[mid].speaker != "client" for mid in request.request_message_ids):
             raise ValueError("Semantic request sources must be customer messages")
         requested.update(request.request_message_ids)
         support = request.support
         if support is None:
             raise ValueError("Every current request requires explicit answer support")
+        if current:
+            _validate_request_v2(request, index, conversation, messages, order)
         if any(not aspect.strip() for aspect in support.unresolved_aspects):
             raise ValueError("Unresolved request aspects must be substantive")
         if request.status == "answered" and support.unresolved_aspects:
@@ -92,7 +146,7 @@ def validate_semantic_coverage(result, conversation, checklist):
             raise ValueError("Answer-support evidence must belong to the linked answer/withdrawal span")
 
     asserted = set()
-    for claim in result.factual_claims:
+    for claim_index, claim in enumerate(result.factual_claims):
         quotes(claim.operator_evidence, {"operator"})
         asserted.update(e.message_id for e in claim.operator_evidence)
         if claim.assessment and claim.assessment.lifecycle == "corrected" and claim.assessment.correction:
@@ -108,6 +162,21 @@ def validate_semantic_coverage(result, conversation, checklist):
         if claim.evidence_kind in {"product_fact", "general_fact"} and claim.verification_scope not in {"interaction", "policy"}:
             raise ValueError("Product/general claims require interaction or policy verification scope")
         known_truth = claim.status in {"supported", "contradicted"}
+        if current:
+            # Context is reviewable source material, never independent truth proof.
+            quotes(claim.context_evidence, {"client", "system"})
+            if claim.dialogue_evidence:
+                quotes(claim.dialogue_evidence, {"client", "system"})
+                if claim.observation_scope == "system_record" and any(
+                    messages[item.message_id].speaker != "system" for item in claim.dialogue_evidence
+                ):
+                    raise ValueError(f"factual_claims[{claim_index}]: system_record observation evidence must come from system messages")
+                if claim.observation_scope == "none" or not (
+                    claim.supported_proposition and claim.supported_proposition.strip()
+                ):
+                    raise ValueError(f"factual_claims[{claim_index}]: dialogue_evidence requires an explicit narrow observation_scope and supported_proposition, including alongside policy references")
+            elif claim.observation_scope != "none":
+                raise ValueError(f"factual_claims[{claim_index}]: an observation scope requires dialogue evidence; use context_evidence for non-proving reports")
         refs = {r.id: r for r in conversation.references}
         applicable_reference = any(
             item.reference_id in refs and item.quote.strip() and item.quote in refs[item.reference_id].text

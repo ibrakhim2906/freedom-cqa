@@ -161,6 +161,13 @@ checked spans, deduction-rule audit and factual-check provenance. Clicking an
 evidence quote highlights its original message. Unresolved results remain
 provisional with score bounds. Serious flags remain separate from the numeric score.
 
+New [v2 evidence records](EVIDENCE_CONTRACT_V2.md) distinguish operator answer
+proof from the full source interval checked for an omission. Request cards show
+both separately. Claim cards separately show observation scope, the narrow
+supported proposition and non-proving customer/system context. Historical results
+remain readable under their original contract; opening them does not generate
+missing metadata or rerun the evaluator.
+
 **Appeal this judgment** records a criterion, author, rationale and supporting
 source message IDs. A completed evaluation is required. A reviewer can reject
 the appeal or accept a full replacement judgment using the configured levels.

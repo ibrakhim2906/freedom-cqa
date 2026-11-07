@@ -105,3 +105,9 @@ their existing per-case references/context; global reference overrides would def
 the deliberately incompatible-source control. The [first authorized real run](OFFICIAL_FACTS_ACCEPTANCE_V1_RESULTS.md)
 is preserved separately: six initial evaluations, two allowed repairs, four valid
 outputs and two failures. No post-result relabeling or repeat run was performed.
+
+The current engine uses [evidence contract v2](EVIDENCE_CONTRACT_V2.md). The
+original verifier intentionally also pins the old engine and therefore rejects
+this engine change. Use `uv run python -m scripts.verify_evidence_contract_candidate`
+for the separate, free candidate check against the unchanged frozen inputs and
+expectations. It does not replace the original manifest or perform inference.

@@ -1,0 +1,2063 @@
+{
+  "kind": "test_only_contract_replay_fixtures_not_model_results",
+  "source_benchmark_sha256": "1fd601fcc64c835fcf3c41c7bd7466a56f7c31f78bf082e9f6031c02409343eb",
+  "provider_metadata_removed": true,
+  "cases": [
+    {
+      "case_id": "ofv1-01",
+      "conversation": {
+        "id": "ofv1-01",
+        "channel": "agent chat",
+        "language": "RU",
+        "messages": [
+          {
+            "id": "m1",
+            "timestamp": "2026-11-07T10:01:00+05:00",
+            "speaker": "client",
+            "text": "Здравствуйте. Деньги у меня сейчас на D-счёте. С какого счёта покупать акции и как использовать для покупки эту сумму?"
+          },
+          {
+            "id": "m2",
+            "timestamp": "2026-11-07T10:02:00+05:00",
+            "speaker": "operator",
+            "text": "Здравствуйте, я Надежда. Для покупки акций используется торговый счёт. Средства на D-счёте напрямую для торговли не используются."
+          },
+          {
+            "id": "m3",
+            "timestamp": "2026-11-07T10:03:00+05:00",
+            "speaker": "client",
+            "text": "Понял, для сделки нужен торговый счёт. Спасибо."
+          },
+          {
+            "id": "m4",
+            "timestamp": "2026-11-07T10:04:00+05:00",
+            "speaker": "operator",
+            "text": "Всего доброго!"
+          }
+        ],
+        "references": [
+          {
+            "id": "accounts-update",
+            "text": "Curated official-source summary: Eligible trading accounts beginning with 7 can submit a personal-data change in the Freedom Broker mobile app: Menu > Instructions > Personal Data > Change of details; the web route is Cabinet > Instructions > Change of details. Confirm sends it for checking; execution follows review. The guide gives no review/unlock deadline.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: accounts-update. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://fbroker.kz/faq/question/how-can-i-update-my-data-3815",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "accounts-requestionnaire",
+            "text": "Curated official-source summary: The company may suspend withdrawal execution until current customer details are confirmed when requested data has not been supplied. Submitting an update does not itself mean it has been executed. This does not establish a guaranteed withdrawal, an unlock deadline, automatic resumption, or mandatory resubmission.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: accounts-requestionnaire. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://fbroker.kz/faq/question/updating-personal-data--requestionnaire-",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "ffg-d-account-20261107",
+            "text": "Curated official-source summary: D-account money cannot be used directly for trading securities. It must first be transferred to the trading account. Selecting a displayed account is different from transferring funds. This source does not establish an individual balance or transfer completion.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-d-account-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://fbroker.kz/faq/question/savings-d-account2727",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "tradernet-d-transfer-20261107",
+            "text": "Curated official-source summary: The platform guide describes transfers in both directions between the trading and D accounts: select the source account, open non-trading orders > transfer between accounts, specify the amount and submit the instruction. No individual transfer deadline is established.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: tradernet-d-transfer-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://tradernet.global/faq/13616-kak-sdelat-perevod-mezhdu-schetami-%28torgoviid-schet%29?site_lang=ru",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "ffg-1042-language-20261107",
+            "text": "Curated official-source summary: For the explicitly identified FFG client service, the supplied Form1042-S is available only in English. The web trading platform provides Cabinet > Form1042-S > year selection > view/PDF download. This does not rule out translated guidance or establish another entity's policy.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-1042-language-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://fbroker.kz/faq/question/what-is-1042-s-form",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "tradernet-margin-14230-20261107",
+            "text": "Curated official-source summary: Use Margin is in order settings. The FAQ states that once enabled, the setting remains enabled for future trades across assets until disabled. It separately discusses repayment of borrowing and stop-out. It does not give a blanket guarantee about effects of disabling on existing holdings, debt or liquidation risk.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: tradernet-margin-14230-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://tradernet.global/faq/14230-margin-financing-negative-cash-balance?site_lang=ru",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "ffg-annex7-current-20261107",
+            "text": "Curated official-source summary: Annex7 links submission of an order with Use Margin activated to borrowing consent, subject to collateral/margin conditions. Ongoing uncovered-position obligations are separate. Approval is dated 2026-10-15, not an established effective interval. No universal existing-position effect of unticking is established here.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-annex7-current-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://fbroker.kz/document/prilozenie-7",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "ffg-tariff-location-20261107",
+            "text": "Curated official-source summary: The FAQ says the active pricing plan is in Account Information in a generated broker report. It gives mobile Menu > Reports and Documents > Broker Reports, and web Cabinet > Broker Reports. It does not establish a tariff label under the name or the tariff-header semantics of an older-period report.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-tariff-location-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://fbroker.kz/faq/question/how-to-find-out-your-tariff-2709",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "ffg-report-fields-20261107",
+            "text": "Curated official-source summary: Broker reports include operations and results for a selected period; Account Information includes a tariff plan. The selected transaction period does not by itself establish that the tariff header is historical or current. That header's time basis is not specified by this source.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-report-fields-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://fbroker.kz/faq/question/how-to-read-the-broker-report",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          }
+        ],
+        "knowledge_scope": "freedom-finance-global-platform",
+        "occurred_on": "2026-11-07",
+        "occurred_on_origin": "source_iso_timestamps",
+        "reference_context": {
+          "mode": "conversation_date",
+          "scope": "freedom-finance-global-platform",
+          "as_of": null,
+          "rationale": "Product scope and conversation date supplied with the conversation record.",
+          "pack_id": "freedom-global-products-20261107",
+          "pack_sha256": "021858faa31966df0f42b2941fd797aa3ce0e40ef3f6c0aa66454f0465c511f3"
+        }
+      },
+      "rejected_coverage_v1_wire": {
+        "judgments": {
+          "contact": {
+            "criterion_id": "contact",
+            "status": "scored",
+            "answer": "yes",
+            "explanation": "The operator greeted the customer in Russian and introduced herself in her first response.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Здравствуйте, я Надежда."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "needs": {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "answer": null,
+            "explanation": "The initial request sufficiently identified the source account, intended purchase, and requested guidance. No additional task detail was needed for a general answer.",
+            "evidence": [
+              {
+                "message_id": "m1",
+                "quote": "Деньги у меня сейчас на D-счёте. С какого счёта покупать акции и как использовать для покупки эту сумму?"
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "identity": {
+            "criterion_id": "identity",
+            "status": "not_applicable",
+            "answer": null,
+            "explanation": "The operator gave general product guidance without protected disclosure or an account action requiring identification.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Для покупки акций используется торговый счёт. Средства на D-счёте напрямую для торговли не используются."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "consultation": {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "answer": "10",
+            "explanation": "The operator correctly identified the trading account and direct-use restriction, but did not explain how to use the D-account money or give a concrete next step. The customer's acknowledgment did not withdraw that substantial question.",
+            "evidence": [
+              {
+                "message_id": "m1",
+                "quote": "С какого счёта покупать акции и как использовать для покупки эту сумму?"
+              },
+              {
+                "message_id": "m4",
+                "quote": "Всего доброго!"
+              }
+            ],
+            "counterevidence": [
+              {
+                "message_id": "m2",
+                "quote": "Для покупки акций используется торговый счёт. Средства на D-счёте напрямую для торговли не используются."
+              }
+            ],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4"
+            ],
+            "uncertainty": null,
+            "deduction": {
+              "criterion_id": "consultation",
+              "rule_quote": "Часть запроса закрыта, существенный вопрос остался открытым.",
+              "defect": "Account selection was answered, but the question about making the D-account funds available for the purchase remained open through the farewell.",
+              "evidence": [
+                {
+                  "message_id": "m1",
+                  "quote": "как использовать для покупки эту сумму?"
+                },
+                {
+                  "message_id": "m2",
+                  "quote": "Средства на D-счёте напрямую для торговли не используются."
+                },
+                {
+                  "message_id": "m4",
+                  "quote": "Всего доброго!"
+                }
+              ],
+              "checked_message_ids": [
+                "m1",
+                "m2",
+                "m3",
+                "m4"
+              ],
+              "overlap_note": "This is a content omission, not a separate clarity or empathy failure. The closing deduction concerns a different required behavior."
+            }
+          },
+          "empathy": {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "answer": "yes",
+            "explanation": "The operator was courteous. The customer expressed a neutral factual request, not dissatisfaction or a concrete experienced inconvenience requiring an additional response.",
+            "evidence": [
+              {
+                "message_id": "m1",
+                "quote": "Здравствуйте. Деньги у меня сейчас на D-счёте."
+              },
+              {
+                "message_id": "m2",
+                "quote": "Здравствуйте, я Надежда."
+              },
+              {
+                "message_id": "m4",
+                "quote": "Всего доброго!"
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "management": {
+            "criterion_id": "management",
+            "status": "scored",
+            "answer": "10",
+            "explanation": "The wording was clear and coherent. No redundant question, explicit sequencing lapse, or unannounced wait was evidenced. Missing funding guidance is a consultation omission, not a communication defect.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Для покупки акций используется торговый счёт. Средства на D-счёте напрямую для торговли не используются."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "closing": {
+            "criterion_id": "closing",
+            "status": "scored",
+            "answer": "no",
+            "explanation": "The operator had a demonstrated closing opportunity and gave a farewell, but neither summarized the exchange nor offered further help. The customer's recap is not an operator summary.",
+            "evidence": [
+              {
+                "message_id": "m4",
+                "quote": "Всего доброго!"
+              }
+            ],
+            "counterevidence": [
+              {
+                "message_id": "m3",
+                "quote": "Понял, для сделки нужен торговый счёт. Спасибо."
+              }
+            ],
+            "checked_message_ids": [
+              "m2",
+              "m3",
+              "m4"
+            ],
+            "uncertainty": null,
+            "deduction": {
+              "criterion_id": "closing",
+              "rule_quote": "Да — оператор подвёл итог или предложил дальнейшую помощь и попрощался.",
+              "defect": "The final operator response contained only a farewell, without the required summary or offer of further help.",
+              "evidence": [
+                {
+                  "message_id": "m4",
+                  "quote": "Всего доброго!"
+                }
+              ],
+              "checked_message_ids": [
+                "m2",
+                "m3",
+                "m4"
+              ],
+              "overlap_note": "This closing-format omission would remain even if the funding question had been answered; it does not duplicate the consultation deduction."
+            }
+          },
+          "serious": {
+            "criterion_id": "serious",
+            "status": "scored",
+            "answer": "no",
+            "explanation": "No insult, private paid-service offer, or confidential disclosure was identified.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Здравствуйте, я Надежда. Для покупки акций используется торговый счёт. Средства на D-счёте напрямую для торговли не используются."
+              },
+              {
+                "message_id": "m4",
+                "quote": "Всего доброго!"
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          }
+        },
+        "request_coverage": [
+          {
+            "request": "Which account should be used to buy shares?",
+            "request_message_ids": [
+              "m1"
+            ],
+            "status": "answered",
+            "answer_message_ids": [
+              "m2"
+            ],
+            "explanation": "The operator explicitly identified the trading account.",
+            "withdrawal_message_ids": [],
+            "support": {
+              "basis": "explicit",
+              "evidence": [
+                {
+                  "message_id": "m2",
+                  "quote": "Для покупки акций используется торговый счёт."
+                }
+              ],
+              "inference": null,
+              "unresolved_aspects": []
+            }
+          },
+          {
+            "request": "How can the money currently on the D account be used for the purchase?",
+            "request_message_ids": [
+              "m1"
+            ],
+            "status": "unanswered",
+            "answer_message_ids": [],
+            "explanation": "The direct-use restriction did not explain how to make these funds usable. The operator gave no transfer guidance or concrete next step.",
+            "withdrawal_message_ids": [],
+            "support": {
+              "basis": "none",
+              "evidence": [
+                {
+                  "message_id": "m2",
+                  "quote": "Средства на D-счёте напрямую для торговли не используются."
+                },
+                {
+                  "message_id": "m4",
+                  "quote": "Всего доброго!"
+                }
+              ],
+              "inference": null,
+              "unresolved_aspects": [
+                "How to move the D-account money to the trading account for the purchase."
+              ]
+            }
+          }
+        ],
+        "scope_notes": [
+          "Assessment uses the supplied platform scope and actual conversation date, 2026-11-07. The cited usable snapshot matches that date.",
+          "The reference establishes product correctness but does not substitute for guidance actually given by the operator.",
+          "No audio was analyzed."
+        ],
+        "factual_claims": [
+          {
+            "claim": "Share purchases use the trading account, and D-account funds cannot be used directly for trading.",
+            "criterion_ids": [
+              "consultation"
+            ],
+            "operator_evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Для покупки акций используется торговый счёт. Средства на D-счёте напрямую для торговли не используются."
+              }
+            ],
+            "status": "supported",
+            "material": true,
+            "reference_evidence": [
+              {
+                "reference_id": "ffg-d-account-20261107",
+                "quote": "D-account money cannot be used directly for trading securities. It must first be transferred to the trading account."
+              }
+            ],
+            "dialogue_evidence": [],
+            "explanation": "The applicable same-date source supports the account-use assertions. It also identifies the transfer requirement that the operator did not explain.",
+            "assessment": {
+              "lifecycle": "active",
+              "correction": null,
+              "impacts": [
+                {
+                  "criterion_id": "consultation",
+                  "when_true": {
+                    "status": "scored",
+                    "answer": "10"
+                  },
+                  "when_false": {
+                    "status": "scored",
+                    "answer": "0"
+                  },
+                  "rule_quote": "Это не отменяет 0 при ошибочной ключевой рекомендации; общая или нерелевантная реплика не считается конкретно решённым вторичным запросом.",
+                  "evidence": [
+                    {
+                      "message_id": "m1",
+                      "quote": "С какого счёта покупать акции и как использовать для покупки эту сумму?"
+                    },
+                    {
+                      "message_id": "m2",
+                      "quote": "Для покупки акций используется торговый счёт. Средства на D-счёте напрямую для торговли не используются."
+                    }
+                  ],
+                  "checked_message_ids": [
+                    "m1",
+                    "m2",
+                    "m3",
+                    "m4"
+                  ],
+                  "explanation": "True account-use advice closes account selection but leaves the funding question unanswered, yielding 10. False key account-use advice would require 0. The supplied reference supports the true branch."
+                }
+              ]
+            },
+            "evidence_kind": "product_fact",
+            "rule_evidence": [],
+            "observation_scope": "none",
+            "supported_proposition": null,
+            "verification_scope": "policy"
+          }
+        ],
+        "semantic_audit": {
+          "version": "coverage-v1",
+          "reviewed_message_ids": [
+            "m1",
+            "m2",
+            "m3",
+            "m4"
+          ],
+          "exclusions": [
+            {
+              "evidence": {
+                "message_id": "m1",
+                "quote": "Здравствуйте."
+              },
+              "reason": "social",
+              "criterion_ids": [
+                "contact"
+              ],
+              "explanation": "The greeting adds no task beyond the two requests captured in request coverage."
+            },
+            {
+              "evidence": {
+                "message_id": "m2",
+                "quote": "Здравствуйте, я Надежда."
+              },
+              "reason": "criterion_behavior",
+              "criterion_ids": [
+                "contact",
+                "empathy"
+              ],
+              "explanation": "Greeting and self-introduction are observable communication behaviors, not product assertions."
+            },
+            {
+              "evidence": {
+                "message_id": "m3",
+                "quote": "Понял, для сделки нужен торговый счёт. Спасибо."
+              },
+              "reason": "context_or_confirmation",
+              "criterion_ids": [
+                "consultation",
+                "closing"
+              ],
+              "explanation": "Acknowledgment and thanks introduce no new request, do not withdraw the funding question, and do not independently verify product policy."
+            },
+            {
+              "evidence": {
+                "message_id": "m4",
+                "quote": "Всего доброго!"
+              },
+              "reason": "criterion_behavior",
+              "criterion_ids": [
+                "closing",
+                "empathy"
+              ],
+              "explanation": "The farewell is closing behavior and demonstrates an actual closing opportunity; it makes no product assertion."
+            }
+          ]
+        }
+      },
+      "authored_coverage_v2_wire": {
+        "judgments": {
+          "contact": {
+            "criterion_id": "contact",
+            "status": "scored",
+            "answer": "yes",
+            "explanation": "The operator greeted the customer in Russian and introduced herself in her first response.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Здравствуйте, я Надежда."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "needs": {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "answer": null,
+            "explanation": "The initial request sufficiently identified the source account, intended purchase, and requested guidance. No additional task detail was needed for a general answer.",
+            "evidence": [
+              {
+                "message_id": "m1",
+                "quote": "Деньги у меня сейчас на D-счёте. С какого счёта покупать акции и как использовать для покупки эту сумму?"
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "identity": {
+            "criterion_id": "identity",
+            "status": "not_applicable",
+            "answer": null,
+            "explanation": "The operator gave general product guidance without protected disclosure or an account action requiring identification.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Для покупки акций используется торговый счёт. Средства на D-счёте напрямую для торговли не используются."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "consultation": {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "answer": "10",
+            "explanation": "The operator correctly identified the trading account and direct-use restriction, but did not explain how to use the D-account money or give a concrete next step. The customer's acknowledgment did not withdraw that substantial question.",
+            "evidence": [
+              {
+                "message_id": "m1",
+                "quote": "С какого счёта покупать акции и как использовать для покупки эту сумму?"
+              },
+              {
+                "message_id": "m4",
+                "quote": "Всего доброго!"
+              }
+            ],
+            "counterevidence": [
+              {
+                "message_id": "m2",
+                "quote": "Для покупки акций используется торговый счёт. Средства на D-счёте напрямую для торговли не используются."
+              }
+            ],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4"
+            ],
+            "uncertainty": null,
+            "deduction": {
+              "criterion_id": "consultation",
+              "rule_quote": "Часть запроса закрыта, существенный вопрос остался открытым.",
+              "defect": "Account selection was answered, but the question about making the D-account funds available for the purchase remained open through the farewell.",
+              "evidence": [
+                {
+                  "message_id": "m1",
+                  "quote": "как использовать для покупки эту сумму?"
+                },
+                {
+                  "message_id": "m2",
+                  "quote": "Средства на D-счёте напрямую для торговли не используются."
+                },
+                {
+                  "message_id": "m4",
+                  "quote": "Всего доброго!"
+                }
+              ],
+              "checked_message_ids": [
+                "m1",
+                "m2",
+                "m3",
+                "m4"
+              ],
+              "overlap_note": "This is a content omission, not a separate clarity or empathy failure. The closing deduction concerns a different required behavior."
+            }
+          },
+          "empathy": {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "answer": "yes",
+            "explanation": "The operator was courteous. The customer expressed a neutral factual request, not dissatisfaction or a concrete experienced inconvenience requiring an additional response.",
+            "evidence": [
+              {
+                "message_id": "m1",
+                "quote": "Здравствуйте. Деньги у меня сейчас на D-счёте."
+              },
+              {
+                "message_id": "m2",
+                "quote": "Здравствуйте, я Надежда."
+              },
+              {
+                "message_id": "m4",
+                "quote": "Всего доброго!"
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "management": {
+            "criterion_id": "management",
+            "status": "scored",
+            "answer": "10",
+            "explanation": "The wording was clear and coherent. No redundant question, explicit sequencing lapse, or unannounced wait was evidenced. Missing funding guidance is a consultation omission, not a communication defect.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Для покупки акций используется торговый счёт. Средства на D-счёте напрямую для торговли не используются."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "closing": {
+            "criterion_id": "closing",
+            "status": "scored",
+            "answer": "no",
+            "explanation": "The operator had a demonstrated closing opportunity and gave a farewell, but neither summarized the exchange nor offered further help. The customer's recap is not an operator summary.",
+            "evidence": [
+              {
+                "message_id": "m4",
+                "quote": "Всего доброго!"
+              }
+            ],
+            "counterevidence": [
+              {
+                "message_id": "m3",
+                "quote": "Понял, для сделки нужен торговый счёт. Спасибо."
+              }
+            ],
+            "checked_message_ids": [
+              "m2",
+              "m3",
+              "m4"
+            ],
+            "uncertainty": null,
+            "deduction": {
+              "criterion_id": "closing",
+              "rule_quote": "Да — оператор подвёл итог или предложил дальнейшую помощь и попрощался.",
+              "defect": "The final operator response contained only a farewell, without the required summary or offer of further help.",
+              "evidence": [
+                {
+                  "message_id": "m4",
+                  "quote": "Всего доброго!"
+                }
+              ],
+              "checked_message_ids": [
+                "m2",
+                "m3",
+                "m4"
+              ],
+              "overlap_note": "This closing-format omission would remain even if the funding question had been answered; it does not duplicate the consultation deduction."
+            }
+          },
+          "serious": {
+            "criterion_id": "serious",
+            "status": "scored",
+            "answer": "no",
+            "explanation": "No insult, private paid-service offer, or confidential disclosure was identified.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Здравствуйте, я Надежда. Для покупки акций используется торговый счёт. Средства на D-счёте напрямую для торговли не используются."
+              },
+              {
+                "message_id": "m4",
+                "quote": "Всего доброго!"
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          }
+        },
+        "request_coverage": [
+          {
+            "request": "Which account should be used to buy shares?",
+            "request_message_ids": [
+              "m1"
+            ],
+            "status": "answered",
+            "answer_message_ids": [
+              "m2"
+            ],
+            "explanation": "The operator explicitly identified the trading account.",
+            "withdrawal_message_ids": [],
+            "support": {
+              "basis": "explicit",
+              "evidence": [
+                {
+                  "message_id": "m2",
+                  "quote": "Для покупки акций используется торговый счёт."
+                }
+              ],
+              "inference": null,
+              "unresolved_aspects": [],
+              "omission": null
+            }
+          },
+          {
+            "request": "How can the money currently on the D account be used for the purchase?",
+            "request_message_ids": [
+              "m1"
+            ],
+            "status": "unanswered",
+            "answer_message_ids": [],
+            "explanation": "The direct-use restriction did not explain how to make these funds usable. The operator gave no transfer guidance or concrete next step.",
+            "withdrawal_message_ids": [],
+            "support": {
+              "basis": "none",
+              "evidence": [],
+              "inference": null,
+              "unresolved_aspects": [
+                "How to move the D-account money to the trading account for the purchase."
+              ],
+              "omission": {
+                "start_message_id": "m1",
+                "end_message_id": "m4",
+                "context_evidence": [
+                  {
+                    "message_id": "m1",
+                    "quote": "Здравствуйте. Деньги у меня сейчас на D-счёте. С какого счёта покупать акции и как использовать для покупки эту сумму?"
+                  },
+                  {
+                    "message_id": "m4",
+                    "quote": "Всего доброго!"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "scope_notes": [
+          "Assessment uses the supplied platform scope and actual conversation date, 2026-11-07. The cited usable snapshot matches that date.",
+          "The reference establishes product correctness but does not substitute for guidance actually given by the operator.",
+          "No audio was analyzed."
+        ],
+        "factual_claims": [
+          {
+            "claim": "Share purchases use the trading account, and D-account funds cannot be used directly for trading.",
+            "criterion_ids": [
+              "consultation"
+            ],
+            "operator_evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Для покупки акций используется торговый счёт. Средства на D-счёте напрямую для торговли не используются."
+              }
+            ],
+            "status": "supported",
+            "material": true,
+            "reference_evidence": [
+              {
+                "reference_id": "ffg-d-account-20261107",
+                "quote": "D-account money cannot be used directly for trading securities. It must first be transferred to the trading account."
+              }
+            ],
+            "dialogue_evidence": [],
+            "explanation": "The applicable same-date source supports the account-use assertions. It also identifies the transfer requirement that the operator did not explain.",
+            "assessment": {
+              "lifecycle": "active",
+              "correction": null,
+              "impacts": [
+                {
+                  "criterion_id": "consultation",
+                  "when_true": {
+                    "status": "scored",
+                    "answer": "10"
+                  },
+                  "when_false": {
+                    "status": "scored",
+                    "answer": "0"
+                  },
+                  "rule_quote": "Это не отменяет 0 при ошибочной ключевой рекомендации; общая или нерелевантная реплика не считается конкретно решённым вторичным запросом.",
+                  "evidence": [
+                    {
+                      "message_id": "m1",
+                      "quote": "С какого счёта покупать акции и как использовать для покупки эту сумму?"
+                    },
+                    {
+                      "message_id": "m2",
+                      "quote": "Для покупки акций используется торговый счёт. Средства на D-счёте напрямую для торговли не используются."
+                    }
+                  ],
+                  "checked_message_ids": [
+                    "m1",
+                    "m2",
+                    "m3",
+                    "m4"
+                  ],
+                  "explanation": "True account-use advice closes account selection but leaves the funding question unanswered, yielding 10. False key account-use advice would require 0. The supplied reference supports the true branch."
+                }
+              ]
+            },
+            "evidence_kind": "product_fact",
+            "rule_evidence": [],
+            "observation_scope": "none",
+            "supported_proposition": null,
+            "verification_scope": "policy",
+            "context_evidence": []
+          }
+        ],
+        "semantic_audit": {
+          "version": "coverage-v2",
+          "reviewed_message_ids": [
+            "m1",
+            "m2",
+            "m3",
+            "m4"
+          ],
+          "exclusions": [
+            {
+              "evidence": {
+                "message_id": "m1",
+                "quote": "Здравствуйте."
+              },
+              "reason": "social",
+              "criterion_ids": [
+                "contact"
+              ],
+              "explanation": "The greeting adds no task beyond the two requests captured in request coverage."
+            },
+            {
+              "evidence": {
+                "message_id": "m2",
+                "quote": "Здравствуйте, я Надежда."
+              },
+              "reason": "criterion_behavior",
+              "criterion_ids": [
+                "contact",
+                "empathy"
+              ],
+              "explanation": "Greeting and self-introduction are observable communication behaviors, not product assertions."
+            },
+            {
+              "evidence": {
+                "message_id": "m3",
+                "quote": "Понял, для сделки нужен торговый счёт. Спасибо."
+              },
+              "reason": "context_or_confirmation",
+              "criterion_ids": [
+                "consultation",
+                "closing"
+              ],
+              "explanation": "Acknowledgment and thanks introduce no new request, do not withdraw the funding question, and do not independently verify product policy."
+            },
+            {
+              "evidence": {
+                "message_id": "m4",
+                "quote": "Всего доброго!"
+              },
+              "reason": "criterion_behavior",
+              "criterion_ids": [
+                "closing",
+                "empathy"
+              ],
+              "explanation": "The farewell is closing behavior and demonstrates an actual closing opportunity; it makes no product assertion."
+            }
+          ]
+        }
+      },
+      "fixture_note": "Explicitly authored test-only representation with unchanged proposed judgments; never a runtime repair or accepted benchmark result."
+    },
+    {
+      "case_id": "ofv1-05",
+      "conversation": {
+        "id": "ofv1-05",
+        "channel": "voice call",
+        "language": "EN",
+        "messages": [
+          {
+            "id": "m1",
+            "timestamp": "01:00",
+            "speaker": "client",
+            "text": "I'm in the Freedom Broker app and see a Use Margin checkbox in the order screen. Where can I switch it off?"
+          },
+          {
+            "id": "m2",
+            "timestamp": "02:00",
+            "speaker": "operator",
+            "text": "Hello, I'm Leah. Open Order Settings and untick Use Margin before submitting the order."
+          },
+          {
+            "id": "m3",
+            "timestamp": "03:00",
+            "speaker": "client",
+            "text": "I can see the setting now. Does unticking it change an existing position or a loan I already have?"
+          },
+          {
+            "id": "m4",
+            "timestamp": "04:00",
+            "speaker": "system",
+            "text": "[The agent placed the call on hold.]"
+          },
+          {
+            "id": "m5",
+            "timestamp": "05:00",
+            "speaker": "system",
+            "text": "[The agent resumed the call.]"
+          },
+          {
+            "id": "m6",
+            "timestamp": "06:00",
+            "speaker": "operator",
+            "text": "Thank you for waiting. Is there anything else I can help you with? Goodbye."
+          }
+        ],
+        "references": [
+          {
+            "id": "accounts-update",
+            "text": "Curated official-source summary: Eligible trading accounts beginning with 7 can submit a personal-data change in the Freedom Broker mobile app: Menu > Instructions > Personal Data > Change of details; the web route is Cabinet > Instructions > Change of details. Confirm sends it for checking; execution follows review. The guide gives no review/unlock deadline.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: accounts-update. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://fbroker.kz/faq/question/how-can-i-update-my-data-3815",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "accounts-requestionnaire",
+            "text": "Curated official-source summary: The company may suspend withdrawal execution until current customer details are confirmed when requested data has not been supplied. Submitting an update does not itself mean it has been executed. This does not establish a guaranteed withdrawal, an unlock deadline, automatic resumption, or mandatory resubmission.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: accounts-requestionnaire. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://fbroker.kz/faq/question/updating-personal-data--requestionnaire-",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "ffg-d-account-20261107",
+            "text": "Curated official-source summary: D-account money cannot be used directly for trading securities. It must first be transferred to the trading account. Selecting a displayed account is different from transferring funds. This source does not establish an individual balance or transfer completion.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-d-account-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://fbroker.kz/faq/question/savings-d-account2727",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "tradernet-d-transfer-20261107",
+            "text": "Curated official-source summary: The platform guide describes transfers in both directions between the trading and D accounts: select the source account, open non-trading orders > transfer between accounts, specify the amount and submit the instruction. No individual transfer deadline is established.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: tradernet-d-transfer-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://tradernet.global/faq/13616-kak-sdelat-perevod-mezhdu-schetami-%28torgoviid-schet%29?site_lang=ru",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "ffg-1042-language-20261107",
+            "text": "Curated official-source summary: For the explicitly identified FFG client service, the supplied Form1042-S is available only in English. The web trading platform provides Cabinet > Form1042-S > year selection > view/PDF download. This does not rule out translated guidance or establish another entity's policy.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-1042-language-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://fbroker.kz/faq/question/what-is-1042-s-form",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "tradernet-margin-14230-20261107",
+            "text": "Curated official-source summary: Use Margin is in order settings. The FAQ states that once enabled, the setting remains enabled for future trades across assets until disabled. It separately discusses repayment of borrowing and stop-out. It does not give a blanket guarantee about effects of disabling on existing holdings, debt or liquidation risk.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: tradernet-margin-14230-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://tradernet.global/faq/14230-margin-financing-negative-cash-balance?site_lang=ru",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "ffg-annex7-current-20261107",
+            "text": "Curated official-source summary: Annex7 links submission of an order with Use Margin activated to borrowing consent, subject to collateral/margin conditions. Ongoing uncovered-position obligations are separate. Approval is dated 2026-10-15, not an established effective interval. No universal existing-position effect of unticking is established here.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-annex7-current-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://fbroker.kz/document/prilozenie-7",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "ffg-tariff-location-20261107",
+            "text": "Curated official-source summary: The FAQ says the active pricing plan is in Account Information in a generated broker report. It gives mobile Menu > Reports and Documents > Broker Reports, and web Cabinet > Broker Reports. It does not establish a tariff label under the name or the tariff-header semantics of an older-period report.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-tariff-location-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://fbroker.kz/faq/question/how-to-find-out-your-tariff-2709",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          },
+          {
+            "id": "ffg-report-fields-20261107",
+            "text": "Curated official-source summary: Broker reports include operations and results for a selected period; Account Information includes a tariff plan. The selected transaction period does not by itself establish that the tariff header is historical or current. That header's time basis is not specified by this source.",
+            "provenance": "Official source reviewed 2026-11-07; curated summary, not verbatim. Source catalog: ffg-report-fields-20261107. Entity/platform qualifiers in catalog apply. Snapshot date records the reviewed source version, not a legal effective interval. Historical applicability is unestablished; an explicit snapshot review is conditional.",
+            "source_url": "https://fbroker.kz/faq/question/how-to-read-the-broker-report",
+            "retrieved_on": "2026-11-07",
+            "scope": "freedom-finance-global-platform",
+            "valid_from": null,
+            "valid_until": null,
+            "date_basis": "snapshot",
+            "snapshot_on": "2026-11-07"
+          }
+        ],
+        "knowledge_scope": null,
+        "occurred_on": null,
+        "occurred_on_origin": null,
+        "reference_context": {
+          "mode": "snapshot_review",
+          "scope": "freedom-finance-global-platform",
+          "as_of": "2026-11-07",
+          "rationale": "Review against the selected FFG product snapshot. The original conversation date and brokerage scope are not independently established.",
+          "pack_id": "freedom-global-products-20261107",
+          "pack_sha256": "021858faa31966df0f42b2941fd797aa3ce0e40ef3f6c0aa66454f0465c511f3"
+        }
+      },
+      "rejected_coverage_v1_wire": {
+        "judgments": {
+          "contact": {
+            "criterion_id": "contact",
+            "status": "scored",
+            "answer": "yes",
+            "explanation": "The first operator response contains an English greeting and self-introduction.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Hello, I'm Leah."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "needs": {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "answer": null,
+            "explanation": "The app, control and intended action were identified from the outset. The follow-up also permits a general explanation without additional task details.",
+            "evidence": [
+              {
+                "message_id": "m1",
+                "quote": "I'm in the Freedom Broker app and see a Use Margin checkbox in the order screen. Where can I switch it off?"
+              },
+              {
+                "message_id": "m3",
+                "quote": "Does unticking it change an existing position or a loan I already have?"
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m6"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "identity": {
+            "criterion_id": "identity",
+            "status": "not_applicable",
+            "answer": null,
+            "explanation": "The interaction concerns general guidance. No private account information was disclosed and no protected action was performed.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Open Order Settings and untick Use Margin before submitting the order."
+              },
+              {
+                "message_id": "m6",
+                "quote": "Thank you for waiting. Is there anything else I can help you with? Goodbye."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4",
+              "m5",
+              "m6"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "consultation": {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "answer": "10",
+            "explanation": "The operator answered where to disable the setting. The substantial follow-up about existing positions and borrowing remained unanswered, with no concrete next step after the hold.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Open Order Settings and untick Use Margin before submitting the order."
+              },
+              {
+                "message_id": "m3",
+                "quote": "Does unticking it change an existing position or a loan I already have?"
+              },
+              {
+                "message_id": "m6",
+                "quote": "Thank you for waiting. Is there anything else I can help you with? Goodbye."
+              }
+            ],
+            "counterevidence": [
+              {
+                "message_id": "m3",
+                "quote": "I can see the setting now."
+              }
+            ],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4",
+              "m5",
+              "m6"
+            ],
+            "uncertainty": null,
+            "deduction": {
+              "criterion_id": "consultation",
+              "rule_quote": "Часть запроса закрыта, существенный вопрос остался открытым.",
+              "defect": "The effects on existing positions and loans asked about in m3 were not addressed before the closing in m6.",
+              "evidence": [
+                {
+                  "message_id": "m3",
+                  "quote": "Does unticking it change an existing position or a loan I already have?"
+                },
+                {
+                  "message_id": "m6",
+                  "quote": "Thank you for waiting. Is there anything else I can help you with? Goodbye."
+                }
+              ],
+              "checked_message_ids": [
+                "m3",
+                "m4",
+                "m5",
+                "m6"
+              ],
+              "overlap_note": "This deduction concerns missing substantive advice; management separately concerns an unannounced hold."
+            }
+          },
+          "empathy": {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "answer": "yes",
+            "explanation": "The operator was courteous. Neither customer turn expresses dissatisfaction, distress or a concrete experienced inconvenience; the unanswered factual question is not independently an empathy failure.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Hello, I'm Leah."
+              },
+              {
+                "message_id": "m6",
+                "quote": "Thank you for waiting."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m6"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "management": {
+            "criterion_id": "management",
+            "status": "scored",
+            "answer": "7",
+            "explanation": "The explanations were understandable, but the recorded hold was not announced in the preceding operator speech. Thanking the customer afterward does not provide advance warning.",
+            "evidence": [
+              {
+                "message_id": "m4",
+                "quote": "[The agent placed the call on hold.]"
+              },
+              {
+                "message_id": "m5",
+                "quote": "[The agent resumed the call.]"
+              }
+            ],
+            "counterevidence": [
+              {
+                "message_id": "m2",
+                "quote": "Open Order Settings and untick Use Margin before submitting the order."
+              },
+              {
+                "message_id": "m6",
+                "quote": "Thank you for waiting."
+              }
+            ],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4",
+              "m5",
+              "m6"
+            ],
+            "uncertainty": null,
+            "deduction": {
+              "criterion_id": "management",
+              "rule_quote": "For one such lapse, one unnecessary repeat question, or an explicit unannounced wait, select 7 if the remaining wording is understandable and the conversation can continue.",
+              "defect": "The system records a hold in m4, but the preceding operator turn contains no warning about waiting.",
+              "evidence": [
+                {
+                  "message_id": "m2",
+                  "quote": "Hello, I'm Leah. Open Order Settings and untick Use Margin before submitting the order."
+                },
+                {
+                  "message_id": "m4",
+                  "quote": "[The agent placed the call on hold.]"
+                }
+              ],
+              "checked_message_ids": [
+                "m2",
+                "m3",
+                "m4",
+                "m5",
+                "m6"
+              ],
+              "overlap_note": "This is an independently evidenced wait-management lapse, not a second deduction for the unanswered follow-up."
+            }
+          },
+          "closing": {
+            "criterion_id": "closing",
+            "status": "scored",
+            "answer": "yes",
+            "explanation": "After the system-recorded resumption, the operator offered further help and said goodbye to the customer.",
+            "evidence": [
+              {
+                "message_id": "m6",
+                "quote": "Is there anything else I can help you with? Goodbye."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m5",
+              "m6"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "serious": {
+            "criterion_id": "serious",
+            "status": "scored",
+            "answer": "no",
+            "explanation": "No insult, off-company paid-service offer or confidential disclosure appears.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Hello, I'm Leah. Open Order Settings and untick Use Margin before submitting the order."
+              },
+              {
+                "message_id": "m6",
+                "quote": "Thank you for waiting. Is there anything else I can help you with? Goodbye."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4",
+              "m5",
+              "m6"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          }
+        },
+        "request_coverage": [
+          {
+            "request": "Locate the control for disabling Use Margin.",
+            "request_message_ids": [
+              "m1"
+            ],
+            "status": "answered",
+            "answer_message_ids": [
+              "m2"
+            ],
+            "explanation": "The operator gave the setting location and the action to take.",
+            "withdrawal_message_ids": [],
+            "support": {
+              "basis": "explicit",
+              "evidence": [
+                {
+                  "message_id": "m2",
+                  "quote": "Open Order Settings and untick Use Margin before submitting the order."
+                }
+              ],
+              "inference": null,
+              "unresolved_aspects": []
+            }
+          },
+          {
+            "request": "Explain whether disabling Use Margin changes an existing position or loan.",
+            "request_message_ids": [
+              "m3"
+            ],
+            "status": "unanswered",
+            "answer_message_ids": [],
+            "explanation": "After the hold, the operator only acknowledged waiting and closed. No substantive answer or concrete next step was given.",
+            "withdrawal_message_ids": [],
+            "support": {
+              "basis": "none",
+              "evidence": [
+                {
+                  "message_id": "m6",
+                  "quote": "Thank you for waiting. Is there anything else I can help you with? Goodbye."
+                }
+              ],
+              "inference": null,
+              "unresolved_aspects": [
+                "Effect on existing positions.",
+                "Effect on existing loans."
+              ]
+            }
+          }
+        ],
+        "scope_notes": [
+          "Product correctness is reviewed conditionally against the selected freedom-finance-global-platform snapshot as of 2026-11-07. The actual conversation date and knowledge_scope remain unknown; historical entity/date applicability is not established.",
+          "Audio was not analyzed. No assessment of pace, diction or pronunciation is made.",
+          "The customer's confirmation establishes visibility of the setting, not completion of disabling it or any effect on existing positions or borrowing."
+        ],
+        "factual_claims": [
+          {
+            "claim": "Use Margin can be disabled by unticking it in Order Settings before submitting an order.",
+            "criterion_ids": [
+              "consultation"
+            ],
+            "operator_evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Open Order Settings and untick Use Margin before submitting the order."
+              }
+            ],
+            "status": "supported",
+            "material": true,
+            "reference_evidence": [
+              {
+                "reference_id": "tradernet-margin-14230-20261107",
+                "quote": "Use Margin is in order settings. The FAQ states that once enabled, the setting remains enabled for future trades across assets until disabled."
+              }
+            ],
+            "dialogue_evidence": [
+              {
+                "message_id": "m3",
+                "quote": "I can see the setting now."
+              }
+            ],
+            "explanation": "The selected snapshot supports the setting location and disabling it. Customer confirmation independently corroborates finding the control, not completing the action. No assertion about existing debt or positions was made.",
+            "assessment": {
+              "lifecycle": "active",
+              "correction": null,
+              "impacts": [
+                {
+                  "criterion_id": "consultation",
+                  "when_true": {
+                    "status": "scored",
+                    "answer": "10"
+                  },
+                  "when_false": {
+                    "status": "scored",
+                    "answer": "0"
+                  },
+                  "rule_quote": "Это не отменяет 0 при ошибочной ключевой рекомендации; общая или нерелевантная реплика не считается конкретно решённым вторичным запросом.",
+                  "evidence": [
+                    {
+                      "message_id": "m2",
+                      "quote": "Open Order Settings and untick Use Margin before submitting the order."
+                    },
+                    {
+                      "message_id": "m3",
+                      "quote": "Does unticking it change an existing position or a loan I already have?"
+                    },
+                    {
+                      "message_id": "m6",
+                      "quote": "Thank you for waiting. Is there anything else I can help you with? Goodbye."
+                    }
+                  ],
+                  "checked_message_ids": [
+                    "m1",
+                    "m2",
+                    "m3",
+                    "m4",
+                    "m5",
+                    "m6"
+                  ],
+                  "explanation": "Correct navigation advice closes one request while the substantial follow-up stays open, yielding 10. If the key navigation recommendation were false, the erroneous-key-recommendation rule would require 0."
+                }
+              ]
+            },
+            "evidence_kind": "product_fact",
+            "rule_evidence": [],
+            "observation_scope": "none",
+            "supported_proposition": null,
+            "verification_scope": "policy"
+          }
+        ],
+        "semantic_audit": {
+          "version": "coverage-v1",
+          "reviewed_message_ids": [
+            "m1",
+            "m2",
+            "m3",
+            "m6"
+          ],
+          "exclusions": [
+            {
+              "evidence": {
+                "message_id": "m2",
+                "quote": "Hello, I'm Leah."
+              },
+              "reason": "criterion_behavior",
+              "criterion_ids": [
+                "contact",
+                "empathy"
+              ],
+              "explanation": "Observable greeting and self-introduction, not a product assertion."
+            },
+            {
+              "evidence": {
+                "message_id": "m3",
+                "quote": "I can see the setting now."
+              },
+              "reason": "context_or_confirmation",
+              "criterion_ids": [
+                "consultation"
+              ],
+              "explanation": "Confirms finding the setting only. The substantive follow-up is separately captured in request coverage."
+            },
+            {
+              "evidence": {
+                "message_id": "m6",
+                "quote": "Thank you for waiting. Is there anything else I can help you with? Goodbye."
+              },
+              "reason": "criterion_behavior",
+              "criterion_ids": [
+                "consultation",
+                "empathy",
+                "management",
+                "closing"
+              ],
+              "explanation": "Acknowledgment and closing behavior; no product assertion, investigation commitment or answer to the pending question."
+            }
+          ]
+        }
+      },
+      "authored_coverage_v2_wire": {
+        "judgments": {
+          "contact": {
+            "criterion_id": "contact",
+            "status": "scored",
+            "answer": "yes",
+            "explanation": "The first operator response contains an English greeting and self-introduction.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Hello, I'm Leah."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "needs": {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "answer": null,
+            "explanation": "The app, control and intended action were identified from the outset. The follow-up also permits a general explanation without additional task details.",
+            "evidence": [
+              {
+                "message_id": "m1",
+                "quote": "I'm in the Freedom Broker app and see a Use Margin checkbox in the order screen. Where can I switch it off?"
+              },
+              {
+                "message_id": "m3",
+                "quote": "Does unticking it change an existing position or a loan I already have?"
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m6"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "identity": {
+            "criterion_id": "identity",
+            "status": "not_applicable",
+            "answer": null,
+            "explanation": "The interaction concerns general guidance. No private account information was disclosed and no protected action was performed.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Open Order Settings and untick Use Margin before submitting the order."
+              },
+              {
+                "message_id": "m6",
+                "quote": "Thank you for waiting. Is there anything else I can help you with? Goodbye."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4",
+              "m5",
+              "m6"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "consultation": {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "answer": "10",
+            "explanation": "The operator answered where to disable the setting. The substantial follow-up about existing positions and borrowing remained unanswered, with no concrete next step after the hold.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Open Order Settings and untick Use Margin before submitting the order."
+              },
+              {
+                "message_id": "m3",
+                "quote": "Does unticking it change an existing position or a loan I already have?"
+              },
+              {
+                "message_id": "m6",
+                "quote": "Thank you for waiting. Is there anything else I can help you with? Goodbye."
+              }
+            ],
+            "counterevidence": [
+              {
+                "message_id": "m3",
+                "quote": "I can see the setting now."
+              }
+            ],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4",
+              "m5",
+              "m6"
+            ],
+            "uncertainty": null,
+            "deduction": {
+              "criterion_id": "consultation",
+              "rule_quote": "Часть запроса закрыта, существенный вопрос остался открытым.",
+              "defect": "The effects on existing positions and loans asked about in m3 were not addressed before the closing in m6.",
+              "evidence": [
+                {
+                  "message_id": "m3",
+                  "quote": "Does unticking it change an existing position or a loan I already have?"
+                },
+                {
+                  "message_id": "m6",
+                  "quote": "Thank you for waiting. Is there anything else I can help you with? Goodbye."
+                }
+              ],
+              "checked_message_ids": [
+                "m3",
+                "m4",
+                "m5",
+                "m6"
+              ],
+              "overlap_note": "This deduction concerns missing substantive advice; management separately concerns an unannounced hold."
+            }
+          },
+          "empathy": {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "answer": "yes",
+            "explanation": "The operator was courteous. Neither customer turn expresses dissatisfaction, distress or a concrete experienced inconvenience; the unanswered factual question is not independently an empathy failure.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Hello, I'm Leah."
+              },
+              {
+                "message_id": "m6",
+                "quote": "Thank you for waiting."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m6"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "management": {
+            "criterion_id": "management",
+            "status": "scored",
+            "answer": "7",
+            "explanation": "The explanations were understandable, but the recorded hold was not announced in the preceding operator speech. Thanking the customer afterward does not provide advance warning.",
+            "evidence": [
+              {
+                "message_id": "m4",
+                "quote": "[The agent placed the call on hold.]"
+              },
+              {
+                "message_id": "m5",
+                "quote": "[The agent resumed the call.]"
+              }
+            ],
+            "counterevidence": [
+              {
+                "message_id": "m2",
+                "quote": "Open Order Settings and untick Use Margin before submitting the order."
+              },
+              {
+                "message_id": "m6",
+                "quote": "Thank you for waiting."
+              }
+            ],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4",
+              "m5",
+              "m6"
+            ],
+            "uncertainty": null,
+            "deduction": {
+              "criterion_id": "management",
+              "rule_quote": "For one such lapse, one unnecessary repeat question, or an explicit unannounced wait, select 7 if the remaining wording is understandable and the conversation can continue.",
+              "defect": "The system records a hold in m4, but the preceding operator turn contains no warning about waiting.",
+              "evidence": [
+                {
+                  "message_id": "m2",
+                  "quote": "Hello, I'm Leah. Open Order Settings and untick Use Margin before submitting the order."
+                },
+                {
+                  "message_id": "m4",
+                  "quote": "[The agent placed the call on hold.]"
+                }
+              ],
+              "checked_message_ids": [
+                "m2",
+                "m3",
+                "m4",
+                "m5",
+                "m6"
+              ],
+              "overlap_note": "This is an independently evidenced wait-management lapse, not a second deduction for the unanswered follow-up."
+            }
+          },
+          "closing": {
+            "criterion_id": "closing",
+            "status": "scored",
+            "answer": "yes",
+            "explanation": "After the system-recorded resumption, the operator offered further help and said goodbye to the customer.",
+            "evidence": [
+              {
+                "message_id": "m6",
+                "quote": "Is there anything else I can help you with? Goodbye."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m5",
+              "m6"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          },
+          "serious": {
+            "criterion_id": "serious",
+            "status": "scored",
+            "answer": "no",
+            "explanation": "No insult, off-company paid-service offer or confidential disclosure appears.",
+            "evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Hello, I'm Leah. Open Order Settings and untick Use Margin before submitting the order."
+              },
+              {
+                "message_id": "m6",
+                "quote": "Thank you for waiting. Is there anything else I can help you with? Goodbye."
+              }
+            ],
+            "counterevidence": [],
+            "checked_message_ids": [
+              "m1",
+              "m2",
+              "m3",
+              "m4",
+              "m5",
+              "m6"
+            ],
+            "uncertainty": null,
+            "deduction": null
+          }
+        },
+        "request_coverage": [
+          {
+            "request": "Locate the control for disabling Use Margin.",
+            "request_message_ids": [
+              "m1"
+            ],
+            "status": "answered",
+            "answer_message_ids": [
+              "m2"
+            ],
+            "explanation": "The operator gave the setting location and the action to take.",
+            "withdrawal_message_ids": [],
+            "support": {
+              "basis": "explicit",
+              "evidence": [
+                {
+                  "message_id": "m2",
+                  "quote": "Open Order Settings and untick Use Margin before submitting the order."
+                }
+              ],
+              "inference": null,
+              "unresolved_aspects": [],
+              "omission": null
+            }
+          },
+          {
+            "request": "Explain whether disabling Use Margin changes an existing position or loan.",
+            "request_message_ids": [
+              "m3"
+            ],
+            "status": "unanswered",
+            "answer_message_ids": [],
+            "explanation": "After the hold, the operator only acknowledged waiting and closed. No substantive answer or concrete next step was given.",
+            "withdrawal_message_ids": [],
+            "support": {
+              "basis": "none",
+              "evidence": [],
+              "inference": null,
+              "unresolved_aspects": [
+                "Effect on existing positions.",
+                "Effect on existing loans."
+              ],
+              "omission": {
+                "start_message_id": "m3",
+                "end_message_id": "m6",
+                "context_evidence": [
+                  {
+                    "message_id": "m3",
+                    "quote": "I can see the setting now. Does unticking it change an existing position or a loan I already have?"
+                  },
+                  {
+                    "message_id": "m4",
+                    "quote": "[The agent placed the call on hold.]"
+                  },
+                  {
+                    "message_id": "m5",
+                    "quote": "[The agent resumed the call.]"
+                  },
+                  {
+                    "message_id": "m6",
+                    "quote": "Thank you for waiting. Is there anything else I can help you with? Goodbye."
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "scope_notes": [
+          "Product correctness is reviewed conditionally against the selected freedom-finance-global-platform snapshot as of 2026-11-07. The actual conversation date and knowledge_scope remain unknown; historical entity/date applicability is not established.",
+          "Audio was not analyzed. No assessment of pace, diction or pronunciation is made.",
+          "The customer's confirmation establishes visibility of the setting, not completion of disabling it or any effect on existing positions or borrowing."
+        ],
+        "factual_claims": [
+          {
+            "claim": "Use Margin can be disabled by unticking it in Order Settings before submitting an order.",
+            "criterion_ids": [
+              "consultation"
+            ],
+            "operator_evidence": [
+              {
+                "message_id": "m2",
+                "quote": "Open Order Settings and untick Use Margin before submitting the order."
+              }
+            ],
+            "status": "supported",
+            "material": true,
+            "reference_evidence": [
+              {
+                "reference_id": "tradernet-margin-14230-20261107",
+                "quote": "Use Margin is in order settings. The FAQ states that once enabled, the setting remains enabled for future trades across assets until disabled."
+              }
+            ],
+            "dialogue_evidence": [
+              {
+                "message_id": "m3",
+                "quote": "I can see the setting now."
+              }
+            ],
+            "explanation": "The selected snapshot supports the setting location and disabling it. Customer confirmation independently corroborates finding the control, not completing the action. No assertion about existing debt or positions was made.",
+            "assessment": {
+              "lifecycle": "active",
+              "correction": null,
+              "impacts": [
+                {
+                  "criterion_id": "consultation",
+                  "when_true": {
+                    "status": "scored",
+                    "answer": "10"
+                  },
+                  "when_false": {
+                    "status": "scored",
+                    "answer": "0"
+                  },
+                  "rule_quote": "Это не отменяет 0 при ошибочной ключевой рекомендации; общая или нерелевантная реплика не считается конкретно решённым вторичным запросом.",
+                  "evidence": [
+                    {
+                      "message_id": "m2",
+                      "quote": "Open Order Settings and untick Use Margin before submitting the order."
+                    },
+                    {
+                      "message_id": "m3",
+                      "quote": "Does unticking it change an existing position or a loan I already have?"
+                    },
+                    {
+                      "message_id": "m6",
+                      "quote": "Thank you for waiting. Is there anything else I can help you with? Goodbye."
+                    }
+                  ],
+                  "checked_message_ids": [
+                    "m1",
+                    "m2",
+                    "m3",
+                    "m4",
+                    "m5",
+                    "m6"
+                  ],
+                  "explanation": "Correct navigation advice closes one request while the substantial follow-up stays open, yielding 10. If the key navigation recommendation were false, the erroneous-key-recommendation rule would require 0."
+                }
+              ]
+            },
+            "evidence_kind": "product_fact",
+            "rule_evidence": [],
+            "observation_scope": "control_visible",
+            "supported_proposition": "The customer can see the Use Margin setting.",
+            "verification_scope": "policy",
+            "context_evidence": []
+          }
+        ],
+        "semantic_audit": {
+          "version": "coverage-v2",
+          "reviewed_message_ids": [
+            "m1",
+            "m2",
+            "m3",
+            "m6"
+          ],
+          "exclusions": [
+            {
+              "evidence": {
+                "message_id": "m2",
+                "quote": "Hello, I'm Leah."
+              },
+              "reason": "criterion_behavior",
+              "criterion_ids": [
+                "contact",
+                "empathy"
+              ],
+              "explanation": "Observable greeting and self-introduction, not a product assertion."
+            },
+            {
+              "evidence": {
+                "message_id": "m3",
+                "quote": "I can see the setting now."
+              },
+              "reason": "context_or_confirmation",
+              "criterion_ids": [
+                "consultation"
+              ],
+              "explanation": "Confirms finding the setting only. The substantive follow-up is separately captured in request coverage."
+            },
+            {
+              "evidence": {
+                "message_id": "m6",
+                "quote": "Thank you for waiting. Is there anything else I can help you with? Goodbye."
+              },
+              "reason": "criterion_behavior",
+              "criterion_ids": [
+                "consultation",
+                "empathy",
+                "management",
+                "closing"
+              ],
+              "explanation": "Acknowledgment and closing behavior; no product assertion, investigation commitment or answer to the pending question."
+            }
+          ]
+        }
+      },
+      "fixture_note": "Explicitly authored test-only representation with unchanged proposed judgments; never a runtime repair or accepted benchmark result."
+    }
+  ]
+}

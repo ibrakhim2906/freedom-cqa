@@ -88,6 +88,7 @@ is unchanged; no new corpus-wide accuracy claim is made.
 - [x] Preserve original and final results and deterministically recalculate scores after review.
 - [x] Persist results and distinguish saved results from new evaluations; browser reload and actual server restart were checked.
 - [x] Verify the browser's real evaluation/evidence/appeal/custom-checklist flow and a visible budget failure; no offline fallback.
+- [x] Separate positive answer evidence, omission intervals and claim observation metadata under evidence contract v2; preserve frozen expectations and prior results. Offline checks: 340 tests, seven mocked browser checks, 71 schemas and 65 unchanged historical scores. New model behavior remains untested; see EVIDENCE_CONTRACT_V2.md.
 
 ## Prepare submission
 
