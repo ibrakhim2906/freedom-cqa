@@ -278,6 +278,51 @@
       "source_conversation_sha256": "b471fbaf5ce50c7f47d93f4e0fdc399298beb1ec2f65cc043cd9fcb79a36b81f",
       "applied_checklist": "checklists/freedom-reviewed-010.json",
       "applied_checklist_version": "1-reviewed-010"
+    },
+    {
+      "case_id": "p1-kz-013",
+      "status": "scored",
+      "review_method": "assistant_proposed_user_accepted",
+      "organizer_ground_truth": false,
+      "independent_expert_review": false,
+      "source_conversation_sha256": "2561d1768e54cbe0938fc4e32bba76d454274bcafc38b84912addb40b363707e",
+      "applied_checklist": "checklists/freedom-reviewed-011.json",
+      "applied_checklist_version": "1-reviewed-011",
+      "id": "R011",
+      "review_item": 13,
+      "rule_id": "R011",
+      "criterion_id": "consultation",
+      "answer": "20",
+      "evidence_message_ids": [
+        "m1",
+        "m5",
+        "m10",
+        "m11",
+        "m12",
+        "m13"
+      ],
+      "reason": "The stated bond-navigation question receives concrete guidance and the client confirms finding it. Novice context does not itself request a full purchase workflow. The subsequent private paid offer is separately flagged; no additional consultation defect is inferred merely from that flag.",
+      "linked_decision": "J014"
+    },
+    {
+      "case_id": "p1-kz-013",
+      "status": "scored",
+      "review_method": "assistant_proposed_user_accepted",
+      "organizer_ground_truth": false,
+      "independent_expert_review": false,
+      "source_conversation_sha256": "2561d1768e54cbe0938fc4e32bba76d454274bcafc38b84912addb40b363707e",
+      "applied_checklist": "checklists/freedom-reviewed-011.json",
+      "applied_checklist_version": "1-reviewed-011",
+      "id": "J014",
+      "review_item": 14,
+      "rule_id": "freedom-v1:serious",
+      "criterion_id": "serious",
+      "answer": "yes",
+      "evidence_message_ids": [
+        "m12",
+        "m13"
+      ],
+      "reason": "The operator offers paid personal investment advice after work and requests private contact. The offer itself meets the supplied serious-error condition; refusal and absence of payment do not remove it. The user explicitly accepted this flag alongside the consultation judgment."
     }
   ]
 }

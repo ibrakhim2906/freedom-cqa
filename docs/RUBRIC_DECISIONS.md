@@ -4,10 +4,10 @@ These decisions record assistant recommendations accepted by the user during
 case review. They are not independent expert adjudication or organizer Ground Truth.
 Original checklist files, authored expectations, and benchmark results remain frozen.
 
-Current default: `checklists/freedom-reviewed-010.json`, version `1-reviewed-010`,
-containing R001 through R010. Ten review dispositions were accepted by the user and
-two additional items follow accepted rules. Eleven items have scored decisions;
-one is explicitly unresolved (`needs_review`). Eight items remain pending. Applications
+Current default: `checklists/freedom-reviewed-011.json`, version `1-reviewed-011`,
+containing R001 through R011. Twelve review dispositions were accepted by the user and
+two additional items follow accepted rules. Thirteen items have scored decisions;
+one is explicitly unresolved (`needs_review`). Six items remain pending. Applications
 of accepted rules are distinguished from separately user-adjudicated labels.
 
 ## R001: partial credit when a genuine secondary request is answered
@@ -263,7 +263,42 @@ Only closing instructions are additionally clarified; its official Yes/No levels
 N/A condition, weight, all earlier interpretations, and original results are preserved.
 No previous evaluation was edited or rerun. No paid API call was made.
 
-Consultation in `p1-kz-013` is the next pending item.
+Consultation and the serious-error flag in `p1-kz-013` were subsequently settled
+under R011 and J014.
+
+## R011: assess consultation and serious-error flags independently
+
+Review item 13: `p1-kz-013`, consultation **20/20**. The operator provides a
+concrete route for the stated bond-navigation question, and the client confirms
+finding it. Being new to purchases is context, not automatically a request for a
+full purchase workflow or investment recommendations. Source messages: m1, m5,
+m10-m13. The subsequent private paid offer is preserved as a serious-error flag.
+
+General interpretation: a serious-error flag does not automatically establish an
+incorrect answer, unresolved customer request, or invalid next step. To reduce
+consultation, identify that criterion's own violation. The same misconduct may
+affect multiple criteria when it independently meets their conditions. Preserve
+the serious-error flag prominently; it does not itself zero or cap the supplied
+checklist's numeric total.
+
+Applied in `checklists/freedom-reviewed-011.json`, version `1-reviewed-011`.
+Only consultation instructions are additionally clarified. Earlier interpretations,
+weights, levels, N/A conditions, and saved results are unchanged. No paid API call
+was made.
+
+## J014: serious-error flag for the private paid offer
+
+Review item 14: `p1-kz-013`, serious **Yes**. The operator offers paid personal
+investment advice after work and requests private contact. Source messages: m12,
+m13. The offer itself satisfies the supplied criterion; the customer's refusal
+and absence of payment do not negate it.
+
+The user explicitly accepted this flag alongside consultation 20 in the preceding
+discussion. This applies the original `freedom-v1:serious` definition and adds no
+new rule or numerical penalty. Both records are assistant recommendations accepted
+by the user, not independent expert annotations or organizer Ground Truth.
+
+Consultation in `p1-en-013` is the next pending item.
 
 To use the original checklist explicitly for a comparison:
 
