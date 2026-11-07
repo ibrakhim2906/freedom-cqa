@@ -26,6 +26,10 @@ development diagnostics, not organizer Ground Truth accuracy.
 The [semantic review](docs/SEMANTIC_REVIEW.md) distinguishes suspected evaluator
 mistakes from ambiguous labels. Original datasets remain frozen;
 [structured review notes](evals/label-review-v2.json) do not override their expectations.
+The [next evaluator experiment](docs/NEXT_EVALUATOR_EXPERIMENT.md) explains why a
+full rewrite is not currently justified and how to compare substantive alternatives.
+`uv run python -m scripts.prepare_human_review` prepares private source-based review
+items without model predictions or paid API calls; existing review files are preserved.
 
 To compare a frozen custom diagnostic file with bounded concurrency:
 
