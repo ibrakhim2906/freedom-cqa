@@ -1,3 +1,4 @@
+import math
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -47,7 +48,7 @@ class Settings:
             raise ValueError("Model has no configured cost rates; add verified rates before use")
         if not 1 <= self.concurrency <= 8 or not 512 <= self.max_output_tokens <= 16000:
             raise ValueError("Concurrency must be 1-8 and output-token limit 512-16000")
-        if self.timeout <= 0 or self.max_spend <= 0:
+        if not math.isfinite(self.timeout) or not math.isfinite(self.max_spend) or self.timeout <= 0 or self.max_spend <= 0:
             raise ValueError("Timeout and lifetime cost limit must be positive")
 
     def require_key(self):

@@ -18,6 +18,11 @@ uv run cqa benchmark --suite combined --budget-usd 2 --output artifacts/benchmar
 See [benchmark setup, data provenance, and result interpretation](docs/BENCHMARK.md).
 There is no offline evaluation fallback.
 
+The first real run is recorded in [baseline results](docs/BASELINE_RESULTS.md),
+with [all-run coverage and spending](docs/BENCHMARK_RUN_SUMMARY.md) and
+[reference-label review notes](docs/REFERENCE_REVIEW.md). These metrics are
+development diagnostics, not organizer Ground Truth accuracy.
+
 ## Product goal
 
 Let a quality reviewer configure a checklist, evaluate an operator's conversation,
@@ -40,7 +45,8 @@ decision history. Support Russian, Kazakh, and English.
 
 React, TypeScript, Vite, and CSS Modules for the frontend; Python, FastAPI, and
 Pydantic for the backend; SQLite with SQLAlchemy for storage; OpenAI API for
-evaluation; pytest and Playwright for testing. The exact model remains to be selected.
+evaluation; pytest and Playwright for testing. The initial benchmark uses
+gpt-6.1-sol at medium reasoning; final model selection remains open.
 
 See [the stack and evaluation policy](docs/STACK.md) for responsibilities, failure
 handling, and the first implementation milestone.

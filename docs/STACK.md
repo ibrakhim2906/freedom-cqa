@@ -1,7 +1,8 @@
 # Technology stack and evaluation policy
 
-Status: selected during project discussion on 2026-11-07. Implementation has not
-started. Exact dependency versions will be pinned when the project is scaffolded.
+Status: selected on 2026-11-07. The initial evaluator, scorer, diagnostic datasets,
+and benchmark CLI are implemented with locked Python dependencies. The web
+frontend, application server, and appeal workflow are not implemented yet.
 
 ## Selected stack
 
@@ -40,8 +41,9 @@ and backend processes.
 - Record model identity, checklist/prompt versions, token usage, latency, and
   estimated cost for each attempt.
 
-The exact OpenAI model is not selected. Compare available candidates using varied
-Russian, Kazakh, and English development cases and human-reviewed criterion labels.
+The initial tested model is gpt-6.1-sol at medium reasoning. Final model selection
+still needs comparisons on varied Russian, Kazakh, and English cases with better
+reviewed criterion labels; the initial diagnostics are AI-authored and provisional.
 The official checklist and subsequent organizer clarification are now available.
 For calls, adapt communication assessment to spoken interaction. Audio can add
 evidence for pace, diction, and pronunciation; transcripts alone cannot establish
@@ -77,7 +79,8 @@ Ground Truth; see [the organizer's selection criteria](JUDGING.md).
 
 ## Open implementation choices
 
-- Exact OpenAI model, API access, and an explicit development spend limit.
+- Final model selection. API access is configured locally; the current lifetime
+  spend limit is $3.50 following the user's available-balance update.
 - Approved reference procedures and verified audio playback/access.
 - Dependency versions, deployment target, and persistent-volume configuration.
 - Browser/computer-use verification in the actual Windows setup.

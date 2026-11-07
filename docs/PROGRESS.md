@@ -23,7 +23,11 @@
 - [x] Author 40 fictional diagnostic cases with explicitly provisional expected judgments.
 - [x] Keep all 65 organizer records available and select 15 representative cases for the first combined benchmark.
 - [x] Verify the real OpenAI structured-output path with one temporal-identification smoke case.
-- [ ] Run and review the complete first benchmark; no competition accuracy claim until measured.
+- [x] Run the first real combined benchmark (40 authored + 15 organizer cases), preserving failures and disagreements.
+- [x] Record results and reference-label issues in BASELINE_RESULTS.md and REFERENCE_REVIEW.md.
+- [x] Constrain source IDs in the response schema and add one explicitly recorded validation repair; recheck five rejected cases.
+- [x] Obtain validated evaluations for all 65 organizer transcripts across the original and follow-up runs; preserve one provisional total.
+- [x] Record all-run spending and coverage in BENCHMARK_RUN_SUMMARY.md; stop API calls at $2.688466 estimated usage.
 - [ ] Define checklist versions, transcript message IDs, evaluation results, and appeal records.
 - [ ] Define how missing reference procedures and unavailable audio affect judgments.
 - [ ] Select a varied development subset and reserve fresh cases for checking changes.
@@ -34,9 +38,10 @@
 - [ ] Check equivalent paraphrases produce equivalent judgments.
 - [ ] Check relevant evidence removal or speaker changes affect the appropriate judgment.
 - [ ] Check irrelevant changes do not alter unrelated judgments.
-- [ ] Apply a new criterion through configuration without changing evaluation code.
-- [ ] Verify weighted calculations independently of model judgments.
-- [ ] Measure criterion agreement, evidence support, language performance, latency, and cost.
+- [x] Apply a new criterion through configuration without changing evaluation code (two real API cases).
+- [x] Verify weighted calculations independently of model judgments.
+- [x] Measure initial provisional-label agreement, source-reference validity, language/channel results, latency, and cost.
+- [ ] Independently review criterion labels and semantic evidence support before claiming Ground Truth accuracy.
 
 ## Complete the product workflow
 
@@ -58,7 +63,7 @@
 
 ## Decisions still open
 
-- Exact OpenAI model, API access, and development spend limit.
+- Final OpenAI model selection; initial Sol access and the $3.50 local lifetime cap are configured.
 - Supporting company procedures/reference sources and exact organizer comparison metric (not supplied).
 - Verified audio playback/access and optional audio-analysis scope.
 - Browser/computer-use behavior: the availability check stalled; WSL compatibility was not established.

@@ -63,7 +63,10 @@ Use a new output filename on each run. The runner freezes the selected suite
 before inference and records its hash, evaluator source hash, prompt version,
 model, reasoning setting, response IDs, usage, and per-case failures. Outputs and
 raw evidence are Git-ignored. SDK retries are disabled so every attempt is
-explicitly budgeted. Unknown-cost failures retain their conservative reservation.
+explicitly budgeted. After the first baseline, the evaluator gained one bounded
+application-level repair for invalid output/reference structure. Both attempts
+and their costs remain recorded; semantic disagreements are not automatically
+retried against expected answers. Unknown-cost failures retain their conservative reservation.
 
 ## Read results
 
