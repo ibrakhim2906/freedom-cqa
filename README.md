@@ -185,3 +185,8 @@ The subsequent [source-span and atomic-proof implementation](docs/SOURCE_SPANS_A
 addresses those mechanisms offline: source-selected citations, canonical observation
 text and explicit proof dependencies. Its live reliability remains unmeasured;
 the historical benchmark above has not been replaced or rescored.
+
+[Three subsequent manual diagnostics](docs/MANUAL_DIAGNOSTICS_V2.md) exposed two
+remaining contract failures and a qualified sequencing audit without API spending.
+One response passed strict validation and two were rejected; these results are
+not a production API benchmark or a new accuracy claim.
