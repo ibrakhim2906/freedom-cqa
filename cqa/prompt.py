@@ -124,8 +124,8 @@ A criterion explicitly penalizing any historical error must still fail after rep
 Incorrect advice still active or with harmful key consequences must not be excused.
 For an unrelated unverified product claim, clear wording may stay maximum: explain
 that independence under the communication rule, not under a made-up factual policy.
-SOURCE-SPAN AND ATOMIC-PROOF CONTRACT (span-v3):
-Return contract_version=span-v3 and the exact supplied catalog_fingerprint. Every
+SOURCE-SPAN AND ATOMIC-PROOF CONTRACT (span-v4):
+Return contract_version=span-v4 and the exact supplied catalog_fingerprint. Every
 citation selects ONLY {span_id} from source_span_catalog. Rule quotes select
 rule_span_id from that criterion's saved rule spans. Never retype, translate,
 correct or concatenate a quote, supply your own offsets, or invent a source ID.
@@ -151,6 +151,9 @@ A correct route AND a false or unknown extra clause cannot become one supported
 claim. Groups have no shared counterfactual or invented aggregate grade; truth
 and grade impacts belong to the individual atoms. Do not silently exclude a
 material false clause or call an unresolved fact social just to pass validation.
+Groups declare only group_id, composition and claim_ids. Select operator source
+spans once on each atom. The application projects each group's exact member-source
+union; never repeat group operator_evidence. Membership and composition remain explicit.
 
 Each atom states its proposition ONCE in claim. An observation explicitly uses
 {target: claim, scope}; it assesses that same canonical
@@ -160,7 +163,11 @@ task_completed/system_record. A visible control does not establish action or
 task completion, general policy or private account truth. Different ancillary
 reports belong in non-proving context or in their own necessary proof premise;
 never pretend that a narrower observation independently proves a broad policy.
-Without observation use observation=null. A commitment uses its canonical claim
+Without proving dialogue leaves use observation=null, including unverified claims
+with proof=null. Context cannot establish an observation. With an observation,
+the proof must supply actual independent dialogue leaves, directly or through a
+declared known dependency; reference-only proof is insufficient.
+A commitment uses its canonical claim
 as the observable promise, not as proof that promised backend work completed.
 Evidence kinds and verification scopes must agree: grading_rule/grading_rule,
 account_state/private_record, workflow_commitment/commitment, or product/general
@@ -198,6 +205,20 @@ false assertion after correction; explicit supported recovery and remaining
 consequences determine its final impact under the actual configured criterion.
 No text of this protocol supplies a special grade for a particular conversation.
 
+Audit each material prerequisite sequence independently of other deductions. Use
+existing proofs/deduction evidence: cite the configured prerequisite and its source,
+the dependent action or explicit completion assurance, and the chronological state
+evidence. Distinguish an actual backend violation from an assurance made against an
+explicitly reported/observed pending prerequisite. Client reports can establish
+that conversational state, not authoritative private truth. A reference establishes
+the prerequisite, not this customer's backend outcome. Do not dismiss a supported
+claimed-action process defect merely because actual completion is unverified;
+conversely, a pending label or possible UI lag alone does not prove a backend
+violation. Follow whether the rule requires the prerequisite or its confirmation;
+do not invent a confirmation step. If conditions are incomplete, name the missing
+premise and keep uncertainty local. Another defect may leave the level unchanged;
+still explain independently justified sequencing findings and genuine overlap.
+
 Every request needs explicit support basis, inference (only for implied answers),
 unresolved_aspects and omission. Positive support.evidence selects actual operator
 answer spans linked in answer_message_ids. Partial requests require real positive
@@ -217,7 +238,7 @@ an array for them. This explicit transport declaration means no such IDs/evidenc
 unresolved aspects. Required fields may never be omitted or filled with invented
 metadata to avoid a real deduction or uncertainty.
 
-Return semantic_audit version=coverage-v3. reviewed_message_ids covers EVERY
+Return semantic_audit version=coverage-v4. reviewed_message_ids covers EVERY
 client/operator message exactly once. Each customer turn requires request coverage
 or an explicit exclusion; each operator turn requires atom/correction coverage
 or an exclusion, even if already cited as an answer. Exclusions select exact
@@ -238,10 +259,11 @@ selected spans retain their original source language. Return only the requested 
 """
 SYSTEM = PROJECT_BASELINE_SYSTEM
 PROMPT_VERSION = "evaluator-v2-" + hashlib.sha256(SYSTEM.encode()).hexdigest()[:12]
-GROUNDED_VERSION = "evaluator-v8-" + hashlib.sha256(GROUNDED_SYSTEM.encode()).hexdigest()[:12]
+GROUNDED_VERSION = "evaluator-v9-" + hashlib.sha256(GROUNDED_SYSTEM.encode()).hexdigest()[:12]
 
 
-def payload_for(conversation: Conversation, checklist: Checklist, *, grounded=False, source_contract=False):
+def payload_for(conversation: Conversation, checklist: Checklist, *, grounded=False, source_contract=False,
+                source_contract_version="span-v4"):
     model_input = conversation.model_dump()
     # New optional context/source metadata must not rewrite the legacy payload
     # representation when merely reading a historical conversation.
@@ -271,7 +293,9 @@ def payload_for(conversation: Conversation, checklist: Checklist, *, grounded=Fa
         from .source_spans import build_catalog
         from .source_view import project_sources
         payload = project_sources(payload, conversation, checklist, build_catalog(conversation, checklist))
-        payload["output_contract"] = "span-v3"
+        if source_contract_version not in {"span-v3", "span-v4"}:
+            raise ValueError("Unknown source-span transport version")
+        payload["output_contract"] = source_contract_version
     return json.dumps(payload, ensure_ascii=False, sort_keys=True)
 
 

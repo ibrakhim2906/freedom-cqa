@@ -26,6 +26,35 @@ def _unique_ids(values, path):
     return set(values)
 
 
+def validate_assertion_group_membership(claim_groups, group_links):
+    """Check declared reciprocal links without reading assertion text or sources.
+
+    Inputs are explicit ``(claim_id, assertion_group_id)`` and
+    ``(group_id, composition, claim_ids)`` tuples, so both the validated provider
+    wire and persisted models use the same topology rules.
+    """
+    claim_groups, group_links = list(claim_groups), list(group_links)
+    _unique_ids([cid for cid, _ in claim_groups], "factual_claims.claim_id")
+    indexed = dict(claim_groups)
+    _unique_ids([gid for gid, _, _ in group_links], "assertion_groups.group_id")
+    membership = {}
+    for gid, composition, claim_ids in group_links:
+        linked = _unique_ids(claim_ids, f"assertion_groups[{gid}].claim_ids")
+        if not linked or not linked <= indexed.keys():
+            raise ValueError("Assertion groups must link existing claims")
+        if composition not in {"atomic", "all_of"} or (
+            composition == "atomic" and len(linked) != 1
+            or composition == "all_of" and len(linked) < 2
+        ):
+            raise ValueError("Atomic groups need one atom; all_of groups need at least two")
+        for cid in linked:
+            if cid in membership or indexed[cid] != gid:
+                raise ValueError("Every atom must belong to exactly its declared assertion group")
+            membership[cid] = gid
+    if set(membership) != set(indexed):
+        raise ValueError("Every atomic factual claim requires assertion-group membership")
+
+
 def assertion_group_status(group, claims):
     """Truth of an explicitly declared conjunction; never a shared grade branch."""
     statuses = [claims[cid].status for cid in group.claim_ids]
@@ -37,17 +66,20 @@ def assertion_group_status(group, claims):
 
 
 def validate_atomic_dependencies(result, conversation, checklist):
-    """Validate coverage-v3; historical v1/v2 records keep their original rules.
+    """Validate declared v3/v4 atoms; historical v1/v2 keep their original rules.
 
     Called after ordinary judgment, source, applicability and correction checks.
     The source checks here also protect direct helper callers and transitive
     premises. Flat proving fields must exactly expose all reachable proof leaves.
     Context is never a proof leaf, including when reached through another claim.
     """
-    if result.semantic_audit is None or result.semantic_audit.version != "coverage-v3":
+    if result.semantic_audit is None or result.semantic_audit.version not in {"coverage-v3", "coverage-v4"}:
         return
+    exact_groups = result.semantic_audit.version == "coverage-v4"
     if result.assertion_groups is None:
-        raise ValueError("coverage-v3 requires explicit assertion groups")
+        raise ValueError(f"{result.semantic_audit.version} requires explicit assertion groups")
+    if exact_groups and result.source_citations is None:
+        raise ValueError("coverage-v4 assertion groups require selected source-span provenance")
     claims = result.factual_claims
     ids = [claim.claim_id for claim in claims]
     _unique_ids(ids, "factual_claims.claim_id")
@@ -57,8 +89,10 @@ def validate_atomic_dependencies(result, conversation, checklist):
     refs = {r.id: r for r in conversation.references}
     criteria = {c.id: c for c in checklist.criteria}
     groups = result.assertion_groups
-    _unique_ids([group.group_id for group in groups], "assertion_groups.group_id")
-    membership = {}
+    validate_assertion_group_membership(
+        ((claim.claim_id, claim.assertion_group_id) for claim in claims),
+        ((group.group_id, group.composition, group.claim_ids) for group in groups),
+    )
 
     def local_keys(kind, items, path):
         """Keep selected offsets distinct even when a source repeats its text.
@@ -113,17 +147,7 @@ def validate_atomic_dependencies(result, conversation, checklist):
             if not any(item.quote in text for text in texts):
                 raise ValueError(f"{path}: proof rule must be verbatim")
 
-    for group in groups:
-        linked = _unique_ids(group.claim_ids, f"assertion_groups[{group.group_id}].claim_ids")
-        if not linked or not linked <= indexed.keys():
-            raise ValueError("Assertion groups must link existing claims")
-        if (
-            group.composition == "atomic"
-            and len(linked) != 1
-            or group.composition == "all_of"
-            and len(linked) < 2
-        ):
-            raise ValueError("Atomic groups need one atom; all_of groups need at least two")
+    for group_index, group in enumerate(groups):
         if not group.operator_evidence:
             raise ValueError("Assertion groups require original operator source evidence")
         for item in group.operator_evidence:
@@ -135,12 +159,23 @@ def validate_atomic_dependencies(result, conversation, checklist):
                 or item.quote not in message.text
             ):
                 raise ValueError("Assertion groups require verbatim operator evidence")
-        for cid in linked:
+        if exact_groups:
+            group_keys = local_keys(
+                "evidence", group.operator_evidence, ("assertion_groups", group_index, "operator_evidence")
+            )
+            atom_keys = {
+                key
+                for cid in group.claim_ids
+                for key in local_keys(
+                    "evidence", indexed[cid].operator_evidence,
+                    ("factual_claims", claim_positions[cid], "operator_evidence"),
+                )
+            }
+            if len(group_keys) != len(set(group_keys)) or set(group_keys) != atom_keys:
+                raise ValueError("Assertion group source must equal the exact selected span union of its atoms")
+        for cid in group.claim_ids:
             claim = indexed[cid]
-            if cid in membership or claim.assertion_group_id != group.group_id:
-                raise ValueError("Every atom must belong to exactly its declared assertion group")
-            membership[cid] = group.group_id
-            if not claim.operator_evidence or any(
+            if not claim.operator_evidence or not exact_groups and any(
                 not any(
                     item.message_id == original.message_id and item.quote in original.quote
                     for original in group.operator_evidence
@@ -148,8 +183,6 @@ def validate_atomic_dependencies(result, conversation, checklist):
                 for item in claim.operator_evidence
             ):
                 raise ValueError("Assertion group source must cover each atom's operator assertion")
-    if set(membership) != set(indexed):
-        raise ValueError("Every atomic factual claim requires assertion-group membership")
 
     for claim in claims:
         if claim.assessment is None:

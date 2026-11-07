@@ -190,3 +190,10 @@ the historical benchmark above has not been replaced or rescored.
 remaining contract failures and a qualified sequencing audit without API spending.
 One response passed strict validation and two were rejected; these results are
 not a production API benchmark or a new accuracy claim.
+
+The [v4 source contract](docs/SOURCE_CONTRACT_V4.md) removes duplicated group
+citations, couples observations to proofs and clarifies sequencing audits. In the
+[Sol6.1medium manual rerun](docs/MANUAL_DIAGNOSTICS_V3.md), two initial responses
+validate; the organizer call validates after one separately recorded model repair.
+Remaining proof-scope and interpretation qualifications are retained. No API
+inference was used and historical results remain unchanged.

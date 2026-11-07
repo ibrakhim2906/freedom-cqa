@@ -10,11 +10,12 @@ import json
 
 import jsonschema
 
+from .atomic_dependencies import validate_assertion_group_membership
 from .models import Evaluation
 from .output_contract import _require_explicit_fields
 from .source_spans import VERSION, build_catalog
 
-CONTRACT = "span-v3"
+CONTRACT = "span-v4"
 _LIST_FIELDS = frozenset({
     "evidence", "counterevidence", "checked_message_ids", "request_coverage", "factual_claims", "scope_notes",
     "operator_evidence", "dialogue_evidence", "context_evidence", "reference_evidence", "rule_evidence",
@@ -61,6 +62,16 @@ def _citation_constraint(path, field):
 
 
 def decode_span_evaluation(text, conversation, checklist):
+    """Decode only the current span-v4 wire; never dispatch historical receipts."""
+    return _decode_span_evaluation(text, conversation, checklist, contract=CONTRACT)
+
+
+def decode_span_evaluation_v3(text, conversation, checklist):
+    """Explicit historical span-v3 reader, retaining its authored group sources."""
+    return _decode_span_evaluation(text, conversation, checklist, contract="span-v3")
+
+
+def _decode_span_evaluation(text, conversation, checklist, *, contract):
     # Delayed import avoids evaluator/schema/decoder import cycles. Preparation is
     # pure and does not construct an evaluator, client or usage ledger.
     from .evaluator import schema_for
@@ -68,15 +79,35 @@ def decode_span_evaluation(text, conversation, checklist):
     catalog = build_catalog(conversation, checklist)
     catalog.assert_sources(conversation, checklist)
     data = json.loads(text, object_pairs_hook=_unique_object, parse_constant=_reject_constant)
-    if not isinstance(data, dict) or data.get("contract_version") != CONTRACT:
-        raise ValueError("Current evaluator requires the explicit span-v3 transport; no legacy fallback")
+    if not isinstance(data, dict) or data.get("contract_version") != contract:
+        raise ValueError(f"Source-span decoder requires the explicit {contract} transport; no legacy fallback")
     if data.get("catalog_fingerprint") != catalog.fingerprint:
         raise ValueError("Source-span selection belongs to a different catalog/source revision")
-    schema = schema_for(conversation, checklist, grounded=True, source_contract=True)
+    schema = schema_for(conversation, checklist, grounded=True, source_contract=True,
+                        source_contract_version=contract)
     try:
         jsonschema.Draft202012Validator(schema).validate(data)
     except jsonschema.ValidationError as error:
         raise ValueError("Span transport schema mismatch at " + _pointer(error.absolute_path)) from None
+    if contract == "span-v4":
+        # This projection occurs only after the *entire* provider object passes
+        # its wire schema. Links are declarations, never inferred from wording.
+        # No-operator schemas explicitly use null for these forbidden arrays.
+        # Normalize only after full schema validation, preserving that contract.
+        wire_claims, wire_groups = data["factual_claims"] or [], data["assertion_groups"] or []
+        validate_assertion_group_membership(
+            ((claim["claim_id"], claim["assertion_group_id"]) for claim in wire_claims),
+            ((group["group_id"], group["composition"], group["claim_ids"])
+             for group in wire_groups),
+        )
+        atoms = {claim["claim_id"]: claim for claim in wire_claims}
+        for group in wire_groups:
+            selected = dict.fromkeys(
+                citation["span_id"]
+                for cid in group["claim_ids"]
+                for citation in atoms[cid]["operator_evidence"]
+            )
+            group["operator_evidence"] = [{"span_id": sid} for sid in selected]
 
     def resolve(value, path=(), kind="dialogue", roles=None, owner=None):
         if isinstance(value, list):
@@ -189,6 +220,7 @@ def decode_span_evaluation(text, conversation, checklist):
 
     collect(resolved)
     resolved["source_citations"] = {"version": VERSION, "catalog_fingerprint": catalog.fingerprint,
+                                    "projection": "derived-groups-v4" if contract == "span-v4" else None,
                                     "selections": selections, "spans": {
         sid: {field: getattr(catalog.entries[sid], field) for field in ["kind", "source_id", "field", "role", "start", "end"]}
         for sid in sorted(set(selections.values()))}}
@@ -199,18 +231,24 @@ def decode_span_evaluation(text, conversation, checklist):
 
 
 def validate_source_citations(result, conversation, checklist):
-    current = result.semantic_audit is not None and result.semantic_audit.version == "coverage-v3"
+    current = (result.semantic_audit is not None
+               and result.semantic_audit.version in {"coverage-v3", "coverage-v4"})
     if not current:
         if result.source_citations is not None or result.assertion_groups is not None or any(
             c.claim_id is not None or c.assertion_group_id is not None or c.proof is not None or
             c.assessment and any(i.fixed_claim_ids is not None for i in c.assessment.impacts)
             for c in result.factual_claims
         ):
-            raise ValueError("Source/atomic dependency extensions require coverage-v3; no contract downgrade")
+            raise ValueError("Source/atomic dependency extensions require coverage-v3 or coverage-v4; no contract downgrade")
         return
     audit = result.source_citations
     if audit is None or audit.version != VERSION:
         raise ValueError("Source contract requires explicit source-citation provenance")
+    if result.semantic_audit.version == "coverage-v4":
+        if audit.projection != "derived-groups-v4":
+            raise ValueError("coverage-v4 requires explicit derived-groups-v4 source provenance")
+    elif audit.projection is not None:
+        raise ValueError("Derived group provenance requires coverage-v4; no contract downgrade")
     catalog = build_catalog(conversation, checklist)
     if audit.catalog_fingerprint != catalog.fingerprint:
         raise ValueError("Saved source-citation catalog does not match source/checklist revision")
@@ -300,9 +338,25 @@ def _validate_span_dependencies(result, catalog):
 
     for cid in indexed:
         leaves(cid)
+    exact_groups = result.semantic_audit.version == "coverage-v4"
+    if exact_groups:
+        validate_assertion_group_membership(
+            ((claim.claim_id, claim.assertion_group_id) for claim in result.factual_claims),
+            ((group.group_id, group.composition, group.claim_ids) for group in result.assertion_groups or []),
+        )
+        if result.assertion_groups is None:
+            raise ValueError("coverage-v4 requires explicit assertion groups")
     for index, group in enumerate(result.assertion_groups or []):
-        spans = [catalog.entries[sid] for sid in selected(("assertion_groups", index, "operator_evidence"),
-                                                         group.operator_evidence)]
+        group_ids = selected(("assertion_groups", index, "operator_evidence"), group.operator_evidence)
+        if exact_groups:
+            atom_ids = set()
+            for cid in group.claim_ids:
+                cindex, claim = indexed[cid]
+                atom_ids.update(selected(("factual_claims", cindex, "operator_evidence"), claim.operator_evidence))
+            if len(group_ids) != len(group.operator_evidence) or group_ids != atom_ids:
+                raise ValueError("Assertion group source must equal the exact selected span union of its atoms")
+            continue
+        spans = [catalog.entries[sid] for sid in group_ids]
         for cid in group.claim_ids:
             if cid not in indexed:
                 raise ValueError("Assertion groups must reference existing canonical claims")

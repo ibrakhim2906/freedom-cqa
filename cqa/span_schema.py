@@ -5,7 +5,8 @@ from copy import deepcopy
 
 from .models import Evaluation
 
-SPAN_CONTRACT = "span-v3"
+SPAN_CONTRACT = "span-v4"
+HISTORICAL_SPAN_CONTRACT = "span-v3"
 
 
 def _share_shapes(schema):
@@ -67,13 +68,17 @@ def _share_shapes(schema):
     return result
 
 
-def bind_span_contract(schema, conversation, checklist, catalog):
+def bind_span_contract(schema, conversation, checklist, catalog, *, contract=SPAN_CONTRACT):
     """Replace copied quotations with immutable citation IDs in a v2 base schema.
 
-    Historical/persisted records retain their own shapes. Null collections here
-    explicitly mean that a branch permits no values; the v3 decoder normalizes
-    only after validating this transport shape and resolving selected sources.
+    The current contract is v4. Historical validation must explicitly select v3;
+    its wire schema retains the original shapes and source permissions exactly.
+    Null collections mean a branch permits no values, rather than an optional
+    field. The decoder normalizes only after validating the selected contract.
     """
+    if contract not in {SPAN_CONTRACT, HISTORICAL_SPAN_CONTRACT}:
+        raise ValueError(f"Unsupported source-span contract: {contract!r}")
+    current = contract == SPAN_CONTRACT
     catalog.assert_sources(conversation, checklist)
     wire = deepcopy(schema)
     definitions = wire["$defs"]
@@ -82,9 +87,10 @@ def bind_span_contract(schema, conversation, checklist, catalog):
         definitions[name] = deepcopy(fresh[name])
     wire["properties"].pop("source_citations", None)
     wire["properties"]["assertion_groups"] = {"type": "array", "items": {"$ref": "#/$defs/AssertionGroup"}}
-    wire["properties"]["contract_version"] = {"type": "string", "enum": [SPAN_CONTRACT]}
+    wire["properties"]["contract_version"] = {"type": "string", "enum": [contract]}
     wire["properties"]["catalog_fingerprint"] = {"type": "string", "enum": [catalog.fingerprint]}
-    definitions["SemanticAudit"]["properties"]["version"] = {"type": "string", "enum": ["coverage-v3"]}
+    definitions["SemanticAudit"]["properties"]["version"] = {
+        "type": "string", "enum": ["coverage-v4" if current else "coverage-v3"]}
 
     roles = {role: [m.id for m in conversation.messages if m.speaker == role]
              for role in ["client", "operator", "system", "bot"]}
@@ -115,16 +121,26 @@ def bind_span_contract(schema, conversation, checklist, catalog):
     premise = deepcopy(definitions["ProofPremise"])
     premise["properties"]["premise_id"] = nonempty_string()
 
-    def source_premise(*, conjunction, commitment=False, private=False):
+    def source_premise(*, conjunction, commitment=False, private=False, observed=False):
         result = deepcopy(premise)
         fields = result["properties"]
         fields["proposition"] = nonempty_string() if conjunction else {"type": "null"}
-        fields["evidence"] = source_evidence(roles["system"] if private else
-                                             independent + (roles["operator"] if commitment else []))
+        if current:
+            allowed = (roles["system"] if private else independent) if observed else (
+                roles["operator"] if commitment else [])
+        else:
+            allowed = roles["system"] if private else independent + (roles["operator"] if commitment else [])
+        fields["evidence"] = source_evidence(allowed)
         if not conversation.references:
             fields["reference_evidence"]["maxItems"] = 0
         fields["depends_on_claim_id"] = {"type": "null"}
         fields["required_status"] = {"type": "null"}
+        # A direct observed premise must select actual dialogue. In a conjunction
+        # other essential premises can instead select references/rules. Whether
+        # the complete proof (including dependencies) has an observation leaf is
+        # checked at runtime; Structured Outputs cannot quantify across that DAG.
+        if current and observed and not conjunction:
+            fields["evidence"]["minItems"] = 1
         return result
 
     dependency = deepcopy(premise)
@@ -135,11 +151,17 @@ def bind_span_contract(schema, conversation, checklist, catalog):
         dependency["properties"][field]["maxItems"] = 0
     definitions["SpanDependencyPremise"] = dependency
 
-    for suffix, commitment, private in [("", False, False), ("Commitment", True, False), ("Private", False, True)]:
+    proof_variants = [("", False, False, False), ("Commitment", True, False, False),
+                      ("Private", False, True, False)]
+    if current:
+        proof_variants.extend([("Observed", False, False, True), ("ObservedSystem", False, True, True)])
+    for suffix, commitment, private, observed in proof_variants:
         direct_name, conjunction_name = "SpanDirectPremise" + suffix, "SpanConjunctPremise" + suffix
-        definitions[direct_name] = {"anyOf": [source_premise(conjunction=False, commitment=commitment, private=private),
+        definitions[direct_name] = {"anyOf": [source_premise(conjunction=False, commitment=commitment,
+                                                           private=private, observed=observed),
                                                {"$ref": "#/$defs/SpanDependencyPremise"}]}
-        definitions[conjunction_name] = {"anyOf": [source_premise(conjunction=True, commitment=commitment, private=private),
+        definitions[conjunction_name] = {"anyOf": [source_premise(conjunction=True, commitment=commitment,
+                                                                private=private, observed=observed),
                                                     {"$ref": "#/$defs/SpanDependencyPremise"}]}
         branches = []
         for relation, item_name in [("direct", direct_name), ("all_of", conjunction_name)]:
@@ -158,7 +180,12 @@ def bind_span_contract(schema, conversation, checklist, catalog):
 
     group = definitions["AssertionGroup"]
     group["properties"]["group_id"] = nonempty_string()
-    group["properties"]["operator_evidence"] = source_evidence(roles["operator"], minimum=1)
+    if current:
+        # Group provenance is the exact union of its canonical atom selections.
+        # It has no second provider-selected citation slot in this contract.
+        group["properties"].pop("operator_evidence", None)
+    else:
+        group["properties"]["operator_evidence"] = source_evidence(roles["operator"], minimum=1)
     group_branches = []
     for composition in ["atomic", "all_of"]:
         branch = deepcopy(group)
@@ -183,6 +210,9 @@ def bind_span_contract(schema, conversation, checklist, catalog):
     definitions["SpanObservation"] = {"anyOf": observation_branches} if observation_branches else {"type": "null"}
     definitions["SpanSystemObservation"] = next((deepcopy(branch) for branch in observation_branches
         if branch["properties"]["scope"]["enum"] == ["system_record"]), {"type": "null"})
+    if current:
+        definitions["SpanIndependentObservation"] = next((deepcopy(branch) for branch in observation_branches
+            if branch["properties"]["scope"]["enum"] != ["system_record"]), {"type": "null"})
     original_claim = definitions["FactualClaim"]
     while "anyOf" in original_claim:
         original_claim = original_claim["anyOf"][0]
@@ -199,18 +229,38 @@ def bind_span_contract(schema, conversation, checklist, catalog):
             (["workflow_commitment"], ["commitment"], True, None),
             (["product_fact", "general_fact"], ["policy"], False, None),
             (["product_fact", "general_fact"], ["interaction"], False, "SpanObservation")]:
-        for known in [True, False]:
+        for known in ([True] if current else [True, False]):
             branch = deepcopy(claim)
             properties = branch["properties"]
             properties["evidence_kind"] = {"type": "string", "enum": kinds}
             properties["verification_scope"] = {"type": "string", "enum": scopes}
-            properties["status"] = {"type": "string", "enum": ["supported", "contradicted"] if known else ["unverified"]}
-            properties["observation"] = ({"anyOf": [{"$ref": "#/$defs/" + observation}, {"type": "null"}]}
-                                         if observation else {"type": "null"})
+            properties["status"] = {"type": "string", "enum": ["supported", "contradicted", "unverified"] if current
+                                    else ["supported", "contradicted"] if known else ["unverified"]}
             proof_ref = {"$ref": "#/$defs/SpanClaimProof" +
                          ("Commitment" if commitment else "Private" if scopes == ["private_record"] else "")}
-            properties["proof"] = proof_ref if known else {"anyOf": [proof_ref, {"type": "null"}]}
+            if not current:
+                properties["observation"] = ({"anyOf": [{"$ref": "#/$defs/" + observation}, {"type": "null"}]}
+                                             if observation else {"type": "null"})
+                properties["proof"] = proof_ref if known else {"anyOf": [proof_ref, {"type": "null"}]}
+                claim_branches.append(branch)
+                continue
+            properties["observation"] = {"type": "null"}
+            properties["proof"] = proof_ref
             claim_branches.append(branch)
+            proofless = deepcopy(branch)
+            proofless["properties"]["status"] = {"type": "string", "enum": ["unverified"]}
+            proofless["properties"]["proof"] = {"type": "null"}
+            claim_branches.append(proofless)
+            observations = (["SpanSystemObservation"] if observation == "SpanSystemObservation" else
+                            ["SpanIndependentObservation", "SpanSystemObservation"] if observation else [])
+            for observation_name in observations:
+                if definitions[observation_name].get("type") == "null":
+                    continue
+                observed = deepcopy(branch)
+                observed["properties"]["observation"] = {"$ref": "#/$defs/" + observation_name}
+                observed["properties"]["proof"] = {"$ref": "#/$defs/SpanClaimProofObserved" +
+                    ("System" if observation_name == "SpanSystemObservation" else "")}
+                claim_branches.append(observed)
     definitions["FactualClaim"] = {"anyOf": claim_branches}
     if not catalog.ids("dialogue", roles={"operator"}):
         wire["properties"]["factual_claims"]["maxItems"] = 0
@@ -347,4 +397,26 @@ def bind_span_contract(schema, conversation, checklist, catalog):
 
     collect(wire)
     wire["$defs"] = {name: definition for name, definition in definitions.items() if name in needed}
+    if current:
+        # These generated names carry no wire data. Compacting them offsets the
+        # correlated v4 branches without repeating or dropping source-ID enums.
+        names = {name: f"S{index}" for index, name in enumerate(wire["$defs"])
+                 if name.startswith("Span") and name != "SpanClaimProof"}
+
+        def rename(node):
+            if "$ref" in node:
+                name = node["$ref"].split("/")[-1]
+                node["$ref"] = "#/$defs/" + names.get(name, name)
+            for field in node.get("properties", {}).values():
+                rename(field)
+            for option in node.get("anyOf", []):
+                rename(option)
+            for field in ["items", "additionalProperties"]:
+                if isinstance(node.get(field), dict):
+                    rename(node[field])
+
+        rename(wire)
+        for definition in wire["$defs"].values():
+            rename(definition)
+        wire["$defs"] = {names.get(name, name): definition for name, definition in wire["$defs"].items()}
     return wire

@@ -8,7 +8,15 @@ import pytest
 from cqa.evaluator import schema_for
 from cqa.models import Checklist, Conversation
 from cqa.source_spans import build_catalog
-from cqa.span_schema import SPAN_CONTRACT, bind_span_contract
+from cqa.span_schema import bind_span_contract as _bind_span_contract
+
+# Preserve the full v3 regression suite. Current v4 cases have a separate suite;
+# explicit historical schema selection cannot change current runtime decoding.
+SPAN_CONTRACT = "span-v3"
+
+
+def bind_span_contract(*args):
+    return _bind_span_contract(*args, contract="span-v3")
 
 
 def fixture():

@@ -62,7 +62,7 @@ def validate_semantic_coverage(result, conversation, checklist):
         return
     messages = {m.id: m for m in conversation.messages}
     order = {m.id: i for i, m in enumerate(conversation.messages)}
-    current = audit.version in {"coverage-v2", "coverage-v3"}
+    current = audit.version in {"coverage-v2", "coverage-v3", "coverage-v4"}
     if not current and (any(r.support and r.support.omission is not None for r in result.request_coverage)
                         or any(c.context_evidence for c in result.factual_claims)):
         raise ValueError("Omission/context evidence requires the coverage-v2 contract")
@@ -165,7 +165,7 @@ def validate_semantic_coverage(result, conversation, checklist):
         if current:
             # Context is reviewable source material, never independent truth proof.
             quotes(claim.context_evidence, {"client", "system"})
-            if audit.version == "coverage-v3" and claim.dialogue_evidence and claim.verification_scope in {
+            if audit.version in {"coverage-v3", "coverage-v4"} and claim.dialogue_evidence and claim.verification_scope in {
                 "policy", "grading_rule", "commitment"
             }:
                 raise ValueError("Canonical observation proof cannot establish a general policy, rule or promise; separate the interaction premise or use context")

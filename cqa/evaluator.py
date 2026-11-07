@@ -182,7 +182,7 @@ class Evaluator:
                                      if extracting else self.workflow_version), "model": self.settings.model,
                   "strategy": self.strategy, "stage": stage, "max_output_tokens": output_cap,
                   "audit_contract_enabled": self.grounded,
-                  "claim_contract_version": "source-spans-atomic-v3" if self.grounded else "legacy",
+                  "claim_contract_version": "source-spans-atomic-v4" if self.grounded else "legacy",
                   "workflow_version": self.workflow_version,
                   "reasoning_effort": self.settings.effort, "ledger_call_id": call_id,
                   "reserved_usd": round(reservation, 6), "audio_analyzed": False,
@@ -248,7 +248,8 @@ class Evaluator:
         return record
 
 
-def schema_for(conversation: Conversation, checklist: Checklist, *, grounded=False, source_contract=False):
+def schema_for(conversation: Conversation, checklist: Checklist, *, grounded=False, source_contract=False,
+               source_contract_version="span-v4"):
     """Constrain references and IDs mechanically without hardcoding criterion meaning."""
     schema = Evaluation.model_json_schema()
     # Retain the exact historical transport shape for explicit old-schema reads.
@@ -362,5 +363,6 @@ def schema_for(conversation: Conversation, checklist: Checklist, *, grounded=Fal
             raise ValueError("Source-span transport requires grounded evaluation")
         from .source_spans import build_catalog
         from .span_schema import bind_span_contract
-        wire = bind_span_contract(wire, conversation, checklist, build_catalog(conversation, checklist))
+        wire = bind_span_contract(wire, conversation, checklist, build_catalog(conversation, checklist),
+                                  contract=source_contract_version)
     return wire

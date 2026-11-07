@@ -1,4 +1,4 @@
-"""Explicitly authored offline v3 fixtures; never a runtime encoder or repair path.
+"""Explicitly authored offline fixtures; never a runtime encoder or repair path.
 
 The serializer below selects exact already-authored source strings. It cannot
 invent claim IDs, proof premises, dependencies, grades, quote spelling or missing
@@ -23,10 +23,12 @@ def proof(*premises):
             "explanation": "The explicitly listed source premises establish the stated canonical proposition."}
 
 
-def wire_for(data, conversation, checklist):
-    """Serialize an explicit normalized v3 fixture, with no inferred factual data."""
+def wire_for(data, conversation, checklist, *, contract="span-v4"):
+    """Serialize an authored fixture for an explicit wire version, never inference."""
     data = deepcopy(data)
-    assert data["semantic_audit"]["version"] == "coverage-v3"
+    assert contract in {"span-v3", "span-v4"}
+    assert data["semantic_audit"]["version"] in {"coverage-v3", "coverage-v4"}
+    data["semantic_audit"]["version"] = "coverage-v4" if contract == "span-v4" else "coverage-v3"
     assert data["assertion_groups"] is not None
     catalog = build_catalog(conversation, checklist)
     indexed = {claim["claim_id"]: claim for claim in data["factual_claims"]}
@@ -112,6 +114,12 @@ def wire_for(data, conversation, checklist):
                     assert not item["evidence"] and not item["reference_evidence"] and not item["rule_evidence"]
                     for field in ["evidence", "reference_evidence", "rule_evidence"]:
                         item[field] = None
+                elif contract == "span-v4" and observation is None and claim["verification_scope"] != "commitment":
+                    assert not item["evidence"], "A fixture cannot hide independent proof under observation=null"
+                    item["evidence"] = None
+    if contract == "span-v4":
+        for group in data["assertion_groups"]:
+            group.pop("operator_evidence")
     for request in data["request_coverage"]:
         status, support = request["status"], request["support"]
         if status != "withdrawn":
@@ -141,7 +149,7 @@ def wire_for(data, conversation, checklist):
                     absent_reference_collections(item)
     absent_reference_collections(data)
     data = convert(data)
-    data["contract_version"] = "span-v3"
+    data["contract_version"] = contract
     data["catalog_fingerprint"] = catalog.fingerprint
     return data
 

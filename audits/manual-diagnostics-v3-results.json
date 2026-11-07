@@ -1,0 +1,130 @@
+{
+  "kind": "isolated_manual_v4_rerun_not_api_benchmark",
+  "completed_at_utc": "2026-11-07T18:46:53.493564+00:00",
+  "prompt": "evaluator-v9-67ef9cb4abdf",
+  "source_contract": "span-v4",
+  "semantic_audit": "coverage-v4",
+  "requested_agent_settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none",
+    "override_explicit": true,
+    "source": "user explicitly requested Sol medium for benchmark agents"
+  },
+  "initial_responses": 3,
+  "initial_strict_valid": 2,
+  "initial_strict_rejected": 1,
+  "rows": [
+    {
+      "packet": "C",
+      "raw_sha256": "e4f5972de29b1c6769ed2030064aa9c3f0bc5e1016913308f3838a1f5a84c6cc",
+      "raw_bytes": 49424,
+      "strict_validation": "failed",
+      "validation_error": "Semantic exclusion must link to a judgment reviewing that source",
+      "matched_reference_judgments": 0,
+      "compared_reference_judgments": 0,
+      "accepted_conversation_score": null,
+      "semantic_disposition": "initial_rejected",
+      "qualification": "Review/exclusion source links were incomplete; no initial accepted credit.",
+      "api_calls": 0
+    },
+    {
+      "packet": "D",
+      "raw_sha256": "bb8274f4261a94c9e0d5510c23eb210e21ba76a168c9e0f9580c41470aa7666f",
+      "raw_bytes": 33520,
+      "strict_validation": "passed",
+      "validation_error": null,
+      "matched_reference_judgments": 8,
+      "compared_reference_judgments": 8,
+      "accepted_conversation_score": 46.92,
+      "semantic_disposition": "semantic_pass",
+      "qualification": "No material issue found; legitimate hold and reported-prerequisite assurance findings retained.",
+      "api_calls": 0
+    },
+    {
+      "packet": "E",
+      "raw_sha256": "bc9c2c0eb08094509c7746cdfd4c31d0fc4e28e0a7f92b912a269dc7a84e1a22",
+      "raw_bytes": 35927,
+      "strict_validation": "passed",
+      "validation_error": null,
+      "matched_reference_judgments": 7,
+      "compared_reference_judgments": 7,
+      "accepted_conversation_score": null,
+      "semantic_disposition": "semantic_qualified",
+      "qualification": "Canonical opening claim is broader than its negative workflow proof; legitimate download/process findings remain.",
+      "api_calls": 0
+    }
+  ],
+  "posthoc_repair": {
+    "packet": "C",
+    "responses": 1,
+    "strict_validation": "passed",
+    "original_initial_stays_failed": true,
+    "judgment_vector_unchanged": true,
+    "receipt_sha256": "6ef2e454153a226e982a3181b869f3eb591cfd93f4eb1651bd3ea50c6f616a69",
+    "raw_sha256": "ab6e91a8ff3410ebdd9f3d8ec6fd2c0bd08cd008edaa5468c0f7638a4e9fdd82",
+    "matched_reference_judgments": 7,
+    "compared_reference_judgments": 8,
+    "reference_disagreement": "Identity Yes rather than assistant-only needs_review; alternative interpretation was recorded before any run.",
+    "semantic_qualification": "C identity/management/consultation interpretation caveats remain; do not infer expert accuracy from matches."
+  },
+  "cases_with_a_valid_response_after_posthoc_repair": 3,
+  "expectations_sha256_unchanged": "e16b09eab3ec7639f960e2f01dff2dbd799646605a2f04ce0d0e00caeb3a5abe",
+  "original_freezes_unchanged": true,
+  "old_failed_results_promoted": false,
+  "runtime_source_identity_unchanged_during_inference": true,
+  "api_calls": 0,
+  "incremental_api_cost_usd": 0,
+  "ledger_before": {
+    "rows": 591,
+    "max_id": 591,
+    "settled_sum": 23.141316
+  },
+  "ledger_after": {
+    "rows": 591,
+    "max_id": 591,
+    "settled_sum": 23.141316
+  },
+  "tests": {
+    "python_passed": 637,
+    "existing_warnings": 1,
+    "ruff": "passed",
+    "all_79_input_bounds": "passed",
+    "historical_v3_schema_and_payload_hashes": "unchanged",
+    "historical_api_scores_unchanged": 97,
+    "prior_manual_receipts_preserved": 6
+  },
+  "grade_increase_claimed": false,
+  "limitations": [
+    "Same three inputs/expectations, no post-result relabeling.",
+    "Previous execution agents inherited chat settings; this run explicitly requests Sol6.1medium. The before/after model settings are not controlled.",
+    "Manual tool-assisted responses do not measure API provider acceptance, latency, token cost, output-cap completion or repeatability.",
+    "One successful model repair was added post hoc; it does not receive first-pass credit.",
+    "E has a remaining proof-scope qualification.",
+    "C interpretation disagreements are not organizer Ground Truth errors."
+  ],
+  "report": "docs/MANUAL_DIAGNOSTICS_V3.md",
+  "implementation": "docs/SOURCE_CONTRACT_V4.md",
+  "source_receipts": [
+    {
+      "path": "artifacts/manual-chat-v3/protocol.frozen.json",
+      "sha256": "477846b7488bfcae150b8957185f85913cc85ce6684c7ead325fc0043915bcb8"
+    },
+    {
+      "path": "artifacts/manual-chat-v3/private-manifest.json",
+      "sha256": "b918855b0e1e0702b31fb3391af2ef30854b6b64e7012c229801b09d3c3e6dae"
+    },
+    {
+      "path": "artifacts/manual-chat-v3/posthoc-repair-C.protocol.json",
+      "sha256": "2a516a0cdb544db6ac9389532c8f92ce9939c4f649c2f0a1aba2ec80418f7a38"
+    },
+    {
+      "path": "artifacts/manual-chat-v3/summary.json",
+      "sha256": "b75096cd93d15cbfb3736252abeb7ff90edccf687476fe21238ee8ee4aeb8909"
+    },
+    {
+      "path": "artifacts/source-contract-v4/candidate-protocol.json",
+      "sha256": "52a1f2a204870d50d4165c305bd9e5caadcd32fc9c07a3145ad497cc329ecaf2"
+    }
+  ]
+}
