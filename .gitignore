@@ -1,0 +1,45 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Private datasets, recordings, generated outputs, and local state
+data/
+datasets/
+recordings/
+artifacts/
+tmp/
+*.sqlite
+*.sqlite3
+*.sqlite3-*
+*.db
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+htmlcov/
+
+# JavaScript
+node_modules/
+dist/
+build/
+.next/
+coverage/
+playwright-report/
+test-results/
+
+# Local editor and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
