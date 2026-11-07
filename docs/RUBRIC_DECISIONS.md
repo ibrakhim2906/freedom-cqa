@@ -4,9 +4,9 @@ These decisions record assistant recommendations accepted by the user during
 case review. They are not independent expert adjudication or organizer Ground Truth.
 Original checklist files, authored expectations, and benchmark results remain frozen.
 
-Current default: `checklists/freedom-reviewed-005.json`, version `1-reviewed-005`,
-containing R001 through R005. Five review items were accepted by the user and two
-additional items follow accepted rules. Thirteen items remain pending. Applications
+Current default: `checklists/freedom-reviewed-006.json`, version `1-reviewed-006`,
+containing R001 through R006. Six review items were accepted by the user and two
+additional items follow accepted rules. Twelve items remain pending. Applications
 of accepted rules are distinguished from separately user-adjudicated labels.
 
 ## R001: partial credit when a genuine secondary request is answered
@@ -137,8 +137,34 @@ customer proceed. Source messages: m5, m10-m13. This directly follows accepted
 R004 and adds no rubric interpretation. It is marked as an assistant application
 of an accepted rule, not a separately user-adjudicated reference label.
 
-Consultation in `p1-ru-015` is the next pending item. No paid calls or reevaluations
-were made during these decisions.
+Consultation in `p1-ru-015` was subsequently discussed and settled under R006.
+No paid calls or reevaluations were made during these decisions.
+
+## R006: accept a supported implied answer to a practical question
+
+Review item 8: `p1-ru-015`, consultation **20/20 for the accepted coverage
+interpretation**, assuming the stated product policy and next step are correct.
+The operator explains why the username remains occupied and directs the customer
+to choose another username now. That addresses the practical question of whether
+to wait before proceeding with registration. Source messages: m1, m5, m10-m12.
+
+General interpretation: a question can be answered by implication when the actual
+operator words or an appropriate concrete next step resolve the customer's practical
+question. Do not demand a specific phrase or a separate yes/no. An arbitrary
+workaround does not automatically resolve a separate substantial question.
+
+Do not infer permanent non-reusability of the username. The provided transcript
+does not establish that, and the broker's retention policy and procedure have not
+been independently verified. This is a coverage interpretation, not factual
+certification of a company policy. The journal retains this limitation explicitly.
+
+Applied in `checklists/freedom-reviewed-006.json`, version `1-reviewed-006`.
+Only consultation instructions are additionally clarified; earlier interpretations,
+weights, scales, and N/A conditions are preserved. The evaluator receives the
+general rule, never this case ID or the accepted case answer. Original expectations
+and saved results remain unchanged, and no paid reevaluation was performed.
+
+Consultation in `p1-ru-020` is the next pending item.
 
 To use the original checklist explicitly for a comparison:
 

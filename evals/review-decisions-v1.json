@@ -156,6 +156,30 @@
       "source_conversation_sha256": "84186b4760e1b4ae3aef0394b345ca89f67ebcc971edc75abb0e42a15d5794c6",
       "applied_checklist": "checklists/freedom-reviewed-005.json",
       "applied_checklist_version": "1-reviewed-005"
+    },
+    {
+      "id": "R006",
+      "review_item": 8,
+      "rule_id": "R006",
+      "case_id": "p1-ru-015",
+      "criterion_id": "consultation",
+      "status": "scored",
+      "answer": "20",
+      "review_method": "assistant_proposed_user_accepted",
+      "organizer_ground_truth": false,
+      "independent_expert_review": false,
+      "evidence_message_ids": [
+        "m1",
+        "m5",
+        "m10",
+        "m11",
+        "m12"
+      ],
+      "reason": "The explanation and direction to choose a different username now address the practical registration/waiting question. The implied answer does not require a separate explicit no. Do not infer that the old username can never become available.",
+      "reference_status": "Username-retention policy and procedure not independently verified. Acceptance concerns coverage and practical-next-step interpretation; the 20 label assumes the stated policy and next step are correct.",
+      "source_conversation_sha256": "a6a818946ad73660b0ce51e10c0ea0d788381b4abfb81e29a6756953599eb814",
+      "applied_checklist": "checklists/freedom-reviewed-006.json",
+      "applied_checklist_version": "1-reviewed-006"
     }
   ]
 }
