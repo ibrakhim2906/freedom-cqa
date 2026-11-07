@@ -96,3 +96,10 @@ Reports mark `conditional_snapshot_review` and each row's `assessment_context`.
 Any comparison in that mode concerns a hypothetical product snapshot, not proven
 historical applicability or organizer accuracy. No paid run was made for this
 integration.
+
+The [six frozen official-facts acceptance cases](OFFICIAL_FACTS_ACCEPTANCE_V1.md)
+include all 48 provisional labels and separate semantic checks. The free command
+`uv run python -m scripts.verify_official_acceptance` checks the immutable hashes,
+expected arithmetic, source context and label isolation without inference. Replay
+their existing per-case references/context; global reference overrides would defeat
+the deliberately incompatible-source control. Paid execution remains paused.

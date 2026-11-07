@@ -22,6 +22,11 @@ optional reference pack integrated with [scope/date preview, immutable evaluatio
 show how those facts affect useful judgments while preserving genuine deductions
 and unresolved evidence. These are conditional manual reviews, not new benchmark results.
 
+The [six-case acceptance suite](docs/OFFICIAL_FACTS_ACCEPTANCE_V1.md) freezes all
+48 provisional expected judgments before paid inference. Verify the pinned inputs,
+sources and label isolation for free with `uv run python -m scripts.verify_official_acceptance`.
+No API run has been authorized for this suite.
+
 ## Evaluator quick start
 
 ```powershell

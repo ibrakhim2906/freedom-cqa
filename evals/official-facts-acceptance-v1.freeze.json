@@ -1,0 +1,540 @@
+{
+  "schema_version": "1.0",
+  "kind": "pre_inference_development_acceptance_freeze",
+  "frozen_at_utc": "2026-11-07T14:54:38.755434+00:00",
+  "repository_base_commit": "0c7dc41fa46d1ab99513b21bbe20bd7d024bb401",
+  "source": "freshly authored development cases",
+  "label_provenance": "ai_authored_provisional",
+  "organizer_ground_truth": false,
+  "paid_model_calls_before_freeze": 0,
+  "case_count": 6,
+  "expected_judgment_count": 48,
+  "ordered_case_ids": [
+    "ofv1-01",
+    "ofv1-02",
+    "ofv1-03",
+    "ofv1-04",
+    "ofv1-05",
+    "ofv1-06"
+  ],
+  "checklist_file": "checklists/freedom-reviewed-015.json",
+  "canonical_checklist_sha256": "182e8caff7592a054af038dd72aa4258ad6363dfd17fb5d62e2e17101e9f6d27",
+  "reference_pack_file": "references/freedom-global-products-20261107.json",
+  "reference_pack_raw_sha256_at_freeze": "021858faa31966df0f42b2941fd797aa3ce0e40ef3f6c0aa66454f0465c511f3",
+  "grounded_prompt_version": "evaluator-v6-0f94ff8ad06f",
+  "grounded_configuration": {
+    "strategy": "grounded",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "medium",
+    "max_output_tokens": 6000,
+    "initial_runs_per_case": 1,
+    "repair_policy": "existing one bounded mechanical repair; all attempts visible"
+  },
+  "api_execution_authorized": false,
+  "hash_policy": "Suite/notes/document: exact LF bytes. Tracked dependencies/runtime: CRLF-to-LF normalization only, matching Git checkout; raw creation receipts retained separately.",
+  "frozen_files": [
+    {
+      "path": "evals/official-facts-acceptance-v1.jsonl",
+      "sha256": "3e008c9e135dd2732d751897e7a57d395fbef5d1e05493e4ff959f4af27633b7"
+    },
+    {
+      "path": "evals/official-facts-acceptance-v1.review.json",
+      "sha256": "4c9300019c4dc5f3e6fecc1bebd8d58bece1b4e72a748f9d1692dd43ddb0c011"
+    },
+    {
+      "path": "docs/OFFICIAL_FACTS_ACCEPTANCE_V1.md",
+      "sha256": "73b2750f902964b67efc49b746112822835327bd5088b7a59779c673f8f1d3c3"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "checklists/freedom-reviewed-015.json",
+      "lf_sha256": "cfe941a135e0cff404d1c2aca1bcd49716f678b4fce813398fd31be0f6607f9f",
+      "raw_sha256_at_freeze": "6893f9fd6b740995fd9e50de85cb3ac7d5ef63b100ec6d03b42cac767e261510"
+    },
+    {
+      "path": "references/freedom-global-products-20261107.json",
+      "lf_sha256": "7e2efeb9af5d3ddc0f3ee94831c6934cd0b114ef34040159282678866626dbbe",
+      "raw_sha256_at_freeze": "021858faa31966df0f42b2941fd797aa3ce0e40ef3f6c0aa66454f0465c511f3"
+    },
+    {
+      "path": "audits/official-product-sources-20261107.json",
+      "lf_sha256": "7025652655b623e6cdfb6abdc2f0ee354ed08d01bf97eca0c6090c89d01697dc",
+      "raw_sha256_at_freeze": "8a7c425eb38e367390821d55d8931c37b65ca20fa4ede7b286e4a7d9edc1a6e7"
+    }
+  ],
+  "evaluator_sources": [
+    {
+      "path": "cqa/__init__.py",
+      "lf_sha256": "8c913f6b3edee35509b9075e422839d4c9cfa33ca7a862c09891b2bf8794bc88",
+      "raw_sha256_at_freeze": "8c913f6b3edee35509b9075e422839d4c9cfa33ca7a862c09891b2bf8794bc88"
+    },
+    {
+      "path": "cqa/__main__.py",
+      "lf_sha256": "6d8b7d7846a845059d7a3107143f11131f63c5511d669b44085b15ec5e3d2279",
+      "raw_sha256_at_freeze": "6d8b7d7846a845059d7a3107143f11131f63c5511d669b44085b15ec5e3d2279"
+    },
+    {
+      "path": "cqa/baseline_prompt.py",
+      "lf_sha256": "617e21a759c7cce1cb1ff2f5bd3d2a58e7321e823c754168b978f1baa6a9c61e",
+      "raw_sha256_at_freeze": "bec994515bf3df4fe394a243752667874dc072aba2101b305f31d59412eb7043"
+    },
+    {
+      "path": "cqa/claim_dependencies.py",
+      "lf_sha256": "c1116c8433aa586116bbce9b7aeb674d17dd92d3910fad461ff4274e94383e2a",
+      "raw_sha256_at_freeze": "c1116c8433aa586116bbce9b7aeb674d17dd92d3910fad461ff4274e94383e2a"
+    },
+    {
+      "path": "cqa/cli.py",
+      "lf_sha256": "1db62f63401aa247fb7aedbc2c84bd17f42048be8a9fe73080c0c70fa896101f",
+      "raw_sha256_at_freeze": "1db62f63401aa247fb7aedbc2c84bd17f42048be8a9fe73080c0c70fa896101f"
+    },
+    {
+      "path": "cqa/context.py",
+      "lf_sha256": "314b09a96978a6802437411a83b43de52c1f329edffdcb3a0e9e1959b717a56d",
+      "raw_sha256_at_freeze": "314b09a96978a6802437411a83b43de52c1f329edffdcb3a0e9e1959b717a56d"
+    },
+    {
+      "path": "cqa/datasets.py",
+      "lf_sha256": "80d34a1f1335ba439c0ba4a6ff017cac33c442e0d561ca28f928cc9851bb0f5f",
+      "raw_sha256_at_freeze": "80d34a1f1335ba439c0ba4a6ff017cac33c442e0d561ca28f928cc9851bb0f5f"
+    },
+    {
+      "path": "cqa/evaluator.py",
+      "lf_sha256": "adbcbae3791d52e5fefc070b09651a7fd32f83aa18152631ede3879d0fd405c6",
+      "raw_sha256_at_freeze": "adbcbae3791d52e5fefc070b09651a7fd32f83aa18152631ede3879d0fd405c6"
+    },
+    {
+      "path": "cqa/grounding.py",
+      "lf_sha256": "a25f07a08a89b89bdc1f7f189d0899ee10762d5abd4a38e3f62a7ba77559c327",
+      "raw_sha256_at_freeze": "a25f07a08a89b89bdc1f7f189d0899ee10762d5abd4a38e3f62a7ba77559c327"
+    },
+    {
+      "path": "cqa/ledger.py",
+      "lf_sha256": "352c1489b17da3ef238e7a840e085c36eb77ed3dc091ab5e52964fbd21eb7c0b",
+      "raw_sha256_at_freeze": "352c1489b17da3ef238e7a840e085c36eb77ed3dc091ab5e52964fbd21eb7c0b"
+    },
+    {
+      "path": "cqa/metrics.py",
+      "lf_sha256": "b1de4ad1046c823f8aac5c104026b604480005c2c053081ae571f1dedc86694f",
+      "raw_sha256_at_freeze": "b1de4ad1046c823f8aac5c104026b604480005c2c053081ae571f1dedc86694f"
+    },
+    {
+      "path": "cqa/models.py",
+      "lf_sha256": "fdc84fd045b34b856d4cd34b5d74614e70773dd01376d2fcd19ebe03fdcddf30",
+      "raw_sha256_at_freeze": "fdc84fd045b34b856d4cd34b5d74614e70773dd01376d2fcd19ebe03fdcddf30"
+    },
+    {
+      "path": "cqa/observations.py",
+      "lf_sha256": "2e7ee91728cd0b95774dd49c062ee44ce865d502859ce746817f0db0522bd972",
+      "raw_sha256_at_freeze": "2e7ee91728cd0b95774dd49c062ee44ce865d502859ce746817f0db0522bd972"
+    },
+    {
+      "path": "cqa/output_contract.py",
+      "lf_sha256": "9638bf330532ac03bb5fa45148133d763307220572358932daa30129fa52406b",
+      "raw_sha256_at_freeze": "9638bf330532ac03bb5fa45148133d763307220572358932daa30129fa52406b"
+    },
+    {
+      "path": "cqa/prompt.py",
+      "lf_sha256": "747de8b5cb2287fb4ee632f5056b9a2ef3c61dd22ab516fec6546abe3fdd6af4",
+      "raw_sha256_at_freeze": "747de8b5cb2287fb4ee632f5056b9a2ef3c61dd22ab516fec6546abe3fdd6af4"
+    },
+    {
+      "path": "cqa/rubric.py",
+      "lf_sha256": "f05915196750bb806f76baf6209fe2bbe70b903577724c1b158d412fe6c68a8e",
+      "raw_sha256_at_freeze": "f05915196750bb806f76baf6209fe2bbe70b903577724c1b158d412fe6c68a8e"
+    },
+    {
+      "path": "cqa/scoring.py",
+      "lf_sha256": "4d8937dd2d79439217eb1401fa0bb8906ed0928069fd9b259cef0b4020a779b3",
+      "raw_sha256_at_freeze": "4d8937dd2d79439217eb1401fa0bb8906ed0928069fd9b259cef0b4020a779b3"
+    },
+    {
+      "path": "cqa/semantic_coverage.py",
+      "lf_sha256": "c576a80f0ecd53375a52574e9b62e8b3b66c978db67bd6040ba5546a8a9da562",
+      "raw_sha256_at_freeze": "c576a80f0ecd53375a52574e9b62e8b3b66c978db67bd6040ba5546a8a9da562"
+    },
+    {
+      "path": "cqa/settings.py",
+      "lf_sha256": "2dc664eb798fb1286226518bae0f799332d33bc71f17754e649caf937c99ea76",
+      "raw_sha256_at_freeze": "2dc664eb798fb1286226518bae0f799332d33bc71f17754e649caf937c99ea76"
+    },
+    {
+      "path": "cqa/submission.py",
+      "lf_sha256": "e6693db5df3894de0bfa6647f05581528e84fd512c3d337c608d0d37a9d3df8e",
+      "raw_sha256_at_freeze": "e6693db5df3894de0bfa6647f05581528e84fd512c3d337c608d0d37a9d3df8e"
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "ofv1-01",
+      "canonical_conversation_sha256": "bc368e493c0bf3f682f4c933d3a5660aaf19b8edeeb63b987e453ee186d02224",
+      "model_payload_sha256": "a154995fd6194e78e89aaef044b1a405be460b1fe349e12dac27cb5f80ebfe04",
+      "input_fingerprint": "29d58923d1dc19154ecbb5f2ad2cf75f4a440d74048261fa4e43a04caa4f0f59",
+      "schema_sha256": "e4e9a75d14944d888ab4deb3dac3efaacd519f96476c17218daacb6a8aa68892",
+      "conditional_snapshot_review": false,
+      "expected_arithmetic": {
+        "total": 76.92,
+        "provisional": false,
+        "unresolved_criteria": [],
+        "applicable_weight": 65.0,
+        "earned_points": 50.0,
+        "flags": {
+          "serious": "no"
+        },
+        "contributions": [
+          {
+            "criterion_id": "contact",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "identity",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "management",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "closing",
+            "status": "scored",
+            "points": 0.0
+          }
+        ],
+        "score_bounds": {
+          "lower": 76.92,
+          "upper": 76.92,
+          "no_numeric_score_possible": false,
+          "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."
+        }
+      }
+    },
+    {
+      "case_id": "ofv1-02",
+      "canonical_conversation_sha256": "c2303ea2452f6903b57b9cea651e832af4ee41bf94d92f42ffcc7b826e863903",
+      "model_payload_sha256": "176a5f35229e6e5e9642bfc9699dabd9418d27c89fffaa13b6f497b8f5cd39b4",
+      "input_fingerprint": "645b4e0afec2566995cc804d2a711f1d1c96e72caa017c4ba6aca947bf37dd81",
+      "schema_sha256": "e4e9a75d14944d888ab4deb3dac3efaacd519f96476c17218daacb6a8aa68892",
+      "conditional_snapshot_review": false,
+      "expected_arithmetic": {
+        "total": 92.31,
+        "provisional": false,
+        "unresolved_criteria": [],
+        "applicable_weight": 65.0,
+        "earned_points": 60.0,
+        "flags": {
+          "serious": "no"
+        },
+        "contributions": [
+          {
+            "criterion_id": "contact",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "identity",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "points": 20.0
+          },
+          {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "management",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "closing",
+            "status": "scored",
+            "points": 0.0
+          }
+        ],
+        "score_bounds": {
+          "lower": 92.31,
+          "upper": 92.31,
+          "no_numeric_score_possible": false,
+          "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."
+        }
+      }
+    },
+    {
+      "case_id": "ofv1-03",
+      "canonical_conversation_sha256": "53eef1efdd31469d70b2fc54ed88090e5001483349cd29621becbd03eb36b00e",
+      "model_payload_sha256": "16a51c47e0c87b19623ef736fa07ea2454be842f984ed961678f35126043b795",
+      "input_fingerprint": "c93cbf0337eae02316edef451c14d483d5c80fe58c08244184288394566c3556",
+      "schema_sha256": "e4e9a75d14944d888ab4deb3dac3efaacd519f96476c17218daacb6a8aa68892",
+      "conditional_snapshot_review": false,
+      "expected_arithmetic": {
+        "total": 84.62,
+        "provisional": false,
+        "unresolved_criteria": [],
+        "applicable_weight": 65.0,
+        "earned_points": 55.0,
+        "flags": {
+          "serious": "no"
+        },
+        "contributions": [
+          {
+            "criterion_id": "contact",
+            "status": "scored",
+            "points": 0.0
+          },
+          {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "identity",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "points": 20.0
+          },
+          {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "management",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "closing",
+            "status": "scored",
+            "points": 5.0
+          }
+        ],
+        "score_bounds": {
+          "lower": 84.62,
+          "upper": 84.62,
+          "no_numeric_score_possible": false,
+          "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."
+        }
+      }
+    },
+    {
+      "case_id": "ofv1-04",
+      "canonical_conversation_sha256": "6b5091a308139626bea80013a62da52c42fb8229dbef140c056b431bcc27023c",
+      "model_payload_sha256": "7e97e2e1a6cab5978dc4732aa4dcc40da0466bbd1f5fd7921487dc9a3ca09bb6",
+      "input_fingerprint": "decee74faba25d5f0a68749fc7b7a1d4260e1154fb2783a6dd2e849c4908a64c",
+      "schema_sha256": "e4e9a75d14944d888ab4deb3dac3efaacd519f96476c17218daacb6a8aa68892",
+      "conditional_snapshot_review": false,
+      "expected_arithmetic": {
+        "total": null,
+        "provisional": true,
+        "unresolved_criteria": [
+          "consultation"
+        ],
+        "applicable_weight": 65.0,
+        "earned_points": 45.0,
+        "flags": {
+          "serious": "no"
+        },
+        "contributions": [
+          {
+            "criterion_id": "contact",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "identity",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "consultation",
+            "status": "needs_review",
+            "points": null
+          },
+          {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "management",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "closing",
+            "status": "scored",
+            "points": 5.0
+          }
+        ],
+        "score_bounds": {
+          "lower": 69.23,
+          "upper": 100.0,
+          "no_numeric_score_possible": false,
+          "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."
+        }
+      }
+    },
+    {
+      "case_id": "ofv1-05",
+      "canonical_conversation_sha256": "8c56e53cab9cce9fa87fd68ee4fdc92b1467e77e48c896ed3529eacdddd3ed57",
+      "model_payload_sha256": "416fdc1725243f4a5f85c02d561c84ef29506d552d71410d3a9dcadae05a0c98",
+      "input_fingerprint": "79eee347a932bf73ef70fdfb6fd36b86505593f25efd5eff01746011e1ef448a",
+      "schema_sha256": "6fc2090022cfd9f2c76274adc08c82fa2f8d22800b1131383faa32b61e5b3424",
+      "conditional_snapshot_review": true,
+      "expected_arithmetic": {
+        "total": 77.69,
+        "provisional": false,
+        "unresolved_criteria": [],
+        "applicable_weight": 65.0,
+        "earned_points": 50.5,
+        "flags": {
+          "serious": "no"
+        },
+        "contributions": [
+          {
+            "criterion_id": "contact",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "identity",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "management",
+            "status": "scored",
+            "points": 10.5
+          },
+          {
+            "criterion_id": "closing",
+            "status": "scored",
+            "points": 5.0
+          }
+        ],
+        "score_bounds": {
+          "lower": 77.69,
+          "upper": 77.69,
+          "no_numeric_score_possible": false,
+          "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."
+        }
+      }
+    },
+    {
+      "case_id": "ofv1-06",
+      "canonical_conversation_sha256": "52ec97eb2185e394ca0cf25ee7bb5074ae841992b4c7b55e8e9b8351147fc44d",
+      "model_payload_sha256": "02012da812503b265eeea8346cb50067707523ec8cdc2baee65356150ce80159",
+      "input_fingerprint": "68922c799274114177a4cdaed7026c193e708d172dc68b0ca90d692c48c0c654",
+      "schema_sha256": "e4e9a75d14944d888ab4deb3dac3efaacd519f96476c17218daacb6a8aa68892",
+      "conditional_snapshot_review": false,
+      "expected_arithmetic": {
+        "total": null,
+        "provisional": true,
+        "unresolved_criteria": [
+          "consultation"
+        ],
+        "applicable_weight": 65.0,
+        "earned_points": 35.0,
+        "flags": {
+          "serious": "no"
+        },
+        "contributions": [
+          {
+            "criterion_id": "contact",
+            "status": "scored",
+            "points": 0.0
+          },
+          {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "identity",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "consultation",
+            "status": "needs_review",
+            "points": null
+          },
+          {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "management",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "closing",
+            "status": "scored",
+            "points": 5.0
+          }
+        ],
+        "score_bounds": {
+          "lower": 53.85,
+          "upper": 84.62,
+          "no_numeric_score_possible": false,
+          "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."
+        }
+      }
+    }
+  ]
+}
