@@ -66,7 +66,7 @@ def official_checklist():
 
 
 def load_checklist(path: str | Path | None = None):
-    target = Path(path) if path else ROOT / "checklists/freedom-reviewed-004.json"
+    target = Path(path) if path else ROOT / "checklists/freedom-reviewed-005.json"
     return Checklist.model_validate_json(target.read_text(encoding="utf-8"))
 
 

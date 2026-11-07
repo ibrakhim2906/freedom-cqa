@@ -4,9 +4,9 @@ These decisions record assistant recommendations accepted by the user during
 case review. They are not independent expert adjudication or organizer Ground Truth.
 Original checklist files, authored expectations, and benchmark results remain frozen.
 
-Current default: `checklists/freedom-reviewed-004.json`, version `1-reviewed-004`,
-containing R001 through R004. Four review items were accepted by the user and one
-additional item follows an accepted rule. Fifteen items remain pending. Applications
+Current default: `checklists/freedom-reviewed-005.json`, version `1-reviewed-005`,
+containing R001 through R005. Five review items were accepted by the user and two
+additional items follow accepted rules. Thirteen items remain pending. Applications
 of accepted rules are distinguished from separately user-adjudicated labels.
 
 ## R001: partial credit when a genuine secondary request is answered
@@ -110,7 +110,35 @@ accepted R002 case and requires no additional rubric interpretation.
 This is an assistant application of a user-accepted rule, not a fifth rule or a
 separately user-adjudicated reference label. It is explicitly marked
 `assistant_applied_user_accepted_rule` in the journal. Empathy in this Kazakh case
-is the next pending judgment; no extra empathy interpretation has been applied.
+was subsequently discussed and settled by R005.
+
+## R005: acknowledgment can be implicit in a specific corrective response
+
+Review item 6: `p1-kz-008`, empathy **Yes**. The operator responds to the customer's
+correction with respectful, specific guidance addressing the stated access
+difficulty. An explicit acknowledgment phrase is absent. Source messages: m10-m13.
+
+The user accepted that acknowledgment can be demonstrated by using the correction
+in a concrete response to the expressed difficulty. A separate acknowledgment or
+apology phrase is not mandatory. This does not make success alone proof of empathy
+and does not excuse dismissiveness or ignored dissatisfaction. Cite the specific
+responsive content, preserving R003's other requirements.
+
+Applied in `checklists/freedom-reviewed-005.json`, version `1-reviewed-005`.
+Only empathy instructions are additionally clarified. Previous interpretations,
+weights, N/A conditions, allowed levels, and saved evaluation scores are unchanged.
+This is an assistant recommendation accepted by the user, not organizer Ground Truth.
+
+## J007: application of R004 to the Kazakh conversation-management judgment
+
+Review item 7: `p1-kz-008`, management **7/10** on the raw scale. One unnecessary
+repeated website question interrupts the flow, then clear guidance lets the
+customer proceed. Source messages: m5, m10-m13. This directly follows accepted
+R004 and adds no rubric interpretation. It is marked as an assistant application
+of an accepted rule, not a separately user-adjudicated reference label.
+
+Consultation in `p1-ru-015` is the next pending item. No paid calls or reevaluations
+were made during these decisions.
 
 To use the original checklist explicitly for a comparison:
 

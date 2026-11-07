@@ -111,6 +111,51 @@
       "source_conversation_sha256": "84186b4760e1b4ae3aef0394b345ca89f67ebcc971edc75abb0e42a15d5794c6",
       "applied_checklist": "checklists/freedom-reviewed-004.json",
       "applied_checklist_version": "1-reviewed-004"
+    },
+    {
+      "id": "R005",
+      "review_item": 6,
+      "rule_id": "R005",
+      "case_id": "p1-kz-008",
+      "criterion_id": "empathy",
+      "status": "scored",
+      "answer": "yes",
+      "review_method": "assistant_proposed_user_accepted",
+      "organizer_ground_truth": false,
+      "independent_expert_review": false,
+      "evidence_message_ids": [
+        "m10",
+        "m11",
+        "m12",
+        "m13"
+      ],
+      "reason": "The respectful corrective response directly uses the customer correction and addresses the access difficulty. A separate acknowledgment phrase or apology is not required. Success alone is not the basis for this decision.",
+      "source_conversation_sha256": "84186b4760e1b4ae3aef0394b345ca89f67ebcc971edc75abb0e42a15d5794c6",
+      "applied_checklist": "checklists/freedom-reviewed-005.json",
+      "applied_checklist_version": "1-reviewed-005"
+    },
+    {
+      "id": "J007",
+      "review_item": 7,
+      "rule_id": "R004",
+      "case_id": "p1-kz-008",
+      "criterion_id": "management",
+      "status": "scored",
+      "answer": "7",
+      "review_method": "assistant_applied_user_accepted_rule",
+      "organizer_ground_truth": false,
+      "independent_expert_review": false,
+      "evidence_message_ids": [
+        "m5",
+        "m10",
+        "m11",
+        "m12",
+        "m13"
+      ],
+      "reason": "Direct application of accepted R004: one unnecessary repeated website question, followed by clear access guidance and successful continuation; no customer request to clarify confusing instructions. This item was not separately adjudicated by the user.",
+      "source_conversation_sha256": "84186b4760e1b4ae3aef0394b345ca89f67ebcc971edc75abb0e42a15d5794c6",
+      "applied_checklist": "checklists/freedom-reviewed-005.json",
+      "applied_checklist_version": "1-reviewed-005"
     }
   ]
 }
