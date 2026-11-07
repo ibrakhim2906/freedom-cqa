@@ -4,8 +4,8 @@ These decisions record assistant recommendations accepted by the user during
 case review. They are not independent expert adjudication or organizer Ground Truth.
 Original checklist files, authored expectations, and benchmark results remain frozen.
 
-Current default: `checklists/freedom-reviewed-002.json`, version `1-reviewed-002`,
-containing R001 and R002. Two review items are accepted; 18 remain pending.
+Current default: `checklists/freedom-reviewed-003.json`, version `1-reviewed-003`,
+containing R001, R002, and R003. Three review items are accepted; 17 remain pending.
 
 ## R001: partial credit when a genuine secondary request is answered
 
@@ -55,8 +55,30 @@ weights, allowed levels, and other criteria are unchanged. This is an accepted t
 interpretation of ambiguous source wording, not an organizer clarification.
 
 No saved score was edited or recomputed. New evaluations use this version unless
-another checklist is explicitly selected. Other review items, including empathy
-in the same conversation, remain pending until discussed.
+another checklist is explicitly selected. At adoption, other review items remained
+pending; R003 subsequently settles empathy in the same conversation.
+
+## R003: empathy may be demonstrated through acknowledgment and corrective action
+
+Accepted case: `p1-ru-014`, empathy **Yes**. After the customer's correction,
+the operator acknowledges it and provides specific access guidance, ending the
+redundant questioning. Source messages: m5, m10, m11, m12, m13, m14.
+
+General interpretation: respectful acknowledgment and practical action addressing
+the expressed difficulty can satisfy the criterion. An explicit apology or a
+particular emotional phrase is not mandatory. A generic acknowledgment alone is
+insufficient. A useful answer does not automatically excuse rudeness or ignored
+dissatisfaction, and failure of another criterion does not automatically establish
+failure of empathy. Each judgment needs its own criterion-specific evidence.
+
+Applied in `checklists/freedom-reviewed-003.json`, version `1-reviewed-003`.
+R001 and R002 are preserved; only empathy instructions are additionally clarified.
+Weights, levels, and N/A conditions are unchanged. Previous versions and evaluation
+results remain unchanged. This records an assistant recommendation accepted by the
+user, not an independent expert annotation or organizer Ground Truth.
+
+Communication management in this conversation is the next pending review item.
+No API call or paid reevaluation was performed to apply this decision.
 
 To use the original checklist explicitly for a comparison:
 
