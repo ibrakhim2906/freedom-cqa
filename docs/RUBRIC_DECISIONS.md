@@ -4,11 +4,13 @@ These decisions record assistant recommendations accepted by the user during
 case review. They are not independent expert adjudication or organizer Ground Truth.
 Original checklist files, authored expectations, and benchmark results remain frozen.
 
-Current default: `checklists/freedom-reviewed-011.json`, version `1-reviewed-011`,
-containing R001 through R011. Twelve review dispositions were accepted by the user and
-two additional items follow accepted rules. Thirteen items have scored decisions;
-one is explicitly unresolved (`needs_review`). Six items remain pending. Applications
-of accepted rules are distinguished from separately user-adjudicated labels.
+Current default: `checklists/freedom-reviewed-012.json`, version `1-reviewed-012`,
+containing accepted interpretations R001 through R012. All 20 review items have
+been processed: 13 user-accepted dispositions, two applications of accepted rules,
+and five provisional assistant-only assessments requested by the user. Eighteen
+items have scores; two remain explicitly unscored (`needs_review`). These counts
+are review coverage, not measured model accuracy. No items remain awaiting this
+review pass. The final five were not individually adjudicated by the user.
 
 ## R001: partial credit when a genuine secondary request is answered
 
@@ -298,7 +300,44 @@ discussion. This applies the original `freedom-v1:serious` definition and adds n
 new rule or numerical penalty. Both records are assistant recommendations accepted
 by the user, not independent expert annotations or organizer Ground Truth.
 
-Consultation in `p1-en-013` is the next pending item.
+Consultation in `p1-en-013` was subsequently settled under R012.
+
+## R012: identify a specific coverage gap before deducting for incompleteness
+
+Review item 15: `p1-en-013`, consultation **20/20 under the user-accepted
+interpretation**, assuming the navigation route is correct. The operator gives
+concrete search guidance. Refusal of the unrelated paid offer does not alone
+identify another unanswered app question, and explicit confirmation of success
+is not a required condition of full consultation credit. Source: m1, m5, m10-m14.
+
+This remains a scope interpretation: the final customer line could also be read
+as an unmet request. Do not claim independent adjudication. The serious violation
+remains separately flaggable. Applied only as a generalized consultation instruction
+in version `1-reviewed-012`; no case ID or accepted answer enters inference.
+
+## Final five: assistant assessments at the user's request
+
+The user delegated these assessments rather than accepting their individual
+labels. They are explicitly marked `assistant_assessment_at_user_request` in the
+journal and `assessed_by_assistant` in the private manifest. They do not create
+additional user-adjudicated checklist rules.
+
+| Item | Case / criterion | Assessment | Basis and material limitation |
+| --- | --- | --- | --- |
+| 16 | EN-013 / empathy | No | Customer objects to the unsolicited direction; operator closes without a response to that objection. Earlier polite assistance is counterevidence. Treating the correction as dissatisfaction is provisional. |
+| 17 | Call RU-002 / identity | No | Apparent order/account check m12 precedes verification exchange m13-m15. Earlier contact is not verification proof. The noisy wording may instead describe a generic check; audio or authentication records could change the label. |
+| 18 | Call RU-002 / consultation | 10/20 | Restrictions and order-book behavior explained, but no concrete customer-facing route for the purchase alternative. Internal hold discussion is not credited as delivered guidance. Scope and product procedure remain provisional. |
+| 19 | Call RU-002 / closing | No | Final customer-facing farewell m71 has no identified closing recap/help offer. Internal farewell m46 is excluded. Whether earlier m67 functions as a recap is a reviewable interpretation. |
+| 20 | Call RU-005 / contact | needs_review | Greeting is visible, self-introduction is corrupted in m17. Bot greeting is not human behavior. Audio or reliable transcription is needed. |
+
+All source message IDs and limitations are retained in the journal. Audio was not
+listened to. No raw source transcript is published here. The two unscored cases
+are item 12 (closing opportunity) and item 20 (noisy self-introduction).
+
+This closes the calibration pass, not validation of the updated evaluator.
+No paid reevaluation has been run on these accumulated rules. Original outputs,
+baseline metrics, and authored labels remain unchanged. The backend, UI, and appeal
+workflow have not been implemented during this review.
 
 To use the original checklist explicitly for a comparison:
 

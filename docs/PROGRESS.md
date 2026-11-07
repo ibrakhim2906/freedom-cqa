@@ -32,6 +32,9 @@
 - [x] Freeze 12 new paired development cases and compare v1/v2 through the real API without rewriting original expectations.
 - [x] Add explicit customer withdrawal evidence and missing-information dependency guidance; preserve two genuine-omission organizer controls.
 - [x] Record that original-rubric RU/KZ N/A inconsistency remains; provide a separately marked scope-clarification draft rather than silently changing official wording.
+- [x] Complete the 20-item calibration review, distinguishing user-accepted, derived, and assistant-only assessments; keep two items unscored for specific uncertainty.
+- [x] Save accepted interpretations in immutable checklist versions; retain original checklist and benchmark outputs.
+- [x] Define an explicit internal product grading rubric without claiming an organizer score or new measured accuracy.
 - [ ] Define checklist versions, transcript message IDs, evaluation results, and appeal records.
 - [ ] Define how missing reference procedures and unavailable audio affect judgments.
 - [ ] Select a varied development subset and reserve fresh cases for checking changes.
