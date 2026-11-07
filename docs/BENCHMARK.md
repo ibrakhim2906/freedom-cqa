@@ -122,3 +122,8 @@ failed its reliability gate: 18/24 first-pass and 22/24 final valid assessments,
 five repairs, 172/186 end-to-end frozen-label matches, and 6/8 fully stable case
 vectors. Actual token-priced cost was $1.7116115. The report preserves failures,
 pre-declared ordinal ambiguities and evidence/counterfactual quality findings.
+
+The following [source-span/atomic v3 candidate](SOURCE_SPANS_AND_ATOMIC_PROOFS.md)
+has offline verification only. Use `uv run python -m scripts.verify_source_span_candidate`
+for the current source-bound schema, preservation and compatibility checks.
+It does not rerun the API or change the earlier failed acceptance result.

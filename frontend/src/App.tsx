@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react'
-import type {Appeal, BatchResult, Checklist, ChecklistRow, Config, ConversationDetail, ConversationRow, Evidence, JobDetail, JobRow, Reference} from './types'
+import type {Appeal, BatchResult, Checklist, ChecklistRow, CitationSelection, Config, ConversationDetail, ConversationRow, Evidence, HighlightRange, JobDetail, JobRow, Reference} from './types'
 import {api} from './api'
 import {Assessment, Highlighted} from './Assessment'
 import {date, dollars, referenceDate, safeLink, terminal} from './format'
@@ -7,6 +7,35 @@ import {ChecklistEditor, newCriterion} from './Checklists'
 import {AppealForm, ResolveForm} from './ReviewForms'
 import {ReferenceContext} from './ReferenceContext'
 import styles from './App.module.css'
+
+function sourceHighlights(text: string, kind: 'dialogue'|'reference', sourceId: string,
+  items: ({quote: string} & CitationSelection)[]) {
+  const characters = Array.from(text), ranges: HighlightRange[] = []
+  let invalid = false
+  for (const item of items) {
+    const hasSelection = item.source_citation_expected || [item.source_span_id, item.source_id, item.source_kind,
+      item.source_field, item.source_start, item.source_end].some(value => value !== undefined)
+    if (hasSelection) {
+      const start = item.source_start, end = item.source_end
+      if (!item.source_span_id || item.source_id !== sourceId || item.source_kind !== kind || item.source_field !== 'text'
+          || typeof start !== 'number' || typeof end !== 'number' || !Number.isInteger(start) || !Number.isInteger(end)
+          || start < 0 || end <= start || end > characters.length || characters.slice(start, end).join('') !== item.quote) {
+        invalid = true
+        continue
+      }
+      ranges.push({start, end, quote: item.quote})
+    } else if (item.quote) {
+      // Historical/human quote-only citations have no selected offset. Preserve
+      // their old lookup behavior; never use it to replace invalid v3 metadata.
+      const at = text.indexOf(item.quote)
+      if (at >= 0) {
+        const start = Array.from(text.slice(0, at)).length
+        ranges.push({start, end: start + Array.from(item.quote).length, quote: item.quote})
+      }
+    }
+  }
+  return {ranges, invalid}
+}
 
 function App() {
   const initial = new URLSearchParams(location.search)
@@ -19,7 +48,8 @@ function App() {
   const [selected, setSelected] = useState<string[]>([]), [budget, setBudget] = useState('1.00')
   const [error, setError] = useState(''), [notice, setNotice] = useState(''), [busy, setBusy] = useState(false)
   const [importText, setImportText] = useState(''), [showImport, setShowImport] = useState(false)
-  const [focus, setFocus] = useState<{ids: string[]; quote?: string}>({ids: []}), [reference, setReference] = useState<{ref: Reference; quote?: string}>()
+  const [focus, setFocus] = useState<{ids: string[]; items?: Evidence[]}>({ids: []})
+  const [reference, setReference] = useState<{ref: Reference; quote?: string; selection?: CitationSelection}>()
   const [appealCriterion, setAppealCriterion] = useState<string>(), [resolveAppeal, setResolveAppeal] = useState<Appeal>()
   const [editor, setEditor] = useState<Checklist>(), [batchId, setBatchId] = useState('')
   const [batch, setBatch] = useState<{budget_usd: number; committed_usd: number; jobs: JobRow[]}>()
@@ -78,7 +108,7 @@ function App() {
   useEffect(() => {if (focus.ids.length) document.getElementById(`message-${focus.ids[0]}`)?.scrollIntoView({behavior: 'smooth', block: 'center'})}, [focus])
   function chooseConversation(id: string) {setConversationId(id); setJobId(''); setJob(undefined); setNotice('')}
   function chooseJob(j: JobRow) {setConversationId(j.conversation_id); setJobId(j.id); setView('conversations')}
-  function evidence(items: Evidence[], ids: string[] = []) {setReference(undefined); setFocus({ids: items.length ? items.map(e => e.message_id) : ids, quote: items[0]?.quote})}
+  function evidence(items: Evidence[], ids: string[] = []) {setReference(undefined); setFocus({ids: items.length ? [...new Set(items.map(e => e.message_id))] : ids, items})}
   async function importNow() {
     await act(async () => {
       const result = await api<{created: number; reused: number; conversations: ConversationRow[]}>('/conversations/import', {content: importText})
@@ -102,6 +132,8 @@ function App() {
     })
   }
   const source = job?.conversation || conversation
+  const referenceHighlight = reference?.quote ? sourceHighlights(reference.ref.text, 'reference', reference.ref.id,
+    [{quote: reference.quote, ...reference.selection}]) : undefined
   return <div className={styles.app}>
     <header className={styles.header}><div><h1>Freedom CQA</h1><span>Conversation evaluation & review</span></div>
       <nav>{['conversations','checklists','history'].map(v => <button key={v} className={view === v ? styles.active : ''} onClick={() => setView(v)}>{v === 'history' ? 'Evaluation history' : v[0].toUpperCase() + v.slice(1)}</button>)}</nav>
@@ -135,17 +167,25 @@ function App() {
           <ReferenceContext key={source.id} source={source} onApplied={async id => {await refresh(); setSelected(old => [...new Set(old.map(selectedId => selectedId === source.id ? id : selectedId))]); chooseConversation(id)}} onError={setError}/>
           {source.metadata.recording_url && <a href={safeLink(source.metadata.recording_url)} target="_blank" rel="noreferrer">Open original recording</a>}
           {source.channel === 'voice call' && <p className={styles.muted}>Transcript assessment only. Audio, diction and pronunciation have not been analyzed.</p>}
-          {source.content.messages.map(m => <article id={`message-${m.id}`} data-testid={`message-${m.id}`} key={m.id} className={`${styles.message} ${styles[m.speaker] || ''} ${focus.ids.includes(m.id) ? styles.highlight : ''}`}>
-            <div><b>{m.speaker}</b><span>{m.id} · {m.timestamp}</span></div><p>{focus.ids.includes(m.id) && focus.quote ? <Highlighted text={m.text} quote={focus.quote}/> : m.text}</p></article>)}
+          {source.content.messages.map(m => {
+            const selected = (focus.items || []).filter(item => item.message_id === m.id)
+            const highlight = sourceHighlights(m.text, 'dialogue', m.id, selected)
+            return <article id={`message-${m.id}`} data-testid={`message-${m.id}`} key={m.id} className={`${styles.message} ${styles[m.speaker] || ''} ${focus.ids.includes(m.id) ? styles.highlight : ''}`}>
+              <div><b>{m.speaker}</b><span>{m.id} · {m.timestamp}</span></div><p><Highlighted text={m.text} ranges={highlight.ranges}/></p>
+              {highlight.invalid && <small role="status">Selected span does not match this preserved source; exact highlighting is unavailable.</small>}
+            </article>
+          })}
           {source.content.references.length > 0 && <details><summary>Attached reference material ({source.content.references.length})</summary>{source.content.references.map(ref => <button key={ref.id} onClick={() => setReference({ref})}>{ref.id}</button>)}</details>}
         </> : <div className={styles.empty}><h2>Choose a conversation</h2><p>Import a file, select a checklist version and run the real evaluator.</p></div>}</section>
         <section className={styles.results}><div className={styles.row}><h2>Assessment</h2><select aria-label="Saved evaluation" value={jobId} onChange={e => setJobId(e.target.value)}><option value="">Choose a saved evaluation</option>{jobs.map(j => <option key={j.id} value={j.id}>{date(j.created_at)} · {j.status} · {j.id.slice(0, 7)}</option>)}</select></div>
-          {job ? <Assessment job={job} busy={busy} onRetry={retry} onCancel={() => act(async () => {await api(`/jobs/${job.id}/cancel`, {}); await refreshJob()})} onEvidence={evidence} onReference={(ref, quote) => setReference({ref, quote})} onAppeal={setAppealCriterion} onResolve={setResolveAppeal}/> : <p className={styles.empty}>Run an evaluation or select a saved result. Loading a saved result makes no API call.</p>}
+          {job ? <Assessment job={job} busy={busy} onRetry={retry} onCancel={() => act(async () => {await api(`/jobs/${job.id}/cancel`, {}); await refreshJob()})} onEvidence={evidence} onReference={(ref, quote, selection) => setReference({ref, quote, selection})} onAppeal={setAppealCriterion} onResolve={setResolveAppeal}/> : <p className={styles.empty}>Run an evaluation or select a saved result. Loading a saved result makes no API call.</p>}
         </section></main></>}
     {reference && <div className={styles.overlay}><section className={styles.dialog}><button className={styles.close} onClick={() => setReference(undefined)}>Close reference</button><h2>{reference.ref.id}</h2><p>{reference.ref.provenance}</p>
       <p>Scope: {reference.ref.scope || 'Explicitly supplied facts'} · {referenceDate(reference.ref)}</p>
       {safeLink(reference.ref.source_url) && <a href={safeLink(reference.ref.source_url)} target="_blank" rel="noreferrer">Original source</a>}
-      <p className={styles.sourceText}>{reference.quote ? <Highlighted text={reference.ref.text} quote={reference.quote}/> : reference.ref.text}</p></section></div>}
+      <p className={styles.sourceText}>{referenceHighlight ? <Highlighted text={reference.ref.text} ranges={referenceHighlight.ranges}/> : reference.ref.text}</p>
+      {referenceHighlight?.invalid && <p role="status">Selected span does not match this preserved source; exact highlighting is unavailable.</p>}
+    </section></div>}
     {appealCriterion && job && <AppealForm job={job} criterionId={appealCriterion} onClose={() => setAppealCriterion(undefined)} onSaved={async () => {await refreshJob(); setAppealCriterion(undefined)}} onError={setError}/>}
     {resolveAppeal && job && <ResolveForm key={`${job.id}-${resolveAppeal.id}`} job={job} appeal={resolveAppeal} onClose={() => setResolveAppeal(undefined)} onSaved={async () => {await refreshJob(); setResolveAppeal(undefined)}} onError={setError}/>}
   </div>

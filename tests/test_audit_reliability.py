@@ -8,14 +8,16 @@ from unittest.mock import AsyncMock
 
 import jsonschema
 import pytest
+from span_fixtures import explicit_browser_fixture, wire_for
 
 from cqa.evaluator import REPAIR_FEEDBACK_BYTES, Evaluator, repair_feedback, schema_for
 from cqa.ledger import BudgetExceeded, Ledger
 from cqa.models import Conversation, Deduction
 from cqa.output_contract import decode_evaluation
 from cqa.rubric import load_checklist
-from cqa.scoring import validate_evaluation
+from cqa.scoring import calculate_score, validate_evaluation
 from cqa.settings import ROOT, Settings
+from cqa.span_transport import decode_span_evaluation
 
 
 def observed_failure():
@@ -37,6 +39,13 @@ def corrected_wire():
         overlap_note="Identity prerequisite is separate from the unanswered consultation request."))
     validate_evaluation(result, conversation, checklist, require_audit=True)
     data = result.model_dump()
+    # These explicit historical transport tests retain their original v2 shape.
+    # Nullable v3 deserialization extensions must not enter that older schema.
+    for field in ["assertion_groups", "source_citations"]:
+        data.pop(field)
+    for claim in data["factual_claims"]:
+        for field in ["claim_id", "assertion_group_id", "proof"]:
+            claim.pop(field)
     audits = {d["criterion_id"]: d for d in data.pop("deductions")}
     data["judgments"] = {j["criterion_id"]: j | {"deduction": audits.get(j["criterion_id"])}
                          for j in data["judgments"]}
@@ -202,12 +211,16 @@ def test_real_attempt_boundary_preserves_rejected_output_and_releases_allowance(
     async def run():
         conversation, checklist, wire = corrected_wire()
         _, _, original, _ = observed_failure()
+        explicit_v3 = explicit_browser_fixture(conversation, checklist, wire)
+        current_wire = wire_for(explicit_v3, conversation, checklist)
+        expected = decode_span_evaluation(json.dumps(current_wire), conversation, checklist)
+        validate_evaluation(expected, conversation, checklist, require_audit=True)
         ledger = Ledger(tmp_path / "ledger.sqlite3", 1, budget_group="run", group_limit=1)
         evaluator = Evaluator(Settings(api_key="fictional-test"), ledger, 1)
         def response(text):
             return SimpleNamespace(id="test-only", model="test-only", output_text=text, status="completed",
                                    usage=SimpleNamespace(input_tokens=100, output_tokens=100))
-        second = (response(json.dumps(wire)) if outcome == "success" else response(original)
+        second = (response(json.dumps(current_wire)) if outcome == "success" else response(original)
                   if outcome == "invalid_again" else RuntimeError("isolated injected interruption")
                   if outcome == "timeout" else asyncio.CancelledError())
         evaluator.client.responses.create = AsyncMock(side_effect=[response(original), second])
@@ -223,7 +236,12 @@ def test_real_attempt_boundary_preserves_rejected_output_and_releases_allowance(
                 assert result["usage"]["estimated_cost_usd"] == pytest.approx(.0024)
                 assert result["status"] == ("completed" if outcome == "success" else "failed")
                 if outcome == "success":
-                    assert result["evaluation"]["judgments"] == decode_evaluation(original).model_dump()["judgments"]
+                    assert result["evaluation"]["judgments"] == expected.model_dump()["judgments"]
+                    assert result["evaluation"]["deductions"] == expected.model_dump()["deductions"]
+                    old = decode_evaluation(original)
+                    assert [(j.criterion_id, j.status, j.answer, j.explanation) for j in expected.judgments] == [
+                        (j.criterion_id, j.status, j.answer, j.explanation) for j in old.judgments]
+                    assert result["score"] == calculate_score(old, checklist)
             assert evaluator.client.responses.create.call_count == 2
             assert ledger.summary()["protected_allowance_usd"] == 0
         finally:

@@ -35,7 +35,7 @@ For every criterion, establish applicability from its exact condition, then sele
 an allowed answer. Missing required behavior is a failure, not N/A. Explain omissions
 using a checked source span. N/A and needs_review require answer=null. Needs_review must
 name a genuine uncertainty and is never an escape from a clear rubric failure.
-Use exact source substrings as evidence quotes. Evidence existence alone is insufficient:
+Select exact immutable source spans by ID. Source identity alone is insufficient:
 the cited passage must support your actual judgment. Include material counterevidence.
 Keep communication quality separate from consultation completeness: a clear answer can
 leave another substantial question unresolved. Capture each substantial customer request
@@ -64,7 +64,7 @@ or any custom failing answer. Binary criteria lose numeric points just like scal
 For maximum-level answers, flags, N/A and needs_review, deduction must be null.
 Do not change a justified failure to a passing answer or needs_review to avoid an audit.
 An omission can be supported by checked_message_ids covering the actual opportunity.
-Each deduction needs an exact quote of its own configured criterion rule, a concrete
+Each deduction needs a span ID for its own configured criterion rule, a concrete
 source-linked defect, and an overlap_note explaining any independent violation when
 another criterion uses the same event. Do not add a second deduction merely to restate
 an unanswered request or a factual error in different words. Follow the checklist's
@@ -124,69 +124,108 @@ A criterion explicitly penalizing any historical error must still fail after rep
 Incorrect advice still active or with harmful key consequences must not be excused.
 For an unrelated unverified product claim, clear wording may stay maximum: explain
 that independence under the communication rule, not under a made-up factual policy.
-EVIDENCE CLASSES AND SOURCE COVERAGE:
-The supplied checklist is the source of expected grading behavior. Use
-evidence_kind=grading_rule, verification_scope=grading_rule and exact rule_evidence
-for an operator assertion about that expectation. A rule requiring verification
-before a protected disclosure does not need another external policy. Its application
-still requires transcript evidence of protected conduct and verification ordering.
-Checklist rules cannot establish fees, account state, market access or other product
-truth. Separate product_fact, account_state, general_fact and workflow_commitment.
-Use policy scope for general rules, private_record for private state, interaction
-for narrowly observed task outcomes, and commitment for a stated next-step promise.
-A promise/investigation referral is observable conduct, not proof of backend completion.
-For supported claims based on observations, set supported_proposition to exactly the
-narrow claim being supported and observation_scope to reported_state/control_visible/
-action_completed/task_completed/system_record as appropriate. A customer finding a
-control does not prove completing the action or a general policy. A customer report
-does not independently verify private account state. Supported policy claims need
-applicable references; grading requirements use their supplied rule instead.
-Every request needs support with basis=explicit/implied/next_step/none/withdrawn,
-exact source evidence, inference (non-null only for implied answers), unresolved_aspects,
-and an explicitly supplied omission field. Positive support.evidence is ONLY actual
-operator answer proof linked in answer_message_ids. Customer confirmation is not an
-operator answer: put non-proving customer context in the source ledger or claim context.
-An answered request cannot retain unresolved aspects; use partial/unanswered when
-needed. An implied answer must actually entail the requested conclusion. A positive
-statement about one option does not establish that alternatives are unavailable.
-Do not demand literal keyword matching or completed tasks where a correct concrete
-next step satisfies the configured criterion. Mere thanks does not withdraw a question.
-For an unanswered request, use basis=none, answer_message_ids=[], support.evidence=[],
-inference=null and name the unresolved aspects. Explain absence with support.omission,
-not by inventing or linking a nonanswer as an answer. The omission object has
-start_message_id (the earliest linked customer request), end_message_id (the last
-original source turn), and context_evidence (verbatim contextual quotes within that
-inclusive interval). This declares the whole opportunity span was checked. Context
-quotes may come from any source role; they do NOT become operator answer proof.
-Partial requests need real positive operator evidence AND an omission interval for
-their remaining aspects. Answered, next_step and withdrawn requests use omission=null.
-For withdrawal, support.evidence quotes only the linked customer withdrawal and
-answer_message_ids=[]; the customer must actually cancel the request. Do not relabel
-an unanswered request or justified deduction to escape these evidence requirements.
-Every factual claim must explicitly supply context_evidence. It holds customer/system
-reports or acknowledgments that are NOT used as independent verification. It never
-verifies policy, private account truth or completed actions. By contrast, nonempty
-dialogue_evidence declares observational support and REQUIRES observation_scope other
-than none plus a nonempty supported_proposition, even if an applicable policy reference
-also supports the claim. State exactly the narrow observed proposition: finding a
-control shows control visibility, not completion or a general policy. Keep reference
-proof for policy and system-only private-record requirements. Without observational
-evidence use dialogue_evidence=[], observation_scope=none; supported_proposition is
-normally null, except the independently stated commitment proposition required for
-verification_scope=commitment. Never infer metadata or promote context to observation
-just to satisfy the contract. Separate assertions when their support or truth differs.
-Return semantic_audit version=coverage-v2. reviewed_message_ids must cover EVERY
-client/operator message exactly once, including late follow-ups and internal speech.
-Each customer turn must appear in request_coverage or an exact-quoted exclusion;
-each operator turn must appear in factual_claims or an exclusion, even when it is
-also cited as an answer. Exclusions name social/context_or_confirmation/
-observable_commitment/criterion_behavior/not_grade_changing, the concrete reason,
-and related criteria where relevant. Multiple assertions in one turn need separate
-claim treatment or explicit exclusion reasoning; an initial wrong route must not
-silently disappear because the final route worked. Keep grade-independent assertions
-and normative conduct distinguishable. Never classify a material unresolved fact as
-social or immaterial just to pass validation. Exclusions are reviewable decisions,
-not a semantic-completeness certificate. Keep quotes and explanations concise.
+SOURCE-SPAN AND ATOMIC-PROOF CONTRACT (span-v3):
+Return contract_version=span-v3 and the exact supplied catalog_fingerprint. Every
+citation selects ONLY {span_id} from source_span_catalog. Rule quotes select
+rule_span_id from that criterion's saved rule spans. Never retype, translate,
+correct or concatenate a quote, supply your own offsets, or invent a source ID.
+Source text fields contain {source_span_id} pointers into source_span_catalog.sources.
+For each source, concatenating its parts.text yields the complete unchanged text.
+The source's own span_id selects that whole field; a non-null parts.span_id selects
+that exact fragment. These source identifiers are metadata, not operator speech.
+Read all parts in order, retaining chronology, source role and source context.
+Select the smallest sufficient available
+span, retaining the surrounding source context in your reasoning. A valid span
+can still be irrelevant: its content must actually support its stated purpose.
+Use only operator spans for operator assertions and positive answer proof;
+customer/system reports cannot become an operator answer. References establish
+only their applicable source proposition, never an action the operator performed.
+Checklist spans establish configured grading rules, never product/private truth.
+
+Give each factual atom a unique claim_id and assertion_group_id. assertion_groups
+cover the original operator assertions: atomic groups link one claim, all_of
+groups link all separately assessed constituent claims. A source sentence can
+contain multiple atoms. Split whenever truth, support, correction lifecycle or
+grade consequence differs, even if the actual final grade would be the same.
+A correct route AND a false or unknown extra clause cannot become one supported
+claim. Groups have no shared counterfactual or invented aggregate grade; truth
+and grade impacts belong to the individual atoms. Do not silently exclude a
+material false clause or call an unresolved fact social just to pass validation.
+
+Each atom states its proposition ONCE in claim. An observation explicitly uses
+{target: claim, scope}; it assesses that same canonical
+proposition under supported/contradicted/unverified status, without generating a
+second paraphrase. Scope is reported_state/control_visible/action_completed/
+task_completed/system_record. A visible control does not establish action or
+task completion, general policy or private account truth. Different ancillary
+reports belong in non-proving context or in their own necessary proof premise;
+never pretend that a narrower observation independently proves a broad policy.
+Without observation use observation=null. A commitment uses its canonical claim
+as the observable promise, not as proof that promised backend work completed.
+Evidence kinds and verification scopes must agree: grading_rule/grading_rule,
+account_state/private_record, workflow_commitment/commitment, or product/general
+facts with interaction/policy scope. Policy, grading-rule and commitment atoms use
+observation=null; related interaction reports cannot verify those propositions.
+Supported policy needs an applicable source.
+Private state needs a real private reference or system record, not a customer report.
+
+Known atoms require explicit proof. A direct proof has one required premise;
+its source premise uses proposition=null to refer to the canonical claim. An
+all_of proof lists each independently necessary premise with its own proposition,
+and requires ALL premise IDs. Customer/system verification premises do not need
+invented operator assertions. Source premises name actual proving evidence,
+reference evidence or rule evidence. A dependency premise names another canonical
+claim and its required supported/contradicted status, with no local source fields
+or repeated proposition. A missing, unverified or cyclic dependency cannot prove
+a known conclusion. Unverified claims with no proving sources use proof=null.
+Proving span selections occur only in proof.premises, including its evidence,
+reference_evidence and rule_evidence fields, or through explicit claim dependencies.
+Do not repeat flat proving lists on the claim or evidence inside observation.
+The application exposes the exact selected leaf union as a source view without
+inferring truth. A premise placed only in context_evidence is NOT proof.
+Inferences requiring an earlier customer state AND a later no-change
+record must expose BOTH; the later record alone does not establish the earlier
+state. A whole chain with an essential customer premise is not system_record-only.
+Operator promise evidence is allowed only to prove the promise itself.
+
+Every impact names in fixed_claim_ids ALL OTHER atoms touching the same criterion.
+Evaluate the atom's true/false alternatives with those other actual facts fixed.
+A known independent wrong key recommendation can determine zero in both branches
+of a separate correct-route claim. A false ancillary clause does not imply that
+correct key guidance is wrong. Do not collapse several independent false
+possibilities into one zero branch: decompose them first. Preserve the original
+false assertion after correction; explicit supported recovery and remaining
+consequences determine its final impact under the actual configured criterion.
+No text of this protocol supplies a special grade for a particular conversation.
+
+Every request needs explicit support basis, inference (only for implied answers),
+unresolved_aspects and omission. Positive support.evidence selects actual operator
+answer spans linked in answer_message_ids. Partial requests require real positive
+support AND an omission interval for their remaining substantive aspects.
+Unanswered requests use basis=none, no positive answer IDs/evidence, and name the
+unresolved aspects. Omission.start_message_id is the earliest linked customer
+request; end_message_id is the final original source turn. Its context_evidence
+may select any source role inside that entire interval, never positive answer
+proof. Answered/next_step/withdrawn use omission=null. Next steps cannot retain
+unanswered request aspects; factual uncertainty about a stated next step belongs
+in the claim audit, not a contradictory request-support list. A correct concrete
+next step can satisfy the criterion without task completion. Customer thanks
+alone neither proves correctness nor withdraws a request. Withdrawal support
+selects actual linked customer withdrawal, not an operator answer.
+Fields that the selected schema branch forbids MUST be literal null; do not open
+an array for them. This explicit transport declaration means no such IDs/evidence/
+unresolved aspects. Required fields may never be omitted or filled with invented
+metadata to avoid a real deduction or uncertainty.
+
+Return semantic_audit version=coverage-v3. reviewed_message_ids covers EVERY
+client/operator message exactly once. Each customer turn requires request coverage
+or an explicit exclusion; each operator turn requires atom/correction coverage
+or an exclusion, even if already cited as an answer. Exclusions select exact
+client/operator spans, name social/context_or_confirmation/observable_commitment/
+criterion_behavior/not_grade_changing, and explain their criterion relationship.
+A message containing several assertions needs each meaning assessed or explicitly
+accounted for. Context and exclusions are reviewable judgments, not a certificate
+of semantic completeness. Keep explanations and source selections concise.
 The evidence_context describes source-derived dates, the explicit assessment basis,
 conflicts and reference rejection reasons. Do not infer dates from MM:SS, language
 or today's date. A curated official-source summary verifies only its stated product
@@ -195,14 +234,14 @@ fact does not close an unanswered request or erase a legitimate independent dedu
 Do not override scope, snapshot date, policy validity or source-date conflicts. Keep
 uncertainty local and retain all independently justified deductions.
 Use concise, specific explanations in English;
-quotes must remain verbatim in the original language. Return only the requested JSON.
+selected spans retain their original source language. Return only the requested JSON.
 """
 SYSTEM = PROJECT_BASELINE_SYSTEM
 PROMPT_VERSION = "evaluator-v2-" + hashlib.sha256(SYSTEM.encode()).hexdigest()[:12]
-GROUNDED_VERSION = "evaluator-v7-" + hashlib.sha256(GROUNDED_SYSTEM.encode()).hexdigest()[:12]
+GROUNDED_VERSION = "evaluator-v8-" + hashlib.sha256(GROUNDED_SYSTEM.encode()).hexdigest()[:12]
 
 
-def payload_for(conversation: Conversation, checklist: Checklist, *, grounded=False):
+def payload_for(conversation: Conversation, checklist: Checklist, *, grounded=False, source_contract=False):
     model_input = conversation.model_dump()
     # New optional context/source metadata must not rewrite the legacy payload
     # representation when merely reading a historical conversation.
@@ -226,9 +265,17 @@ def payload_for(conversation: Conversation, checklist: Checklist, *, grounded=Fa
                                         if k not in {"source_timestamps", "unusable_timestamps"}}
         payload["evidence_context"] = evidence_context
         payload["usable_reference_ids"] = [r["reference_id"] for r in evidence_context["references"] if r["usable"]]
+    if source_contract:
+        if not grounded:
+            raise ValueError("Source-span transport requires grounded source context")
+        from .source_spans import build_catalog
+        from .source_view import project_sources
+        payload = project_sources(payload, conversation, checklist, build_catalog(conversation, checklist))
+        payload["output_contract"] = "span-v3"
     return json.dumps(payload, ensure_ascii=False, sort_keys=True)
 
 
 def fingerprint(conversation: Conversation, checklist: Checklist, *, grounded=False):
     instructions = GROUNDED_SYSTEM if grounded else SYSTEM
-    return hashlib.sha256((instructions + payload_for(conversation, checklist, grounded=grounded)).encode()).hexdigest()
+    return hashlib.sha256((instructions + payload_for(
+        conversation, checklist, grounded=grounded, source_contract=grounded)).encode()).hexdigest()

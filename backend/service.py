@@ -77,7 +77,7 @@ class Workflow:
                 conversation = Conversation.model_validate(doc.content)
                 key = digest({"conversation_revision": doc.id, "config": self.config(),
                     "input": fingerprint(conversation, checklist, grounded=True),
-                    "schema": schema_for(conversation, checklist, grounded=True)})
+                    "schema": schema_for(conversation, checklist, grounded=True, source_contract=True)})
                 existing = session.scalar(select(Job).where(Job.cache_key == key,
                     Job.status.in_(["queued", "running"] if request.force else ["queued", "running", "completed"]))
                     .order_by(Job.created_at.desc()).limit(1))

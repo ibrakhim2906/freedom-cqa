@@ -1,9 +1,11 @@
 from decimal import ROUND_HALF_UP, Decimal
 
+from .atomic_dependencies import validate_atomic_dependencies
 from .claim_dependencies import validate_claim_assessment
 from .grounding import reference_applicable
 from .models import Checklist, Conversation, Evaluation
 from .semantic_coverage import validate_semantic_coverage
+from .span_transport import validate_source_citations
 
 
 def validate_evaluation(result: Evaluation, conversation: Conversation, checklist: Checklist, *, require_audit=False):
@@ -59,6 +61,8 @@ def validate_evaluation(result: Evaluation, conversation: Conversation, checklis
             raise ValueError("Only withdrawn requests may have withdrawal evidence")
     validate_audit(result, conversation, checklist, require_audit=require_audit)
     validate_semantic_coverage(result, conversation, checklist)
+    validate_source_citations(result, conversation, checklist)
+    validate_atomic_dependencies(result, conversation, checklist)
 
 
 def validate_audit(result, conversation, checklist, *, require_audit):

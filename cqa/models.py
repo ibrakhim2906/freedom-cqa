@@ -201,6 +201,8 @@ class ClaimImpact(StrictModel):
     evidence: list[Evidence]
     checked_message_ids: list[str]
     explanation: str
+    # Historical records predate explicit contextual counterfactual dependencies.
+    fixed_claim_ids: list[str] | None = None
 
 
 class ClaimCorrection(StrictModel):
@@ -215,6 +217,32 @@ class ClaimAssessment(StrictModel):
     lifecycle: Literal["active", "corrected"]
     correction: ClaimCorrection | None
     impacts: list[ClaimImpact]
+
+
+class ProofPremise(StrictModel):
+    premise_id: str
+    # Explicit null in a direct source premise aliases the canonical claim.
+    # Conjunctive premises describe their own independently needed propositions.
+    proposition: str | None
+    evidence: list[Evidence]
+    reference_evidence: list[ReferenceEvidence]
+    rule_evidence: list[RuleEvidence]
+    depends_on_claim_id: str | None
+    required_status: Literal["supported", "contradicted"] | None
+
+
+class ClaimProof(StrictModel):
+    relation: Literal["direct", "all_of"]
+    premises: list[ProofPremise]
+    required_premise_ids: list[str]
+    explanation: str
+
+
+class AssertionGroup(StrictModel):
+    group_id: str
+    composition: Literal["atomic", "all_of"]
+    operator_evidence: list[Evidence]
+    claim_ids: list[str]
 
 
 class FactualClaim(StrictModel):
@@ -237,6 +265,10 @@ class FactualClaim(StrictModel):
     # Customer reports/acknowledgments that do not independently verify the claim.
     # Keep these separate from observation proof in dialogue_evidence.
     context_evidence: list[Evidence] = Field(default_factory=list)
+    # Source-contract v3 requires these explicitly; old records remain unchanged.
+    claim_id: str | None = None
+    assertion_group_id: str | None = None
+    proof: ClaimProof | None = None
 
 
 class Deduction(StrictModel):
@@ -256,9 +288,27 @@ class SemanticExclusion(StrictModel):
 
 
 class SemanticAudit(StrictModel):
-    version: Literal["coverage-v1", "coverage-v2"]
+    version: Literal["coverage-v1", "coverage-v2", "coverage-v3"]
     reviewed_message_ids: list[str]
     exclusions: list[SemanticExclusion]
+
+
+class SelectedSourceSpan(StrictModel):
+    kind: Literal["dialogue", "reference", "rule"]
+    source_id: str
+    field: str
+    role: Literal["client", "operator", "system", "bot"] | None
+    start: int = Field(ge=0)
+    end: int = Field(ge=0)
+
+
+class SourceCitationAudit(StrictModel):
+    version: Literal["source-spans-v1"]
+    catalog_fingerprint: str
+    # JSON pointers into the persisted evaluation, mapped to explicitly selected
+    # source spans. Exact quote strings come only from those immutable sources.
+    selections: dict[str, str]
+    spans: dict[str, SelectedSourceSpan]
 
 
 class Evaluation(StrictModel):
@@ -269,6 +319,8 @@ class Evaluation(StrictModel):
     factual_claims: list[FactualClaim] = Field(default_factory=list)
     deductions: list[Deduction] = Field(default_factory=list)
     semantic_audit: SemanticAudit | None = None
+    assertion_groups: list[AssertionGroup] | None = None
+    source_citations: SourceCitationAudit | None = None
 
 
 class Expectation(StrictModel):

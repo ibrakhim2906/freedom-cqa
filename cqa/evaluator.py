@@ -20,6 +20,7 @@ from .output_contract import bind_evidence_contracts, bind_judgment_audits, deco
 from .prompt import GROUNDED_SYSTEM, GROUNDED_VERSION, PROMPT_VERSION, SYSTEM, fingerprint, payload_for
 from .scoring import calculate_score, validate_evaluation
 from .settings import DEFAULT_STRATEGY, RATES, Settings
+from .span_transport import decode_span_evaluation
 
 REPAIR_FEEDBACK_BYTES = 24_000
 REPAIR_INSTRUCTIONS = (
@@ -135,10 +136,10 @@ class Evaluator:
         return attempts
 
     def _prepare(self, conversation, checklist, feedback=None, *, stage="grading", observations=None):
-        payload = payload_for(conversation, checklist, grounded=self.grounded)
+        payload = payload_for(conversation, checklist, grounded=self.grounded, source_contract=self.grounded)
         extracting = stage == "observations"
         schema = observation_schema(conversation, checklist) if extracting else schema_for(
-            conversation, checklist, grounded=self.grounded)
+            conversation, checklist, grounded=self.grounded, source_contract=self.grounded)
         instructions = OBSERVATION_SYSTEM if extracting else GROUNDED_SYSTEM if self.grounded else SYSTEM
         output_cap = min(3000, self.settings.max_output_tokens) if extracting else self.settings.max_output_tokens
         if observations is not None:
@@ -181,7 +182,7 @@ class Evaluator:
                                      if extracting else self.workflow_version), "model": self.settings.model,
                   "strategy": self.strategy, "stage": stage, "max_output_tokens": output_cap,
                   "audit_contract_enabled": self.grounded,
-                  "claim_contract_version": "evidence-coverage-v2" if self.grounded else "legacy",
+                  "claim_contract_version": "source-spans-atomic-v3" if self.grounded else "legacy",
                   "workflow_version": self.workflow_version,
                   "reasoning_effort": self.settings.effort, "ledger_call_id": call_id,
                   "reserved_usd": round(reservation, 6), "audio_analyzed": False,
@@ -217,9 +218,8 @@ class Evaluator:
                     validate_observations(result, conversation, checklist)
                     record.update(status="completed", observations=result.model_dump())
                 else:
-                    result = decode_evaluation(response.output_text, require_claim_dependencies=self.grounded,
-                                               require_semantic_coverage=self.grounded,
-                                               require_evidence_contract=self.grounded)
+                    result = (decode_span_evaluation(response.output_text, conversation, checklist) if self.grounded
+                              else decode_evaluation(response.output_text))
                     validate_evaluation(result, conversation, checklist, require_audit=self.grounded)
                     record.update(status="completed", evaluation=result.model_dump(),
                                   score=calculate_score(result, checklist))
@@ -248,9 +248,21 @@ class Evaluator:
         return record
 
 
-def schema_for(conversation: Conversation, checklist: Checklist, *, grounded=False):
+def schema_for(conversation: Conversation, checklist: Checklist, *, grounded=False, source_contract=False):
     """Constrain references and IDs mechanically without hardcoding criterion meaning."""
     schema = Evaluation.model_json_schema()
+    # Retain the exact historical transport shape for explicit old-schema reads.
+    # Actual grounded preparation opts into the separately versioned span wire.
+    for name, fields in {"Evaluation": ["assertion_groups", "source_citations"],
+                         "FactualClaim": ["claim_id", "assertion_group_id", "proof"],
+                         "ClaimImpact": ["fixed_claim_ids"]}.items():
+        definition = schema if name == "Evaluation" else schema["$defs"][name]
+        for field in fields:
+            definition["properties"].pop(field)
+            if field in definition.get("required", []):
+                definition["required"].remove(field)
+    for name in ["SourceCitationAudit", "SelectedSourceSpan", "AssertionGroup", "ClaimProof", "ProofPremise"]:
+        schema["$defs"].pop(name, None)
     message_ids = [m.id for m in conversation.messages]
     definitions = schema["$defs"]
     schema["required"] = list(schema["properties"])
@@ -334,10 +346,21 @@ def schema_for(conversation: Conversation, checklist: Checklist, *, grounded=Fal
     def remove_defaults(node):
         if isinstance(node, dict):
             node.pop("default", None)
-            for value in node.values():
-                remove_defaults(value)
-        elif isinstance(node, list):
-            for value in node:
-                remove_defaults(value)
+            # Property and definition names are user data, not schema keywords.
+            for field in ["properties", "$defs"]:
+                for value in node.get(field, {}).values():
+                    remove_defaults(value)
+            for field in ["items", "additionalProperties"]:
+                if isinstance(node.get(field), dict):
+                    remove_defaults(node[field])
+            for field in ["anyOf", "oneOf", "allOf"]:
+                for value in node.get(field, []):
+                    remove_defaults(value)
     remove_defaults(wire)
+    if source_contract:
+        if not grounded:
+            raise ValueError("Source-span transport requires grounded evaluation")
+        from .source_spans import build_catalog
+        from .span_schema import bind_span_contract
+        wire = bind_span_contract(wire, conversation, checklist, build_catalog(conversation, checklist))
     return wire

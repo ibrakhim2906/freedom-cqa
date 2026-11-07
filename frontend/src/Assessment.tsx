@@ -1,21 +1,62 @@
-import type {Appeal, Evidence, JobDetail, Reference} from './types'
+import type {Appeal, CitationSelection, ClaimOutcome, Evidence, HighlightRange, JobDetail, Reference, ReferenceEvidence} from './types'
 import styles from './App.module.css'
 import {date, dollars, terminal} from './format'
 
-export function Highlighted({text, quote}: {text: string; quote: string}) {
+export function Highlighted({text, quote, ranges}: {text: string; quote?: string; ranges?: HighlightRange[]}) {
+  if (ranges !== undefined) {
+    const characters = Array.from(text)
+    const valid = ranges.filter(r => Number.isInteger(r.start) && Number.isInteger(r.end)
+      && r.start >= 0 && r.end > r.start && r.end <= characters.length
+      && characters.slice(r.start, r.end).join('') === r.quote).sort((a, b) => a.start - b.start || a.end - b.end)
+    const merged: {start: number; end: number}[] = []
+    for (const range of valid) {
+      const previous = merged[merged.length - 1]
+      if (previous && range.start <= previous.end) previous.end = Math.max(previous.end, range.end)
+      else merged.push({start: range.start, end: range.end})
+    }
+    let cursor = 0
+    const pieces = merged.flatMap((range, i) => {
+      const before = characters.slice(cursor, range.start).join('')
+      cursor = range.end
+      return [before, <mark key={i}>{characters.slice(range.start, range.end).join('')}</mark>]
+    })
+    return <>{pieces}{characters.slice(cursor).join('')}</>
+  }
+  if (!quote) return text
   const at = text.indexOf(quote)
   return at < 0 ? text : <>{text.slice(0, at)}<mark>{quote}</mark>{text.slice(at + quote.length)}</>
 }
 export function EvidenceButtons({items, onClick}: {items: Evidence[]; onClick: (e: Evidence[]) => void}) {
-  return <div className={styles.evidence}>{items.map((e, i) => <button key={i} onClick={() => onClick([e])}>{e.message_id}: “{e.quote}”</button>)}</div>
+  return <div className={styles.evidence}>{items.map((e, i) => <button key={i} onClick={() => onClick([e])}>{e.message_id}: “{e.quote}”</button>)}
+    {items.length > 1 && <button onClick={() => onClick(items)}>Show all cited spans</button>}</div>
 }
 
 export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReference, onAppeal, onResolve}: {
   job: JobDetail; busy: boolean; onRetry: () => void; onCancel: () => void;
-  onEvidence: (e: Evidence[], ids?: string[]) => void; onReference: (ref: Reference, quote?: string) => void;
+  onEvidence: (e: Evidence[], ids?: string[]) => void; onReference: (ref: Reference, quote?: string, selection?: CitationSelection) => void;
   onAppeal: (id: string) => void; onResolve: (a: Appeal) => void;
 }) {
   const effective = job.effective, checklist = job.checklist.content
+  const facts = job.record?.evaluation.factual_claims || []
+  const paths = new WeakMap<object, string>()
+  function indexSourceObjects(value: unknown, path: (string|number)[] = []) {
+    if (value === null || typeof value !== 'object') return
+    paths.set(value, path.map(part => '/' + String(part).replaceAll('~', '~0').replaceAll('/', '~1')).join(''))
+    if (Array.isArray(value)) value.forEach((item, i) => indexSourceObjects(item, [...path, i]))
+    else Object.entries(value).forEach(([key, item]) => indexSourceObjects(item, [...path, key]))
+  }
+  indexSourceObjects(job.record?.evaluation)
+  function selectedSource(item: object): CitationSelection|undefined {
+    const audit = job.record?.evaluation.source_citations, pointer = paths.get(item)
+    if (!audit || pointer === undefined) return undefined
+    const id = audit.selections[pointer], span = audit.spans?.[id]
+    return {source_citation_expected: true, source_span_id: id,
+      ...(span ? {source_id: span.source_id, source_kind: span.kind, source_field: span.field,
+        source_start: span.start, source_end: span.end} : {})}
+  }
+  function citedEvidence(items: Evidence[], ids?: string[]) {
+    onEvidence(items.map(item => ({...item, ...selectedSource(item)})), ids)
+  }
   const assessment = effective?.assessment_context || job.record?.assessment_context || job.evidence_context?.assessment
   const flagged = Object.values(effective?.score.flags || {}).includes('yes')
   const flagUncertain = Object.values(effective?.score.flags || {}).includes('needs_review')
@@ -23,6 +64,30 @@ export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReferenc
     const messages = job.conversation.content.messages
     const first = messages.findIndex(m => m.id === start), last = messages.findIndex(m => m.id === end)
     return first < 0 || last < first ? [] : messages.slice(first, last + 1).map(m => m.id)
+  }
+  function factReference(id: string) {
+    const index = facts.findIndex(f => f.claim_id === id), fact = facts[index]
+    const criterionIndex = fact ? checklist.criteria.findIndex(c => fact.criterion_ids.includes(c.id)) : -1
+    const anchor = `fact-${index}-${criterionIndex}`
+    return fact ? <a href={`#${anchor}`} onClick={event => {
+      const target = document.getElementById(anchor)
+      if (!target) return
+      event.preventDefault()
+      for (let parent = target.parentElement; parent; parent = parent.parentElement) {
+        if (parent instanceof HTMLDetailsElement) parent.open = true
+      }
+      target.scrollIntoView({block: 'center'})
+      target.focus({preventScroll: true})
+    }}>{fact.claim} ({fact.status})</a> : <span>Unresolved fact reference: {id}</span>
+  }
+  function referenceButtons(items: ReferenceEvidence[]) {
+    return items.map((r, n) => <button key={n} onClick={() => {
+      const ref = job.conversation.content.references.find(x => x.id === r.reference_id)
+      if (ref) onReference(ref, r.quote, selectedSource(r))
+    }}>Reference: {r.reference_id} — {r.quote}</button>)
+  }
+  function outcome(value: ClaimOutcome) {
+    return value.status === 'scored' ? value.answer : value.status.replaceAll('_', ' ')
   }
   return <>
     <div className={styles.card}><b data-testid="job-status">{job.status}</b> · {date(job.created_at)}
@@ -55,27 +120,72 @@ export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReferenc
       {effective.judgments.map(j => {
         const c = checklist.criteria.find(c => c.id === j.criterion_id)!
         const changed = job.appeals.some(a => a.criterion_id === j.criterion_id && a.status === 'accepted')
+        const original = !changed && job.record?.evaluation.judgments.find(item => item.criterion_id === j.criterion_id)
+        const judgmentEvidence = original || j
         return <article key={j.criterion_id} className={styles.card} data-testid={`criterion-${j.criterion_id}`}>
           <h3>{c.title} <small>{changed ? 'Human review' : 'AI'}</small></h3><b>{j.status === 'scored' ? j.answer : j.status}</b>
           <p>{j.explanation}</p>{j.uncertainty && <p className={styles.warning}>{j.uncertainty}</p>}
-          <EvidenceButtons items={j.evidence} onClick={onEvidence}/>
-          {j.counterevidence.length > 0 && <><small>Counterevidence</small><EvidenceButtons items={j.counterevidence} onClick={onEvidence}/></>}
+          <EvidenceButtons items={judgmentEvidence.evidence} onClick={citedEvidence}/>
+          {judgmentEvidence.counterevidence.length > 0 && <><small>Counterevidence</small><EvidenceButtons items={judgmentEvidence.counterevidence} onClick={citedEvidence}/></>}
           <div className={styles.row}><button onClick={() => onEvidence([], j.checked_message_ids)}>Show checked messages</button>
             <button onClick={() => onAppeal(j.criterion_id)}>Appeal this judgment</button></div>
           <details><summary>Configured rule and original AI audit</summary><p>{c.instruction}</p>
             {job.record?.evaluation.deductions.filter(d => d.criterion_id === c.id).map((d, i) => <div key={i}><blockquote>{d.rule_quote}</blockquote><p>{d.defect}</p><p>{d.overlap_note}</p></div>)}
-            {job.record?.evaluation.factual_claims.filter(f => f.criterion_ids.includes(c.id)).map((f, i) => <div className={styles.fact} key={i}>
+            {facts.filter(f => f.criterion_ids.includes(c.id)).map((f, i) => <div className={styles.fact} key={i}
+              id={`fact-${facts.indexOf(f)}-${checklist.criteria.indexOf(c)}`} tabIndex={-1}
+              data-testid={f.claim_id ? `fact-${f.claim_id}` : undefined}>
               <b>{f.status}</b><p>{f.claim}</p><p>{f.explanation}</p>
+              {f.assertion_group_id && (() => {
+                const group = job.record?.evaluation.assertion_groups?.find(g => g.group_id === f.assertion_group_id)
+                return group ? <details><summary>{group.composition === 'all_of'
+                  ? `Source statement contains ${group.claim_ids.length} separately assessed facts`
+                  : 'Source statement contains one assessed fact'}</summary>
+                  <p>Each fact keeps its own truth assessment and effect on the grade.</p>
+                  <EvidenceButtons items={group.operator_evidence} onClick={citedEvidence}/>
+                  {group.claim_ids.filter(id => id !== f.claim_id).map(id => <p key={id}>Related fact: {factReference(id)}</p>)}
+                </details> : null
+              })()}
               {f.verification_scope && <p>Verification scope: {f.verification_scope.replaceAll('_', ' ')}</p>}
-              <small>Operator assertion</small><EvidenceButtons items={f.operator_evidence} onClick={onEvidence}/>
+              <small>Operator assertion</small><EvidenceButtons items={f.operator_evidence} onClick={citedEvidence}/>
               {f.dialogue_evidence.length > 0 && <><small>Recorded dialogue evidence</small>
                 <p>Declared observation scope: {f.observation_scope?.replaceAll('_', ' ') || 'not recorded'}</p>
-                {f.supported_proposition && <p>Declared observation proposition: {f.supported_proposition}</p>}
-                <EvidenceButtons items={f.dialogue_evidence} onClick={onEvidence}/></>}
-              {!f.dialogue_evidence.length && f.supported_proposition && <p>Declared supported proposition: {f.supported_proposition}</p>}
+                {f.supported_proposition && (f.supported_proposition === f.claim
+                  ? <p>Observation targets this claim.</p>
+                  : <p>Declared observation proposition: {f.supported_proposition}</p>)}
+                <EvidenceButtons items={f.dialogue_evidence} onClick={citedEvidence}/></>}
+              {!f.dialogue_evidence.length && f.supported_proposition && (f.supported_proposition === f.claim
+                ? <p>The supported proposition is this claim.</p>
+                : <p>Declared supported proposition: {f.supported_proposition}</p>)}
+              {f.proof && <div data-testid={`proof-${f.claim_id || i}`}>
+                <b>{f.proof.relation === 'all_of' ? `All ${f.proof.required_premise_ids.length} proof premises are required` : 'Direct source proof'}</b>
+                <p>{f.proof.explanation}</p>
+                {f.proof.premises.map((p, n) => <div key={p.premise_id} data-testid={`premise-${f.claim_id || i}-${p.premise_id}`}>
+                  <p><b>Premise {n + 1}{f.proof?.required_premise_ids.includes(p.premise_id) ? ' · required' : ''}</b></p>
+                  {p.depends_on_claim_id ? <p>Requires {factReference(p.depends_on_claim_id)} to be {p.required_status}.</p>
+                    : <><p>{p.proposition === null ? 'Uses this claim.' : p.proposition}</p>
+                      <EvidenceButtons items={p.evidence} onClick={citedEvidence}/>
+                      {referenceButtons(p.reference_evidence)}
+                      {p.rule_evidence.map((r, key) => <div key={key}><small>Rule: {checklist.criteria.find(rule => rule.id === r.criterion_id)?.title || r.criterion_id}</small><blockquote>{r.quote}</blockquote></div>)}
+                    </>}
+                </div>)}
+              </div>}
               {!!f.context_evidence?.length && <><small>Customer/system context — not independent verification</small>
-                <EvidenceButtons items={f.context_evidence} onClick={onEvidence}/></>}
-              {f.reference_evidence.map((r, n) => <button key={n} onClick={() => {const ref = job.conversation.content.references.find(x => x.id === r.reference_id); if (ref) onReference(ref, r.quote)}}>Reference: {r.reference_id} — {r.quote}</button>)}
+                <EvidenceButtons items={f.context_evidence} onClick={citedEvidence}/></>}
+              {referenceButtons(f.reference_evidence)}
+              {f.assessment?.correction && <div><b>Earlier advice explicitly corrected</b>
+                <p>{f.assessment.correction.explanation}</p>
+                <p>Remaining consequence: {f.assessment.correction.remaining_consequence.replaceAll('_', ' ')}</p>
+                <small>Correction</small><EvidenceButtons items={f.assessment.correction.operator_evidence} onClick={citedEvidence}/>
+                <small>Independent outcome evidence</small><EvidenceButtons items={f.assessment.correction.outcome_evidence} onClick={citedEvidence}/>
+                {referenceButtons(f.assessment.correction.reference_evidence)}
+              </div>}
+              {f.assessment?.impacts.filter(impact => impact.criterion_id === c.id).map(impact => <div key={impact.criterion_id}>
+                <p>Grade if this fact were true: <b>{outcome(impact.when_true)}</b> · if false: <b>{outcome(impact.when_false)}</b></p>
+                <p>{impact.explanation}</p>
+                {impact.fixed_claim_ids && <><small>Other facts held fixed for this comparison</small>
+                  {impact.fixed_claim_ids.length ? <ul>{impact.fixed_claim_ids.map(id => <li key={id}>{factReference(id)}</li>)}</ul>
+                    : <p>No other related facts were declared.</p>}</>}
+              </div>)}
             </div>)}
             {changed && <p>These audits belong to the original AI result. The human decision is recorded below.</p>}
           </details>
@@ -88,13 +198,13 @@ export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReferenc
           <button onClick={() => onEvidence([], [...r.request_message_ids, ...r.answer_message_ids])}>Show linked request and operator turns</button>
           {support && <>
             {support.basis === 'none' ? <p>No operator answer recorded.</p> : <><p>{support.basis === 'withdrawn' ? 'Customer withdrawal evidence' : `Operator answer evidence (${support.basis.replaceAll('_', ' ')})`}</p>
-              <EvidenceButtons items={support.evidence} onClick={onEvidence}/></>}
+              <EvidenceButtons items={support.evidence} onClick={citedEvidence}/></>}
             {support.inference && <p>Answer inference: {support.inference}</p>}
             {support.unresolved_aspects.length > 0 && <p>Still unanswered: {support.unresolved_aspects.join('; ')}</p>}
           </>}
           {omission && <div><p>Interval checked for missing answer: {omission.start_message_id}–{omission.end_message_id}</p>
             <button disabled={!interval.length} onClick={() => onEvidence([], interval)}>Show complete omission review interval</button>
-            <p>Context for the missing answer — not operator answer proof</p><EvidenceButtons items={omission.context_evidence} onClick={onEvidence}/>
+            <p>Context for the missing answer — not operator answer proof</p><EvidenceButtons items={omission.context_evidence} onClick={citedEvidence}/>
           </div>}
         </div>
       })}</details>
@@ -111,7 +221,9 @@ export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReferenc
         {a.status === 'open' ? <button onClick={() => onResolve(a)}>Review appeal</button> : <><p>{a.resolution?.reviewer}: {a.resolution?.rationale}</p><p>Before: {a.resolution?.before.answer ?? a.resolution?.before.status} → After: {a.resolution?.after.answer ?? a.resolution?.after.status}</p>
           {a.resolution?.supporting_references?.map(ref => <button key={ref.id} onClick={() => onReference(ref)}>Review source: {ref.id}</button>)}</>}
       </article>)}
-      <details className={styles.card}><summary>Original AI JSON & provenance</summary><p>Response: {job.record?.response_id} · Prompt: {job.record?.prompt_version}</p><pre>{JSON.stringify(job.record, null, 2)}</pre></details>
+      <details className={styles.card}><summary>Original AI JSON & provenance</summary><p>Response: {job.record?.response_id} · Prompt: {job.record?.prompt_version}</p>
+        {job.record?.evaluation.source_citations && <p>Source citations: {Object.keys(job.record.evaluation.source_citations.selections).length} selections resolved from preserved originals. Quote text comes from the selected sources.</p>}
+        <pre>{JSON.stringify(job.record, null, 2)}</pre></details>
     </>}
   </>
 }

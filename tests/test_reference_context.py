@@ -230,4 +230,4 @@ def test_legacy_payload_and_validation_are_not_reinterpreted_by_new_optional_fie
     assert "snapshot_on" not in payload["conversation"]["references"][0]
     assert "date_basis" not in payload["conversation"]["references"][0]
     assert "evidence_context" not in payload
-    assert PROMPT_VERSION == "evaluator-v2-452e92fc403a" and GROUNDED_VERSION.startswith("evaluator-v7-")
+    assert PROMPT_VERSION == "evaluator-v2-452e92fc403a" and GROUNDED_VERSION.startswith("evaluator-v8-")

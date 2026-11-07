@@ -180,3 +180,8 @@ frozen baseline and prior API results remain unchanged; broader reliability is
 tested in a [fresh repeated-run experiment](docs/FRESH_REPEAT_V1_RESULTS.md).
 That run failed its reliability gate: 18/24 first-pass and 22/24 final valid outputs;
 evidence-chain and compound-counterfactual precision also remain open.
+
+The subsequent [source-span and atomic-proof implementation](docs/SOURCE_SPANS_AND_ATOMIC_PROOFS.md)
+addresses those mechanisms offline: source-selected citations, canonical observation
+text and explicit proof dependencies. Its live reliability remains unmeasured;
+the historical benchmark above has not been replaced or rescored.

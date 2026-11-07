@@ -258,7 +258,7 @@ def decode_evaluation(text, *, require_claim_dependencies=False, require_semanti
             raise ValueError("Current evidence contract requires explicit non-proving context evidence")
     result = Evaluation.model_validate(data)
     if require_evidence_contract:
-        _require_explicit_fields(result)
+        _require_explicit_fields(result, historical_extensions=True)
     if (require_claim_dependencies or require_semantic_coverage or require_evidence_contract) and any(
         c.assessment is None for c in result.factual_claims
     ):
@@ -272,7 +272,7 @@ def decode_evaluation(text, *, require_claim_dependencies=False, require_semanti
     return result
 
 
-def _require_explicit_fields(value, path="evaluation"):
+def _require_explicit_fields(value, path="evaluation", *, historical_extensions=False):
     """Reject historical model defaults in current provider outputs, recursively.
 
     Inline deductions have already been copied from explicitly supplied wire
@@ -280,15 +280,20 @@ def _require_explicit_fields(value, path="evaluation"):
     """
     if isinstance(value, BaseModel):
         fields = type(value).model_fields
-        missing = set(fields) - value.model_fields_set
+        extensions = {"Evaluation": {"assertion_groups", "source_citations"},
+                      "FactualClaim": {"claim_id", "assertion_group_id", "proof"},
+                      "ClaimImpact": {"fixed_claim_ids"}}
+        allowed = extensions.get(type(value).__name__, set()) if historical_extensions else set()
+        missing = set(fields) - value.model_fields_set - allowed
         if missing:
             raise ValueError("Current evidence contract requires explicit fields at " + path +
                              ": " + ", ".join(sorted(missing)))
         for name in fields:
-            _require_explicit_fields(getattr(value, name), path + "." + name)
+            _require_explicit_fields(getattr(value, name), path + "." + name,
+                                     historical_extensions=historical_extensions)
     elif isinstance(value, list):
         for index, item in enumerate(value):
-            _require_explicit_fields(item, f"{path}[{index}]")
+            _require_explicit_fields(item, f"{path}[{index}]", historical_extensions=historical_extensions)
     elif isinstance(value, dict):
         for name, item in value.items():
-            _require_explicit_fields(item, path + "." + str(name))
+            _require_explicit_fields(item, path + "." + str(name), historical_extensions=historical_extensions)

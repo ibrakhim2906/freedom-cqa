@@ -1,13 +1,37 @@
-export type Evidence = {message_id: string; quote: string}
+export type CitationSelection = {source_span_id?: string; source_id?: string;
+  source_kind?: 'dialogue'|'reference'|'rule'; source_field?: string; source_start?: number; source_end?: number;
+  source_citation_expected?: boolean}
+export type HighlightRange = {start: number; end: number; quote: string}
+export type Evidence = {message_id: string; quote: string} & CitationSelection
 export type OmissionSupport = {start_message_id: string; end_message_id: string; context_evidence: Evidence[]}
 export type AnswerSupport = {basis: 'explicit'|'implied'|'next_step'|'none'|'withdrawn'; evidence: Evidence[];
   inference: string|null; unresolved_aspects: string[]; omission?: OmissionSupport|null}
 export type RequestCoverage = {request: string; status: string; request_message_ids: string[];
   answer_message_ids: string[]; explanation: string; support?: AnswerSupport|null}
+export type ReferenceEvidence = {reference_id: string; quote: string}
+export type RuleEvidence = {criterion_id: string; quote: string}
+export type ClaimOutcome = {status: 'scored'|'not_applicable'|'needs_review'; answer: string|null}
+export type ClaimImpact = {criterion_id: string; when_true: ClaimOutcome; when_false: ClaimOutcome;
+  rule_quote: string; evidence: Evidence[]; checked_message_ids: string[]; explanation: string;
+  fixed_claim_ids?: string[]|null}
+export type ClaimCorrection = {operator_evidence: Evidence[]; outcome_evidence: Evidence[];
+  reference_evidence: ReferenceEvidence[]; remaining_consequence: 'none_established'|'present'|'uncertain'; explanation: string}
+export type ClaimAssessment = {lifecycle: 'active'|'corrected'; correction: ClaimCorrection|null; impacts: ClaimImpact[]}
+export type ProofPremise = {premise_id: string; proposition: string|null; evidence: Evidence[];
+  reference_evidence: ReferenceEvidence[]; rule_evidence: RuleEvidence[];
+  depends_on_claim_id: string|null; required_status: 'supported'|'contradicted'|null}
+export type ClaimProof = {relation: 'direct'|'all_of'; premises: ProofPremise[];
+  required_premise_ids: string[]; explanation: string}
+export type AssertionGroup = {group_id: string; composition: 'atomic'|'all_of'; operator_evidence: Evidence[]; claim_ids: string[]}
+export type SourceSpanLocation = {kind: 'dialogue'|'reference'|'rule'; source_id: string; field: string;
+  role: string|null; start: number; end: number}
+export type SourceCitationAudit = {version: string; catalog_fingerprint: string; selections: Record<string,string>;
+  spans?: Record<string,SourceSpanLocation>}
 export type FactualClaim = {claim: string; criterion_ids: string[]; status: string; explanation: string;
   operator_evidence: Evidence[]; dialogue_evidence: Evidence[]; context_evidence?: Evidence[];
-  reference_evidence: {reference_id: string; quote: string}[]; observation_scope?: string;
-  supported_proposition?: string|null; verification_scope?: string}
+  reference_evidence: ReferenceEvidence[]; observation_scope?: string;
+  supported_proposition?: string|null; verification_scope?: string; assessment?: ClaimAssessment|null;
+  claim_id?: string|null; assertion_group_id?: string|null; proof?: ClaimProof|null}
 export type Judgment = {criterion_id: string; status: 'scored'|'not_applicable'|'needs_review'; answer: string|null;
   explanation: string; evidence: Evidence[]; counterevidence: Evidence[]; checked_message_ids: string[]; uncertainty: string|null}
 export type Criterion = {id: string; title: string; instruction: string; kind: 'binary'|'scale'|'flag'; weight: number;
@@ -47,6 +71,7 @@ export type JobDetail = JobRow & {conversation: ConversationDetail; checklist: C
   effective: {judgments: Judgment[]; score: Score; source: string; accepted_revisions: number; assessment_context?: AssessmentContext}|null;
   record: {evaluation: {judgments: Judgment[]; scope_notes: string[]; request_coverage: RequestCoverage[];
     factual_claims: FactualClaim[];
+    assertion_groups?: AssertionGroup[]|null; source_citations?: SourceCitationAudit|null;
     deductions: {criterion_id: string; rule_quote: string; defect: string; overlap_note: string}[]};
     score: Score; error: string|null; model: string; prompt_version: string; workflow_version: string; response_id: string;
     usage: {estimated_cost_usd: number; input_tokens: number; output_tokens: number}|null;

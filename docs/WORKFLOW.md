@@ -168,6 +168,13 @@ supported proposition and non-proving customer/system context. Historical result
 remain readable under their original contract; opening them does not generate
 missing metadata or rerun the evaluator.
 
+The current [v3 source/proof workflow](SOURCE_SPANS_AND_ATOMIC_PROOFS.md) resolves
+model-selected spans from saved sources. New records support exact-position
+highlighting, including repeated quotes and Unicode. Fact cards expose required
+premises, separately assessed statement parts and other fixed facts. Context is
+shown separately from proof. Historical records retain their original audit and
+citation behavior; human revisions do not inherit fabricated AI span provenance.
+
 **Appeal this judgment** records a criterion, author, rationale and supporting
 source message IDs. A completed evaluation is required. A reviewer can reject
 the appeal or accept a full replacement judgment using the configured levels.

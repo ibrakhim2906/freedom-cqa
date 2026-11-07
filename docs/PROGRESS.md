@@ -90,6 +90,7 @@ is unchanged; no new corpus-wide accuracy claim is made.
 - [x] Verify the browser's real evaluation/evidence/appeal/custom-checklist flow and a visible budget failure; no offline fallback.
 - [x] Separate positive answer evidence, omission intervals and claim observation metadata under evidence contract v2; preserve frozen expectations and prior results. Offline checks: 340 tests, seven mocked browser checks, 71 schemas and 65 unchanged historical scores. Model behavior was untested at this offline milestone; see EVIDENCE_CONTRACT_V2.md.
 - [x] Run the unchanged frozen six-case suite once through v7: six first-pass valid results, 48/48 provisional pairs, no repairs, $0.3560597 reconciled token cost. Complete assessments reviewed; compound-claim granularity and fresh/repeated robustness checks remain open. See EVIDENCE_CONTRACT_V2_LIVE_RESULTS.md.
+- [x] Implement source-span selections, one canonical observation proposition and atomic claim/proof dependencies in the full grounded workflow. Preserve rubric arithmetic, legitimate deductions, historical validation and frozen expectations. Offline verification: 560 tests, 18 intercepted browser checks, all 79 input/schema pairs within unchanged bounds, 110 unchanged labels/12 complete vectors, and 97 historical scores unchanged. $0 API spending; v8 live behavior remains untested. See SOURCE_SPANS_AND_ATOMIC_PROOFS.md.
 
 ## Prepare submission
 
