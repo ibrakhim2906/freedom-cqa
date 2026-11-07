@@ -1,0 +1,1527 @@
+{
+  "kind": "prospective_source_review_not_organizer_ground_truth",
+  "frozen_before_inference": true,
+  "created_at_utc": "2026-11-07T19:39:17.757885+00:00",
+  "human_expert_labels": false,
+  "organizer_ground_truth": false,
+  "candidate_builders_blind_to_cases": true,
+  "engines_frozen_before_root_source_adjudication": true,
+  "author_and_blind_reviewer_requested_model": "gpt-6.1-sol",
+  "requested_effort": "medium",
+  "reference_provenance": [
+    {
+      "path": "artifacts/lean-ab-v1/draft/cases.jsonl",
+      "sha256": "1cfb1960607ac003b0b97a5e6903ded96f6ba51b398b14065eb00593ad61474c"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/semantic-checks.json",
+      "sha256": "3268d085ac13e847dc001574201e69d1f2561d435063dad745f975d894bec8d7"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/source-only.json",
+      "sha256": "0b268fe8cb82de7813b6af8ac85d1ec18fb1f23a0b29e89af7931fd29667d601"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/AUTHOR_NOTES.md",
+      "sha256": "cbc9d92a79feb172004de84412cea8e1a8f061c4ed91b8734c86c60bd1c2cf9e"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/blind-review.json",
+      "sha256": "a1988aaefac19edd24c409b53f2de8894a3a48531f850aeb8daad95911c0dcba"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/revised/cases.jsonl",
+      "sha256": "b797e141bd9dcbf315fd5f41d8f26152fb991dde59c3b2195d1ddc9667621805"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/revised/source-only.json",
+      "sha256": "900b13935d19e4837ff39b98afafeaef1ee80d789f72496b601ee9b218de3a51"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/revised/REVISION_NOTE.md",
+      "sha256": "f334a64fb70a204d9390d9cd0bd63b14482769231d1756435b9a641b5ed5b10e"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/revised/revised-02-review.json",
+      "sha256": "2b7cbfe49f75358355f084925f9e8fcc677e82146b0502854988801afcdb8a73"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/final/cases.jsonl",
+      "sha256": "ce30db5a0a3ac48be7b27a089f662f50b406e7f618f26d7f7f921e2af4102cfa"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/final/source-only.json",
+      "sha256": "42b68d4d7e37c8bd03e6bc3a9fdbe78829728bec18c9e5616f79a5b807e21a4c"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/final/REVISION_NOTE.md",
+      "sha256": "3cf2fbc1f61d53e4dc873a385cee2578721de4411cee857ce79a2740005bb119"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/final/review-04-06.json",
+      "sha256": "e9c05208ca1f27a41f7f66fb729577e78ed08174eeb3ea109319958a97639219"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/contract-review.json",
+      "sha256": "2b696db8063620a6a316bc719549a40086be3ab65e43563204799635147e2b4e"
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "fresh-lean-01",
+      "expectations": [
+        {
+          "criterion_id": "contact",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "m2 greets in English and introduces Dana in first operator reply."
+        },
+        {
+          "criterion_id": "needs",
+          "status": "not_applicable",
+          "answer": null,
+          "rationale": "m1 contains platform, task and usable email; no missing task detail from the start."
+        },
+        {
+          "criterion_id": "identity",
+          "status": "not_applicable",
+          "answer": null,
+          "rationale": "Generic self-service directions only; no protected action or individual disclosure."
+        },
+        {
+          "criterion_id": "consultation",
+          "status": "scored",
+          "answer": "20",
+          "rationale": "m2 supplies all reset stages supported by the applicable official reference; m3 confirms success."
+        },
+        {
+          "criterion_id": "empathy",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "Courteous; no dissatisfaction cue."
+        },
+        {
+          "criterion_id": "management",
+          "status": "scored",
+          "answer": "10",
+          "rationale": "Clear ordered instructions with no separate process/wording fault."
+        },
+        {
+          "criterion_id": "closing",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "m4 summarizes restored access, offers help and says goodbye."
+        },
+        {
+          "criterion_id": "serious",
+          "status": "scored",
+          "answer": "no",
+          "rationale": "No insult, private paid offer or confidential disclosure."
+        }
+      ],
+      "source_only_judgment_review": {
+        "contact": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m2"
+          ],
+          "rationale": "First human response greets in English and identifies Dana.",
+          "checklist_basis": "contact"
+        },
+        "needs": {
+          "status": "not_applicable",
+          "answer": null,
+          "allowed_answers": [
+            "N/A"
+          ],
+          "source_spans": [
+            "m1",
+            "m2"
+          ],
+          "rationale": "From the initial substantive request, platform, lost-password task, email availability and public-instruction scope are known. No task detail needed clarification.",
+          "checklist_basis": "needs N/A; R002; R015"
+        },
+        "identity": {
+          "status": "not_applicable",
+          "answer": null,
+          "allowed_answers": [
+            "N/A"
+          ],
+          "source_spans": [
+            "m1",
+            "m2"
+          ],
+          "rationale": "Operator gives public self-service instructions; neither accesses an account nor discloses individual data. Receiving a code inside the app is not operator identity verification and need not be.",
+          "checklist_basis": "identity N/A"
+        },
+        "consultation": {
+          "status": "decided",
+          "answer": "20",
+          "allowed_answers": [
+            "20"
+          ],
+          "source_spans": [
+            "m1",
+            "m2",
+            "m3",
+            "reference:fbroker-recovery-20261107"
+          ],
+          "rationale": "Instructions match the applicable recovery reference, email meets the stated constraint, and the customer explicitly confirms sign-in. No other live request remains.",
+          "checklist_basis": "consultation 20; R006; R012"
+        },
+        "empathy": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m1",
+            "m2",
+            "m3",
+            "m4"
+          ],
+          "rationale": "Courteous throughout. Forgotten password may be a concrete inconvenience; the email-based recovery steps directly address it. There is no ignored dissatisfaction cue.",
+          "checklist_basis": "empathy; R003; R014"
+        },
+        "management": {
+          "status": "decided",
+          "answer": "10",
+          "allowed_answers": [
+            "10"
+          ],
+          "source_spans": [
+            "m1-m4"
+          ],
+          "rationale": "Clear, ordered recovery instructions with no unnecessary repeat, prerequisite violation or explicit unannounced wait. Timestamp gaps are not threshold violations.",
+          "checklist_basis": "management; R013; R014"
+        },
+        "closing": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m3",
+            "m4"
+          ],
+          "rationale": "After confirmed success, operator summarizes restored access, offers help and says goodbye.",
+          "checklist_basis": "closing"
+        },
+        "serious": {
+          "status": "decided",
+          "answer": "no",
+          "allowed_answers": [
+            "no"
+          ],
+          "source_spans": [
+            "m1-m4"
+          ],
+          "rationale": "No insult, private paid diversion or confidential disclosure. The operator instructs the customer to keep the code private.",
+          "checklist_basis": "serious"
+        }
+      },
+      "unscored_rubric_ambiguities": [],
+      "prospective_author_checks": {
+        "case_id": "fresh-lean-01",
+        "ambiguity_before_inference": "No unresolved material ambiguity intended; review source sufficiency before accepting provisional labels.",
+        "critical_atomic_facts": [
+          "m2 Restore access is on the start screen.",
+          "Phone/email/client code/login are alternative account-identification routes, not four mandatory steps.",
+          "Confirmation code precedes setting the new password.",
+          "m3 confirms actual self-service recovery; no operator account access is claimed."
+        ],
+        "scope_and_dates": [
+          "Only fbroker-kz-platform on 2026-11-07. Reference copied exactly from supplied pack."
+        ],
+        "legitimate_overlaps": [],
+        "correction_consequence": [
+          "No correction or adverse consequence."
+        ],
+        "request_coverage": [
+          "Only password reset guidance requested; fully answered."
+        ],
+        "positive_controls": [
+          "needs N/A, identity N/A, consultation 20, management 10, serious no."
+        ]
+      },
+      "independent_atomic_truths": [
+        {
+          "claim": "This is public password-recovery guidance for the explicitly named Kazakhstan platform.",
+          "source_spans": [
+            "m1"
+          ]
+        },
+        {
+          "claim": "The customer can receive email and later explicitly reports successful sign-in.",
+          "source_spans": [
+            "m1",
+            "m3"
+          ]
+        },
+        {
+          "claim": "The reference supports Restore access, four identifier choices, email/phone code and a new password.",
+          "source_spans": [
+            "reference:fbroker-recovery-20261107"
+          ]
+        }
+      ],
+      "independent_semantic_checks": [
+        "Do not demand an operator-led identity check or the customer code.",
+        "Do not invent unresolved recovery steps after the explicit successful sign-in.",
+        "Ignore the first-response threshold and attachment scoring."
+      ],
+      "root_adjudication": "Author and independent source-only reviewer agree on included exact labels. Case03 consultation exact ordinal intentionally omitted; source facts and verified recovery remain assessable."
+    },
+    {
+      "case_id": "fresh-lean-02",
+      "expectations": [
+        {
+          "criterion_id": "contact",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "m2 greets and introduces Aysha in Kazakh."
+        },
+        {
+          "criterion_id": "needs",
+          "status": "not_applicable",
+          "answer": null,
+          "rationale": "The initial general navigation request has adequate platform/task details; later notification question is itself fully specified."
+        },
+        {
+          "criterion_id": "identity",
+          "status": "not_applicable",
+          "answer": null,
+          "rationale": "No protected account operation or disclosure."
+        },
+        {
+          "criterion_id": "consultation",
+          "status": "scored",
+          "answer": "20",
+          "rationale": "m2 gives official support route; m3 establishes submission success; m4 answers notification options and paid SMS. m5 does not retract earlier success."
+        },
+        {
+          "criterion_id": "empathy",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "Courteous throughout; no qualifying complaint."
+        },
+        {
+          "criterion_id": "management",
+          "status": "scored",
+          "answer": "10",
+          "rationale": "Clear spoken sequence; no wait or wording fault shown. Audio qualities cannot be inferred."
+        },
+        {
+          "criterion_id": "closing",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "m6 offers further help and says farewell in Kazakh before the disconnection. Closing is affirmatively present; no inference about a missed opportunity is required."
+        },
+        {
+          "criterion_id": "serious",
+          "status": "scored",
+          "answer": "no",
+          "rationale": "No listed serious error."
+        }
+      ],
+      "source_only_judgment_review": {
+        "contact": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m2"
+          ],
+          "rationale": "Aisha greets and introduces herself in Kazakh in her first response.",
+          "checklist_basis": "contact"
+        },
+        "needs": {
+          "status": "not_applicable",
+          "answer": null,
+          "allowed_answers": [
+            "N/A"
+          ],
+          "source_spans": [
+            "m1",
+            "m2",
+            "m3",
+            "m4"
+          ],
+          "rationale": "The initial request names the platform and asks where to submit an error. No missing detail is needed to answer that navigation question; the later notification question also needs no individualized information.",
+          "checklist_basis": "needs N/A; R002; R015"
+        },
+        "identity": {
+          "status": "not_applicable",
+          "answer": null,
+          "allowed_answers": [
+            "N/A"
+          ],
+          "source_spans": [
+            "m1-m6",
+            "reference:fbroker-support-20261107"
+          ],
+          "rationale": "Public support-navigation and notification-channel guidance does not involve operator disclosure or a protected change.",
+          "checklist_basis": "identity N/A"
+        },
+        "consultation": {
+          "status": "decided",
+          "answer": "20",
+          "allowed_answers": [
+            "20"
+          ],
+          "source_spans": [
+            "m2",
+            "m3",
+            "m4",
+            "m5",
+            "m6",
+            "reference:fbroker-support-20261107"
+          ],
+          "rationale": "The customer reports successful submission and a request number. Operator explains email/SMS notifications and paid SMS consistently with the reference, then appropriately says to wait for the already selected email notification. No second submission or new action is required by the stated task.",
+          "checklist_basis": "consultation 20; R006; R012"
+        },
+        "empathy": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m1-m6"
+          ],
+          "rationale": "Human speech is courteous. Asking where to report an error is not by itself an explicit experienced inconvenience or distress cue; there is no ignored qualifying cue. Relevant assistance is supplied in any event.",
+          "checklist_basis": "empathy; R014"
+        },
+        "management": {
+          "status": "decided",
+          "answer": "10",
+          "allowed_answers": [
+            "10"
+          ],
+          "source_spans": [
+            "m1-m7"
+          ],
+          "rationale": "Spoken instructions and notification explanation are coherent. No separately evidenced management defect or explicit unannounced wait exists. Sudden technical disconnect is not an operator wait failure.",
+          "checklist_basis": "management; R013; R014; voice guidance"
+        },
+        "closing": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m6",
+            "m7"
+          ],
+          "evidence": [
+            {
+              "message_id": "m6",
+              "quote": "Қосымша көмек керек болса, хабарласыңыз. Сау болыңыз!",
+              "meaning": "If further help is needed, contact us. Goodbye!"
+            }
+          ],
+          "rationale": "The operator completes a summary of the existing request/email notification, explicitly offers further help and says goodbye in m6. The later m7 disconnect occurs after this completed closing. The required act is now directly evidenced, so there is no remaining need to decide whether the earlier transcript offered a fair opportunity. A disconnect cannot undo an already spoken farewell.",
+          "checklist_basis": "closing Yes: summary or further-help offer, plus farewell; R010 does not convert an already completed closing into N/A."
+        },
+        "serious": {
+          "status": "decided",
+          "answer": "no",
+          "allowed_answers": [
+            "no"
+          ],
+          "source_spans": [
+            "m1-m7"
+          ],
+          "rationale": "No prohibited behavior. Official paid SMS is a company notification option, not a paid private service offered by the operator.",
+          "checklist_basis": "serious"
+        }
+      },
+      "unscored_rubric_ambiguities": [],
+      "prospective_author_checks": {
+        "case_id": "fresh-lean-02",
+        "ambiguity_before_inference": "No unresolved material ambiguity intended; review source sufficiency before accepting provisional labels.",
+        "critical_atomic_facts": [
+          "Menu > Support > Write to support is the applicable official mobile route.",
+          "A screenshot is optional, not mandatory.",
+          "SMS notification is paid; do not invent email charges.",
+          "m3 establishes submission before m5 declines a duplicate.",
+          "m7 establishes no closing opportunity after the final explanatory reply."
+        ],
+        "scope_and_dates": [
+          "fbroker-kz-platform; 2026-11-07 only; no handling time or account-status claim."
+        ],
+        "legitimate_overlaps": [],
+        "correction_consequence": [
+          "Do not turn later refusal to duplicate into failed original submission."
+        ],
+        "request_coverage": [
+          "Navigation resolved and notification methods answered; no open substantive request."
+        ],
+        "positive_controls": [
+          "consultation 20 and management 10 despite no new action in m5; closing N/A based on event record."
+        ],
+        "voice_limits": [
+          "Transcript only; no audio reviewed. No inference of diction, speed, pronunciation, emotion tone or unrecorded silence."
+        ]
+      },
+      "independent_atomic_truths": [
+        {
+          "claim": "The customer successfully submitted a support request before asking about notifications.",
+          "source_spans": [
+            "m3"
+          ]
+        },
+        {
+          "claim": "The customer says email is already selected and they will not submit again or do anything else now.",
+          "source_spans": [
+            "m5"
+          ]
+        },
+        {
+          "claim": "Operator confirms the existing request and says an email notification can be awaited.",
+          "source_spans": [
+            "m6"
+          ]
+        },
+        {
+          "claim": "System asserts no speaking/farewell opportunity after the last operator utterance; it does not explicitly resolve opportunity during that utterance.",
+          "source_spans": [
+            "m7"
+          ]
+        },
+        {
+          "claim": "Reference supports email or paid SMS notification.",
+          "source_spans": [
+            "reference:fbroker-support-20261107"
+          ]
+        }
+      ],
+      "independent_semantic_checks": [
+        "Preserve the successful earlier submission when considering m5.",
+        "Do not invent another required submission, automatic deadline or escalation.",
+        "Do not treat paid SMS as a serious private-payment flag.",
+        "Do not equate a disconnect after an operator summary with proven absence of any earlier fair closing opportunity."
+      ],
+      "root_adjudication": "Author and independent source-only reviewer agree on included exact labels. Case03 consultation exact ordinal intentionally omitted; source facts and verified recovery remain assessable."
+    },
+    {
+      "case_id": "fresh-lean-03",
+      "expectations": [
+        {
+          "criterion_id": "contact",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "m2 greets and introduces Ilya in Russian."
+        },
+        {
+          "criterion_id": "needs",
+          "status": "not_applicable",
+          "answer": null,
+          "rationale": "m1 names the exact alert and desired operation; no missing task detail."
+        },
+        {
+          "criterion_id": "identity",
+          "status": "not_applicable",
+          "answer": null,
+          "rationale": "Operator provides generic instructions; client performs self-service; identity not required."
+        },
+        {
+          "criterion_id": "empathy",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "Courteous and uses the client correction in concrete corrective advice; no ignored complaint."
+        },
+        {
+          "criterion_id": "management",
+          "status": "scored",
+          "answer": "10",
+          "rationale": "Initial factual error is consultation content. The correction clearly withdraws it; client asks about the wrong effect, not because wording/order is unclear. No independent management defect."
+        },
+        {
+          "criterion_id": "closing",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "m7 summarizes actual result and says farewell."
+        },
+        {
+          "criterion_id": "serious",
+          "status": "scored",
+          "answer": "no",
+          "rationale": "No insult, private paid service or disclosure."
+        }
+      ],
+      "source_only_judgment_review": {
+        "contact": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m2"
+          ],
+          "rationale": "Ilya greets and introduces himself in Russian in his first reply.",
+          "checklist_basis": "contact"
+        },
+        "needs": {
+          "status": "not_applicable",
+          "answer": null,
+          "allowed_answers": [
+            "N/A"
+          ],
+          "source_spans": [
+            "m1",
+            "m2"
+          ],
+          "rationale": "Alert ALP-8, desired push-only change and preservation of orders are known initially. m2 is an incorrect factual instruction, not evidence of missing task information.",
+          "checklist_basis": "needs N/A; R015"
+        },
+        "identity": {
+          "status": "not_applicable",
+          "answer": null,
+          "allowed_answers": [
+            "N/A"
+          ],
+          "source_spans": [
+            "m2",
+            "m4",
+            "reference:aster-alert-procedure"
+          ],
+          "rationale": "Supplied fictional procedure explicitly makes this public guidance rather than an operator action on the account.",
+          "checklist_basis": "identity N/A"
+        },
+        "consultation": {
+          "status": "needs_review",
+          "answer": null,
+          "allowed_answers": [
+            "0",
+            "20"
+          ],
+          "source_spans": [
+            "m1",
+            "m2",
+            "m3",
+            "m4",
+            "m5",
+            "m6",
+            "reference:aster-alert-procedure"
+          ],
+          "rationale": "m2 gives a wrong key instruction: Delete removes the entire signal. Before any use, m4 explicitly retracts it and supplies the correct Push-only path. Customer and authoritative session log confirm final success without signal deletion or order changes. The checklist states 0 for a wrong key recommendation but does not explicitly adjudicate a retracted, unused recommendation followed by complete verified correction. A final-resolution reading supports 20; an any-key-error reading supports 0. Resolve the aggregation rule before freezing a numeric target.",
+          "checklist_basis": "consultation 20 and 0; R006; R012"
+        },
+        "empathy": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m1",
+            "m2",
+            "m3",
+            "m4",
+            "m5"
+          ],
+          "rationale": "Human language is courteous. m3 is primarily a factual correction/clarification of the desired signal retention, not an explicit dissatisfaction cue. Even if treated as a concrete difficulty, m4 expressly incorporates it in corrective practical guidance.",
+          "checklist_basis": "empathy; R005; R014"
+        },
+        "management": {
+          "status": "decided",
+          "answer": "10",
+          "allowed_answers": [
+            "10"
+          ],
+          "source_spans": [
+            "m2",
+            "m3",
+            "m4",
+            "m5",
+            "m7"
+          ],
+          "rationale": "The initial instruction is factually wrong but plainly worded. The customer points out the functional mismatch; this is not clarification caused by unclear wording or instruction order. The explicit retraction makes the final instruction coherent rather than leaving an unintelligible contradiction. No separate sequencing, wait or redundancy defect is evidenced.",
+          "checklist_basis": "management; R013; R014"
+        },
+        "closing": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m5",
+            "m6",
+            "m7"
+          ],
+          "rationale": "Operator accurately summarizes the saved Push-only result and says goodbye.",
+          "checklist_basis": "closing"
+        },
+        "serious": {
+          "status": "decided",
+          "answer": "no",
+          "allowed_answers": [
+            "no"
+          ],
+          "source_spans": [
+            "m1-m7",
+            "reference:aster-alert-procedure"
+          ],
+          "rationale": "An erroneous delete recommendation is not one of the three listed serious-error categories; no confidential disclosure, insult or private paid offer occurs.",
+          "checklist_basis": "serious"
+        }
+      },
+      "unscored_rubric_ambiguities": [
+        {
+          "criterion_id": "consultation",
+          "reason": "Prospective disagreement over scoring a wrong key instruction explicitly withdrawn before use with complete independently verified recovery; checklist lacks an explicit temporal aggregation rule.",
+          "author_initial_answer": "20",
+          "blind_review_alternatives": [
+            "0",
+            "20"
+          ],
+          "reasoned_outcomes_to_review_separately": [
+            {
+              "status": "scored",
+              "answer": "0"
+            },
+            {
+              "status": "scored",
+              "answer": "20"
+            },
+            {
+              "status": "needs_review",
+              "answer": null
+            }
+          ],
+          "exact_ordinal_excluded_from_primary_agreement_and_score_error": true,
+          "no_compromise_ordinal_assumed": true
+        }
+      ],
+      "prospective_author_checks": {
+        "case_id": "fresh-lean-03",
+        "ambiguity_before_inference": "No unresolved material ambiguity intended; review source sufficiency before accepting provisional labels.",
+        "critical_atomic_facts": [
+          "Initial claim Delete only turns off push is false under supplied fictional procedure.",
+          "Client explicitly had not acted before correction.",
+          "m4 explicitly withdraws Delete and supplies Channels > Push off > Save.",
+          "m6 establishes no deletion or exchange-order action; alert survives with Push=false."
+        ],
+        "scope_and_dates": [
+          "Fictional Aster only on 2026-11-07; not a real broker policy."
+        ],
+        "legitimate_overlaps": [],
+        "correction_consequence": [
+          "Retain initial error in reasoning; do not present it as uncorrected or claim lasting loss. Recovery is independently recorded."
+        ],
+        "request_coverage": [
+          "Disable only push, preserve signal and exchange orders: all confirmed."
+        ],
+        "positive_controls": [
+          "consultation 20 after explicit successful recovery; management 10 because no distinct communication fault."
+        ],
+        "voice_limits": [
+          "Text only: no audible tone, speed or pronunciation conclusions."
+        ]
+      },
+      "independent_atomic_truths": [
+        {
+          "claim": "Initial goal is to disable only push, not cancel orders.",
+          "source_spans": [
+            "m1"
+          ]
+        },
+        {
+          "claim": "Delete removes the signal; no alert action cancels exchange orders.",
+          "source_spans": [
+            "reference:aster-alert-procedure"
+          ]
+        },
+        {
+          "claim": "Customer has not clicked anything before the correction.",
+          "source_spans": [
+            "m3"
+          ]
+        },
+        {
+          "claim": "Operator explicitly retracts Delete and supplies Channels > Push off > Save.",
+          "source_spans": [
+            "m4"
+          ]
+        },
+        {
+          "claim": "Customer and authoritative log confirm ALP-8 retained, Push=false and no deletions/order operations during the entire session.",
+          "source_spans": [
+            "m5",
+            "m6"
+          ]
+        }
+      ],
+      "independent_semantic_checks": [
+        "Read the full correction and session-wide log rather than freezing the story at m2.",
+        "Do not claim the alert or exchange orders were deleted.",
+        "Do not invent emotional distress from the neutral correction.",
+        "Do not automatically map factual-error correction to management 4.",
+        "Do not silently choose a numeric corrected-error policy absent prospective adjudication."
+      ],
+      "root_adjudication": "Author and independent source-only reviewer agree on included exact labels. Case03 consultation exact ordinal intentionally omitted; source facts and verified recovery remain assessable."
+    },
+    {
+      "case_id": "fresh-lean-04",
+      "expectations": [
+        {
+          "criterion_id": "contact",
+          "status": "scored",
+          "answer": "no",
+          "rationale": "m2 greets in English but does not introduce the operator in the first reply. No other first-reply introduction is present."
+        },
+        {
+          "criterion_id": "needs",
+          "status": "not_applicable",
+          "answer": null,
+          "rationale": "m1 identifies both exact preference operations from the start; identity check is not needs discovery."
+        },
+        {
+          "criterion_id": "identity",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "m3 verifies before m4-m5 protected action."
+        },
+        {
+          "criterion_id": "consultation",
+          "status": "scored",
+          "answer": "0",
+          "rationale": "The central completion assurance in m6 is materially false for digest and gives wrong no-action advice. Immediate failure is recorded at m5; final full-session audit m9 confirms continued subscription with no retry, successful stop, automatic unsubscription, ticket or referral. Real alert success does not make the compound assurance true."
+        },
+        {
+          "criterion_id": "empathy",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "Courteous; no dissatisfaction cue."
+        },
+        {
+          "criterion_id": "management",
+          "status": "scored",
+          "answer": "10",
+          "rationale": "Clear understandable wording and correct prerequisite order. False factual assurance alone is not a separate management fault."
+        },
+        {
+          "criterion_id": "closing",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "m8 summarizes and says goodbye, although the summary is substantively wrong. Closing form is present."
+        },
+        {
+          "criterion_id": "serious",
+          "status": "scored",
+          "answer": "no",
+          "rationale": "No confidential disclosure, insult or private paid offer; false completion alone is not one of the specified serious categories."
+        }
+      ],
+      "source_only_judgment_review": {
+        "contact": {
+          "status": "decided",
+          "answer": "no",
+          "allowed_answers": [
+            "no"
+          ],
+          "source_spans": [
+            "m2"
+          ],
+          "rationale": "The first human reply says Hello but does not introduce the operator. Contact requires both greeting in the customer language and introduction in that first response. No outside interface identity is supplied or assumed.",
+          "checklist_basis": "contact"
+        },
+        "needs": {
+          "status": "not_applicable",
+          "answer": null,
+          "allowed_answers": [
+            "N/A"
+          ],
+          "source_spans": [
+            "m1",
+            "m2",
+            "m3"
+          ],
+          "rationale": "Both separate preference requests and the alert identifier are supplied initially. Identity confirmation is a separate security prerequisite, not a missing request detail.",
+          "checklist_basis": "needs N/A; R015"
+        },
+        "identity": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m2",
+            "m3",
+            "m4",
+            "m5",
+            "reference:aster-preferences"
+          ],
+          "rationale": "Secure verification and permission for both changes are confirmed before the operator attempts/applies the preference operations.",
+          "checklist_basis": "identity"
+        },
+        "consultation": {
+          "status": "decided",
+          "answer": "0",
+          "allowed_answers": [
+            "0"
+          ],
+          "source_spans": [
+            "m1",
+            "m5",
+            "m6",
+            "m8",
+            "m9",
+            "reference:aster-preferences"
+          ],
+          "rationale": "Alert cancellation succeeds, but digest unsubscription fails and the final all-actor/all-route session audit proves the digest remains active with no successful retry, automatic unsubscription, ticket or referral through closure. The operator falsely reports both complete and gives consequential erroneous advice that no further action is needed, despite the required successful retry or tracked support ticket. This independently meets the wrong-key-recommendation condition for 0. It is not merely silence about the second request; the genuine alert success is still preserved.",
+          "checklist_basis": "consultation 0; R001 erroneous-key-recommendation exception; R006; R012"
+        },
+        "empathy": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m1-m9"
+          ],
+          "rationale": "Human language is courteous and the customer voices no dissatisfaction, distress or concrete experienced inconvenience. A system-recorded operational failure is not a customer emotion cue. The false answer is independently a consultation defect.",
+          "checklist_basis": "empathy; R014"
+        },
+        "management": {
+          "status": "decided",
+          "answer": "10",
+          "allowed_answers": [
+            "10"
+          ],
+          "source_spans": [
+            "m2-m9"
+          ],
+          "rationale": "Verification precedes the attempted changes. Operator wording is understandable; no separately evidenced clarity, prerequisite sequencing, redundant-question or wait defect occurs. False completion is a factual-content failure, not by itself an incoherent dialogue or management deduction.",
+          "checklist_basis": "management; R013; R014"
+        },
+        "closing": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m7",
+            "m8",
+            "m9"
+          ],
+          "rationale": "After customer acceptance, m8 supplies a summary and Goodbye. Its inaccurate content belongs to consultation; the closing act itself is present. The final system audit is not an additional operator turn.",
+          "checklist_basis": "closing"
+        },
+        "serious": {
+          "status": "decided",
+          "answer": "no",
+          "allowed_answers": [
+            "no"
+          ],
+          "source_spans": [
+            "m1-m9"
+          ],
+          "rationale": "No insult, private paid diversion or confidential disclosure is evidenced. An unsuccessful preference operation and false completion are not automatically listed serious categories.",
+          "checklist_basis": "serious"
+        }
+      },
+      "unscored_rubric_ambiguities": [],
+      "prospective_author_checks": {
+        "case_id": "fresh-lean-04",
+        "ambiguity_before_inference": "Scale rationale is provisional: 0 is selected for central materially false completion/no-action advice, rather than 10 for a mere omission. Reviewer should independently assess that boundary; atomic truths are unambiguous.",
+        "critical_atomic_facts": [
+          "Atom 1 QZ-4 cancelled=true.",
+          "Atom 2 digest stopped=false; it remains active.",
+          "The conjunction in m6 and m8 is therefore false; do not discard the true cancellation atom.",
+          "No-action recommendation is wrong because no successful retry/ticket exists."
+        ],
+        "scope_and_dates": [
+          "Fictional Aster procedure only, 2026-11-07."
+        ],
+        "legitimate_overlaps": [],
+        "correction_consequence": [
+          "No correction; customer acknowledgment is based on operator assertion and does not override the system log."
+        ],
+        "request_coverage": [
+          "Alert cancellation achieved; digest request incorrectly represented as complete, with no valid next step."
+        ],
+        "positive_controls": [
+          "identity yes; management 10 despite consultation 0; serious no; closing yes on its own requirements."
+        ]
+      },
+      "independent_atomic_truths": [
+        {
+          "claim": "The initial customer asks for alert cancellation and digest unsubscription as two requests.",
+          "source_spans": [
+            "m1"
+          ]
+        },
+        {
+          "claim": "The first human reply greets but contains no operator introduction.",
+          "source_spans": [
+            "m2"
+          ]
+        },
+        {
+          "claim": "Secure identity verification and permission for both preferences precede the attempted changes.",
+          "source_spans": [
+            "m3",
+            "m4",
+            "m5"
+          ]
+        },
+        {
+          "claim": "QZ-4 cancellation succeeds; the initial digest stop fails before execution.",
+          "source_spans": [
+            "m5"
+          ]
+        },
+        {
+          "claim": "The operator falsely reports both changes complete and says no further action is needed; later repeats the completion claim.",
+          "source_spans": [
+            "m6",
+            "m8"
+          ]
+        },
+        {
+          "claim": "The final audit occurs after the last operator response and chat closure and covers the entire session across all actors/routes: alert remains cancelled, digest remains subscribed, and no retry, successful stop, automatic unsubscription, support ticket or other referral occurred after m5.",
+          "source_spans": [
+            "m9"
+          ]
+        },
+        {
+          "claim": "A failed digest stop needs a successful retry or tracked failure ticket under the supplied fictional procedure.",
+          "source_spans": [
+            "reference:aster-preferences"
+          ]
+        }
+      ],
+      "independent_semantic_checks": [
+        "Score contact No; do not invent an operator name from a previous source revision or interface.",
+        "Read m9 before concluding what happened over the entire session.",
+        "Preserve QZ-4 success and digest failure separately.",
+        "Do not invent a later actor, automatic process, ticket or alternate route that the final audit explicitly excludes.",
+        "Keep false no-further-action advice in consultation rather than automatically reducing management, empathy or closing."
+      ],
+      "root_adjudication": "Author and independent source-only reviewer agree on included exact labels. Case03 consultation exact ordinal intentionally omitted; source facts and verified recovery remain assessable."
+    },
+    {
+      "case_id": "fresh-lean-05",
+      "expectations": [
+        {
+          "criterion_id": "contact",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "m2 greets and introduces Marina in Russian."
+        },
+        {
+          "criterion_id": "needs",
+          "status": "not_applicable",
+          "answer": null,
+          "rationale": "Request and W-51 target are known initially; missing identity permission is not a missing task detail."
+        },
+        {
+          "criterion_id": "identity",
+          "status": "scored",
+          "answer": "no",
+          "rationale": "m2 discloses individual confidential status before any verification; m3 establishes absence, m5 is late."
+        },
+        {
+          "criterion_id": "consultation",
+          "status": "scored",
+          "answer": "20",
+          "rationale": "Status and appropriate next step are correct per independent reference/log: wait for 8 November without payment. No unanswered question or factual advice defect. Serious flag does not automatically lower consultation."
+        },
+        {
+          "criterion_id": "empathy",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "Courteous; client expresses no dissatisfaction or concrete inconvenience."
+        },
+        {
+          "criterion_id": "management",
+          "status": "scored",
+          "answer": "7",
+          "rationale": "One independently evidenced prerequisite-order lapse: m2 explicitly says check must precede status, then discloses; m3 proves not checked; m5 is late. Remaining conversation understandable."
+        },
+        {
+          "criterion_id": "closing",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "m7 summarizes and says farewell."
+        },
+        {
+          "criterion_id": "serious",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "m2 discloses confidential individual application status to an unverified customer; authoritative confidentiality and no-public-search scope supplied. Late check does not undo disclosure."
+        }
+      ],
+      "source_only_judgment_review": {
+        "contact": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m2"
+          ],
+          "rationale": "Marina greets and introduces herself in Russian in her first reply.",
+          "checklist_basis": "contact"
+        },
+        "needs": {
+          "status": "not_applicable",
+          "answer": null,
+          "allowed_answers": [
+            "N/A"
+          ],
+          "source_spans": [
+            "m1",
+            "m2",
+            "reference:aster-webinar"
+          ],
+          "rationale": "Webinar application W-51, status request and contingent next-step question are known initially. Missing identity verification does not make those request details missing.",
+          "checklist_basis": "needs N/A; R015"
+        },
+        "identity": {
+          "status": "decided",
+          "answer": "no",
+          "allowed_answers": [
+            "no"
+          ],
+          "source_spans": [
+            "m2",
+            "m3",
+            "m4",
+            "m5",
+            "reference:aster-webinar"
+          ],
+          "rationale": "Operator discloses the confidential individual status at m2 before identity verification, explicitly confirmed absent at that time by m3. The later verification cannot make the earlier disclosure compliant. Customer knowledge of W-51 is not verification.",
+          "checklist_basis": "identity"
+        },
+        "consultation": {
+          "status": "decided",
+          "answer": "20",
+          "allowed_answers": [
+            "20"
+          ],
+          "source_spans": [
+            "m1",
+            "m2",
+            "m3",
+            "m6",
+            "m7",
+            "reference:aster-webinar"
+          ],
+          "rationale": "Status, allocation date and no-payment/no-action next step are correct according to the authoritative supplied source. On the conversation date, tomorrow is 8 November. No substantive customer request remains unresolved. The security breach has no independently evidenced factual/completeness defect in this consultation.",
+          "checklist_basis": "consultation 20; R011; R012"
+        },
+        "empathy": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m1-m7"
+          ],
+          "rationale": "Courteous operator language and no customer dissatisfaction, distress or explicit experienced inconvenience. Being waitlisted is disclosed by the operator; do not infer a customer emotion or ignored cue from it.",
+          "checklist_basis": "empathy; R014"
+        },
+        "management": {
+          "status": "decided",
+          "answer": "7",
+          "allowed_answers": [
+            "7"
+          ],
+          "source_spans": [
+            "m2",
+            "m3",
+            "m4",
+            "m5"
+          ],
+          "rationale": "Independent sequencing defect: m2 explicitly requires verification BEFORE individual status disclosure, then discloses that status in the same turn. m3 confirms verification was absent; it occurs only at m5. This is one clear lapse, with remaining wording understandable and conversation continuing. It overlaps identity legitimately.",
+          "checklist_basis": "management; R014 three-part prerequisite test"
+        },
+        "closing": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m6",
+            "m7"
+          ],
+          "rationale": "After customer reports no further questions, operator summarizes status/date/no extra payment and says goodbye.",
+          "checklist_basis": "closing"
+        },
+        "serious": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m2",
+            "m3",
+            "reference:aster-webinar"
+          ],
+          "rationale": "Individual application status is explicitly confidential and is disclosed before required identity confirmation. This independently satisfies confidential disclosure; later verification does not erase it.",
+          "checklist_basis": "serious"
+        }
+      },
+      "unscored_rubric_ambiguities": [],
+      "prospective_author_checks": {
+        "case_id": "fresh-lean-05",
+        "ambiguity_before_inference": "No unresolved material ambiguity intended; review source sufficiency before accepting provisional labels.",
+        "critical_atomic_facts": [
+          "Confidential customer-specific W-51 waitlist status is spoken to client in m2, not only system text.",
+          "Verification is explicitly required before disclosure; m3 confirms not done; m5 occurs later.",
+          "Underlying status, next distribution date and no-payment advice are independently correct."
+        ],
+        "scope_and_dates": [
+          "Fictional Aster only, conversation 2026-11-07; tomorrow is 2026-11-08."
+        ],
+        "legitimate_overlaps": [
+          "identity no for late permission; management 7 for explicitly established order lapse; serious yes for confidential disclosure. Same source event legitimately supports distinct criteria.",
+          "needs remains N/A because all request details were already known; consultation remains 20 because independent advice content is correct."
+        ],
+        "correction_consequence": [
+          "Late verification does not erase earlier disclosure. No unrecorded financial or reputational harm inferred."
+        ],
+        "request_coverage": [
+          "Status and action-if-unconfirmed fully answered."
+        ],
+        "positive_controls": [
+          "serious yes must coexist with consultation 20; aggregate is not automatically zero."
+        ],
+        "voice_limits": [
+          "No raw audio, so no inference about tone, diction or actual recording access."
+        ]
+      },
+      "independent_atomic_truths": [
+        {
+          "claim": "W-51 is a private individual record with no public status search; mentioning its number is not identity confirmation.",
+          "source_spans": [
+            "m3",
+            "reference:aster-webinar"
+          ]
+        },
+        {
+          "claim": "The operator explicitly states the verification prerequisite and then reveals the waiting-list status before verification.",
+          "source_spans": [
+            "m2",
+            "m3"
+          ]
+        },
+        {
+          "claim": "Verification succeeds only later.",
+          "source_spans": [
+            "m5"
+          ]
+        },
+        {
+          "claim": "Authoritative source confirms waiting list, allocation 8 November, and no action or extra payment beforehand.",
+          "source_spans": [
+            "m3",
+            "reference:aster-webinar"
+          ]
+        },
+        {
+          "claim": "Customer understands the wait and says no further questions.",
+          "source_spans": [
+            "m6"
+          ]
+        }
+      ],
+      "independent_semantic_checks": [
+        "Do not relabel identity confirmation as a missing request detail.",
+        "Do not erase the pre-verification disclosure after m5.",
+        "Do not deduct consultation solely for the serious flag.",
+        "Preserve the management prerequisite violation despite the identity deduction.",
+        "Do not infer customer distress from the operator-reported waiting-list status."
+      ],
+      "root_adjudication": "Author and independent source-only reviewer agree on included exact labels. Case03 consultation exact ordinal intentionally omitted; source facts and verified recovery remain assessable."
+    },
+    {
+      "case_id": "fresh-lean-06",
+      "expectations": [
+        {
+          "criterion_id": "contact",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "m2 greets and introduces Daniyar in Kazakh."
+        },
+        {
+          "criterion_id": "needs",
+          "status": "scored",
+          "answer": "no",
+          "rationale": "Initially two possible appointments; target number is a real missing task detail. m2 asks but m4 acts before m6 answer, as m3/m5 confirm. Coincidental correct selection does not establish timely discovery."
+        },
+        {
+          "criterion_id": "identity",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "m3 independently confirms identity before protected m4 operation."
+        },
+        {
+          "criterion_id": "consultation",
+          "status": "scored",
+          "answer": "10",
+          "rationale": "Actual C-12 move achieved and matches m6; paid interpreter question remains materially unanswered at m7-m8 with no registered coordinator route. Partial substantive result merits 10."
+        },
+        {
+          "criterion_id": "empathy",
+          "status": "scored",
+          "answer": "no",
+          "rationale": "m6 explicitly says the customer is upset that the interpreter question remains unanswered and cannot attend without the already-paid interpreter. This is an experienced inconvenience and dissatisfaction cue beyond a neutral reminder. Subsequent m7 only repeats the appointment time and closes; it neither acknowledges the particular difficulty nor provides relevant help. Courteous closing does not erase the ignored cue."
+        },
+        {
+          "criterion_id": "management",
+          "status": "scored",
+          "answer": "7",
+          "rationale": "One independently evidenced prerequisite-order lapse: m2 explicitly requires chosen number before change, m4 performs it before m6. Clear wording otherwise; unanswered content alone adds no further management penalty."
+        },
+        {
+          "criterion_id": "closing",
+          "status": "scored",
+          "answer": "yes",
+          "rationale": "m7 summarizes appointment result, offers future help and says goodbye; unanswered content does not erase these closing actions."
+        },
+        {
+          "criterion_id": "serious",
+          "status": "scored",
+          "answer": "no",
+          "rationale": "No listed serious error; unauthorized selection is not itself confidential disclosure, insult or private payment."
+        }
+      ],
+      "source_only_judgment_review": {
+        "contact": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m2"
+          ],
+          "rationale": "The first reply greets in Kazakh and introduces Daniyar.",
+          "checklist_basis": "contact"
+        },
+        "needs": {
+          "status": "decided",
+          "answer": "no",
+          "allowed_answers": [
+            "no"
+          ],
+          "source_spans": [
+            "m1",
+            "m2",
+            "m3",
+            "m4",
+            "m5",
+            "m6",
+            "reference:aster-appointments"
+          ],
+          "rationale": "Two appointments are possible and the initial request does not select one. Operator asks for the number and expressly requires it before rescheduling, but actually changes C-12 before the customer supplies that selection. Later confirmation does not satisfy the before-dependent-action requirement. This is a missing task selection, independently of already completed identity verification.",
+          "checklist_basis": "needs; R009; R015"
+        },
+        "identity": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m3",
+            "m4",
+            "reference:aster-appointments"
+          ],
+          "rationale": "The source explicitly confirms verification before this chat and thus before the protected rescheduling. m3 is when the earlier fact is reported, not when verification occurred.",
+          "checklist_basis": "identity"
+        },
+        "consultation": {
+          "status": "decided",
+          "answer": "10",
+          "allowed_answers": [
+            "10"
+          ],
+          "source_spans": [
+            "m1",
+            "m4",
+            "m5",
+            "m6",
+            "m7",
+            "m8",
+            "reference:aster-appointments"
+          ],
+          "rationale": "C-12 is actually rescheduled to 15:00 and the customer later confirms it was the intended appointment. The distinct prepaid-interpreter issue remains unanswered without the required service check/result or tracked coordinator request. The new statement makes its practical consequence explicit: without the interpreter the customer cannot attend. Nonetheless the real requested reschedule remains a substantive partial result, so 10 applies; do not erase it or invent an interpreter failure outcome.",
+          "checklist_basis": "consultation 10; R001; R007; R008; R012"
+        },
+        "empathy": {
+          "status": "decided",
+          "answer": "no",
+          "allowed_answers": [
+            "no"
+          ],
+          "source_spans": [
+            "m6",
+            "m7",
+            "m8"
+          ],
+          "rationale": "m6 explicitly says the customer has paid for the interpreter, cannot attend without it, and is upset that the question remains unanswered. This is both an experienced practical obstacle and explicit dissatisfaction, not a neutral reminder. The only subsequent human reply m7 merely repeats the appointment time and gives generic further-help/farewell language; no acknowledgment, corrective help or appropriate referral addresses that concrete difficulty before closure at m8. Earlier courtesy does not erase the ignored later cue.",
+          "checklist_basis": "empathy; R014"
+        },
+        "management": {
+          "status": "decided",
+          "answer": "7",
+          "allowed_answers": [
+            "7"
+          ],
+          "source_spans": [
+            "m2",
+            "m3",
+            "m4",
+            "m5",
+            "m6",
+            "reference:aster-appointments"
+          ],
+          "rationale": "Independent prerequisite-sequencing defect: m2 requires the chosen consultation number before changing time; m4 claims and m5 confirms the actual change; m6 supplies the number only later. The wording otherwise remains clear and the customer can continue. Repetition of the interpreter request and complaint about its omission are not clarification caused by unclear wording, so they do not justify 4. The ignored cue is an empathy defect, not automatically another management level.",
+          "checklist_basis": "management; R013; R014"
+        },
+        "closing": {
+          "status": "decided",
+          "answer": "yes",
+          "allowed_answers": [
+            "yes"
+          ],
+          "source_spans": [
+            "m7",
+            "m8"
+          ],
+          "rationale": "m7 summarizes the new C-12 time, offers further help and says goodbye before the operator closes the chat. Unresolved content and the ignored dissatisfaction cue are independently scored under consultation and empathy.",
+          "checklist_basis": "closing"
+        },
+        "serious": {
+          "status": "decided",
+          "answer": "no",
+          "allowed_answers": [
+            "no"
+          ],
+          "source_spans": [
+            "m1-m8",
+            "reference:aster-appointments"
+          ],
+          "rationale": "Identity was already verified; no insult, paid private diversion or confidential disclosure occurs. Neither premature target selection nor ignored dissatisfaction is automatically one of the listed serious flags.",
+          "checklist_basis": "serious"
+        }
+      },
+      "unscored_rubric_ambiguities": [],
+      "prospective_author_checks": {
+        "case_id": "fresh-lean-06",
+        "ambiguity_before_inference": "No unresolved material ambiguity intended; review source sufficiency before accepting provisional labels.",
+        "critical_atomic_facts": [
+          "Two appointments and no earlier target choice are independently established.",
+          "m4 action occurs before m6 target answer, even though operator asked in m2.",
+          "C-12 was actually moved and later confirmed as the intended target.",
+          "Interpreter retention is independent and unresolved; appointment confirmation does not answer it.",
+          "Identity already verified before the chat action."
+        ],
+        "scope_and_dates": [
+          "Fictional Aster procedure only; tomorrow means 2026-11-08. No actual paid-service policy invented for Freedom."
+        ],
+        "legitimate_overlaps": [
+          "needs no and management 7 both apply: missing target detail before dependent action and explicit established process-order lapse.",
+          "identity yes because verification is separate and timely; empathy yes and closing yes despite material consultation omission."
+        ],
+        "correction_consequence": [
+          "No wrong-target loss asserted; eventual match does not change action-before-detail chronology."
+        ],
+        "request_coverage": [
+          "Rescheduling achieved; paid interpreter preservation remains open with no valid next step."
+        ],
+        "positive_controls": [
+          "consultation 10 for concrete partial resolution; management 7, not 4 because no unclear wording forces clarification; empathy yes for neutral request."
+        ]
+      },
+      "independent_atomic_truths": [
+        {
+          "claim": "Two appointments exist tomorrow; no prior choice of one is available.",
+          "source_spans": [
+            "m1",
+            "m2",
+            "m3"
+          ]
+        },
+        {
+          "claim": "Identity was confirmed through a protected channel before this chat.",
+          "source_spans": [
+            "m3"
+          ]
+        },
+        {
+          "claim": "Operator states that the number is needed before rescheduling but changes C-12 before it is supplied.",
+          "source_spans": [
+            "m2",
+            "m4",
+            "m5"
+          ]
+        },
+        {
+          "claim": "The customer later confirms C-12 was intended.",
+          "source_spans": [
+            "m6"
+          ]
+        },
+        {
+          "claim": "The customer has already paid for the interpreter, says they cannot attend without one, and explicitly expresses dissatisfaction about the unanswered question.",
+          "source_spans": [
+            "m6"
+          ]
+        },
+        {
+          "claim": "Subsequent operator response only repeats the appointment time and generic further-help/farewell; session closes without interpreter answer or registered referral.",
+          "source_spans": [
+            "m7",
+            "m8"
+          ]
+        },
+        {
+          "claim": "Rescheduling alone does not establish retention of the prepaid interpreter; a check/result or tracked coordinator request is required.",
+          "source_spans": [
+            "reference:aster-appointments"
+          ]
+        }
+      ],
+      "independent_semantic_checks": [
+        "Score empathy No with m6 cue and m7-m8 response/omission evidence; do not preserve the earlier neutral-reminder reading after this source change.",
+        "Do not demand a formulaic apology; relevant acknowledgment plus practical help could have sufficed, but neither is supplied here.",
+        "Preserve the successfully performed and later-confirmed reschedule when scoring consultation 10.",
+        "Do not infer that the paid interpreter was actually cancelled or preserved.",
+        "Do not relabel the later confirmation as pre-action selection, or already-completed verification as missing.",
+        "Do not map the repeated content question to management 4 without unclear wording/order evidence."
+      ],
+      "root_adjudication": "Author and independent source-only reviewer agree on included exact labels. Case03 consultation exact ordinal intentionally omitted; source facts and verified recovery remain assessable."
+    }
+  ],
+  "limitations": [
+    "Six targeted authored cases; not untouched natural conversations or expert GT.",
+    "Author and reviewer are separate cold agents from the same requested model family.",
+    "The author incidentally saw output-model definitions while reading input types; no evaluator/candidate/prompt/results access.",
+    "One source opportunity ambiguity clarified and final audit chronology corrected before freeze; no model result existed.",
+    "Corrected-advice ordinal remains unscored rather than forcing agreement."
+  ]
+}

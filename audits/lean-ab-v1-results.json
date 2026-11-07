@@ -1,0 +1,723 @@
+{
+  "kind": "frozen_manual_current_vs_lean_comparison_not_api_benchmark",
+  "completed_at_utc": "2026-11-07T19:56:15.928685+00:00",
+  "baseline_prompt": "evaluator-v10-08c974f78057",
+  "candidate_prompt": "lean-span-v1-582dd35f22ce",
+  "requested_executor": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "requested_reviewer": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "medium",
+    "fork_turns": "none"
+  },
+  "fresh_cases": 6,
+  "first_submissions": 12,
+  "repairs": 0,
+  "frozen_exact_reference_judgments_per_arm": 47,
+  "frozen_complete_vectors": 5,
+  "unscored_ordinal": {
+    "case_id": "fresh-lean-03",
+    "criterion_id": "consultation",
+    "current_authored": "20",
+    "lean_authored": "0",
+    "ambiguity_frozen_before_inference": true
+  },
+  "arms": {
+    "current-span-v5": {
+      "assigned": 6,
+      "strict_passed": 3,
+      "strict_rejected": 3,
+      "accepted_reference_matches": 24,
+      "accepted_reference_comparisons": 24,
+      "all_frozen_determinate_judgments": 47,
+      "diagnostic_authored_matches_including_rejected_not_accuracy": 47,
+      "diagnostic_authored_compared_including_rejected": 47,
+      "complete_reference_vectors": 5,
+      "accepted_numeric_vectors": 3,
+      "score_mae_only_accepted_numeric_subset": 0.0,
+      "median_canonical_wire_bytes_all_submissions_including_rejected": 16415.5,
+      "median_instruction_plus_schema_bytes": 78208.0,
+      "median_protected_input_bytes": 150257.0,
+      "independent_semantic_pass": 4,
+      "independent_semantic_qualified": 2
+    },
+    "lean-span-v1": {
+      "assigned": 6,
+      "strict_passed": 1,
+      "strict_rejected": 5,
+      "accepted_reference_matches": 8,
+      "accepted_reference_comparisons": 8,
+      "all_frozen_determinate_judgments": 47,
+      "diagnostic_authored_matches_including_rejected_not_accuracy": 47,
+      "diagnostic_authored_compared_including_rejected": 47,
+      "complete_reference_vectors": 5,
+      "accepted_numeric_vectors": 1,
+      "score_mae_only_accepted_numeric_subset": 0.0,
+      "median_canonical_wire_bytes_all_submissions_including_rejected": 10563.5,
+      "median_instruction_plus_schema_bytes": 10174.0,
+      "median_protected_input_bytes": 77846.0,
+      "independent_semantic_pass": 5,
+      "independent_semantic_qualified": 1
+    }
+  },
+  "rows": [
+    {
+      "packet_id": "01",
+      "case_number": 1,
+      "case_id": "fresh-lean-01",
+      "arm": "current-span-v5",
+      "strict_validation": "passed",
+      "validation_error": null,
+      "raw_response_sha256": "c86ecd98903ea98ea56ede81129fab46c358e154566de6808521d4d2b2fd4173",
+      "canonical_json_bytes": 19497,
+      "accepted_score": {
+        "total": 100.0,
+        "provisional": false,
+        "unresolved_criteria": [],
+        "applicable_weight": 65.0,
+        "earned_points": 65.0,
+        "flags": {
+          "serious": "no"
+        },
+        "contributions": [
+          {
+            "criterion_id": "contact",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "identity",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "points": 20.0
+          },
+          {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "management",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "closing",
+            "status": "scored",
+            "points": 5.0
+          }
+        ],
+        "score_bounds": {
+          "lower": 100.0,
+          "upper": 100.0,
+          "no_numeric_score_possible": false,
+          "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."
+        }
+      },
+      "accepted_reference_matches": 8,
+      "accepted_reference_compared": 8,
+      "diagnostic_authored_labels_only": {
+        "matched": 8,
+        "compared": 8,
+        "consultation_authored": {
+          "status": "scored",
+          "answer": "20"
+        },
+        "not_accepted_accuracy": true
+      },
+      "independent_semantic_verdict": "semantic_pass"
+    },
+    {
+      "packet_id": "02",
+      "case_number": 1,
+      "case_id": "fresh-lean-01",
+      "arm": "lean-span-v1",
+      "strict_validation": "passed",
+      "validation_error": null,
+      "raw_response_sha256": "f839f5ffa7f4696a26b9575c1787291d0fb37386ec6ebf6b6865d0e0b4389476",
+      "canonical_json_bytes": 9139,
+      "accepted_score": {
+        "total": 100.0,
+        "provisional": false,
+        "unresolved_criteria": [],
+        "applicable_weight": 65.0,
+        "earned_points": 65.0,
+        "flags": {
+          "serious": "no"
+        },
+        "contributions": [
+          {
+            "criterion_id": "contact",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "identity",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "points": 20.0
+          },
+          {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "management",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "closing",
+            "status": "scored",
+            "points": 5.0
+          }
+        ],
+        "score_bounds": {
+          "lower": 100.0,
+          "upper": 100.0,
+          "no_numeric_score_possible": false,
+          "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."
+        }
+      },
+      "accepted_reference_matches": 8,
+      "accepted_reference_compared": 8,
+      "diagnostic_authored_labels_only": {
+        "matched": 8,
+        "compared": 8,
+        "consultation_authored": {
+          "status": "scored",
+          "answer": "20"
+        },
+        "not_accepted_accuracy": true
+      },
+      "independent_semantic_verdict": "semantic_pass"
+    },
+    {
+      "packet_id": "03",
+      "case_number": 2,
+      "case_id": "fresh-lean-02",
+      "arm": "lean-span-v1",
+      "strict_validation": "failed",
+      "validation_error": "Citation selects the wrong source kind",
+      "raw_response_sha256": "18f80f0c9a36dd9df710fa36d2e5786de9fa2dbbb7aece60cbd3f9e1de3c6d92",
+      "canonical_json_bytes": 10661,
+      "accepted_score": null,
+      "accepted_reference_matches": 0,
+      "accepted_reference_compared": 0,
+      "diagnostic_authored_labels_only": {
+        "matched": 8,
+        "compared": 8,
+        "consultation_authored": {
+          "status": "scored",
+          "answer": "20"
+        },
+        "not_accepted_accuracy": true
+      },
+      "independent_semantic_verdict": "semantic_pass"
+    },
+    {
+      "packet_id": "04",
+      "case_number": 2,
+      "case_id": "fresh-lean-02",
+      "arm": "current-span-v5",
+      "strict_validation": "failed",
+      "validation_error": "Dialogue observations cannot alone verify general product/policy truth",
+      "raw_response_sha256": "99e3246d36db7102945ca16b6c31c274f2dc63a628b2e2a4c2a2d8428bd1cd3f",
+      "canonical_json_bytes": 17405,
+      "accepted_score": null,
+      "accepted_reference_matches": 0,
+      "accepted_reference_compared": 0,
+      "diagnostic_authored_labels_only": {
+        "matched": 8,
+        "compared": 8,
+        "consultation_authored": {
+          "status": "scored",
+          "answer": "20"
+        },
+        "not_accepted_accuracy": true
+      },
+      "independent_semantic_verdict": "semantic_pass"
+    },
+    {
+      "packet_id": "05",
+      "case_number": 3,
+      "case_id": "fresh-lean-03",
+      "arm": "current-span-v5",
+      "strict_validation": "failed",
+      "validation_error": "Independent outcome confirmation must follow the correction",
+      "raw_response_sha256": "27f76ee6b935984ce966d54868c95619f6af12d48399a2da8d579737ff2ecac1",
+      "canonical_json_bytes": 17666,
+      "accepted_score": null,
+      "accepted_reference_matches": 0,
+      "accepted_reference_compared": 0,
+      "diagnostic_authored_labels_only": {
+        "matched": 7,
+        "compared": 7,
+        "consultation_authored": {
+          "status": "scored",
+          "answer": "20"
+        },
+        "not_accepted_accuracy": true
+      },
+      "independent_semantic_verdict": "qualified"
+    },
+    {
+      "packet_id": "06",
+      "case_number": 3,
+      "case_id": "fresh-lean-03",
+      "arm": "lean-span-v1",
+      "strict_validation": "failed",
+      "validation_error": "Citation selects the wrong source kind",
+      "raw_response_sha256": "b76e5c1723f404a3dd7228a11198f06a7f17cd54816296a5a1f0c1a1a7305d3f",
+      "canonical_json_bytes": 10466,
+      "accepted_score": null,
+      "accepted_reference_matches": 0,
+      "accepted_reference_compared": 0,
+      "diagnostic_authored_labels_only": {
+        "matched": 7,
+        "compared": 7,
+        "consultation_authored": {
+          "status": "scored",
+          "answer": "0"
+        },
+        "not_accepted_accuracy": true
+      },
+      "independent_semantic_verdict": "qualified"
+    },
+    {
+      "packet_id": "07",
+      "case_number": 4,
+      "case_id": "fresh-lean-04",
+      "arm": "lean-span-v1",
+      "strict_validation": "failed",
+      "validation_error": "Fact requires related configured criteria",
+      "raw_response_sha256": "6f97f77af850eda738fdd1bf4edb412d4a129ec482c2aa651818ecab799e3026",
+      "canonical_json_bytes": 11042,
+      "accepted_score": null,
+      "accepted_reference_matches": 0,
+      "accepted_reference_compared": 0,
+      "diagnostic_authored_labels_only": {
+        "matched": 8,
+        "compared": 8,
+        "consultation_authored": {
+          "status": "scored",
+          "answer": "0"
+        },
+        "not_accepted_accuracy": true
+      },
+      "independent_semantic_verdict": "semantic_pass"
+    },
+    {
+      "packet_id": "08",
+      "case_number": 4,
+      "case_id": "fresh-lean-04",
+      "arm": "current-span-v5",
+      "strict_validation": "failed",
+      "validation_error": "Span transport schema mismatch at /factual_claims/2",
+      "raw_response_sha256": "eb6fb843373fe8664e72e7e4eb9131c6b7ee6eaad8bbeb752915d2437e79983f",
+      "canonical_json_bytes": 14160,
+      "accepted_score": null,
+      "accepted_reference_matches": 0,
+      "accepted_reference_compared": 0,
+      "diagnostic_authored_labels_only": {
+        "matched": 8,
+        "compared": 8,
+        "consultation_authored": {
+          "status": "scored",
+          "answer": "0"
+        },
+        "not_accepted_accuracy": true
+      },
+      "independent_semantic_verdict": "semantic_pass"
+    },
+    {
+      "packet_id": "09",
+      "case_number": 5,
+      "case_id": "fresh-lean-05",
+      "arm": "current-span-v5",
+      "strict_validation": "passed",
+      "validation_error": null,
+      "raw_response_sha256": "35c572289d0165d425ce8e5c2e0346c9243301c40de2959dd65839d1963312e4",
+      "canonical_json_bytes": 15424,
+      "accepted_score": {
+        "total": 71.18,
+        "provisional": false,
+        "unresolved_criteria": [],
+        "applicable_weight": 85.0,
+        "earned_points": 60.5,
+        "flags": {
+          "serious": "yes"
+        },
+        "contributions": [
+          {
+            "criterion_id": "contact",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "identity",
+            "status": "scored",
+            "points": 0.0
+          },
+          {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "points": 20.0
+          },
+          {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "management",
+            "status": "scored",
+            "points": 10.5
+          },
+          {
+            "criterion_id": "closing",
+            "status": "scored",
+            "points": 5.0
+          }
+        ],
+        "score_bounds": {
+          "lower": 71.18,
+          "upper": 71.18,
+          "no_numeric_score_possible": false,
+          "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."
+        }
+      },
+      "accepted_reference_matches": 8,
+      "accepted_reference_compared": 8,
+      "diagnostic_authored_labels_only": {
+        "matched": 8,
+        "compared": 8,
+        "consultation_authored": {
+          "status": "scored",
+          "answer": "20"
+        },
+        "not_accepted_accuracy": true
+      },
+      "independent_semantic_verdict": "semantic_pass"
+    },
+    {
+      "packet_id": "10",
+      "case_number": 5,
+      "case_id": "fresh-lean-05",
+      "arm": "lean-span-v1",
+      "strict_validation": "failed",
+      "validation_error": "Citation selects the wrong source kind",
+      "raw_response_sha256": "08ae2996c0551e3fc2a4126558b0f66f23d8ea2dc55a1fa1c13fd683997402a6",
+      "canonical_json_bytes": 9934,
+      "accepted_score": null,
+      "accepted_reference_matches": 0,
+      "accepted_reference_compared": 0,
+      "diagnostic_authored_labels_only": {
+        "matched": 8,
+        "compared": 8,
+        "consultation_authored": {
+          "status": "scored",
+          "answer": "20"
+        },
+        "not_accepted_accuracy": true
+      },
+      "independent_semantic_verdict": "semantic_pass"
+    },
+    {
+      "packet_id": "11",
+      "case_number": 6,
+      "case_id": "fresh-lean-06",
+      "arm": "lean-span-v1",
+      "strict_validation": "failed",
+      "validation_error": "Citation selects the wrong source kind",
+      "raw_response_sha256": "8019bf0f28f5c4b62cd0f2deaa75c8ca21c92cfbb10b8820462b66cc5c3d93f4",
+      "canonical_json_bytes": 11147,
+      "accepted_score": null,
+      "accepted_reference_matches": 0,
+      "accepted_reference_compared": 0,
+      "diagnostic_authored_labels_only": {
+        "matched": 8,
+        "compared": 8,
+        "consultation_authored": {
+          "status": "scored",
+          "answer": "10"
+        },
+        "not_accepted_accuracy": true
+      },
+      "independent_semantic_verdict": "semantic_pass"
+    },
+    {
+      "packet_id": "12",
+      "case_number": 6,
+      "case_id": "fresh-lean-06",
+      "arm": "current-span-v5",
+      "strict_validation": "passed",
+      "validation_error": null,
+      "raw_response_sha256": "46d0801f54afaa453befacb09e6b4f47d649390baf5f24cadb051eeab58bad1b",
+      "canonical_json_bytes": 15426,
+      "accepted_score": {
+        "total": 55.5,
+        "provisional": false,
+        "unresolved_criteria": [],
+        "applicable_weight": 100.0,
+        "earned_points": 55.5,
+        "flags": {
+          "serious": "no"
+        },
+        "contributions": [
+          {
+            "criterion_id": "contact",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "needs",
+            "status": "scored",
+            "points": 0.0
+          },
+          {
+            "criterion_id": "identity",
+            "status": "scored",
+            "points": 20.0
+          },
+          {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "points": 0.0
+          },
+          {
+            "criterion_id": "management",
+            "status": "scored",
+            "points": 10.5
+          },
+          {
+            "criterion_id": "closing",
+            "status": "scored",
+            "points": 5.0
+          }
+        ],
+        "score_bounds": {
+          "lower": 55.5,
+          "upper": 55.5,
+          "no_numeric_score_possible": false,
+          "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."
+        }
+      },
+      "accepted_reference_matches": 8,
+      "accepted_reference_compared": 8,
+      "diagnostic_authored_labels_only": {
+        "matched": 8,
+        "compared": 8,
+        "consultation_authored": {
+          "status": "scored",
+          "answer": "10"
+        },
+        "not_accepted_accuracy": true
+      },
+      "independent_semantic_verdict": "qualified"
+    }
+  ],
+  "size_comparison": {
+    "median_canonical_wire_reduction_percent": 35.6492,
+    "median_instruction_schema_reduction_percent": 86.9911,
+    "invalid_outputs_included": true,
+    "not_provider_tokens_or_costs": true
+  },
+  "predeclared_gate": {
+    "lean_all_six_strict_valid": false,
+    "wire_reduction_target35percent": true,
+    "instruction_schema_target25percent": true,
+    "size_does_not_override_quality": true,
+    "candidate_promoted": false
+  },
+  "root_adjudication": {
+    "decision": "Keep current default; lean candidate fails the predeclared strict-completion gate and is not promoted.",
+    "operational_findings": [
+      "Lean runtime validates strict source types, but its wire schema leaves source-kind choices and nonempty relevance constraints insufficiently bound.",
+      "Several useful policy references are placed into judgment arrays that accept dialogue only.",
+      "Flat fact proof kinds cannot directly represent every legitimate policy-plus-interaction inference; original proof and context must be distinguished.",
+      "Both engines reject the correction example for placement/classification reasons despite recognizing actual pre-action prevention and later recovery.",
+      "Both engines reject the mixed-success example for different audit-representation failures while preserving the true cancellation and false digest assertion."
+    ],
+    "semantic_findings": [
+      "Independent reviewers find no material actual grading winner in any pair.",
+      "Both preserve the known confidentiality breach, legitimate management overlap and independent correct consultation.",
+      "Both preserve the paid-interpreter omission, ignored explicit inconvenience, correct rescheduling and early-action needs/management deductions.",
+      "Current output01 overstates which login identifier was used in a hypothetical branch; actual identifier choice is not established.",
+      "Current output12 has a minor incomplete date/time proof link; its actual grades remain supported.",
+      "Corrected-advice scores differ20 versus0 under the pre-recorded unresolved temporal rule. Neither is treated as exact-reference success or failure."
+    ],
+    "freeze_bookkeeping_caveat": "The frozen review JSON retained initial-author narrative checks for case06 that say empathy Yes from the pre-revision neutral source. The final TestCase expectation and final independent source-only review both say No for the explicit complaint, before inference. Primary comparisons use the unchanged final TestCase expectations; old author narrative is historical provenance, not a scored expectation. Frozen files are not rewritten.",
+    "what_not_to_claim": [
+      "47/47 authored agreement is not accepted accuracy and does not repair rejected outputs.",
+      "A zero MAE over a small accepted subset does not pass the full-case gate.",
+      "Smaller invalid outputs do not establish a usable, cheaper production evaluator.",
+      "This six-case authored same-model-family study does not establish organizer Ground Truth accuracy."
+    ],
+    "next_engineering_focus": "Align the native citation representation with legitimate source composition and enforce essential ownership/role constraints in the generation schema, without restoring the old graph or weakening source authority. Keep baseline and all first failures frozen.",
+    "api_topup_needed_now": false,
+    "why_no_paid_probe_yet": "The free gate exposed known contract failures that should be corrected before spending on provider verification."
+  },
+  "tests": {
+    "python_passed": 755,
+    "existing_warnings": 1,
+    "ruff": "passed",
+    "current_engine_historical_verifier_passed": true,
+    "unchanged_historical_api_scores": 97,
+    "organizer_input_pairs_fully_preserved": 65
+  },
+  "all_frozen_inputs_and_engines_unchanged": true,
+  "old_failures_promoted": false,
+  "manual_outputs_inserted_into_runtime": false,
+  "api_calls": 0,
+  "incremental_api_cost_usd": 0,
+  "ledger_before": {
+    "rows": 591,
+    "max_id": 591,
+    "settled_sum": 23.141316
+  },
+  "ledger_after": {
+    "rows": 591,
+    "max_id": 591,
+    "settled_sum": 23.141316
+  },
+  "source_receipts": [
+    {
+      "path": "artifacts/lean-ab-v1/protocol.frozen.json",
+      "sha256": "7d0a6eaebf512d01799817c19e39975517c912709a65fc1819bb39371d3b500e"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/design.frozen.json",
+      "sha256": "35f3c1900c0ddfc9870a89198228ae04712324000f0f231409689b992784ba60"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/engines.frozen.json",
+      "sha256": "00900e771b0a07811b21a177a38851aa9db22ce3283b95b606ceaebb9a77950f"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/organizer-preflight.json",
+      "sha256": "d67e9f9a29152ee6e4aa3cba92ad842f598f38b6797ed11293423c5679dc765d"
+    },
+    {
+      "path": "evals/lean-ab-fresh-v1.freeze.json",
+      "sha256": "6b3021e3b6629a7fdb91d7da2e1e31057ddce052eae389909fc9b31b9eb25488"
+    },
+    {
+      "path": "evals/lean-ab-fresh-v1.jsonl",
+      "sha256": "b942c8f1b851a6a35932c75b6314c731e6c1cb9f6727b881f77351e44c112d15"
+    },
+    {
+      "path": "evals/lean-ab-fresh-v1.review.json",
+      "sha256": "ba54b9f8898b6886254049801950ab6d6dac49ca016b137e8d99332ef15f6ebb"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/reviews/review-cases-01-02.json",
+      "sha256": "10bd765f2ea697d2cff1952b54e17ee74b27df8792fa5a586c2c92d623ac1ab1"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/reviews/review-cases-03-04.json",
+      "sha256": "d63fa04207d29f61361849138fd117800058531e8ad6f81e1252e1bbc8417e3e"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/reviews/review-cases-05-06.json",
+      "sha256": "71b27fc18fea954672bf773047440f9dee306f5a3480f577f5cbb794b21202d7"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/results/01-c86ecd98903e/receipt.json",
+      "sha256": "7e0a68235cd4a18c240c817be6b3f393917e3fd0e3494c7e666ea51bb15dae34"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/results/02-f839f5ffa7f4/receipt.json",
+      "sha256": "3038e4ad8b40d9b28c3e4a130d9f534917c704bd7f96ea71704648d85d9a250f"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/results/03-18f80f0c9a36/receipt.json",
+      "sha256": "c4441172b966655cf7928d2e9933290279afeb90d025ab6947ad225fc1ac58db"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/results/04-99e3246d36db/receipt.json",
+      "sha256": "36c2f05713c4b42424686734b652d6947ef3146ec2618e04f161b4ae81c3bc87"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/results/05-27f76ee6b935/receipt.json",
+      "sha256": "d4fc6765d327c90295dd79134c28440b9a9e4fb882b1849f15de57b72a647248"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/results/06-b76e5c1723f4/receipt.json",
+      "sha256": "d515b6ba7b08aadb6bbb4b5fd13b69c1ad02c747916c62948c5ed7e842ddc52f"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/results/07-6f97f77af850/receipt.json",
+      "sha256": "4d2a6221760237e8cd104d1d7704da7cd30f45d61a99d9b6a369deffbe112b38"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/results/08-eb6fb843373f/receipt.json",
+      "sha256": "7cd9e318d879a7fda9350fb1ac3268be458aef4bd455304bb9fd90adf853a47c"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/results/09-35c572289d01/receipt.json",
+      "sha256": "2498c9bc9c946d065e2eda68cec0f74357a83c819879f14c67a13d3a0ba33e2b"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/results/10-08ae2996c055/receipt.json",
+      "sha256": "59f50d82434c8fa2333cd7f3f543d5065e472aa3181d4b20eac6c6fb80f4ca86"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/results/11-8019bf0f28f5/receipt.json",
+      "sha256": "7e88c7728f3226ded7d109328f2c0e978d756e4f880b46dae8b5148a0508796f"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/results/12-46d0801f54af/receipt.json",
+      "sha256": "7665634e73cf9cb84f82435ddf449bba3799865fb269407394350f7837c55f32"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/root-adjudication.json",
+      "sha256": "7dc40705b790ae27e1da1c9eaec204af5402ff92c84ad3622f9a8f1052e6652b"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/summary.json",
+      "sha256": "5d7bb9e2a8f21d13bef22c91e936c01568cd05939df7041ad412f20838a2a2d1"
+    }
+  ],
+  "report": "docs/LEAN_EVALUATOR_COMPARISON_RESULTS.md",
+  "implementation": "docs/LEAN_EVALUATOR.md",
+  "limitations": [
+    "Source author and source reviewer are separate cold Sol6.1medium agents, not human experts or organizer GT.",
+    "Six targeted authored cases use full explicit references/logs and do not measure natural-corpus generalization.",
+    "Both prompts and wire schemas differ; this is a system comparison, not a single-variable ablation.",
+    "Manual tool-assisted output does not reproduce provider schema enforcement, hidden reasoning/output cap, latency, cost or repeats.",
+    "One temporal-rubric ambiguity is excluded prospectively; an old author narrative bookkeeping inconsistency is explicitly retained."
+  ]
+}

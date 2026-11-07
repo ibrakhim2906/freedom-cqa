@@ -1,0 +1,401 @@
+{
+  "kind": "prospective_unseen_to_evaluator_manual_comparison_dataset",
+  "created_at_utc": "2026-11-07T19:39:17.759596+00:00",
+  "frozen_before_inference": true,
+  "case_count": 6,
+  "ordered_case_ids": [
+    "fresh-lean-01",
+    "fresh-lean-02",
+    "fresh-lean-03",
+    "fresh-lean-04",
+    "fresh-lean-05",
+    "fresh-lean-06"
+  ],
+  "checklist_file": "checklists/freedom-reviewed-015.json",
+  "frozen_labeled_judgments": 47,
+  "complete_expected_vectors": 5,
+  "unscored_ordinals": [
+    {
+      "case_id": "fresh-lean-03",
+      "criterion_id": "consultation"
+    }
+  ],
+  "canonical_checklist_sha256": "182e8caff7592a054af038dd72aa4258ad6363dfd17fb5d62e2e17101e9f6d27",
+  "frozen_files": [
+    {
+      "path": "evals/lean-ab-fresh-v1.jsonl",
+      "sha256": "b942c8f1b851a6a35932c75b6314c731e6c1cb9f6727b881f77351e44c112d15"
+    },
+    {
+      "path": "evals/lean-ab-fresh-v1.review.json",
+      "sha256": "ba54b9f8898b6886254049801950ab6d6dac49ca016b137e8d99332ef15f6ebb"
+    },
+    {
+      "path": "checklists/freedom-reviewed-015.json",
+      "sha256": "6893f9fd6b740995fd9e50de85cb3ac7d5ef63b100ec6d03b42cac767e261510"
+    },
+    {
+      "path": "references/fbroker-platform-20261107.json",
+      "sha256": "c95e36274f0ed66a45e78f02e698362421c454e82bf1571530bdab38e3ad0edf"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/design.frozen.json",
+      "sha256": "35f3c1900c0ddfc9870a89198228ae04712324000f0f231409689b992784ba60"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/engines.frozen.json",
+      "sha256": "00900e771b0a07811b21a177a38851aa9db22ce3283b95b606ceaebb9a77950f"
+    }
+  ],
+  "provenance_receipts": [
+    {
+      "path": "artifacts/lean-ab-v1/draft/cases.jsonl",
+      "sha256": "1cfb1960607ac003b0b97a5e6903ded96f6ba51b398b14065eb00593ad61474c"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/semantic-checks.json",
+      "sha256": "3268d085ac13e847dc001574201e69d1f2561d435063dad745f975d894bec8d7"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/source-only.json",
+      "sha256": "0b268fe8cb82de7813b6af8ac85d1ec18fb1f23a0b29e89af7931fd29667d601"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/AUTHOR_NOTES.md",
+      "sha256": "cbc9d92a79feb172004de84412cea8e1a8f061c4ed91b8734c86c60bd1c2cf9e"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/blind-review.json",
+      "sha256": "a1988aaefac19edd24c409b53f2de8894a3a48531f850aeb8daad95911c0dcba"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/revised/cases.jsonl",
+      "sha256": "b797e141bd9dcbf315fd5f41d8f26152fb991dde59c3b2195d1ddc9667621805"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/revised/source-only.json",
+      "sha256": "900b13935d19e4837ff39b98afafeaef1ee80d789f72496b601ee9b218de3a51"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/revised/REVISION_NOTE.md",
+      "sha256": "f334a64fb70a204d9390d9cd0bd63b14482769231d1756435b9a641b5ed5b10e"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/revised/revised-02-review.json",
+      "sha256": "2b7cbfe49f75358355f084925f9e8fcc677e82146b0502854988801afcdb8a73"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/final/cases.jsonl",
+      "sha256": "ce30db5a0a3ac48be7b27a089f662f50b406e7f618f26d7f7f921e2af4102cfa"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/final/source-only.json",
+      "sha256": "42b68d4d7e37c8bd03e6bc3a9fdbe78829728bec18c9e5616f79a5b807e21a4c"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/final/REVISION_NOTE.md",
+      "sha256": "3cf2fbc1f61d53e4dc873a385cee2578721de4411cee857ce79a2740005bb119"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/draft/final/review-04-06.json",
+      "sha256": "e9c05208ca1f27a41f7f66fb729577e78ed08174eeb3ea109319958a97639219"
+    },
+    {
+      "path": "artifacts/lean-ab-v1/contract-review.json",
+      "sha256": "2b696db8063620a6a316bc719549a40086be3ab65e43563204799635147e2b4e"
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "fresh-lean-01",
+      "canonical_conversation_sha256": "b5ab0aad51122dc7deede2782b9c4fbf057bf5a81d40c7b1825ee7f2064caee3",
+      "expected_arithmetic": {
+        "total": 100.0,
+        "provisional": false,
+        "unresolved_criteria": [],
+        "applicable_weight": 65.0,
+        "earned_points": 65.0,
+        "flags": {
+          "serious": "no"
+        },
+        "contributions": [
+          {
+            "criterion_id": "contact",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "identity",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "points": 20.0
+          },
+          {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "management",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "closing",
+            "status": "scored",
+            "points": 5.0
+          }
+        ],
+        "score_bounds": {
+          "lower": 100.0,
+          "upper": 100.0,
+          "no_numeric_score_possible": false,
+          "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."
+        }
+      }
+    },
+    {
+      "case_id": "fresh-lean-02",
+      "canonical_conversation_sha256": "0e205140f80d4f3464ddb108aa4fb7fc02c830bc17fe1cd85656250941beb78b",
+      "expected_arithmetic": {
+        "total": 100.0,
+        "provisional": false,
+        "unresolved_criteria": [],
+        "applicable_weight": 65.0,
+        "earned_points": 65.0,
+        "flags": {
+          "serious": "no"
+        },
+        "contributions": [
+          {
+            "criterion_id": "contact",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "identity",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "points": 20.0
+          },
+          {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "management",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "closing",
+            "status": "scored",
+            "points": 5.0
+          }
+        ],
+        "score_bounds": {
+          "lower": 100.0,
+          "upper": 100.0,
+          "no_numeric_score_possible": false,
+          "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."
+        }
+      }
+    },
+    {
+      "case_id": "fresh-lean-03",
+      "canonical_conversation_sha256": "15aac652c710832a9dc23bd436232f7b732dd9e60bc8fdab76ab1b476e69faef",
+      "expected_arithmetic": null
+    },
+    {
+      "case_id": "fresh-lean-04",
+      "canonical_conversation_sha256": "f6b2d512f85f824143ac176d91ed4b0cc2bb35108da64fe8f83ef637b540061d",
+      "expected_arithmetic": {
+        "total": 64.71,
+        "provisional": false,
+        "unresolved_criteria": [],
+        "applicable_weight": 85.0,
+        "earned_points": 55.0,
+        "flags": {
+          "serious": "no"
+        },
+        "contributions": [
+          {
+            "criterion_id": "contact",
+            "status": "scored",
+            "points": 0.0
+          },
+          {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "identity",
+            "status": "scored",
+            "points": 20.0
+          },
+          {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "points": 0.0
+          },
+          {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "management",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "closing",
+            "status": "scored",
+            "points": 5.0
+          }
+        ],
+        "score_bounds": {
+          "lower": 64.71,
+          "upper": 64.71,
+          "no_numeric_score_possible": false,
+          "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."
+        }
+      }
+    },
+    {
+      "case_id": "fresh-lean-05",
+      "canonical_conversation_sha256": "f79ca3f179ba4b1102bbfe5aefbfabf1bdf74c6fbca784a039005e9834e8c97c",
+      "expected_arithmetic": {
+        "total": 71.18,
+        "provisional": false,
+        "unresolved_criteria": [],
+        "applicable_weight": 85.0,
+        "earned_points": 60.5,
+        "flags": {
+          "serious": "yes"
+        },
+        "contributions": [
+          {
+            "criterion_id": "contact",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "needs",
+            "status": "not_applicable",
+            "points": null
+          },
+          {
+            "criterion_id": "identity",
+            "status": "scored",
+            "points": 0.0
+          },
+          {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "points": 20.0
+          },
+          {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "points": 15.0
+          },
+          {
+            "criterion_id": "management",
+            "status": "scored",
+            "points": 10.5
+          },
+          {
+            "criterion_id": "closing",
+            "status": "scored",
+            "points": 5.0
+          }
+        ],
+        "score_bounds": {
+          "lower": 71.18,
+          "upper": 71.18,
+          "no_numeric_score_possible": false,
+          "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."
+        }
+      }
+    },
+    {
+      "case_id": "fresh-lean-06",
+      "canonical_conversation_sha256": "a24f30d45542111af92f52bd57775001182a336f7078651600578e2c3f95eab3",
+      "expected_arithmetic": {
+        "total": 55.5,
+        "provisional": false,
+        "unresolved_criteria": [],
+        "applicable_weight": 100.0,
+        "earned_points": 55.5,
+        "flags": {
+          "serious": "no"
+        },
+        "contributions": [
+          {
+            "criterion_id": "contact",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "needs",
+            "status": "scored",
+            "points": 0.0
+          },
+          {
+            "criterion_id": "identity",
+            "status": "scored",
+            "points": 20.0
+          },
+          {
+            "criterion_id": "consultation",
+            "status": "scored",
+            "points": 10.0
+          },
+          {
+            "criterion_id": "empathy",
+            "status": "scored",
+            "points": 0.0
+          },
+          {
+            "criterion_id": "management",
+            "status": "scored",
+            "points": 10.5
+          },
+          {
+            "criterion_id": "closing",
+            "status": "scored",
+            "points": 5.0
+          }
+        ],
+        "score_bounds": {
+          "lower": 55.5,
+          "upper": 55.5,
+          "no_numeric_score_possible": false,
+          "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."
+        }
+      }
+    }
+  ],
+  "paid_api_calls": 0
+}

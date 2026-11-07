@@ -13,6 +13,11 @@ The [six-case manual rerun](docs/MANUAL_DIAGNOSTICS_V4.md) records five strict
 passes, one retained rejection and remaining semantic qualifications, at $0 API
 cost. These diagnostics do not establish production accuracy or reliability.
 
+An isolated [lean candidate](docs/LEAN_EVALUATOR.md) was compared on six fresh
+frozen cases using Sol 6.1 medium. [The comparison](docs/LEAN_EVALUATOR_COMPARISON_RESULTS.md)
+records 1/6 lean versus 3/6 current first-pass valid outputs. The candidate is
+smaller but is not promoted; all failures remain visible and API cost is $0.
+
 ## Run the application
 
 ```powershell
