@@ -40,6 +40,12 @@ evidence-first strategy added cost without improving the tested judgments.
 The report preserves a 6.93-point repeated-score drift and the remaining source
 and reference limitations; passing the local anchors is not organizer accuracy.
 
+The [grounding and deduction-boundary candidate](docs/GROUNDING_AND_OVERLAP_RESULTS.md)
+adds scoped official references, factual-claim citations and rule-linked deductions.
+Use `--strategy grounded --checklist checklists/freedom-reviewed-013.json` explicitly:
+its live validation is incomplete after provider credits ran out, so it is not the
+default. The report includes the completed comparison, failures, costs and remaining checks.
+
 The [semantic review](docs/SEMANTIC_REVIEW.md) distinguishes suspected evaluator
 mistakes from ambiguous labels. Original datasets remain frozen;
 [structured review notes](evals/label-review-v2.json) do not override their expectations.

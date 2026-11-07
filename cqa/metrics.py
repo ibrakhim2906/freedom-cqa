@@ -70,5 +70,9 @@ def summarize(rows):
             "by_channel": {ch: group_summary([r for r in rows if r["channel"] == ch])
                            for ch in sorted({r["channel"] for r in rows})},
             "estimated_known_cost_usd": round(sum(costs), 6),
-            "unknown_cost_attempts": sum(r["record"]["status"] == "failed" and not r["record"].get("usage") for r in rows),
+            "unknown_cost_attempts": sum(
+                a.get("usage") is None and a.get("settled_cost_usd") is None and
+                a.get("billing_state") != "not_submitted"
+                for r in rows for a in r["record"].get("attempt_records", [r["record"]])
+                if a.get("status") == "failed"),
             "p95_latency_seconds": latencies[max(0, int(len(latencies) * .95 + .999999) - 1)] if latencies else None}

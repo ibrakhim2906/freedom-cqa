@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -5,6 +6,11 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 class StrictModel(BaseModel):
     model_config = ConfigDict(extra="forbid")
+
+
+def validate_iso_date(value: str):
+    if date.fromisoformat(value).isoformat() != value:
+        raise ValueError("Date must use canonical YYYY-MM-DD format")
 
 
 class Message(StrictModel):
@@ -18,6 +24,20 @@ class Reference(StrictModel):
     id: str
     text: str
     provenance: str
+    source_url: str | None = None
+    retrieved_on: str | None = None
+    scope: str | None = None
+    valid_from: str | None = None
+    valid_until: str | None = None
+
+    @model_validator(mode="after")
+    def valid_dates(self):
+        for value in [self.retrieved_on, self.valid_from, self.valid_until]:
+            if value is not None:
+                validate_iso_date(value)
+        if self.valid_from and self.valid_until and self.valid_from > self.valid_until:
+            raise ValueError("Reference validity window is reversed")
+        return self
 
 
 class Conversation(StrictModel):
@@ -26,11 +46,17 @@ class Conversation(StrictModel):
     language: str
     messages: list[Message]
     references: list[Reference] = Field(default_factory=list)
+    knowledge_scope: str | None = None
+    occurred_on: str | None = None
 
     @model_validator(mode="after")
     def unique_messages(self):
         if not self.messages or len({m.id for m in self.messages}) != len(self.messages):
             raise ValueError("Conversation needs nonempty, unique message IDs")
+        if len({r.id for r in self.references}) != len(self.references):
+            raise ValueError("Reference IDs must be unique")
+        if self.occurred_on is not None:
+            validate_iso_date(self.occurred_on)
         return self
 
 
@@ -100,10 +126,38 @@ class RequestCoverage(StrictModel):
     withdrawal_message_ids: list[str] = Field(default_factory=list)
 
 
+class ReferenceEvidence(StrictModel):
+    reference_id: str
+    quote: str
+
+
+class FactualClaim(StrictModel):
+    claim: str
+    criterion_ids: list[str]
+    operator_evidence: list[Evidence]
+    status: Literal["supported", "contradicted", "unverified"]
+    material: bool
+    reference_evidence: list[ReferenceEvidence]
+    dialogue_evidence: list[Evidence]
+    explanation: str
+
+
+class Deduction(StrictModel):
+    criterion_id: str
+    rule_quote: str
+    defect: str
+    evidence: list[Evidence]
+    checked_message_ids: list[str]
+    overlap_note: str
+
+
 class Evaluation(StrictModel):
     judgments: list[Judgment]
     request_coverage: list[RequestCoverage]
     scope_notes: list[str]
+    # Defaults allow reading frozen historical results, not omitting new API fields.
+    factual_claims: list[FactualClaim] = Field(default_factory=list)
+    deductions: list[Deduction] = Field(default_factory=list)
 
 
 class Expectation(StrictModel):

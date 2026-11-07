@@ -1,0 +1,55 @@
+{
+  "scope": "fbroker-kz-platform",
+  "references": [
+    {
+      "id": "fbroker-support-20261107",
+      "text": "В мобильном приложении платформы Freedom Broker войдите в «Меню» → «Поддержка» → «Написать в поддержку». Опишите возникшую проблему, вопрос или комментарий по работе платформы. При необходимости приложите файл (например, скриншот). Уведомления об ответе можно будет получить на email или в SMS (услуга платная). ",
+      "provenance": "Official fbroker.kz platform help; fetched 2026-11-07. Snapshot scope is platform guidance, not rates, withdrawal timing, individual account state, or all Freedom entities. Validity window is our conservative assessment window, not an asserted legal effective date.",
+      "source_url": "https://fbroker.kz/faq/question/how-to-get-advice-on-tradernet-3808",
+      "retrieved_on": "2026-11-07",
+      "scope": "fbroker-kz-platform",
+      "valid_from": "2026-11-07",
+      "valid_until": "2026-11-07"
+    },
+    {
+      "id": "fbroker-recovery-20261107",
+      "text": "Восстановление пароля 1. В мобильном приложении платформы Freedom Broker вы можете нажать на стартовом экране на «Восстановить доступ». 2. Далее приложение предложит вам варианты восстановления пароля - по номеру телефона, email, коду клиента или вашему логину. ​ 3. После выберите предпочитаемый способ получения кода подтверждения - по контактному номеру либо email. 4. Введите полученный код и задайте новый пароль. ",
+      "provenance": "Official fbroker.kz platform help; fetched 2026-11-07. Snapshot scope is platform guidance, not rates, withdrawal timing, individual account state, or all Freedom entities. Validity window is our conservative assessment window, not an asserted legal effective date.",
+      "source_url": "https://fbroker.kz/faq/question/how-to-recover-change-tradernet-login-password-3819",
+      "retrieved_on": "2026-11-07",
+      "scope": "fbroker-kz-platform",
+      "valid_from": "2026-11-07",
+      "valid_until": "2026-11-07"
+    },
+    {
+      "id": "fbroker-profile-20261107",
+      "text": "Важно! Подать поручение на актуализацию анкетных данных можно только с торгового счета, номер которого начинается на 7*****. Инструкция как переходить между счетами. 1. Войдите в платформу Freedom Broker предпочитаемым способом: • в мобильном приложении → «Меню» → «Поручения» → «Персональные данные» → «Изменение сведений» ; • на сайте в разделе «Кабинет» → «Поручения» → «Изменение сведений» . 2. Откройте сессию безопасности. 3. Заполните в соответствующих полях данные, которые были изменены. Важно! Паспортные данные необходимо заполнять в точности так, как указано в вашем документе, удостоверяющем личность. В случае, смены адреса регистрации или адреса проживания, необходимо дополнительно прикрепить документ, подтверждающий адрес. В качестве подтверждения адреса подойдут следующие документы (их можно получить через eGov, ЕНПФ или банковское приложение): • справка о регистрации по месту жительства; • справка о пенсионных отчислениях из Единого Накопительного Пенсионного Фонда; • справка из психоневрологического диспансера; • справка из наркологического диспансера; • справка из противотуберкулёзного диспансера. 4. Загрузите скан, либо фото актуального документа в «Файл» и проверьте корректность введенных данных. Важно! Скриншоты документов не принимаются. Необходимо загрузить официальный документ в формате PDF либо его качественную фотографию/скан-копию, содержащую все реквизиты документа. ​ 5. После этого остается только нажать на «Подтвердить» , отправив поручение на проверку. Готово! После проверки поручение будет исполнено. ",
+      "provenance": "Official fbroker.kz platform help; fetched 2026-11-07. Snapshot scope is platform guidance, not rates, withdrawal timing, individual account state, or all Freedom entities. Validity window is our conservative assessment window, not an asserted legal effective date.",
+      "source_url": "https://fbroker.kz/faq/question/how-can-i-update-my-data-3815",
+      "retrieved_on": "2026-11-07",
+      "scope": "fbroker-kz-platform",
+      "valid_from": "2026-11-07",
+      "valid_until": "2026-11-07"
+    }
+  ],
+  "manifest": [
+    {
+      "id": "fbroker-support-20261107",
+      "source_url": "https://fbroker.kz/faq/question/how-to-get-advice-on-tradernet-3808",
+      "raw_sha256": "47ce2137f3169f61d745368fe2beb020824d80184f24bbf3fcfaa69d32ddf6be",
+      "excerpt_sha256": "64e804b22a895a78ab69880fa9db2f14096554ec995601ce935f0d388d94adcc"
+    },
+    {
+      "id": "fbroker-recovery-20261107",
+      "source_url": "https://fbroker.kz/faq/question/how-to-recover-change-tradernet-login-password-3819",
+      "raw_sha256": "634556cdc2368bf9aecc686ffe10e1496f2822ed443eccfbf98c769d7f7d1627",
+      "excerpt_sha256": "4b4c4ba666083b992b3457c6cee44f98fcff5a46a369a7f577e19a5d322d84b9"
+    },
+    {
+      "id": "fbroker-profile-20261107",
+      "source_url": "https://fbroker.kz/faq/question/how-can-i-update-my-data-3815",
+      "raw_sha256": "25928bcddb9aa4de73d4dd77de101e18a64e4c1fa46602d71f1620bae29535a9",
+      "excerpt_sha256": "c23bd8a91df38330a8b91b16b4ce47076f5dd533db24125c8d73a4d3b0351f5c"
+    }
+  ]
+}

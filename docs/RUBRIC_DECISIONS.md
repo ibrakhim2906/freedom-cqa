@@ -346,3 +346,36 @@ uv run cqa benchmark --checklist checklists/freedom-v1.json --suite combined --b
 ```
 
 This command is billable; the local spending cap still applies.
+
+## R013 candidate: separate content defects from communication defects
+
+Implemented at the user's request to address overlapping deductions. This is a
+**team interpretation proposed by the implementing assistant**, not an organizer
+clarification or a newly user-adjudicated reference label. It is saved separately
+as `freedom-reviewed-013.json`; reviewed-012 remains the default until the candidate
+finishes its live checks.
+
+A missing substantive answer or a factual mistake belongs to consultation. Neither
+alone establishes unclear wording, incoherence, a bad prerequisite sequence, an
+unnecessary repeat question, or failure to announce an explicit wait. Ending with
+a further-help offer and farewell while a question is unanswered is an omission;
+that same omission alone does not also lower management. A separate evidenced
+communication defect can lower management, including when content also fails.
+
+Likewise, explicit frustration that the operator ignores can independently lower
+empathy. A repeated factual question is not automatically an expressed emotional
+objection. A serious-error flag continues to have its own configured meaning.
+
+Contrasts frozen before candidate inference:
+
+- Clear reply plus an unanswered late request: consultation 10, management 10.
+- Unclear wording makes the customer ask what the operator meant, then a separate
+  question remains unanswered: consultation 10 and management 4.
+- An unanswered question accompanied by explicit frustration that receives no
+  response: consultation 10 and empathy No.
+
+These labels are provisional team test expectations, not independent Ground Truth.
+The grounded output contract requires each numeric deduction to quote its configured
+rule, cite source evidence or a checked omission span, and explain overlap. Code
+validates the citations and rule existence; semantic independence still requires
+correct model interpretation. It never removes all overlapping deductions mechanically.

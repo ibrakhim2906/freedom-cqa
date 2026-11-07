@@ -1,9 +1,10 @@
 from decimal import ROUND_HALF_UP, Decimal
 
+from .grounding import reference_applicable
 from .models import Checklist, Conversation, Evaluation
 
 
-def validate_evaluation(result: Evaluation, conversation: Conversation, checklist: Checklist):
+def validate_evaluation(result: Evaluation, conversation: Conversation, checklist: Checklist, *, require_audit=False):
     criteria = {c.id: c for c in checklist.criteria}
     ids = [j.criterion_id for j in result.judgments]
     if len(ids) != len(set(ids)) or set(ids) != set(criteria):
@@ -54,6 +55,79 @@ def validate_evaluation(result: Evaluation, conversation: Conversation, checklis
                 raise ValueError("Withdrawal cannot precede the request")
         elif request.withdrawal_message_ids:
             raise ValueError("Only withdrawn requests may have withdrawal evidence")
+    validate_audit(result, conversation, checklist, require_audit=require_audit)
+
+
+def validate_audit(result, conversation, checklist, *, require_audit):
+    criteria = {c.id: c for c in checklist.criteria}
+    judgments = {j.criterion_id: j for j in result.judgments}
+    messages = {m.id: m for m in conversation.messages}
+    references = {r.id: r for r in conversation.references}
+
+    def check_quotes(items, allowed_roles=None):
+        for item in items:
+            message = messages.get(item.message_id)
+            if message is None or not item.quote.strip() or item.quote not in message.text:
+                raise ValueError("Audit quote must occur verbatim in its source message")
+            if allowed_roles is not None and message.speaker not in allowed_roles:
+                raise ValueError("Audit source has the wrong speaker role")
+
+    deducted = set()
+    for item in result.deductions:
+        criterion = criteria.get(item.criterion_id)
+        if criterion is None or not item.defect.strip() or not item.overlap_note.strip():
+            raise ValueError("Deduction needs a configured criterion, defect and overlap explanation")
+        rules = [criterion.instruction, *[x.description for x in criterion.levels],
+                 *criterion.channel_guidance.values()]
+        if not item.rule_quote.strip() or not any(item.rule_quote in text for text in rules):
+            raise ValueError("Deduction must quote the configured criterion rule verbatim")
+        judgment = judgments[item.criterion_id]
+        if judgment.status != "scored" or criterion.kind == "flag":
+            raise ValueError("Deduction audit only describes scored numeric deductions")
+        level = next(x for x in criterion.levels if x.value == judgment.answer)
+        if level.fraction == max(x.fraction for x in criterion.levels):
+            raise ValueError("Maximum-level judgments cannot have a deduction")
+        if not (item.evidence or item.checked_message_ids):
+            raise ValueError("Deduction requires evidence or a checked omission span")
+        check_quotes(item.evidence)
+        if any(mid not in messages for mid in item.checked_message_ids):
+            raise ValueError("Deduction checked span references a nonexistent message")
+        deducted.add(item.criterion_id)
+    if require_audit:
+        for cid, judgment in judgments.items():
+            criterion = criteria[cid]
+            if criterion.kind == "flag" or judgment.status != "scored":
+                continue
+            level = next(x for x in criterion.levels if x.value == judgment.answer)
+            if level.fraction < max(x.fraction for x in criterion.levels) and cid not in deducted:
+                raise ValueError("Every numeric deduction requires a source-linked rule audit")
+
+    for claim in result.factual_claims:
+        if not claim.claim.strip() or not claim.explanation.strip() or not claim.operator_evidence:
+            raise ValueError("Factual claim needs a statement, explanation and operator source")
+        if not claim.criterion_ids or any(cid not in criteria for cid in claim.criterion_ids):
+            raise ValueError("Factual claim must identify its configured criterion impact")
+        check_quotes(claim.operator_evidence, {"operator"})
+        check_quotes(claim.dialogue_evidence, {"client", "system"})
+        for citation in claim.reference_evidence:
+            ref = references.get(citation.reference_id)
+            if ref is None or not citation.quote.strip() or citation.quote not in ref.text:
+                raise ValueError("Reference quote must occur verbatim in the supplied reference")
+            if claim.status != "unverified" and not reference_applicable(ref, conversation):
+                raise ValueError("Out-of-scope or out-of-date source cannot verify a claim")
+        if claim.status != "unverified" and not (claim.reference_evidence or claim.dialogue_evidence):
+            raise ValueError("Verified claims require reference or customer/system evidence")
+        if claim.material and claim.status == "unverified" and any(
+            judgments[cid].status != "needs_review" for cid in claim.criterion_ids
+        ):
+            raise ValueError("Material unverified claims require review of the dependent criteria")
+        if claim.material and claim.status == "contradicted":
+            for cid in claim.criterion_ids:
+                criterion, judgment = criteria[cid], judgments[cid]
+                if criterion.kind != "flag" and judgment.status == "scored":
+                    level = next(x for x in criterion.levels if x.value == judgment.answer)
+                    if level.fraction == max(x.fraction for x in criterion.levels):
+                        raise ValueError("Material contradicted claims cannot receive full credit in dependent criteria")
 
 
 def calculate_score(result: Evaluation, checklist: Checklist):

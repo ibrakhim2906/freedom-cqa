@@ -7,6 +7,7 @@ from datetime import UTC, datetime
 
 from .datasets import load_cases, load_suite
 from .evaluator import Evaluator
+from .grounding import attach_reference_pack
 from .ledger import BudgetExceeded, Ledger
 from .metrics import compare_case, summarize
 from .rubric import load_checklist
@@ -32,6 +33,15 @@ async def benchmark(args):
             raise ValueError("Requested case IDs are not all present in this suite")
     if args.limit:
         cases = cases[:args.limit]
+    reference_pack = getattr(args, "reference_pack", None)
+    reference_scope, as_of = getattr(args, "reference_scope", None), getattr(args, "as_of", None)
+    if reference_pack:
+        if not reference_scope or not as_of:
+            raise ValueError("A reference pack requires explicit --reference-scope and --as-of context")
+        cases = [c.model_copy(update={"conversation": attach_reference_pack(
+            c.conversation, ROOT / reference_pack, reference_scope, as_of)}) for c in cases]
+    elif reference_scope or as_of:
+        raise ValueError("Reference scope/date options require --reference-pack")
     if not cases:
         raise ValueError("Suite selection is empty")
     if not 0 < args.budget_usd <= settings.max_spend:
@@ -58,6 +68,8 @@ async def benchmark(args):
                 "selected_case_ids": [c.id for c in cases], "complete": False}
     metadata["evaluator_source_sha256"] = hashlib.sha256(b"\n".join(
         path.read_bytes() for path in sorted((ROOT / "cqa").glob("*.py")))).hexdigest()
+    metadata["reference_pack_sha256"] = (hashlib.sha256((ROOT / reference_pack).read_bytes()).hexdigest()
+                                         if reference_pack else None)
     # Freeze exactly what was selected BEFORE any model result is seen, outside inference.
     output.with_suffix(".suite.jsonl").write_text("".join(c.model_dump_json() + "\n" for c in cases), encoding="utf-8")
     semaphore = asyncio.Semaphore(settings.concurrency)
@@ -107,8 +119,11 @@ def main():
     run.add_argument("--concurrency", type=int, help="Override local concurrency (1-8) for this run")
     run.add_argument("--limit", type=int)
     run.add_argument("--model")
-    run.add_argument("--strategy", choices=["direct", "evidence-first"], default="direct")
+    run.add_argument("--strategy", choices=["direct", "evidence-first", "grounded"], default="direct")
     run.add_argument("--checklist")
+    run.add_argument("--reference-pack", help="Explicit scoped reference bundle; no implicit product/entity selection")
+    run.add_argument("--reference-scope")
+    run.add_argument("--as-of", help="Explicit YYYY-MM-DD assessment date for the selected reference bundle")
     run.add_argument("--budget-usd", type=float, default=1.0)
     run.add_argument("--output", default="artifacts/benchmark/baseline-v1.json")
     args = parser.parse_args()

@@ -14,7 +14,7 @@ from .observations import (
     observation_schema,
     validate_observations,
 )
-from .prompt import PROMPT_VERSION, SYSTEM, fingerprint, payload_for
+from .prompt import GROUNDED_SYSTEM, GROUNDED_VERSION, PROMPT_VERSION, SYSTEM, fingerprint, payload_for
 from .scoring import calculate_score, validate_evaluation
 from .settings import RATES, Settings
 
@@ -22,11 +22,14 @@ from .settings import RATES, Settings
 class Evaluator:
     def __init__(self, settings: Settings, ledger: Ledger, run_ceiling: float, strategy: str = "direct"):
         settings.require_key()
-        if strategy not in {"direct", "evidence-first"}:
+        if strategy not in {"direct", "evidence-first", "grounded"}:
             raise ValueError("Unknown evaluator strategy")
         self.strategy = strategy
-        self.workflow_version = (PROMPT_VERSION if strategy == "direct" else "evidence-first-v1-" +
-                                 hashlib.sha256((OBSERVATION_SYSTEM + OBSERVATION_GRADING + SYSTEM).encode()).hexdigest()[:12])
+        self.grounded = strategy == "grounded"
+        self.provider_blocked = False
+        self.workflow_version = (GROUNDED_VERSION if self.grounded else PROMPT_VERSION if strategy == "direct"
+                                 else "evidence-first-v1-" + hashlib.sha256(
+                                     (OBSERVATION_SYSTEM + OBSERVATION_GRADING + SYSTEM).encode()).hexdigest()[:12])
         self.settings, self.ledger, self.run_ceiling = settings, ledger, run_ceiling
         # No invisible SDK retries: each billable attempt is reserved and recorded here.
         self.client = AsyncOpenAI(api_key=settings.api_key, base_url="https://api.openai.com/v1",
@@ -36,6 +39,11 @@ class Evaluator:
         await self.client.close()
 
     async def evaluate(self, conversation: Conversation, checklist: Checklist):
+        if self.provider_blocked:
+            return {"status": "failed", "conversation_id": conversation.id,
+                    "error": "provider_credit_exhausted_no_request", "billing_state": "not_submitted",
+                    "evaluation": None, "score": None, "usage": None, "attempt_records": [],
+                    "attempt_count": 0, "latency_seconds": 0, "strategy": self.strategy}
         attempts = []
         if self.strategy == "evidence-first":
             extracted = await self._stage(conversation, checklist, stage="observations")
@@ -92,10 +100,11 @@ class Evaluator:
 
     async def _attempt(self, conversation: Conversation, checklist: Checklist, feedback=None,
                        *, stage="grading", observations=None):
-        payload = payload_for(conversation, checklist)
+        payload = payload_for(conversation, checklist, grounded=self.grounded)
         extracting = stage == "observations"
-        schema = observation_schema(conversation, checklist) if extracting else schema_for(conversation, checklist)
-        instructions = OBSERVATION_SYSTEM if extracting else SYSTEM
+        schema = observation_schema(conversation, checklist) if extracting else schema_for(
+            conversation, checklist, grounded=self.grounded)
+        instructions = OBSERVATION_SYSTEM if extracting else GROUNDED_SYSTEM if self.grounded else SYSTEM
         output_cap = min(3000, self.settings.max_output_tokens) if extracting else self.settings.max_output_tokens
         if observations is not None:
             parsed_payload = json.loads(payload)
@@ -119,13 +128,14 @@ class Evaluator:
         call_id = self.ledger.reserve(self.settings.model, reservation, self.run_ceiling)
         started = perf_counter()
         record = {"status": "failed", "conversation_id": conversation.id,
-                  "input_fingerprint": fingerprint(conversation, checklist),
+                  "input_fingerprint": fingerprint(conversation, checklist, grounded=self.grounded),
                   "request_fingerprint": hashlib.sha256((instructions + payload + json.dumps(schema)).encode()).hexdigest(),
                   "checklist_hash": hashlib.sha256(checklist.model_dump_json().encode()).hexdigest(),
                   "checklist_id": checklist.id, "checklist_version": checklist.version,
                   "prompt_version": ("observations-v1-" + hashlib.sha256(OBSERVATION_SYSTEM.encode()).hexdigest()[:12]
-                                     if extracting else PROMPT_VERSION), "model": self.settings.model,
+                                     if extracting else self.workflow_version), "model": self.settings.model,
                   "strategy": self.strategy, "stage": stage, "max_output_tokens": output_cap,
+                  "audit_contract_enabled": self.grounded,
                   "workflow_version": self.workflow_version,
                   "reasoning_effort": self.settings.effort, "ledger_call_id": call_id,
                   "reserved_usd": round(reservation, 6), "audio_analyzed": False,
@@ -159,13 +169,17 @@ class Evaluator:
                     record.update(status="completed", observations=result.model_dump())
                 else:
                     result = Evaluation.model_validate_json(response.output_text)
-                    validate_evaluation(result, conversation, checklist)
+                    validate_evaluation(result, conversation, checklist, require_audit=self.grounded)
                     record.update(status="completed", evaluation=result.model_dump(),
                                   score=calculate_score(result, checklist))
         except APIStatusError as error:
             record["error"] = "api_http_" + str(error.status_code)
             record["api_error_code"] = error.code
             record["api_error_param"] = error.param
+            if error.status_code == 429 and error.code in {"credit_balance_exhausted", "insufficient_quota"}:
+                self.provider_blocked = True
+                record["billing_state"] = "provider_rejected"
+                record["settled_cost_usd"] = 0
         except APIConnectionError:
             record["error"] = "api_connection_or_timeout"
         except (ValidationError, ValueError, json.JSONDecodeError) as error:
@@ -177,21 +191,38 @@ class Evaluator:
             record["latency_seconds"] = round(perf_counter() - started, 3)
             usage = record["usage"]
             self.ledger.finish(call_id, record["status"],
-                               cost=usage["estimated_cost_usd"] if usage else None,
+                               cost=usage["estimated_cost_usd"] if usage else record.get("settled_cost_usd"),
                                input_tokens=usage["input_tokens"] if usage else None,
                                output_tokens=usage["output_tokens"] if usage else None)
         return record
 
 
-def schema_for(conversation: Conversation, checklist: Checklist):
+def schema_for(conversation: Conversation, checklist: Checklist, *, grounded=False):
     """Constrain references and IDs mechanically without hardcoding criterion meaning."""
     schema = Evaluation.model_json_schema()
     message_ids = [m.id for m in conversation.messages]
     definitions = schema["$defs"]
+    schema["required"] = list(schema["properties"])
+    for definition in definitions.values():
+        if definition.get("type") == "object":
+            definition["required"] = list(definition["properties"])
     definitions["Evidence"]["properties"]["message_id"]["enum"] = message_ids
     judgment = definitions["Judgment"]["properties"]
     judgment["criterion_id"]["enum"] = [c.id for c in checklist.criteria]
     judgment["checked_message_ids"]["items"]["enum"] = message_ids
+    if grounded:
+        deduction = definitions["Deduction"]["properties"]
+        deduction["criterion_id"]["enum"] = [c.id for c in checklist.criteria]
+        deduction["checked_message_ids"]["items"]["enum"] = message_ids
+        definitions["FactualClaim"]["properties"]["criterion_ids"]["items"]["enum"] = [c.id for c in checklist.criteria]
+        if conversation.references:
+            definitions["ReferenceEvidence"]["properties"]["reference_id"]["enum"] = [r.id for r in conversation.references]
+    else:
+        for field in ["deductions", "factual_claims"]:
+            schema["properties"].pop(field)
+            schema["required"].remove(field)
+        for name in ["Deduction", "FactualClaim", "ReferenceEvidence"]:
+            definitions.pop(name)
     values = sorted({level.value for c in checklist.criteria for level in c.levels})
     for option in judgment["answer"]["anyOf"]:
         if option.get("type") == "string":
