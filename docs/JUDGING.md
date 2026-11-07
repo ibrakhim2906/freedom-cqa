@@ -34,6 +34,20 @@ quotas or a scoring advantage for either local or cloud models.
 The earlier 100-point judging rubric discussed in chat was hypothetical. It is
 not the organizer's rubric and must not be represented as official weights.
 
+## Later clarification and submission appendix
+
+The organizer reiterates that there is no fixed public formula or ranking. Expert
+proximity, an internal repository check, functionality/usability, useful product
+features, and diversity of technical approaches jointly inform selection. Build a
+working corporate review product; do not optimize against an invented selection
+formula. Audience: managers, directors, QA specialists and ordinary employees.
+Professional, clear workflows and visual style matter; a cartoon/game theme is
+not appropriate for the stated corporate customer.
+
+The new three-page appendix defines mandatory JSON 1.0 result files, exact
+criterion codes/types, full-transcript evidence positions and explicit errors.
+It supplies no expert-labelled conversations. See [submission format](SUBMISSION_FORMAT.md).
+
 ## Further organizer clarification supplied in chat, 2026-11-07
 
 Exact point-for-point agreement is not expected, and expert evaluations can differ.
