@@ -1,5 +1,8 @@
 # Semantic review before UI integration
 
+Historical review snapshot. Subsequent user-accepted interpretations and the current
+default checklist are recorded in [RUBRIC_DECISIONS.md](RUBRIC_DECISIONS.md).
+
 Review date: 2026-11-07. This review uses the supplied checklist, all saved organizer
 evaluations, and selected source transcripts. It is AI review, not independent
 adjudication. Original datasets and first-run results remain unchanged.

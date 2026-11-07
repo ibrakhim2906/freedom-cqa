@@ -18,6 +18,10 @@ uv run cqa benchmark --suite combined --budget-usd 2 --output artifacts/benchmar
 See [benchmark setup, data provenance, and result interpretation](docs/BENCHMARK.md).
 There is no offline evaluation fallback.
 
+New evaluations use the versioned [reviewed checklist](checklists/freedom-reviewed-001.json).
+Only [accepted rubric decisions](docs/RUBRIC_DECISIONS.md) are included. The original
+`checklists/freedom-v1.json` remains available through `--checklist` for comparisons.
+
 The first real run is recorded in [baseline results](docs/BASELINE_RESULTS.md),
 with [all-run coverage and spending](docs/BENCHMARK_RUN_SUMMARY.md) and
 [reference-label review notes](docs/REFERENCE_REVIEW.md). These metrics are

@@ -1,0 +1,27 @@
+{
+  "provenance": "User-accepted assistant recommendations; not independent expert labels or organizer Ground Truth.",
+  "application": "Calibration journal only. Case IDs and accepted answers never enter inference; generalized interpretation lives in the versioned checklist.",
+  "decisions": [
+    {
+      "id": "R001",
+      "case_id": "p1-ru-003",
+      "criterion_id": "consultation",
+      "status": "scored",
+      "answer": "10",
+      "review_method": "assistant_proposed_user_accepted",
+      "organizer_ground_truth": false,
+      "independent_expert_review": false,
+      "evidence_message_ids": [
+        "m1",
+        "m5",
+        "m13",
+        "m14",
+        "m15"
+      ],
+      "reason": "Concrete tariff-location question answered and confirmed; substantial purchase-commission question remains unanswered without a correct next step.",
+      "source_conversation_sha256": "80c9278cccd1f4d30b8217c244ff4d65f39535d3a803b97fd2a53e8fba794889",
+      "applied_checklist": "checklists/freedom-reviewed-001.json",
+      "applied_checklist_version": "1-reviewed-001"
+    }
+  ]
+}
