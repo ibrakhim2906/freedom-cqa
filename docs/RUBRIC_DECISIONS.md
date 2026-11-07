@@ -4,8 +4,10 @@ These decisions record assistant recommendations accepted by the user during
 case review. They are not independent expert adjudication or organizer Ground Truth.
 Original checklist files, authored expectations, and benchmark results remain frozen.
 
-Current default: `checklists/freedom-reviewed-003.json`, version `1-reviewed-003`,
-containing R001, R002, and R003. Three review items are accepted; 17 remain pending.
+Current default: `checklists/freedom-reviewed-004.json`, version `1-reviewed-004`,
+containing R001 through R004. Four review items were accepted by the user and one
+additional item follows an accepted rule. Fifteen items remain pending. Applications
+of accepted rules are distinguished from separately user-adjudicated labels.
 
 ## R001: partial credit when a genuine secondary request is answered
 
@@ -77,8 +79,38 @@ Weights, levels, and N/A conditions are unchanged. Previous versions and evaluat
 results remain unchanged. This records an assistant recommendation accepted by the
 user, not an independent expert annotation or organizer Ground Truth.
 
-Communication management in this conversation is the next pending review item.
+Communication management in this conversation was the next review item; R004
+subsequently settles it.
 No API call or paid reevaluation was performed to apply this decision.
+
+## R004: distinguish a redundant question from an unclear explanation
+
+Accepted case: `p1-ru-014`, management **7/10** on its raw scale. One unnecessary
+question requires the customer to repeat known details. The subsequent instructions
+are clear and the customer successfully proceeds. Source messages: m5, m10-m13.
+
+General interpretation: an isolated unnecessary question with understandable
+subsequent guidance fits the single-noticeable-lapse level of 7. Repeating known
+details is not itself asking for clarification because wording or explanation order
+is unclear. Level 4 requires evidence of the latter. A justified confirmation of
+ambiguous or changed facts is not automatically an unnecessary repetition.
+
+The event can independently violate needs and management when each criterion's
+definition is met. Do not infer management failure merely from another criterion's
+score. Applied in `checklists/freedom-reviewed-004.json`; R001-R003, weights, allowed
+levels, and N/A conditions are preserved. No saved evaluation score was overwritten.
+
+## J005: application of existing R002 to the Kazakh handoff case
+
+Case: `p1-kz-008`, needs **No**. The initial site question lacks the website name;
+the bot obtains it before handoff, and the operator requests it again. Source
+messages: m1, m4, m5, m9, m10, m11. This is the same relevant sequence as the
+accepted R002 case and requires no additional rubric interpretation.
+
+This is an assistant application of a user-accepted rule, not a fifth rule or a
+separately user-adjudicated reference label. It is explicitly marked
+`assistant_applied_user_accepted_rule` in the journal. Empathy in this Kazakh case
+is the next pending judgment; no extra empathy interpretation has been applied.
 
 To use the original checklist explicitly for a comparison:
 
