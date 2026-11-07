@@ -7,14 +7,26 @@ from pydantic import ValidationError
 
 from .ledger import BudgetExceeded, Ledger
 from .models import Checklist, Conversation, Evaluation
+from .observations import (
+    OBSERVATION_GRADING,
+    OBSERVATION_SYSTEM,
+    Observations,
+    observation_schema,
+    validate_observations,
+)
 from .prompt import PROMPT_VERSION, SYSTEM, fingerprint, payload_for
 from .scoring import calculate_score, validate_evaluation
 from .settings import RATES, Settings
 
 
 class Evaluator:
-    def __init__(self, settings: Settings, ledger: Ledger, run_ceiling: float):
+    def __init__(self, settings: Settings, ledger: Ledger, run_ceiling: float, strategy: str = "direct"):
         settings.require_key()
+        if strategy not in {"direct", "evidence-first"}:
+            raise ValueError("Unknown evaluator strategy")
+        self.strategy = strategy
+        self.workflow_version = (PROMPT_VERSION if strategy == "direct" else "evidence-first-v1-" +
+                                 hashlib.sha256((OBSERVATION_SYSTEM + OBSERVATION_GRADING + SYSTEM).encode()).hexdigest()[:12])
         self.settings, self.ledger, self.run_ceiling = settings, ledger, run_ceiling
         # No invisible SDK retries: each billable attempt is reserved and recorded here.
         self.client = AsyncOpenAI(api_key=settings.api_key, base_url="https://api.openai.com/v1",
@@ -25,21 +37,27 @@ class Evaluator:
 
     async def evaluate(self, conversation: Conversation, checklist: Checklist):
         attempts = []
-        feedback = None
-        for _ in range(2):
+        if self.strategy == "evidence-first":
+            extracted = await self._stage(conversation, checklist, stage="observations")
+            attempts.extend(extracted)
+            if extracted[-1]["status"] != "completed":
+                return self._combine(attempts)
+            observations = extracted[-1]["observations"]
             try:
-                record = await self._attempt(conversation, checklist, feedback)
+                attempts.extend(await self._stage(conversation, checklist, observations=observations))
             except BudgetExceeded:
-                if not attempts:
-                    raise
-                attempts[-1]["repair_skipped"] = "budget_limit"
-                break
-            attempts.append(record)
-            if record["status"] == "completed" or not str(record.get("error")).startswith("invalid_evaluation_"):
-                break
-            feedback = {"validation_error": record.get("validation_reason") or record["error"],
-                        "previous_rejected_output": record.get("raw_output_text", "")}
+                # Retain the paid extraction and expose that no grade was produced.
+                final = self._combine(attempts)
+                final.update(status="failed", failed_stage="grading", error="grading_budget_limit",
+                             evaluation=None, score=None)
+                return final
+        else:
+            attempts.extend(await self._stage(conversation, checklist))
+        return self._combine(attempts)
+
+    def _combine(self, attempts):
         final = dict(attempts[-1])
+        final["strategy"] = self.strategy
         final["attempt_records"] = attempts
         final["attempt_count"] = len(attempts)
         final["latency_seconds"] = round(sum(a["latency_seconds"] for a in attempts), 3)
@@ -50,10 +68,40 @@ class Evaluator:
                               "estimated_cost_usd": round(sum(a["estimated_cost_usd"] for a in known_usage), 6)}
         return final
 
-    async def _attempt(self, conversation: Conversation, checklist: Checklist, feedback=None):
+    async def _stage(self, conversation, checklist, *, stage="grading", observations=None):
+        attempts = []
+        feedback = None
+        for _ in range(2):
+            try:
+                if stage == "grading" and observations is None:
+                    record = await self._attempt(conversation, checklist, feedback)
+                else:
+                    record = await self._attempt(conversation, checklist, feedback,
+                                                 stage=stage, observations=observations)
+            except BudgetExceeded:
+                if not attempts:
+                    raise
+                attempts[-1]["repair_skipped"] = "budget_limit"
+                break
+            attempts.append(record)
+            if record["status"] == "completed" or not str(record.get("error")).startswith("invalid_evaluation_"):
+                break
+            feedback = {"validation_error": record.get("validation_reason") or record["error"],
+                        "previous_rejected_output": record.get("raw_output_text", "")}
+        return attempts
+
+    async def _attempt(self, conversation: Conversation, checklist: Checklist, feedback=None,
+                       *, stage="grading", observations=None):
         payload = payload_for(conversation, checklist)
-        schema = schema_for(conversation, checklist)
-        instructions = SYSTEM
+        extracting = stage == "observations"
+        schema = observation_schema(conversation, checklist) if extracting else schema_for(conversation, checklist)
+        instructions = OBSERVATION_SYSTEM if extracting else SYSTEM
+        output_cap = min(3000, self.settings.max_output_tokens) if extracting else self.settings.max_output_tokens
+        if observations is not None:
+            parsed_payload = json.loads(payload)
+            parsed_payload["source_observations"] = observations
+            payload = json.dumps(parsed_payload, ensure_ascii=False)
+            instructions += OBSERVATION_GRADING
         if feedback:
             parsed_payload = json.loads(payload)
             parsed_payload["mechanical_validation_feedback"] = feedback
@@ -67,7 +115,7 @@ class Evaluator:
         input_bound = len((instructions + payload + json.dumps(schema)).encode("utf-8")) + 4096
         if input_bound > 200_000:
             raise ValueError("Input exceeds this benchmark's short-context cost bound")
-        reservation = (input_bound * input_rate + self.settings.max_output_tokens * output_rate) / 1_000_000
+        reservation = (input_bound * input_rate + output_cap * output_rate) / 1_000_000
         call_id = self.ledger.reserve(self.settings.model, reservation, self.run_ceiling)
         started = perf_counter()
         record = {"status": "failed", "conversation_id": conversation.id,
@@ -75,15 +123,18 @@ class Evaluator:
                   "request_fingerprint": hashlib.sha256((instructions + payload + json.dumps(schema)).encode()).hexdigest(),
                   "checklist_hash": hashlib.sha256(checklist.model_dump_json().encode()).hexdigest(),
                   "checklist_id": checklist.id, "checklist_version": checklist.version,
-                  "prompt_version": PROMPT_VERSION, "model": self.settings.model,
+                  "prompt_version": ("observations-v1-" + hashlib.sha256(OBSERVATION_SYSTEM.encode()).hexdigest()[:12]
+                                     if extracting else PROMPT_VERSION), "model": self.settings.model,
+                  "strategy": self.strategy, "stage": stage, "max_output_tokens": output_cap,
+                  "workflow_version": self.workflow_version,
                   "reasoning_effort": self.settings.effort, "ledger_call_id": call_id,
                   "reserved_usd": round(reservation, 6), "audio_analyzed": False,
                   "evaluation": None, "score": None, "error": None, "usage": None}
         try:
             response = await self.client.responses.create(
                 model=self.settings.model, instructions=instructions, input=payload,
-                reasoning={"effort": self.settings.effort}, max_output_tokens=self.settings.max_output_tokens,
-                text={"format": {"type": "json_schema", "name": "conversation_evaluation",
+                reasoning={"effort": self.settings.effort}, max_output_tokens=output_cap,
+                text={"format": {"type": "json_schema", "name": "source_observations" if extracting else "conversation_evaluation",
                                  "schema": schema, "strict": True}}, store=False,
             )
             record["response_id"] = response.id
@@ -102,10 +153,15 @@ class Evaluator:
             elif not response.output_text:
                 record["error"] = "empty_or_refused_response"
             else:
-                result = Evaluation.model_validate_json(response.output_text)
-                validate_evaluation(result, conversation, checklist)
-                record.update(status="completed", evaluation=result.model_dump(),
-                              score=calculate_score(result, checklist))
+                if extracting:
+                    result = Observations.model_validate_json(response.output_text)
+                    validate_observations(result, conversation, checklist)
+                    record.update(status="completed", observations=result.model_dump())
+                else:
+                    result = Evaluation.model_validate_json(response.output_text)
+                    validate_evaluation(result, conversation, checklist)
+                    record.update(status="completed", evaluation=result.model_dump(),
+                                  score=calculate_score(result, checklist))
         except APIStatusError as error:
             record["error"] = "api_http_" + str(error.status_code)
             record["api_error_code"] = error.code

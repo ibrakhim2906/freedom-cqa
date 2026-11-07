@@ -46,10 +46,11 @@ async def benchmark(args):
     ledger = Ledger(settings.ledger_path, settings.max_spend)
     before = ledger.committed()
     ceiling = min(settings.max_spend, before + args.budget_usd)
-    evaluator = Evaluator(settings, ledger, ceiling)
+    strategy = getattr(args, "strategy", "direct")
+    evaluator = Evaluator(settings, ledger, ceiling, strategy=strategy)
     metadata = {"started_at": datetime.now(UTC).isoformat(),
                 "suite": "case-file" if args.cases_file else args.suite,
-                "model": settings.model, "reasoning_effort": settings.effort,
+                "model": settings.model, "reasoning_effort": settings.effort, "strategy": strategy,
                 "max_output_tokens": settings.max_output_tokens, "concurrency": settings.concurrency,
                 "timeout_seconds": settings.timeout,
                 "run_budget_usd": args.budget_usd, "lifetime_committed_before_usd": before,
@@ -106,6 +107,7 @@ def main():
     run.add_argument("--concurrency", type=int, help="Override local concurrency (1-8) for this run")
     run.add_argument("--limit", type=int)
     run.add_argument("--model")
+    run.add_argument("--strategy", choices=["direct", "evidence-first"], default="direct")
     run.add_argument("--checklist")
     run.add_argument("--budget-usd", type=float, default=1.0)
     run.add_argument("--output", default="artifacts/benchmark/baseline-v1.json")

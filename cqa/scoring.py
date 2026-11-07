@@ -84,4 +84,47 @@ def calculate_score(result: Evaluation, checklist: Checklist):
         total = float((100 * earned / applicable).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
     return {"total": total, "provisional": bool(unresolved), "unresolved_criteria": unresolved,
             "applicable_weight": float(applicable), "earned_points": float(earned),
-            "flags": flags, "contributions": contributions}
+            "flags": flags, "contributions": contributions,
+            "score_bounds": score_bounds(result, checklist)}
+
+
+def score_bounds(result: Evaluation, checklist: Checklist):
+    """Allowed-outcome envelope, not a probability interval or a finalized score.
+
+    For an unresolved N/A-eligible criterion, include both exclusion and every
+    allowed level. A weighted-average optimum includes optional items in order of
+    their fractions, so testing sorted prefixes avoids exponential enumeration.
+    """
+    judgments = {j.criterion_id: j for j in result.judgments}
+    fixed_points, fixed_weight = Decimal(0), Decimal(0)
+    mandatory, optional = [], []
+    for criterion in checklist.criteria:
+        judgment = judgments[criterion.id]
+        if criterion.kind == "flag" or judgment.status == "not_applicable":
+            continue
+        weight = Decimal(str(criterion.weight))
+        if judgment.status == "scored":
+            level = next(x for x in criterion.levels if x.value == judgment.answer)
+            fixed_points += weight * Decimal(str(level.fraction))
+            fixed_weight += weight
+        elif weight:
+            fractions = [Decimal(str(x.fraction)) for x in criterion.levels]
+            (optional if criterion.na_condition else mandatory).append((weight, min(fractions), max(fractions)))
+
+    def extremum(upper):
+        index = 2 if upper else 1
+        points = fixed_points + sum((item[0] * item[index] for item in mandatory), Decimal(0))
+        weight = fixed_weight + sum((item[0] for item in mandatory), Decimal(0))
+        candidates = [points / weight] if weight else []
+        for item in sorted(optional, key=lambda x: x[index], reverse=upper):
+            weight += item[0]
+            points += item[0] * item[index]
+            candidates.append(points / weight)
+        if not candidates:
+            return None
+        value = max(candidates) if upper else min(candidates)
+        return float((100 * value).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
+
+    return {"lower": extremum(False), "upper": extremum(True),
+            "no_numeric_score_possible": fixed_weight == 0 and not mandatory,
+            "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."}

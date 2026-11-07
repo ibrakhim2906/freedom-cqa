@@ -33,6 +33,13 @@ The [updated-rubric benchmark](docs/CALIBRATED_BENCHMARK_RESULTS.md) covers 117 
 API evaluations, a 24-case same-input control, and targeted checks. It reports
 criterion agreement separately from score error and the loss of numeric coverage.
 
+The [core workflow experiment](docs/CORE_EXPERIMENT_RESULTS.md) adds 14 fresh
+diagnostic conversations, actual-request repeat checks, and transparent score bounds
+for unresolved criteria. Direct grading remains the default: the experimental
+evidence-first strategy added cost without improving the tested judgments.
+The report preserves a 6.93-point repeated-score drift and the remaining source
+and reference limitations; passing the local anchors is not organizer accuracy.
+
 The [semantic review](docs/SEMANTIC_REVIEW.md) distinguishes suspected evaluator
 mistakes from ambiguous labels. Original datasets remain frozen;
 [structured review notes](evals/label-review-v2.json) do not override their expectations.
