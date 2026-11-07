@@ -61,17 +61,19 @@
 
 ## Complete the product workflow
 
-- [ ] Import conversations and preserve source timestamps and speaker roles.
-- [ ] Create and save checklists through the interface.
-- [ ] Run evaluations with visible progress, failures, and retries.
-- [ ] Open supporting messages and audio fragments from criterion results.
-- [ ] Submit an appeal and record a reviewer's decision.
-- [ ] Preserve original and final results and recalculate scores after review.
-- [ ] Persist results and distinguish saved results from new evaluations.
+- [x] Import conversations and preserve source timestamps and speaker roles; all 65 organizer records imported into the app.
+- [x] Create and save immutable checklist versions through the interface; a new criterion was evaluated through the real API from the UI.
+- [x] Run real evaluations with visible progress, per-batch budgets, failures, retries and queued cancellation.
+- [x] Open supporting source messages, counterevidence and reference quotes from criterion results.
+- [ ] Play timestamp-aligned audio fragments inside the workspace; original recording links are available, audio remains unanalyzed.
+- [x] Submit an appeal and record a reviewer's accepted/rejected decision and supporting references.
+- [x] Preserve original and final results and deterministically recalculate scores after review.
+- [x] Persist results and distinguish saved results from new evaluations; browser reload and actual server restart were checked.
+- [x] Verify the browser's real evaluation/evidence/appeal/custom-checklist flow and a visible budget failure; no offline fallback.
 
 ## Prepare submission
 
-- [ ] Document reproducible installation and startup.
+- [x] Document reproducible local installation and startup in WORKFLOW.md and scripts/start-local.ps1.
 - [ ] Verify the complete browser workflow on the final code.
 - [ ] Demonstrate RU, KZ, and EN cases, N/A handling, an appeal, and a live criterion change.
 - [ ] Process the control dataset when the organizers release it.

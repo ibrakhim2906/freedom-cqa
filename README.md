@@ -2,8 +2,19 @@
 
 Conversation Quality Analytics prototype for the Freedom Broker hackathon.
 
-Status: the initial API evaluator, deterministic scorer, diagnostic dataset, and
-benchmark CLI are implemented. The frontend and appeal workflow are not implemented yet.
+Status: the local React/FastAPI workflow is implemented: conversation import,
+versioned checklists, real evaluations, evidence inspection, saved results and
+appeals with preserved AI/human history. The benchmark CLI remains available.
+
+## Run the application
+
+```powershell
+./scripts/start-local.ps1
+```
+
+Open **http://127.0.0.1:8000**. Configure the backend key in the ignored `.env` first.
+See [workflow, startup and verification details](docs/WORKFLOW.md) for imports,
+reference context, spending limits, review decisions and remaining limitations.
 
 ## Evaluator quick start
 
@@ -127,5 +138,6 @@ in [the stack document](docs/STACK.md).
 
 ## Progress
 
-See [the progress checklist](docs/PROGRESS.md). Use small commits for reviewable
-milestones. The CLI runs the evaluator; the web application is not scaffolded yet.
+See [the progress checklist](docs/PROGRESS.md). The application and CLI share the
+grounded evaluator and scorer. The local browser workflow has been exercised
+through real API calls and reference-backed human review.

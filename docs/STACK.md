@@ -1,8 +1,9 @@
 # Technology stack and evaluation policy
 
-Status: selected on 2026-11-07. The initial evaluator, scorer, diagnostic datasets,
-and benchmark CLI are implemented with locked Python dependencies. The web
-frontend, application server, and appeal workflow are not implemented yet.
+Status: selected on 2026-11-07 and now implemented with locked Python/frontend
+dependencies. The React workspace, FastAPI service, SQLite/SQLAlchemy storage,
+evaluation queue and appeal history are working locally. See WORKFLOW.md for
+the real-browser validation and current limitations.
 
 ## Selected stack
 
@@ -79,8 +80,9 @@ Ground Truth; see [the organizer's selection criteria](JUDGING.md).
 
 ## Open implementation choices
 
-- Final model selection. API access is configured locally; the current lifetime
-  spend limit is $3.50 following the user's available-balance update.
+- Broader model comparisons are incomplete. The tested default remains Sol at
+  medium reasoning. The authorized lifetime cap is $9.427742; usage is preserved
+  across CLI and application calls, independently of the account balance.
 - Approved reference procedures and verified audio playback/access.
 - Dependency versions, deployment target, and persistent-volume configuration.
 - Browser/computer-use verification in the actual Windows setup.

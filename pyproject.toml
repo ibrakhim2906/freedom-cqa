@@ -7,16 +7,24 @@ name = "freedom-cqa"
 version = "0.1.0"
 description = "Evidence-grounded configurable conversation evaluation"
 requires-python = ">=3.12"
-dependencies = ["openai>=2,<3", "pydantic>=2.10,<3", "python-dotenv>=1,<2"]
+dependencies = [
+    "fastapi>=0.115,<1",
+    "openai>=2,<3",
+    "pydantic>=2.10,<3",
+    "python-dotenv>=1,<2",
+    "sqlalchemy>=2,<3",
+    "uvicorn>=0.34,<1",
+]
 
 [dependency-groups]
 dev = ["pytest>=8,<10", "httpx>=0.28,<1", "ruff>=0.12"]
 
 [project.scripts]
 cqa = "cqa.cli:main"
+cqa-serve = "backend.app:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["cqa"]
+packages = ["cqa", "backend"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
