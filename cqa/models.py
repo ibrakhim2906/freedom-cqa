@@ -131,6 +131,35 @@ class ReferenceEvidence(StrictModel):
     quote: str
 
 
+class ClaimOutcome(StrictModel):
+    status: Literal["scored", "not_applicable", "needs_review"]
+    answer: str | None
+
+
+class ClaimImpact(StrictModel):
+    criterion_id: str
+    when_true: ClaimOutcome
+    when_false: ClaimOutcome
+    rule_quote: str
+    evidence: list[Evidence]
+    checked_message_ids: list[str]
+    explanation: str
+
+
+class ClaimCorrection(StrictModel):
+    operator_evidence: list[Evidence]
+    outcome_evidence: list[Evidence]
+    reference_evidence: list[ReferenceEvidence]
+    remaining_consequence: Literal["none_established", "present", "uncertain"]
+    explanation: str
+
+
+class ClaimAssessment(StrictModel):
+    lifecycle: Literal["active", "corrected"]
+    correction: ClaimCorrection | None
+    impacts: list[ClaimImpact]
+
+
 class FactualClaim(StrictModel):
     claim: str
     criterion_ids: list[str]
@@ -140,6 +169,9 @@ class FactualClaim(StrictModel):
     reference_evidence: list[ReferenceEvidence]
     dialogue_evidence: list[Evidence]
     explanation: str
+    # Historical records retain the original conservative dependency contract.
+    # The current provider schema requires a non-null assessment for every claim.
+    assessment: ClaimAssessment | None = None
 
 
 class Deduction(StrictModel):

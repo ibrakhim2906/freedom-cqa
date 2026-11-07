@@ -85,12 +85,43 @@ Operator/bot repetition and a polite thank-you are never independent verificatio
 References may be incomplete: do not infer that an unlisted route is impossible solely
 because it is absent. Use a source only for the claim it actually supports. Report an
 empty factual_claims list when no material product/procedure truth claim needs checking.
+CLAIM DEPENDENCIES AND CORRECTIONS:
+Every factual_claim needs a non-null assessment. criterion_ids identify RELEVANT
+criteria, not an automatic requirement to withhold their grades. assessment.impacts
+must cover every related criterion exactly once. For each impact, specify when_true
+and when_false: the allowed status/answer if this ORIGINAL claim were true versus
+false, given the other established evidence and the configured rule. Cite that rule
+verbatim and source evidence/checked spans explaining the difference or invariance.
+If an unverified claim changes that criterion's allowed outcome, the criterion must
+be needs_review. If both outcomes are the same definite grade, that claim does not
+block it. A source-linked independent violation can establish a grade regardless of
+claim truth, including a security violation before verification. An independent
+partial omission does NOT settle a score if wrong key advice could still change it
+from partial credit to zero. Never invent invariant outcomes just to avoid review.
+A contradicted claim uses when_false; a supported claim uses when_true. Other
+genuine uncertainty can still require review. Grade-changing claims are material.
+Track original assertions as lifecycle=active, correction=null until evidenced
+recovery. A corrected claim keeps its ORIGINAL truth status and operator evidence;
+set lifecycle=corrected with a later operator correction, independent later
+customer/system outcome evidence or an applicable reference for the correction,
+and remaining_consequence=none_established/present/uncertain with an explanation.
+Operator self-assertion alone does not independently prove recovery. Do not use
+thanks, finding a control, or promises as proof of a completed task or no harm.
+Corrected advice is not an automatic pass: apply the actual criterion's treatment
+of historical mistakes, and preserve remaining harmful consequences and independent
+clarity/process/security deductions. If the criterion judges final consultation,
+explicitly successful corrected advice with no established remaining consequence
+can receive full credit; an abandoned initial route need not poison the final grade.
+A criterion explicitly penalizing any historical error must still fail after repair.
+Incorrect advice still active or with harmful key consequences must not be excused.
+For an unrelated unverified product claim, clear wording may stay maximum: explain
+that independence under the communication rule, not under a made-up factual policy.
 Use concise, specific explanations in English;
 quotes must remain verbatim in the original language. Return only the requested JSON.
 """
 SYSTEM = PROJECT_BASELINE_SYSTEM
 PROMPT_VERSION = "evaluator-v2-" + hashlib.sha256(SYSTEM.encode()).hexdigest()[:12]
-GROUNDED_VERSION = "evaluator-v3-" + hashlib.sha256(GROUNDED_SYSTEM.encode()).hexdigest()[:12]
+GROUNDED_VERSION = "evaluator-v4-" + hashlib.sha256(GROUNDED_SYSTEM.encode()).hexdigest()[:12]
 
 
 def payload_for(conversation: Conversation, checklist: Checklist, *, grounded=False):

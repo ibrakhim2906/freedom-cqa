@@ -1,5 +1,11 @@
 # Progress
 
+Latest focused core work: [claim dependencies and corrected advice](CLAIM_DEPENDENCY_RESULTS.md).
+Four original organizer failures now have valid assessments (two still provisional);
+the focused synthetic subset matches 10/10 provisional labels. All first outcomes
+and costs are retained. The earlier full-run [65-case audit](ORGANIZER_65_REVIEW.md)
+is unchanged; no new corpus-wide accuracy claim is made.
+
 ## Setup
 
 - [x] Read the supplied case documents.

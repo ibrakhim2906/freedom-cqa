@@ -51,7 +51,7 @@ def bind_judgment_audits(schema, checklist):
     return schema
 
 
-def decode_evaluation(text):
+def decode_evaluation(text, *, require_claim_dependencies=False):
     import json
 
     data = json.loads(text)
@@ -73,4 +73,7 @@ def decode_evaluation(text):
                 deductions.append(deduction)
             judgments.append(item)
         data["judgments"], data["deductions"] = judgments, deductions
-    return Evaluation.model_validate(data)
+    result = Evaluation.model_validate(data)
+    if require_claim_dependencies and any(c.assessment is None for c in result.factual_claims):
+        raise ValueError("Current claim contract requires an explicit dependency assessment for every claim")
+    return result

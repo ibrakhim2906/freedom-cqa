@@ -1,5 +1,6 @@
 import hashlib
 import json
+from copy import deepcopy
 from time import perf_counter
 
 from openai import APIConnectionError, APIStatusError, AsyncOpenAI
@@ -179,6 +180,7 @@ class Evaluator:
                                      if extracting else self.workflow_version), "model": self.settings.model,
                   "strategy": self.strategy, "stage": stage, "max_output_tokens": output_cap,
                   "audit_contract_enabled": self.grounded,
+                  "claim_contract_version": "dependencies-v1" if self.grounded else "legacy",
                   "workflow_version": self.workflow_version,
                   "reasoning_effort": self.settings.effort, "ledger_call_id": call_id,
                   "reserved_usd": round(reservation, 6), "audio_analyzed": False,
@@ -211,7 +213,7 @@ class Evaluator:
                     validate_observations(result, conversation, checklist)
                     record.update(status="completed", observations=result.model_dump())
                 else:
-                    result = decode_evaluation(response.output_text)
+                    result = decode_evaluation(response.output_text, require_claim_dependencies=self.grounded)
                     validate_evaluation(result, conversation, checklist, require_audit=self.grounded)
                     record.update(status="completed", evaluation=result.model_dump(),
                                   score=calculate_score(result, checklist))
@@ -258,13 +260,37 @@ def schema_for(conversation: Conversation, checklist: Checklist, *, grounded=Fal
         deduction["criterion_id"]["enum"] = [c.id for c in checklist.criteria]
         deduction["checked_message_ids"]["items"]["enum"] = message_ids
         definitions["FactualClaim"]["properties"]["criterion_ids"]["items"]["enum"] = [c.id for c in checklist.criteria]
+        definitions["FactualClaim"]["properties"]["assessment"] = {"$ref": "#/$defs/ClaimAssessment"}
+        impact = definitions["ClaimImpact"]["properties"]
+        impact["criterion_id"]["enum"] = [c.id for c in checklist.criteria]
+        impact["checked_message_ids"]["items"]["enum"] = message_ids
+        # Encode source roles in the wire contract, rather than repeatedly asking
+        # a repair to remove operator assertions from independent factual proof.
+        for name, field, roles in [
+            ("FactualClaim", "operator_evidence", {"operator"}),
+            ("FactualClaim", "dialogue_evidence", {"client", "system"}),
+            ("ClaimCorrection", "operator_evidence", {"operator"}),
+            ("ClaimCorrection", "outcome_evidence", {"client", "system"}),
+        ]:
+            evidence = deepcopy(definitions["Evidence"])
+            permitted = [m.id for m in conversation.messages if m.speaker in roles]
+            field_schema = definitions[name]["properties"][field]
+            if permitted:
+                evidence["properties"]["message_id"]["enum"] = permitted
+            else:
+                field_schema["maxItems"] = 0
+            field_schema["items"] = evidence
         if conversation.references:
             definitions["ReferenceEvidence"]["properties"]["reference_id"]["enum"] = [r.id for r in conversation.references]
+        else:
+            for name in ["FactualClaim", "ClaimCorrection"]:
+                definitions[name]["properties"]["reference_evidence"]["maxItems"] = 0
     else:
         for field in ["deductions", "factual_claims"]:
             schema["properties"].pop(field)
             schema["required"].remove(field)
-        for name in ["Deduction", "FactualClaim", "ReferenceEvidence"]:
+        for name in ["Deduction", "FactualClaim", "ReferenceEvidence", "ClaimOutcome", "ClaimImpact",
+                     "ClaimCorrection", "ClaimAssessment"]:
             definitions.pop(name)
     values = sorted({level.value for c in checklist.criteria for level in c.levels})
     for option in judgment["answer"]["anyOf"]:

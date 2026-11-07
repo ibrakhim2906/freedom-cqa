@@ -40,6 +40,18 @@ def corrected_wire():
     audits = {d["criterion_id"]: d for d in data.pop("deductions")}
     data["judgments"] = {j["criterion_id"]: j | {"deduction": audits.get(j["criterion_id"])}
                          for j in data["judgments"]}
+    for claim in data["factual_claims"]:
+        impacts = []
+        for cid in claim["criterion_ids"]:
+            judgment = data["judgments"][cid]
+            outcome = {"status": judgment["status"], "answer": judgment["answer"]}
+            criterion = next(c for c in checklist.criteria if c.id == cid)
+            impacts.append({"criterion_id": cid, "when_true": outcome,
+                            "when_false": {"status": "scored", "answer": "0"} if cid == "consultation" else outcome,
+                            "rule_quote": criterion.levels[0].description,
+                            "evidence": claim["operator_evidence"], "checked_message_ids": judgment["checked_message_ids"],
+                            "explanation": "Supported factual advice; security ordering is independently established."})
+        claim["assessment"] = {"lifecycle": "active", "correction": None, "impacts": impacts}
     return conversation, checklist, data
 
 

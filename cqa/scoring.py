@@ -1,5 +1,6 @@
 from decimal import ROUND_HALF_UP, Decimal
 
+from .claim_dependencies import validate_claim_assessment
 from .grounding import reference_applicable
 from .models import Checklist, Conversation, Evaluation
 
@@ -119,6 +120,10 @@ def validate_audit(result, conversation, checklist, *, require_audit):
                 raise ValueError("Out-of-scope or out-of-date source cannot verify a claim")
         if claim.status != "unverified" and not (claim.reference_evidence or claim.dialogue_evidence):
             raise ValueError("Verified claims require reference or customer/system evidence")
+        if claim.assessment is not None:
+            validate_claim_assessment(claim, conversation, criteria, judgments, check_quotes)
+            continue
+        # Preserve validation semantics for frozen historical evaluations.
         if claim.material and claim.status == "unverified" and any(
             judgments[cid].status != "needs_review" for cid in claim.criterion_ids
         ):
