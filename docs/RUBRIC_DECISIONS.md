@@ -355,6 +355,13 @@ clarification or a newly user-adjudicated reference label. It is saved separatel
 as `freedom-reviewed-013.json`; reviewed-012 remains the default until the candidate
 finishes its live checks.
 
+Status update: the live targeted checks and repeat/regression checks are complete;
+reviewed-013 and the single-call grounded evaluator are now defaults. The organizer's
+later clarification supports reasonable uncertainty instead of invented facts.
+See `GROUNDED_VALIDATION_RESULTS.md` for results, the remaining unverified organizer
+claim, and the numeric-coverage tradeoff. R013 is still a team interpretation,
+not a newly official criterion or an independent expert label.
+
 A missing substantive answer or a factual mistake belongs to consultation. Neither
 alone establishes unclear wording, incoherence, a bad prerequisite sequence, an
 unnecessary repeat question, or failure to announce an explicit wait. Ending with

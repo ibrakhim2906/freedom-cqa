@@ -6,6 +6,7 @@ from pathlib import Path
 from dotenv import dotenv_values
 
 ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_STRATEGY = "grounded"
 
 # Standard short-context rates checked against official model pages on 2026-11-07.
 # Uncached input is conservatively charged even when the API reports cached tokens.

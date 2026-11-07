@@ -109,7 +109,7 @@ def test_ambiguous_dates_cannot_bypass_lexical_scope_checks(value):
         Reference(id="r", text="Source", provenance="Test", valid_from=value)
 
 
-def test_grounded_audit_is_explicit_and_default_contract_remains_frozen():
+def test_legacy_contract_remains_available_and_grounded_schema_is_strict():
     conversation, rubric, _ = fixtures()
     original = schema_for(conversation, rubric)
     candidate = schema_for(conversation, rubric, grounded=True)

@@ -1,5 +1,13 @@
 # Accuracy-first delivery plan
 
+Update 2026-11-07: the focused core phase is closed. The grounded evaluator and
+reviewed-013 are now defaults after targeted live checks; see
+[completed results](GROUNDED_VALIDATION_RESULTS.md). The organizer's additional
+clarification favors justified, reproducible results and a complete working process,
+not exact hidden-label matching. Stop expanding rubric-guessing experiments and
+continue with the full import/evaluate/evidence/review workflow. The original plan
+and its evidentiary limits follow for context.
+
 2026-11-07. Target: an excellent completed submission by 2026-11-08 12:00 Astana.
 95-100 is an internal ambition, not a prediction of the organizers' score.
 The user explicitly prioritizes assessment quality before product polish.

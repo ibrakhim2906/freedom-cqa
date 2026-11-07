@@ -1,5 +1,8 @@
 # Grounding and overlapping deductions, 2026-11-07
 
+Historical first-pass report. The [completed validation and promotion report](GROUNDED_VALIDATION_RESULTS.md)
+supersedes its current-status statements; the interrupted-run evidence below is preserved.
+
 Implemented a single-call grounded candidate and a separately versioned boundary
 rule. It fixes one demonstrated wrong-scope verification error in the completed
 comparison. Live testing is incomplete because OpenAI returned HTTP 429 with

@@ -11,7 +11,7 @@ from .grounding import attach_reference_pack
 from .ledger import BudgetExceeded, Ledger
 from .metrics import compare_case, summarize
 from .rubric import load_checklist
-from .settings import ROOT, Settings
+from .settings import DEFAULT_STRATEGY, ROOT, Settings
 
 
 def save_report(path, rows, metadata, ledger):
@@ -56,7 +56,7 @@ async def benchmark(args):
     ledger = Ledger(settings.ledger_path, settings.max_spend)
     before = ledger.committed()
     ceiling = min(settings.max_spend, before + args.budget_usd)
-    strategy = getattr(args, "strategy", "direct")
+    strategy = getattr(args, "strategy", DEFAULT_STRATEGY)
     evaluator = Evaluator(settings, ledger, ceiling, strategy=strategy)
     metadata = {"started_at": datetime.now(UTC).isoformat(),
                 "suite": "case-file" if args.cases_file else args.suite,
@@ -119,7 +119,7 @@ def main():
     run.add_argument("--concurrency", type=int, help="Override local concurrency (1-8) for this run")
     run.add_argument("--limit", type=int)
     run.add_argument("--model")
-    run.add_argument("--strategy", choices=["direct", "evidence-first", "grounded"], default="direct")
+    run.add_argument("--strategy", choices=["direct", "evidence-first", "grounded"], default=DEFAULT_STRATEGY)
     run.add_argument("--checklist")
     run.add_argument("--reference-pack", help="Explicit scoped reference bundle; no implicit product/entity selection")
     run.add_argument("--reference-scope")

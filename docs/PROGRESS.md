@@ -40,8 +40,13 @@
 - [x] Validate three fresh targeted empathy contrasts through the real API; preserve remaining uncertainty rather than claim independent Ground Truth accuracy.
 - [x] Record new benchmark spending ($4.145748 of the authorized $6) and limitations in CALIBRATED_BENCHMARK_RESULTS.md.
 - [ ] Define checklist versions, transcript message IDs, evaluation results, and appeal records.
-- [ ] Define how missing reference procedures and unavailable audio affect judgments.
-- [ ] Select a varied development subset and reserve fresh cases for checking changes.
+- [x] Define how missing reference procedures and unavailable audio affect judgments; retain unresolved evidence explicitly.
+- [x] Freeze fresh source/overlap cases before inference and preserve prior labels and outputs.
+- [x] Add generic score bounds, scoped source citations, material factual uncertainty and rule-linked deduction audits.
+- [x] Finish grounded validation: 15/15 targeted judgments, 12/12 regression judgments, and 24/24 unchanged repeated judgments on three inputs.
+- [x] Inspect two original organizer outputs; preserve the additional provisional consultation instead of claiming full numeric coverage.
+- [x] Promote the single-call grounded evaluator and reviewed-013; keep legacy mode explicitly available.
+- [x] Record the organizer clarification favoring justified, reproducible results and a complete working process over exact hidden-label matching.
 
 ## Prove evaluation behavior
 
@@ -74,7 +79,9 @@
 
 ## Decisions still open
 
-- Final OpenAI model selection; initial Sol access and the $3.50 local lifetime cap are configured.
-- Supporting company procedures/reference sources and exact organizer comparison metric (not supplied).
+- Broader model comparisons are not complete; the tested default remains gpt-6.1-sol at medium reasoning.
+- The authorized local lifetime cap is $9.427742; commitment after grounded validation is $9.166096. Do not reset usage or infer authorization from account balance alone.
+- Broader product-reference coverage and source context for undated organizer inputs remain incomplete. Three scoped official platform guides are available.
+- The exact organizer comparison formula is not supplied; the organizer explicitly discourages guessing it.
 - Verified audio playback/access and optional audio-analysis scope.
 - Browser/computer-use behavior: the availability check stalled; WSL compatibility was not established.

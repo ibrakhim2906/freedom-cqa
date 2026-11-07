@@ -16,11 +16,11 @@ from .observations import (
 )
 from .prompt import GROUNDED_SYSTEM, GROUNDED_VERSION, PROMPT_VERSION, SYSTEM, fingerprint, payload_for
 from .scoring import calculate_score, validate_evaluation
-from .settings import RATES, Settings
+from .settings import DEFAULT_STRATEGY, RATES, Settings
 
 
 class Evaluator:
-    def __init__(self, settings: Settings, ledger: Ledger, run_ceiling: float, strategy: str = "direct"):
+    def __init__(self, settings: Settings, ledger: Ledger, run_ceiling: float, strategy: str = DEFAULT_STRATEGY):
         settings.require_key()
         if strategy not in {"direct", "evidence-first", "grounded"}:
             raise ValueError("Unknown evaluator strategy")

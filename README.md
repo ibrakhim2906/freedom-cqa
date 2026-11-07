@@ -12,14 +12,17 @@ uv sync --dev
 # Configure OPENAI_API_KEY in the Git-ignored .env file.
 uv run cqa check-config
 uv run pytest -q
-uv run cqa benchmark --suite combined --budget-usd 2 --output artifacts/benchmark/baseline-v1.json
+# Optional billable single-case check; use a fresh output filename.
+uv run cqa benchmark --cases-file evals/core-anchors-v4.jsonl --case core-language-wrong --concurrency 1 --budget-usd 0.20 --output artifacts/benchmark/new-run.json
 ```
 
 See [benchmark setup, data provenance, and result interpretation](docs/BENCHMARK.md).
 There is no offline evaluation fallback.
 
-New evaluations use the versioned [reviewed checklist](checklists/freedom-reviewed-012.json).
-Only [accepted rubric decisions](docs/RUBRIC_DECISIONS.md) are included. The original
+New evaluations use the grounded evaluator and versioned
+[reviewed checklist](checklists/freedom-reviewed-013.json). The
+[rubric journal](docs/RUBRIC_DECISIONS.md) distinguishes accepted decisions from
+the documented team interpretation R013. The original
 `checklists/freedom-v1.json` remains available through `--checklist` for comparisons.
 The [internal 100-point product rubric](docs/SOLUTION_GRADING_RUBRIC.md) distinguishes
 our engineering targets from the organizer's actual selection priorities.
@@ -35,16 +38,17 @@ criterion agreement separately from score error and the loss of numeric coverage
 
 The [core workflow experiment](docs/CORE_EXPERIMENT_RESULTS.md) adds 14 fresh
 diagnostic conversations, actual-request repeat checks, and transparent score bounds
-for unresolved criteria. Direct grading remains the default: the experimental
-evidence-first strategy added cost without improving the tested judgments.
+for unresolved criteria. The experimental two-call evidence-first strategy added
+cost without improving the tested judgments and was not promoted.
 The report preserves a 6.93-point repeated-score drift and the remaining source
 and reference limitations; passing the local anchors is not organizer accuracy.
 
-The [grounding and deduction-boundary candidate](docs/GROUNDING_AND_OVERLAP_RESULTS.md)
-adds scoped official references, factual-claim citations and rule-linked deductions.
-Use `--strategy grounded --checklist checklists/freedom-reviewed-013.json` explicitly:
-its live validation is incomplete after provider credits ran out, so it is not the
-default. The report includes the completed comparison, failures, costs and remaining checks.
+The [grounded validation results](docs/GROUNDED_VALIDATION_RESULTS.md) complete the
+earlier [interrupted candidate comparison](docs/GROUNDING_AND_OVERLAP_RESULTS.md).
+The single-call grounded evaluator is now the default, with scoped references,
+factual-claim citations and rule-linked deductions. The report preserves the
+organizer example that needs review, reduced numeric coverage, costs and limits.
+The legacy mode remains available through `--strategy direct` with an older checklist.
 
 The [semantic review](docs/SEMANTIC_REVIEW.md) distinguishes suspected evaluator
 mistakes from ambiguous labels. Original datasets remain frozen;

@@ -34,6 +34,25 @@ quotas or a scoring advantage for either local or cloud models.
 The earlier 100-point judging rubric discussed in chat was hypothetical. It is
 not the organizer's rubric and must not be represented as official weights.
 
+## Further organizer clarification supplied in chat, 2026-11-07
+
+Exact point-for-point agreement is not expected, and expert evaluations can differ.
+The organizers emphasize a working system that meaningfully analyzes new dialogue,
+applies the selected checklist, and produces logical, justified, reproducible
+assessments. Ground Truth comparison considers closeness and overall adequacy.
+
+N/A, serious errors, incomplete data and disputed claims must be handled reasonably;
+the system must not invent facts to fill missing information. Calls should account
+for spoken communication, without requiring perfect transcription of every word
+or pause. Interface usability, the complete process, useful additional capabilities
+and the technical approach also matter. The organizers explicitly discourage
+spending excessive time guessing their internal grading methodology.
+
+Development consequence: close the focused core-validation phase after the
+documented grounding/boundary checks; retain genuine uncertainty and measured
+limitations. Complete and verify the real evaluation/evidence/review workflow.
+This clarification does not provide a numeric selection formula or guarantee a score.
+
 ## Original announcement
 
 **Критерии отбора топ-50 команд**
