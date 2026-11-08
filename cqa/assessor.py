@@ -152,6 +152,14 @@ turn may span consecutive ASR fragments before any operator/bot clarification;
 the first stored message alone is not necessarily the complete request. Do not
 credit information elicited by a later clarification as available from the start.
 Keep the original message IDs and source positions; do not merge or rewrite them.
+The same segmentation principle applies to an operator's uninterrupted opening
+response: adjacent fragments may contain the greeting and introduction together.
+Assess intelligible speech in its actual turn order. When a rule restricts an
+action to the first operator response, do not satisfy it with a later response
+across an intervening customer turn. Do not reconstruct a garbled name,
+farewell or other required behavior from expectation. Transcription corruption
+alone proves neither that the behavior occurred nor that the operator omitted it
+or spoke poorly. State the specific uncertainty when it can affect the decision.
 
 Return rubric-assessor-v3 JSON with the supplied catalog_fingerprint and exactly
 the configured judgment keys. For EVERY applicable criterion, select the best-
@@ -178,6 +186,25 @@ effect on the expressed request and the configured level descriptions, rather
 than the mere presence of another question. Read the whole relevant exchange for
 equivalent or implied rubric behaviors; require particular words or a separate
 stage only when the configured rule requires them. Preserve explicit timing rules.
+When a configured rule requires a recap, inspect the closing exchange as a whole.
+A concise confirmation of the agreed result or next step can serve as a recap
+while also answering a final follow-up; a separate repetition is not inherently
+required. Identify what it actually confirms or summarizes. A bare farewell,
+generic instruction or arbitrary last answer is not automatically a recap.
+Still require every separate element of the configured closing rule, and do not
+credit a mid-conversation courtesy as the final farewell.
+
+Distinguish a task's target identifier, identity verification and the protected
+action itself. Selecting the correct record may need a genuinely missing task
+detail; that selection does not by itself authenticate the caller. Do not treat
+a supplied identifier or an operator's assertion as stronger verification evidence
+than the configured rule permits; apply that rule's required evidence. A promise
+of future action or a description of the verification process does not prove an
+action already occurred. Conversely, deferring a final action does not erase any
+earlier independently evidenced protected disclosure or action. Do not infer
+unknown access permissions or classify every record lookup as protected by
+default; identify the actual conduct and applicable rule, preserving uncertainty
+where the sources do not establish them. Apply the configured N/A condition.
 
 Each decision must satisfy its own configured rule. The same event may affect
 multiple criteria when each rule covers it; explain each connection. Respect

@@ -1,0 +1,195 @@
+{
+  "id": "fresh-release-v2",
+  "version": 2,
+  "status": "fixture_metadata_corrected_preflight_passed",
+  "created_at_utc": "2026-11-08T04:42:16.130735+00:00",
+  "origin": {
+    "source": "evals/fresh-release-v1.jsonl",
+    "source_sha256": "a9ec5c75cd8fed43681c930b2ffc08cd773784dab242e8035f34db3fb1076832",
+    "review_manifest": "evals/fresh-release-v1.review.json",
+    "review_manifest_current_sha256": "0b69191e989ad32d63878fac3c305edaf4e3a2c16a00cb23367dad079115e692",
+    "review_manifest_original_freeze_sha256": "0bd696a135080476f2375f1889bd3ec4c7ca662cdb9c47338645d6becda4d04b",
+    "original_freeze_record": "artifacts/final-candidate/test-freeze.json",
+    "review_manifest_metadata_amendment": "The v1 review manifest's current hash includes the independently verified metadata-only completion amendment; its original frozen judgment-bearing content is unchanged.",
+    "label_provenance": "ai_authored_provisional",
+    "human_ground_truth": false,
+    "organizer_ground_truth": false
+  },
+  "disclosure": {
+    "first_pass_already_begun": true,
+    "reason": "All ten v1 supplied references were rejected with scope_mismatch because knowledge_scope contained an explanatory sentence rather than the exact reference.scope identifier.",
+    "change": "Only conversation.knowledge_scope is replaced with the exact existing reference.scope in each case.",
+    "no_model_tuning": true,
+    "model_prompts_or_candidate_changed": false,
+    "source_text_unchanged": true,
+    "reference_text_and_policy_unchanged": true,
+    "all_expected_labels_rationales_totals_acceptance_and_exclusions_unchanged": true,
+    "labels_and_review_rules": "Inherit all v1 expectations and judgment-bearing review content without modification. Preserve original case IDs, families, tags and source text.",
+    "paid_calls_performed_by_this_task": 0,
+    "independence_qualification": "This is a disclosed post-start fixture metadata correction, not a newly independent unseen holdout. It must not replace or erase the original run record."
+  },
+  "fixture_sha256": "988e09d619ce17845e1edd00601fe7052acfb920197efba24f6d27e45b8317a1",
+  "changes": [
+    {
+      "case_id": "fresh-v1-ru-01",
+      "changed_json_pointer": "/conversation/knowledge_scope"
+    },
+    {
+      "case_id": "fresh-v1-ru-02",
+      "changed_json_pointer": "/conversation/knowledge_scope"
+    },
+    {
+      "case_id": "fresh-v1-ru-03",
+      "changed_json_pointer": "/conversation/knowledge_scope"
+    },
+    {
+      "case_id": "fresh-v1-ru-04",
+      "changed_json_pointer": "/conversation/knowledge_scope"
+    },
+    {
+      "case_id": "fresh-v1-kz-01",
+      "changed_json_pointer": "/conversation/knowledge_scope"
+    },
+    {
+      "case_id": "fresh-v1-kz-02",
+      "changed_json_pointer": "/conversation/knowledge_scope"
+    },
+    {
+      "case_id": "fresh-v1-kz-03",
+      "changed_json_pointer": "/conversation/knowledge_scope"
+    },
+    {
+      "case_id": "fresh-v1-en-01",
+      "changed_json_pointer": "/conversation/knowledge_scope"
+    },
+    {
+      "case_id": "fresh-v1-en-02",
+      "changed_json_pointer": "/conversation/knowledge_scope"
+    },
+    {
+      "case_id": "fresh-v1-en-03",
+      "changed_json_pointer": "/conversation/knowledge_scope"
+    }
+  ],
+  "validation": {
+    "validator": "cqa.grounding.evidence_context_for",
+    "schema": "cqa.models.TestCase",
+    "case_count": 10,
+    "reference_count": 10,
+    "every_reference_usable": true,
+    "all_other_bytes_preserved_per_line": true,
+    "all_other_parsed_objects_equal": true,
+    "per_case": [
+      {
+        "case_id": "fresh-v1-ru-01",
+        "knowledge_scope": "ceramics-workshop booking changes",
+        "references": [
+          {
+            "reference_id": "scenario-policy",
+            "usable": true,
+            "rejection_reasons": []
+          }
+        ]
+      },
+      {
+        "case_id": "fresh-v1-ru-02",
+        "knowledge_scope": "city museum public visitor information",
+        "references": [
+          {
+            "reference_id": "scenario-policy",
+            "usable": true,
+            "rejection_reasons": []
+          }
+        ]
+      },
+      {
+        "case_id": "fresh-v1-ru-03",
+        "knowledge_scope": "public local-history catalogue export",
+        "references": [
+          {
+            "reference_id": "scenario-policy",
+            "usable": true,
+            "rejection_reasons": []
+          }
+        ]
+      },
+      {
+        "case_id": "fresh-v1-ru-04",
+        "knowledge_scope": "public bus timetable kiosk",
+        "references": [
+          {
+            "reference_id": "scenario-policy",
+            "usable": true,
+            "rejection_reasons": []
+          }
+        ]
+      },
+      {
+        "case_id": "fresh-v1-kz-01",
+        "knowledge_scope": "public planetarium visitor hours",
+        "references": [
+          {
+            "reference_id": "scenario-policy",
+            "usable": true,
+            "rejection_reasons": []
+          }
+        ]
+      },
+      {
+        "case_id": "fresh-v1-kz-02",
+        "knowledge_scope": "public library printer file support",
+        "references": [
+          {
+            "reference_id": "scenario-policy",
+            "usable": true,
+            "rejection_reasons": []
+          }
+        ]
+      },
+      {
+        "case_id": "fresh-v1-kz-03",
+        "knowledge_scope": "public community printer operation",
+        "references": [
+          {
+            "reference_id": "scenario-policy",
+            "usable": true,
+            "rejection_reasons": []
+          }
+        ]
+      },
+      {
+        "case_id": "fresh-v1-en-01",
+        "knowledge_scope": "makerspace private locker access reset",
+        "references": [
+          {
+            "reference_id": "scenario-policy",
+            "usable": true,
+            "rejection_reasons": []
+          }
+        ]
+      },
+      {
+        "case_id": "fresh-v1-en-02",
+        "knowledge_scope": "botanical garden public route guidance",
+        "references": [
+          {
+            "reference_id": "scenario-policy",
+            "usable": true,
+            "rejection_reasons": []
+          }
+        ]
+      },
+      {
+        "case_id": "fresh-v1-en-03",
+        "knowledge_scope": "community forum public help instructions",
+        "references": [
+          {
+            "reference_id": "scenario-policy",
+            "usable": true,
+            "rejection_reasons": []
+          }
+        ]
+      }
+    ]
+  }
+}

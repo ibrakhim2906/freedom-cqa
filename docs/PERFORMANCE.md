@@ -2,24 +2,38 @@
 
 Measured on 8 November 2026 with **OpenAI `gpt-6.1-sol`, medium reasoning**. These are development measurements against declared AI-reviewed references, not organizer Ground Truth or a predicted competition score.
 
-## Latest behavioral check
+## Latest frozen candidate
 
-The [frozen 17-case panel](../evals/final-rubric-panel-v1.jsonl) has eight primary conversations, four translations, two irrelevant paraphrases and three identical repeats. Two AI reviewers independently agreed on all 64 primary decisions before inference. Its [freeze manifest](../evals/final-rubric-panel-v1.review.json) records sources, settings, hashes and an empathy-boundary qualification for case 406.
+Candidate **`rubric-assessor-v3-963619247384`** clarifies closing summaries, task identifiers versus identity verification, and opening turns split across call-transcript fragments. The saved checklist, scoring arithmetic and historical assessments are unchanged. New explanations are in Russian; evidence quotations retain their original language.
+
+The [new ten-case set](../evals/fresh-release-v2.jsonl) contains four RU, three KZ and three EN conversations, including two synthetic call transcripts. An independent AI reviewer labelled all eight criteria from source before seeing the author's labels; another reviewed the four boundary criteria. The evaluator was frozen before the root reviewer read the cases. See the [reference provenance](../evals/fresh-release-v2.review.json) and [compact measured results](../evals/fresh-release-v2.results.json).
 
 | Measurement | Observed result |
 |---|---|
-| First run, without automatic retries | **15/17 valid assessments**, two validation failures |
-| Primary reference decisions, failures counted incorrect | **56/64**; seven of eight primary conversations completed |
-| Primary score error on completed cases | MAE **0**, seven conversations; failed case excluded from MAE only |
-| Controlled language agreement | **32/32** decisions across four RU/KZ translations |
-| Paraphrase / repeat comparison | **8/16** and **16/24** delivered comparisons; failed base/variant counts as missing |
-| First-run latency | Median **20.05s**, p95 **27.51s** per assessment |
-| First-run estimated cost | **$0.848159**, including both failures; $0.050 per attempt |
-| Fresh targeted check after correction | **3/3 valid; 24/24 decisions matched**, $0.177401 |
+| Corrected set, no automatic retries | **10/10 completed**, no failures or budget skips |
+| Unambiguous reference judgments | **79/79 matched** |
+| Aggregate score error | MAE **0**, nine eligible conversations |
+| Ambiguous closing | Provisional No with explicit uncertainty; excluded from strict agreement and score MAE |
+| Two preselected identical repeats | **16/16** answer/status/uncertainty decisions and both totals unchanged |
+| Exact source validation and score replay | **12/12 assessments**, including repeats |
+| Main-run latency | Median **19.06 s**, p95 **25.13 s** |
+| Main-run cost | **$0.582992**, about $0.058 per conversation |
+| Repeat cost | **$0.040533** |
+| Offline suite | **822 Python tests passed** |
 
-Both failures used valid operator-conduct quotations alongside applicable policy and independent customer/system evidence. The validator incorrectly rejected the additional operator role. The correction accepts that combination while still requiring independent customer/system support; an operator's claim alone cannot verify policy or private state. The targeted check included both failed cases and a disclosure-violation control.
+A setup mistake in the initial fixture gave every policy an incompatible scope. The application correctly excluded those references and retained factual uncertainty. That run completed eight cases and skipped two at its budget boundary, costing **$0.474926**; it is not claimed as policy-grounded accuracy. The corrected fixture changes only `knowledge_scope`: transcripts, policy text, reference labels and the evaluator are identical. Both fixture versions and the correction record are retained. Eleven offline tests now guard applicability and preservation of the frozen labels. Total cost including this setup mistake, the corrected run and repeats was **$1.098451**.
 
-Offline revalidation of all 17 saved responses succeeds without changing any model grade, status or explanation. Their eight primary vectors match all 64 references with MAE 0; translation, paraphrase and repeat decisions also match. This is **offline replay**, not a new 17/17 first-pass run. The original run used `7332f3e2dfe4`; the corrected candidate and three fresh checks use `042dd1f149fb`. Source review found no definite semantic grade error across the 136 raw decisions, with the predeclared empathy interpretation still qualified.
+Source review of all 80 corrected-run judgments found no definite grading error or matching answer with an unsupported explanation. All 185 selected source spans validate; the repeats add 31. The unknown closing opportunity in `fresh-v1-ru-03` remains an explicit limitation, not a uniquely established negative judgment. Two repeats are a small consistency check, not additional independent accuracy samples. No human or organizer Ground Truth was used.
+
+To reproduce the corrected panel with a configured API key and sufficient local/provider budget:
+
+```sh
+python -m cqa.cli benchmark --cases-file evals/fresh-release-v2.jsonl --strategy assessor --checklist checklists/freedom-reviewed-016.json --repair-attempts 0 --concurrency 1 --budget-usd 0.90 --output artifacts/verification/fresh-release-v2.json
+```
+
+Use a new output filename for each run. The batch cap includes conservative allowance for the next request; it is not the expected bill. Reference labels stay outside the model input.
+
+An earlier 17-case panel had eight primary conversations plus translations/paraphrases/repeats. Its first run delivered 15/17; a validator correction passed three targeted fresh checks and replayed all saved responses. Those historical results are separate from the latest ten-case measurement.
 
 ## DEV results and product behavior
 
@@ -43,7 +57,7 @@ validation does not establish stable expert-level accuracy. Original outputs and
 the DEV submission were not replaced.
 
 All 65 selected saved assessments still validate, with all 520 grade/rationale
-pairs and 65 totals unchanged. The integrated Python suite passed 805 tests.
+pairs and 65 totals unchanged. The integrated Python suite now passes 822 tests.
 Local evidence is preserved under ignored `artifacts/precontrol-audit/`.
 
 - [Official DEV export](../results/dev/results.json): **65/65 numerical results, 65 ok, 0 errors**; 20 assessments retain material uncertainty. These are completed assessments, not measured expert agreement.

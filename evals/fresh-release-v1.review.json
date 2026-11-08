@@ -1,0 +1,952 @@
+{
+  "id": "fresh-release-v1",
+  "version": 1,
+  "status": "independently_reviewed_ready_for_freeze",
+  "created_on": "2026-11-08",
+  "checklist": "checklists/freedom-reviewed-016.json",
+  "origin": {
+    "author": "AI subagent fresh_cases",
+    "label_provenance": "ai_authored_provisional",
+    "human_ground_truth": false,
+    "organizer_ground_truth": false,
+    "inference_run_before_authoring": false,
+    "read_sources": [
+      "cqa/datasets.py (schema/loading context; it incidentally contains existing organizer judgments, which were not used as templates)",
+      "cqa/models.py",
+      "checklists/freedom-reviewed-016.json",
+      "docs/SUBMISSION_FORMAT.md"
+    ],
+    "not_read": [
+      "existing evaluation case files",
+      "model prompts",
+      "benchmark reports",
+      "results/artifacts"
+    ],
+    "construction": "Ten independently composed synthetic support conversations, not mutations of existing evaluation cases. Institutions, transcripts, system events and scenario policies are invented for bounded evaluation and assert no Freedom financial policy."
+  },
+  "balance": {
+    "case_count": 10,
+    "languages": {
+      "ru": 4,
+      "kz": 3,
+      "en": 3
+    },
+    "channels": {
+      "agent chat": 8,
+      "voice call": 2
+    },
+    "audio_available": false
+  },
+  "scoring": {
+    "formula": "sum(weight * selected level fraction) / sum(applicable weights) * 100, rounded to two decimals; N/A removes weight; serious flag has zero weight",
+    "unresolved": "Current v3 requires a concrete best-effort allowed answer for applicable criteria. Ambiguous operational selections are qualified in the manifest with acceptable alternatives and strict-agreement exclusions; their totals are conditional, not certain ground truth.",
+    "levels_are_raw": "consultation 0/5/10/15/20 and management 0/4/7/10 precede weighting"
+  },
+  "evidence_contract": {
+    "purpose": "Minimal necessary source IDs and checked scopes are review targets, not a demand for identical prose or one exact evidence serialization.",
+    "omissions": "Omission spans cover the full available response opportunity and must not be repurposed as positive answer evidence.",
+    "source_boundaries": "Human operator actions, bot answers, customer reports, independent synthetic system events and supplied synthetic policies remain separate.",
+    "uncertainty": "Adjudicate genuine disagreements before freezing. Do not alter expectations after seeing inference solely to improve a score; record any correction and its independent reason."
+  },
+  "review": {
+    "independent_second_review_completed": true,
+    "reviewer": "accuracy_audit (independent AI source-only reviewer)",
+    "independent_labels_report": "artifacts/final-candidate/blind-reference-review.json",
+    "independent_labels_sha256": "c15d54fa5d8f751cc38c30dd6c9e07acb020c33b546bcf9f181e87729016605f",
+    "comparison_receipt": "artifacts/final-candidate/blind-reference-comparison.json",
+    "labels_frozen_before_comparison": true,
+    "operational_label_matches": 80,
+    "operational_label_count": 80,
+    "strict_unique_label_eligible_count": 79,
+    "conversation_sources_unchanged_since_initial_packet": true,
+    "unresolved_discrepancies": [],
+    "additional_boundary_review": {
+      "reviewer": "case_rubric (independent AI source-only reviewer)",
+      "report": "artifacts/final-candidate/blind-boundary-review.json",
+      "sha256": "0a0336515cf2179f54d0d5b06da7ad6854391d01e6942d87c7a90e0a338003d0",
+      "reviewed_labels": 40,
+      "original_author_matches": 39,
+      "discrepancy": "Only the original legacy needs_review closing label; resolved to an operational No with material uncertainty under the current v3 contract, preserving original judgment and metric exclusions."
+    },
+    "human_ground_truth": false,
+    "freeze_sha256": null
+  },
+  "cases": [
+    {
+      "case_id": "fresh-v1-ru-01",
+      "expected_total": {
+        "value": 100,
+        "earned_weight": 100,
+        "applicable_weight": 100
+      },
+      "acceptable_alternatives": [],
+      "minimal_evidence": {
+        "contact": [
+          "m2"
+        ],
+        "needs": [
+          "m1",
+          "m2",
+          "m3",
+          "m7"
+        ],
+        "identity": [
+          "m4",
+          "m5",
+          "m7"
+        ],
+        "consultation": [
+          "m3",
+          "m7",
+          "m8"
+        ],
+        "empathy": [
+          "m2",
+          "m4",
+          "m8",
+          "m10"
+        ],
+        "management": [
+          "m2",
+          "m4",
+          "m5",
+          "m6",
+          "m7"
+        ],
+        "closing": [
+          "m10"
+        ],
+        "serious": {
+          "checked_message_ids": [
+            "m1",
+            "m2",
+            "m3",
+            "m4",
+            "m5",
+            "m6",
+            "m7",
+            "m8",
+            "m9",
+            "m10"
+          ]
+        }
+      },
+      "scope_expectations": [
+        "The booking change is private_record/system_record evidence, independently supported by m7; m8 alone is insufficient.",
+        "The announced check is a workflow commitment, not proof of its completion.",
+        "Do not treat identity confirmation as a missing needs-discovery field."
+      ],
+      "request_coverage": [
+        {
+          "request": "Move K-38 to 14 November at 16:00",
+          "status": "answered",
+          "request_message_ids": [
+            "m1",
+            "m3"
+          ],
+          "answer_message_ids": [
+            "m8"
+          ],
+          "independent_support": [
+            "m7"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "fresh-v1-ru-02",
+      "expected_total": {
+        "value": 84.62,
+        "earned_weight": 55,
+        "applicable_weight": 65
+      },
+      "acceptable_alternatives": [],
+      "minimal_evidence": {
+        "contact": [
+          "m2"
+        ],
+        "needs": [
+          "m1"
+        ],
+        "identity": [
+          "m1"
+        ],
+        "consultation": {
+          "positive": [
+            "m1",
+            "m2"
+          ],
+          "omission": {
+            "request_message_ids": [
+              "m1",
+              "m3"
+            ],
+            "start_message_id": "m2",
+            "end_message_id": "m5"
+          }
+        },
+        "empathy": [
+          "m1",
+          "m2",
+          "m3",
+          "m4"
+        ],
+        "management": {
+          "checked_message_ids": [
+            "m1",
+            "m2",
+            "m3",
+            "m4",
+            "m5"
+          ]
+        },
+        "closing": [
+          "m4"
+        ],
+        "serious": {
+          "checked_message_ids": [
+            "m1",
+            "m2",
+            "m3",
+            "m4",
+            "m5"
+          ]
+        }
+      },
+      "scope_expectations": [
+        "Opening time is a policy fact supported by scenario-policy.",
+        "The supplied entrance fact must not be hallucinated as an operator response.",
+        "The customer's neutral repeat is not an empathy complaint."
+      ],
+      "request_coverage": [
+        {
+          "request": "Sunday opening time",
+          "status": "answered",
+          "request_message_ids": [
+            "m1"
+          ],
+          "answer_message_ids": [
+            "m2"
+          ]
+        },
+        {
+          "request": "Wheelchair entrance",
+          "status": "unanswered",
+          "request_message_ids": [
+            "m1",
+            "m3"
+          ],
+          "answer_message_ids": [],
+          "omission_span": [
+            "m2",
+            "m5"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "fresh-v1-ru-03",
+      "expected_total": {
+        "value": 84.62,
+        "earned_weight": 55,
+        "applicable_weight": 65,
+        "provisional": true,
+        "strict_comparison": false,
+        "condition": "Operational closingNo under current v3 forced-choice contract; closure opportunity is unestablished."
+      },
+      "acceptable_alternatives": [],
+      "qualification": "Consultation15 relies on the client's explicit statement that the filename is secondary and not an obstacle. Closing is deliberately uncertain; the stored No is a conditional operational choice, not ground truth. Exclude closing and total from strict unique-label agreement.",
+      "minimal_evidence": {
+        "contact": [
+          "m2"
+        ],
+        "needs": [
+          "m1"
+        ],
+        "identity": [
+          "m1",
+          "m2"
+        ],
+        "consultation": {
+          "positive": [
+            "m2"
+          ],
+          "omission": {
+            "request_message_ids": [
+              "m1"
+            ],
+            "start_message_id": "m2",
+            "end_message_id": "m3"
+          }
+        },
+        "empathy": [
+          "m1",
+          "m2",
+          "m3"
+        ],
+        "management": [
+          "m2"
+        ],
+        "closing": {
+          "checked_message_ids": [
+            "m1",
+            "m2",
+            "m3"
+          ],
+          "missing_information": "Whether the operator had an opportunity to send a closing after m3."
+        },
+        "serious": {
+          "checked_message_ids": [
+            "m1",
+            "m2",
+            "m3"
+          ]
+        }
+      },
+      "scope_expectations": [
+        "Export steps and absence of a login requirement are supplied policy facts.",
+        "Do not claim a successful download from 'Понял, спасибо'.",
+        "A transcript boundary is not a proved disconnect or operator closure."
+      ],
+      "request_coverage": [
+        {
+          "request": "Download public results as CSV",
+          "status": "answered",
+          "request_message_ids": [
+            "m1"
+          ],
+          "answer_message_ids": [
+            "m2"
+          ]
+        },
+        {
+          "request": "Optional default filename",
+          "status": "unanswered",
+          "request_message_ids": [
+            "m1"
+          ],
+          "answer_message_ids": [],
+          "omission_span": [
+            "m2",
+            "m3"
+          ],
+          "importance": "explicitly secondary"
+        }
+      ],
+      "strict_agreement_exclusions": [
+        "closing"
+      ],
+      "missing_information": [
+        "Whether the operator had an opportunity to send a closing after m3."
+      ],
+      "review_warnings": [
+        "The source checklist's R010 would ordinarily use needs_review for this evidence gap. Current user-selected v3 output contract requires a best-effort allowed answer plus explicit uncertainty.",
+        "N/A is not accepted on missing information alone: the configured interruption condition is unproved. The operational No is not a unique ground-truth label; exclude this criterion from strict agreement and this case from aggregate score MAE."
+      ],
+      "original_authored_expectation": {
+        "criterion_id": "closing",
+        "status": "needs_review",
+        "answer": null,
+        "rationale": "The unexplained transcript boundary does not establish either an operator closing opportunity or an interruption before one."
+      },
+      "metric_exclusions": {
+        "strict_unique_label_criteria": [
+          "closing"
+        ],
+        "aggregate_score_mae": true,
+        "reason": "Material uncertainty about closing opportunity, preserved from the original authored needs_review."
+      }
+    },
+    {
+      "case_id": "fresh-v1-ru-04",
+      "expected_total": {
+        "value": 32.31,
+        "earned_weight": 21,
+        "applicable_weight": 65
+      },
+      "acceptable_alternatives": [],
+      "qualification": "This intentionally separates a dismissive response from an actual insult. The serious checklist enumerates its triggers; it is not a catch-all for poor service.",
+      "minimal_evidence": {
+        "contact": [
+          "m2"
+        ],
+        "needs": [
+          "m1"
+        ],
+        "identity": [
+          "m1"
+        ],
+        "consultation": {
+          "positive": [
+            "m4"
+          ],
+          "omission": {
+            "request_message_ids": [
+              "m1"
+            ],
+            "start_message_id": "m2",
+            "end_message_id": "m7"
+          }
+        },
+        "empathy": {
+          "cue": [
+            "m1"
+          ],
+          "response": [
+            "m2",
+            "m4"
+          ],
+          "disrespect": [
+            "m4"
+          ]
+        },
+        "management": [
+          "m2",
+          "m3"
+        ],
+        "closing": [
+          "m5",
+          "m6",
+          "m7"
+        ],
+        "serious": {
+          "checked_message_ids": [
+            "m1",
+            "m2",
+            "m3",
+            "m4",
+            "m5",
+            "m6",
+            "m7"
+          ]
+        }
+      },
+      "scope_expectations": [
+        "No audio exists; do not assess pronunciation, pace or diction.",
+        "Client confusion is explicitly attributed to operator wording, not merely an unanswered new question.",
+        "A general timetable pointer is some help (5), with no fully answered secondary request to justify 10."
+      ],
+      "request_coverage": [
+        {
+          "request": "Select tomorrow and print the public timetable",
+          "status": "partial",
+          "request_message_ids": [
+            "m1"
+          ],
+          "answer_message_ids": [
+            "m4"
+          ],
+          "unresolved_aspects": [
+            "Where to select tomorrow",
+            "How to display and print"
+          ],
+          "omission_span": [
+            "m2",
+            "m7"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "fresh-v1-kz-01",
+      "expected_total": {
+        "value": 100,
+        "earned_weight": 60,
+        "applicable_weight": 60
+      },
+      "acceptable_alternatives": [],
+      "minimal_evidence": {
+        "contact": [
+          "m2"
+        ],
+        "needs": [
+          "m1"
+        ],
+        "identity": [
+          "m1"
+        ],
+        "consultation": [
+          "m1",
+          "m2"
+        ],
+        "empathy": [
+          "m2"
+        ],
+        "management": [
+          "m2",
+          "m3"
+        ],
+        "closing": [
+          "m3"
+        ],
+        "serious": {
+          "checked_message_ids": [
+            "m1",
+            "m2",
+            "m3"
+          ]
+        }
+      },
+      "scope_expectations": [
+        "The interruption N/A rests on explicit event semantics, not elapsed time or a bare disconnect token.",
+        "Hours are supported by scenario-policy."
+      ],
+      "request_coverage": [
+        {
+          "request": "Saturday opening time",
+          "status": "answered",
+          "request_message_ids": [
+            "m1"
+          ],
+          "answer_message_ids": [
+            "m2"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "fresh-v1-kz-02",
+      "expected_total": {
+        "value": 38.13,
+        "earned_weight": 30.5,
+        "applicable_weight": 80
+      },
+      "acceptable_alternatives": [],
+      "minimal_evidence": {
+        "contact": [
+          "m2",
+          "m5"
+        ],
+        "needs": [
+          "m1",
+          "m2",
+          "m3",
+          "m5",
+          "m6"
+        ],
+        "identity": [
+          "m1",
+          "m3"
+        ],
+        "consultation": {
+          "bot_only": [
+            "m4"
+          ],
+          "omission": {
+            "request_message_ids": [
+              "m1",
+              "m8"
+            ],
+            "start_message_id": "m5",
+            "end_message_id": "m10"
+          }
+        },
+        "empathy": {
+          "checked_message_ids": [
+            "m1",
+            "m2",
+            "m3",
+            "m4",
+            "m5",
+            "m6",
+            "m7",
+            "m8",
+            "m9",
+            "m10"
+          ]
+        },
+        "management": [
+          "m3",
+          "m5",
+          "m6"
+        ],
+        "closing": [
+          "m9"
+        ],
+        "serious": {
+          "checked_message_ids": [
+            "m1",
+            "m2",
+            "m3",
+            "m4",
+            "m5",
+            "m6",
+            "m7",
+            "m8",
+            "m9",
+            "m10"
+          ]
+        }
+      },
+      "scope_expectations": [
+        "Bot-collected information is known to the human, but bot consultation and greeting cannot become human actions.",
+        "The neutral repetition is not itself an empathy failure.",
+        "The operator's 'Оқып отырмын' is an interaction/workflow statement, not an independent factual solution."
+      ],
+      "request_coverage": [
+        {
+          "request": "Whether the customer's PDF is accepted",
+          "status": "unanswered",
+          "request_message_ids": [
+            "m1",
+            "m3",
+            "m8"
+          ],
+          "answer_message_ids": [],
+          "excluded_bot_answer_message_ids": [
+            "m4"
+          ],
+          "omission_span": [
+            "m5",
+            "m10"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "fresh-v1-kz-03",
+      "expected_total": {
+        "value": 92.31,
+        "earned_weight": 60,
+        "applicable_weight": 65
+      },
+      "acceptable_alternatives": [],
+      "minimal_evidence": {
+        "contact": [
+          "m2"
+        ],
+        "needs": [
+          "m1"
+        ],
+        "identity": [
+          "m1"
+        ],
+        "consultation": [
+          "m2",
+          "m3",
+          "m5",
+          "m6",
+          "m7"
+        ],
+        "empathy": [
+          "m2",
+          "m4",
+          "m5",
+          "m8"
+        ],
+        "management": [
+          "m2",
+          "m3",
+          "m4",
+          "m5",
+          "m6"
+        ],
+        "closing": [
+          "m8"
+        ],
+        "serious": {
+          "checked_message_ids": [
+            "m1",
+            "m2",
+            "m3",
+            "m4",
+            "m5",
+            "m6",
+            "m7",
+            "m8"
+          ]
+        }
+      },
+      "scope_expectations": [
+        "The app prerequisite in m2 is contradicted by scenario-policy; retain the error in the explanation.",
+        "Correction lifecycle is supported by m5 plus independent completed-action evidence m6.",
+        "Do not infer the absence of consequences only from customer thanks; m6 supplies bounded evidence.",
+        "Noise annotations do not establish vocal delivery defects."
+      ],
+      "request_coverage": [
+        {
+          "request": "Whether a phone app is required to print the PDF",
+          "status": "answered",
+          "request_message_ids": [
+            "m1"
+          ],
+          "answer_message_ids": [
+            "m5",
+            "m8"
+          ],
+          "independent_support": [
+            "m6"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "fresh-v1-en-01",
+      "expected_total": {
+        "value": 71.18,
+        "earned_weight": 60.5,
+        "applicable_weight": 85
+      },
+      "acceptable_alternatives": [],
+      "qualification": "Consultation20 is narrowly about the completed requested reset outcomes. IdentityNo and management7 capture the independently proven authorization/order failures. SeriousNo follows the checklist's enumerated triggers; a protected reset alone is not a disclosure.",
+      "minimal_evidence": {
+        "contact": [
+          "m2"
+        ],
+        "needs": [
+          "m1"
+        ],
+        "identity": [
+          "m2",
+          "m3",
+          "m4",
+          "m5",
+          "m7"
+        ],
+        "consultation": [
+          "m1",
+          "m4",
+          "m5",
+          "m9"
+        ],
+        "empathy": [
+          "m2",
+          "m4",
+          "m6",
+          "m9"
+        ],
+        "management": [
+          "m2",
+          "m3",
+          "m4",
+          "m5",
+          "m7"
+        ],
+        "closing": [
+          "m9"
+        ],
+        "serious": {
+          "checked_message_ids": [
+            "m1",
+            "m2",
+            "m3",
+            "m4",
+            "m5",
+            "m6",
+            "m7",
+            "m8",
+            "m9"
+          ],
+          "specific_non_disclosure": [
+            "m5"
+          ]
+        }
+      },
+      "scope_expectations": [
+        "Reset outcome is action_completed/private_record supported by independent m5.",
+        "Verification timing is system_record, not an operator self-certification.",
+        "Never infer key values, disclosure, customer confusion, or an extra missing task detail.",
+        "Preserve legitimate overlapping identity and sequence findings; keep the serious trigger separate."
+      ],
+      "request_coverage": [
+        {
+          "request": "Revoke old L-21 app key and enable replacement",
+          "status": "answered",
+          "request_message_ids": [
+            "m1"
+          ],
+          "answer_message_ids": [
+            "m4",
+            "m9"
+          ],
+          "independent_support": [
+            "m5"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "fresh-v1-en-02",
+      "expected_total": {
+        "value": 100,
+        "earned_weight": 65,
+        "applicable_weight": 65
+      },
+      "acceptable_alternatives": [],
+      "minimal_evidence": {
+        "contact": [
+          "m2"
+        ],
+        "needs": [
+          "m1"
+        ],
+        "identity": [
+          "m1"
+        ],
+        "consultation": [
+          "m1",
+          "m2",
+          "m4",
+          "m5"
+        ],
+        "empathy": [
+          "m2",
+          "m3",
+          "m4",
+          "m5"
+        ],
+        "management": [
+          "m2",
+          "m3",
+          "m5"
+        ],
+        "closing": [
+          "m5"
+        ],
+        "serious": [
+          "m3"
+        ]
+      },
+      "scope_expectations": [
+        "Public-map instructions are a supplied policy fact.",
+        "The serious flag is zero-weight and does not zero or cap the numerical total.",
+        "Do not invent a payment, acceptance, loss, or a request for the private service."
+      ],
+      "request_coverage": [
+        {
+          "request": "Download the public walking map",
+          "status": "answered",
+          "request_message_ids": [
+            "m1"
+          ],
+          "answer_message_ids": [
+            "m2",
+            "m5"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "fresh-v1-en-03",
+      "expected_total": {
+        "value": 100,
+        "earned_weight": 80,
+        "applicable_weight": 80
+      },
+      "acceptable_alternatives": [],
+      "minimal_evidence": {
+        "contact": [
+          "m2"
+        ],
+        "needs": [
+          "m1",
+          "m2",
+          "m3",
+          "m4"
+        ],
+        "identity": [
+          "m3",
+          "m4"
+        ],
+        "consultation": [
+          "m3",
+          "m4",
+          "m5",
+          "m6",
+          "m8"
+        ],
+        "empathy": {
+          "cue": [
+            "m3"
+          ],
+          "response": [
+            "m4",
+            "m6"
+          ]
+        },
+        "management": [
+          "m2",
+          "m3",
+          "m4",
+          "m5",
+          "m6",
+          "m8"
+        ],
+        "closing": [
+          "m8"
+        ],
+        "serious": {
+          "checked_message_ids": [
+            "m1",
+            "m2",
+            "m3",
+            "m4",
+            "m5",
+            "m6",
+            "m7",
+            "m8"
+          ],
+          "quoted_or_negated_spans": [
+            "m3",
+            "m6"
+          ]
+        }
+      },
+      "scope_expectations": [
+        "Record the alerts request as withdrawn at m3, not answered or silently dropped.",
+        "Report and Hide are separate active requested steps; moderation removal is not promised.",
+        "The transcript proves that instructions were given, not that reports were submitted or comments hidden.",
+        "The operator's negated quotation is not a customer-directed insult."
+      ],
+      "request_coverage": [
+        {
+          "request": "Turn on new-reply alerts",
+          "status": "withdrawn",
+          "request_message_ids": [
+            "m1"
+          ],
+          "withdrawal_message_ids": [
+            "m3"
+          ],
+          "answer_message_ids": []
+        },
+        {
+          "request": "Report abusive comment on desktop",
+          "status": "answered",
+          "request_message_ids": [
+            "m3"
+          ],
+          "answer_message_ids": [
+            "m4",
+            "m6"
+          ]
+        },
+        {
+          "request": "Hide that comment immediately from own view",
+          "status": "answered",
+          "request_message_ids": [
+            "m3"
+          ],
+          "answer_message_ids": [
+            "m4",
+            "m6"
+          ]
+        },
+        {
+          "request": "Whether to reply using insulting words",
+          "status": "answered",
+          "request_message_ids": [
+            "m5"
+          ],
+          "answer_message_ids": [
+            "m6"
+          ]
+        }
+      ]
+    }
+  ],
+  "authoring_notes": [
+    "Initial schema-valid author draft used needs_review for the unexplained closing boundary, following checklist R010. Before any inference, root supplied the current user-selected v3 contract requiring concrete numerical judgments with uncertainty preserved separately. Only that expectation/rationale and review metadata were aligned; every conversation source remained unchanged.",
+    "No N/A alternative is accepted for that boundary because a qualifying interruption is not established. Its original authored needs_review is retained, and the operational No is explicitly excluded from strict unique-label and aggregate score-MAE metrics."
+  ]
+}
