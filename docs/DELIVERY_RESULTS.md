@@ -163,3 +163,70 @@ The ten unseen PROD inputs have not been supplied. `scripts/prepare_control_run.
 and `docs/CONTROL_RUN.md` preserve those actual sources, freeze configuration and
 lead through bounded inference and official export once available. No placeholder
 PROD output or inferred organizer accuracy score was created.
+
+## Subsequent quality improvements, 8 November morning
+
+The current candidate is `rubric-assessor-v3-7332f3e2dfe4`. It reconciles actual
+customer requests before producing grades, applies N/A conditions before grading
+conduct, and requires a real task dependency before penalizing a missing detail.
+Omission severity follows the practical effect on the expressed request and the
+configured levels. A prior explanation can support an actual later confirmation;
+prior-only evidence cannot answer a new request. An unanswered request may retain
+the operator's inadequate response as evidence without being relabelled answered.
+The full checked omission interval remains required. V1/V2 semantics are preserved.
+
+The fresh independently authored fixture is `evals/delivery-unseen-v1.jsonl`, with
+its frozen hash, 25 expected decisions and exclusions in the adjacent review
+manifest. Neither the core author nor provider saw those expected answers before
+the candidate was prepared. The author knew earlier failure classes, so this is
+a fresh behavioral challenge, not independent expert Ground Truth.
+
+The single-attempt batch produced **7/8 valid outputs and 24/25 delivered matching
+decisions** at an estimated **$0.329345**. Its four complete reference vectors have
+MAE 0. All 50 proposed judgments, including the rejected draft, received a separate
+source review. Case106's Kazakh wording has a genuine state-preservation versus
+two-setting-instruction ambiguity; its matching consultation label and full-vector
+MAE do not resolve that ambiguity. The author identified it before reading outputs.
+The original metrics and frozen labels remain unchanged.
+
+Case102 failed because its unanswered request cited an inadequate operator attempt.
+The representation fix accepts the exact saved raw response with all criterion
+grades and its unanswered status unchanged. This is an offline replay after a
+fix, not a second model call or an 8/8 first-pass claim. The original failure stays
+in `artifacts/delivery/unseen-01.json` and the saved application history.
+
+The custom criterion uses actual levels 0/1/2. Changing its requirement from an
+explained handoff to permission before handoff changes the same source from 100
+to 50. API/export equality checks and an actual browser comparison preserved the
+complete model explanations, score difference and exact source highlight. The
+source and context are unchanged; the saved criterion is different.
+
+The known call003 prerequisite problem received one predeclared reassessment on
+the identical frozen source/checklist, costing **$0.103776**. Its result is
+**88.24, provisional**: needs N/A, consultation15 for corrected wrong-topic advice,
+and continued closing-opportunity uncertainty. Separate source review found all
+eight decisions defensible, including management10 under the rule separating
+content mistakes from independently established unclear wording. The earlier
+management4 is not compelled by the noisy transcript; that remains an interpretive
+boundary. This candidate replaces the previous call003 entry, not any of the
+other 64 DEV entries. Prior reports and the earlier appeal remain preserved.
+
+The product now preserves uncertainty when accepting numerical appeals; clearing
+it requires an explicit reviewer explanation. The queue shows distinct
+conversations and latest revisions, exact saved-result states, review needs and
+expandable history. A failed latest attempt cannot borrow an earlier score.
+Recording URLs survive edited imports. Long saved context rationale is expandable,
+while the actual scope/date assumption remains visible above the assessment.
+
+One focused backend workflow check, the relevant compact-assessor regressions,
+three targeted browser checks, production build and actual saved-result browser
+inspection passed. No full regression-suite rerun was used. These product fixes
+do not themselves measure semantic accuracy.
+
+Final DEV export remains **65 numerical, 65 ok, 0 errors**, including20 provisional
+assessments. This quality pass cost an estimated **$0.433121**; total additional
+delivery spend is **$6.307710 of the authorized $7**, leaving **$0.692290** of local
+authorization. No paid requests or active reservations remain. These estimates
+are not the user's provider balance. `artifacts/delivery/quality-push-receipt.json`
+pins the current selected records and supersedes the earlier release receipt.
+The user confirms that the control conversations have not been released yet.

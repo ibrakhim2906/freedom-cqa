@@ -11,6 +11,7 @@ import {Icon} from './Icon'
 import {ConversationQueue} from './ConversationQueue'
 import {Recording} from './Recording'
 import {AssessmentComparison} from './AssessmentComparison'
+import {groupConversationRevisions} from './conversationRevisions'
 
 function sourceHighlights(text: string, kind: 'dialogue'|'reference', sourceId: string,
   items: ({quote: string} & CitationSelection)[]) {
@@ -106,11 +107,11 @@ function App() {
         if (cancelled || !result) return
         setBatch(result)
         if (result.jobs.some(j => !terminal.has(j.status))) timer = setTimeout(poll, 1500)
-        else setNotice(`Batch finished: ${result.jobs.filter(j => j.status === 'completed').length} completed, ${result.jobs.filter(j => ['failed', 'interrupted'].includes(j.status)).length} failed${result.jobs.some(j => j.status === 'cancelled') ? `, ${result.jobs.filter(j => j.status === 'cancelled').length} cancelled` : ''}.`)
+        else {setNotice(`Batch finished: ${result.jobs.filter(j => j.status === 'completed').length} completed, ${result.jobs.filter(j => ['failed', 'interrupted'].includes(j.status)).length} failed${result.jobs.some(j => j.status === 'cancelled') ? `, ${result.jobs.filter(j => j.status === 'cancelled').length} cancelled` : ''}.`); refresh().catch(e => setError(e.message))}
       } catch (e) {if (!cancelled) setError((e as Error).message)}
     }
     void poll(); return () => {cancelled = true; clearTimeout(timer)}
-  }, [batchId])
+  }, [batchId, refresh])
   useEffect(() => {if (focus.ids.length) document.getElementById(`message-${focus.ids[0]}`)?.scrollIntoView({behavior: 'smooth', block: 'center'})}, [focus])
   function chooseConversation(id: string) {setConversationId(id); setJobId(''); setJob(undefined); setNotice('')}
   function chooseJob(j: JobRow) {setConversationId(j.conversation_id); setJobId(j.id); setView('conversations')}
@@ -138,6 +139,7 @@ function App() {
     })
   }
   const source = job?.conversation || conversation
+  const latestConversations = groupConversationRevisions(conversations).map(group => group.latest)
   const referenceHighlight = reference?.quote ? sourceHighlights(reference.ref.text, 'reference', reference.ref.id,
     [{quote: reference.quote, ...reference.selection}]) : undefined
   return <div className={styles.app}>
@@ -156,7 +158,7 @@ function App() {
         checklists.find(c => c.id === checklistId)?.content.criteria.map(c => <article className={styles.card} key={c.id}><h3>{c.title} <small>{c.weight} points · {c.kind}</small></h3><p>{c.instruction}</p><p>{c.levels.map(l => `${l.value}: ${l.description}`).join(' · ')}</p>{c.na_condition && <p>N/A only when: {c.na_condition}</p>}</article>)}
     </section> : view === 'history' ? <History onSelect={chooseJob}/> : <>
       <section className={styles.intro}><div><div className={styles.eyebrow}>Quality workspace</div><h1>Conversation review</h1><p>Evaluate the conversation. Follow the evidence. Record the decision.</p></div>
-        <div className={styles.stats} aria-label="Workspace overview"><div className={styles.stat}><strong>{conversations.length}</strong><span>Conversations</span></div><div className={styles.stat}><strong>{conversations.filter(c => c.channel === 'voice call').length}</strong><span>Call transcripts</span></div><div className={styles.stat}><strong>{new Set(conversations.map(c => c.language)).size}</strong><span>Languages</span></div><div className={styles.stat}><strong>{selected.length}</strong><span>Selected</span></div></div></section>
+        <div className={styles.stats} aria-label="Workspace overview"><div className={styles.stat}><strong>{latestConversations.length}</strong><span>Conversations</span></div><div className={styles.stat}><strong>{latestConversations.filter(c => c.channel === 'voice call').length}</strong><span>Call transcripts</span></div><div className={styles.stat}><strong>{new Set(latestConversations.map(c => c.language)).size}</strong><span>Languages</span></div><div className={styles.stat}><strong>{selected.length}</strong><span>Selected revisions</span></div></div></section>
       <div className={styles.toolbar}><button onClick={() => setShowImport(!showImport)}><Icon name="upload" size={15}/>Import conversations</button>
         <select aria-label="Evaluation checklist" value={checklistId} onChange={e => setChecklistId(e.target.value)}>{checklists.map(c => <option key={c.id} value={c.id}>{c.title} · {c.version}</option>)}</select>
         <label className={styles.depthControl}><span>Assessment depth</span><select aria-label="Assessment depth" aria-describedby={strategy === 'assessor-reviewed' ? 'assessment-depth-help' : undefined} value={strategy} onChange={e => setStrategy(e.target.value as 'assessor'|'assessor-reviewed')}><option value="assessor">Standard</option><option value="assessor-reviewed">Independent review</option></select></label>
@@ -169,9 +171,11 @@ function App() {
         <button disabled={busy || !importText.trim()} onClick={importNow}>Import</button></section>}
       {batch && <div className={styles.batch} role="status"><div className={styles.batchHead}><Icon name="list" size={17}/><div><b>Batch: {batch.jobs.filter(j => terminal.has(j.status)).length}/{batch.jobs.length} finished</b><br/><span>{dollars(batch.committed_usd)} committed / {dollars(batch.budget_usd)} budget</span></div><progress aria-label="Evaluation batch progress" value={batch.jobs.filter(j => terminal.has(j.status)).length} max={batch.jobs.length || 1}/></div>{batch.jobs.map(j => <button key={j.id} onClick={() => chooseJob(j)}><span className={styles.status} data-status={j.status}>{j.status}</span>{j.id.slice(0, 7)}</button>)}</div>}
       <main className={styles.workspace}>
-        <ConversationQueue conversations={conversations} selected={selected} current={conversationId} onSelect={setSelected} onChoose={chooseConversation}/>
+        <ConversationQueue conversations={conversations} selected={selected} current={conversationId} onSelect={setSelected} onChoose={chooseConversation}
+          onOpenAssessment={(id, revisionId) => {setConversationId(revisionId); setJobId(id); setNotice('')}}/>
         <section className={styles.transcript}>{source ? <><div className={styles.sectionHeading}><div><div className={styles.panelLabel}>Source transcript</div><h2>{source.external_id}</h2><span><Icon name={source.channel === 'voice call' ? 'call' : 'chat'} size={12}/>{source.channel === 'voice call' ? 'Voice call' : 'Agent chat'} · {source.content.messages.length} messages</span></div><span className={styles.pill}>{source.language}</span></div>
-          <div className={styles.transcriptActions}><button onClick={() => {setImportText(JSON.stringify(source.content, null, 2)); setShowImport(true)}}>Edit / import new revision</button><button disabled={busy} onClick={() => run([source.id])}>Evaluate this revision</button></div>
+          <div className={styles.transcriptActions}><button onClick={() => {setImportText(JSON.stringify({...source.content,
+            ...(source.metadata.recording_url ? {recording_url: source.metadata.recording_url} : {})}, null, 2)); setShowImport(true)}}>Edit / import new revision</button><button disabled={busy} onClick={() => run([source.id])}>Evaluate this revision</button></div>
           <ReferenceContext key={source.id} source={source} onApplied={async id => {await refresh(); setSelected(old => [...new Set(old.map(selectedId => selectedId === source.id ? id : selectedId))]); chooseConversation(id)}} onError={setError}/>
           {source.metadata.recording_url && <Recording key={source.metadata.recording_url} url={source.metadata.recording_url}/>}
           {source.channel === 'voice call' && !source.metadata.recording_url && <p className={styles.muted}>Transcript assessment only. No recording link is available; voice quality has not been analyzed.</p>}
@@ -194,8 +198,8 @@ function App() {
       <p className={styles.sourceText}>{referenceHighlight ? <Highlighted text={reference.ref.text} ranges={referenceHighlight.ranges}/> : reference.ref.text}</p>
       {referenceHighlight?.invalid && <p role="status">Selected span does not match this preserved source; exact highlighting is unavailable.</p>}
     </section></div>}
-    {appealCriterion && job && <AppealForm job={job} criterionId={appealCriterion} onClose={() => setAppealCriterion(undefined)} onSaved={async () => {await refreshJob(); setAppealCriterion(undefined)}} onError={setError}/>}
-    {resolveAppeal && job && <ResolveForm key={`${job.id}-${resolveAppeal.id}`} job={job} appeal={resolveAppeal} onClose={() => setResolveAppeal(undefined)} onSaved={async () => {await refreshJob(); setResolveAppeal(undefined)}} onError={setError}/>}
+    {appealCriterion && job && <AppealForm job={job} criterionId={appealCriterion} onClose={() => setAppealCriterion(undefined)} onSaved={async () => {await Promise.all([refreshJob(), refresh()]); setAppealCriterion(undefined)}} onError={setError}/>}
+    {resolveAppeal && job && <ResolveForm key={`${job.id}-${resolveAppeal.id}`} job={job} appeal={resolveAppeal} onClose={() => setResolveAppeal(undefined)} onSaved={async () => {await Promise.all([refreshJob(), refresh()]); setResolveAppeal(undefined)}} onError={setError}/>}
   </div>
 }
 

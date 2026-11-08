@@ -3,7 +3,8 @@
 The React/TypeScript workspace and FastAPI application now implement the full
 local path: import → select checklist → queue real evaluation → inspect evidence
 → submit appeal → accept/reject → recalculate a human-reviewed score → export.
-The interface is deliberately functional; visual polish remains separate work.
+The interface provides a searchable review queue, transcript/evidence workspace,
+version comparison, checklist editor and separate appeal and reviewer actions.
 
 ## Run locally on Windows
 
@@ -51,14 +52,24 @@ Changed source content creates a new immutable revision, including when its
 external conversation ID is unchanged. **Edit / import new revision** opens the
 canonical JSON for revision, without changing earlier evaluations.
 
-Original recording URLs are retained as external links. Some organizer links are
-preview/share pages; audio playback, transcription and timestamp-aligned seeking
-are not implemented. Calls are evaluated from their transcripts and explicitly
-labelled as not audio-analyzed.
+The queue groups revisions by original conversation ID and shows the newest source
+revision by default. Expand history to open an older source and its saved result.
+Counts distinguish conversations from revisions. Status, grade, provisional
+warnings and open appeals come from the latest actual assessment of that exact
+revision; a new transcript does not inherit an older transcript's grade. A newer
+failed attempt remains visible rather than borrowing an earlier successful score.
+
+Original recording URLs are retained when creating an edited revision. Direct
+audio-file URLs can play in the workspace; preview/share links open the external
+player. Automatic transcription and timestamp-aligned seeking are not implemented.
+Calls are evaluated from their transcripts and labelled as not audio-analyzed.
 
 ## Checklists and reference context
 
-The default is reviewed-015 and the grounded evaluator with one protected mechanical repair. The checklist
+The delivery default is reviewed-016 and the compact rubric-assessor-v3 evaluator
+with one protected mechanical repair. Independent review is an optional additional
+blind assessment of every criterion, followed by adjudication for disagreements.
+The checklist
 editor supports arbitrary criteria, instructions, kinds, weights, N/A conditions,
 call guidance, and allowed levels/fractions. Saving an existing ID/version with
 changed content is rejected; **Edit as new version** creates another version.
@@ -92,7 +103,7 @@ keeps sources unusable; no fallback date or entity is invented. See
 
 The selected mode, rationale, scope, assessment date, pack ID/hash and exact source
 texts are frozen in the conversation input and included in its fingerprint. **Evaluate
-this revision** uses these facts in the real grounded request, while retrying an old
+this revision** uses these facts in the real assessment request, while retrying an old
 job retains the old input. Quotes open the operator message or supplied reference;
 reference knowledge is never credited as an answer the operator gave. The same
 applicability helper drives preview, model payload, strict claim validation and
@@ -101,9 +112,10 @@ Older records without captured context show a separately labeled reconstructed
 inspection view; it is not presented as evidence sent to their original model.
 
 References/context can also be supplied in canonical JSON imports. Full review
-exports preserve conditional context. The organizer's fixed JSON1.0 adapter emits
-an explicit error for a conditional snapshot result rather than silently exporting
-it as a verified historical score.
+exports preserve conditional context. Under the user's numerical-grading policy,
+the organizer JSON1.0 adapter exports v3 numerical judgments with their uncertainty
+and conditional assumptions in the rationale. It does not label those assumptions
+as historically verified. Legacy v1/v2 unresolved judgments still export as errors.
 
 Offline integration validation on 2026-11-07: **252 tests passed**, including
 capture of the real evaluator's request preparation and strict deduction fixtures;
@@ -158,8 +170,10 @@ never reset the ledger to bypass a cap.
 
 Criterion cards display the actual model explanation, evidence, counterevidence,
 checked spans, deduction-rule audit and factual-check provenance. Clicking an
-evidence quote highlights its original message. Unresolved results remain
-provisional with score bounds. Serious flags remain separate from the numeric score.
+evidence quote highlights its original text. Current v3 decisions retain numerical
+grades alongside material uncertainty and review recommendations. Historical
+unscored results remain unscored. Bounds show possible rubric outcomes, not a
+probability interval. Serious flags remain separate from the numeric score.
 
 New [v2 evidence records](EVIDENCE_CONTRACT_V2.md) distinguish operator answer
 proof from the full source interval checked for an omission. Request cards show
@@ -168,12 +182,14 @@ supported proposition and non-proving customer/system context. Historical result
 remain readable under their original contract; opening them does not generate
 missing metadata or rerun the evaluator.
 
-The current [v3 source/proof workflow](SOURCE_SPANS_AND_ATOMIC_PROOFS.md) resolves
+The historical [v3 source/proof workflow](SOURCE_SPANS_AND_ATOMIC_PROOFS.md) resolves
 model-selected spans from saved sources. New records support exact-position
 highlighting, including repeated quotes and Unicode. Fact cards expose required
 premises, separately assessed statement parts and other fixed facts. Context is
 shown separately from proof. Historical records retain their original audit and
 citation behavior; human revisions do not inherit fabricated AI span provenance.
+The current compact rubric assessor also resolves immutable source selections in
+code, without requiring the historical global claim/proof structure.
 
 **Appeal this judgment** records a criterion, author, rationale and supporting
 source message IDs. A completed evaluation is required. A reviewer can reject
@@ -186,6 +202,12 @@ weighted total, N/A normalization, provisional state, bounds and flags in code.
 The original AI record is never overwritten. AI audits remain labelled as the
 original model's findings; human revisions are not misrepresented as model output.
 Stale reviewer submissions are rejected with a conflict, requiring a reload.
+
+Replacement evidence must be selected explicitly; disputed citations are not
+copied automatically. A numerical change preserves the current uncertainty by
+default. The reviewer may edit the remaining information gap, or explicitly mark
+it resolved with a separate explanation. Merely changing a grade cannot silently
+remove a material factual caveat.
 
 **Export** includes the original source/checklist snapshots, model record, effective
 judgments/score, appeal submissions and reviewer decisions. Loading an existing

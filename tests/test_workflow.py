@@ -193,6 +193,48 @@ def test_appeal_acceptance_recalculates_without_modifying_ai_and_conflicts_are_r
     assert updated["appeals"][0]["resolution"]["before"]["answer"] == "missing"
 
 
+def test_queue_summary_tracks_exact_revision_latest_attempt_and_effective_review(setup):
+    client, app, _, _ = setup
+    cid, checklist_id = import_one(client), save_checklist(client)
+    assert client.get("/api/conversations").json()[0]["latest_assessment"] is None
+    job = wait_for_job(client, run(client, cid, checklist_id)["job_ids"][0])
+    original = copy.deepcopy(job["record"])
+    appeal = client.post(f"/api/jobs/{job['id']}/appeals", json={
+        "criterion_id": "new-clarity", "author": "Reviewer", "reason": "Review the actionable route",
+        "message_ids": ["agent-1"]}).json()
+    summary = client.get("/api/conversations").json()[0]["latest_assessment"]
+    assert summary["id"] == job["id"] and summary["open_appeals"] == 1
+    assert summary["total"] == job["effective"]["score"]["total"]
+    revised = dict(job["effective"]["judgments"][0]) | {
+        "answer": "complete", "explanation": "Route is explicit; external availability remains unconfirmed",
+        "uncertainty": "The current availability of this route was not independently verified."}
+    response = client.post(f"/api/appeals/{appeal['id']}/resolve", json={
+        "decision": "accept", "reviewer": "QA", "rationale": "Credit the wording while retaining the factual caveat",
+        "expected_revision": 0, "judgment": revised})
+    assert response.status_code == 200, response.text
+    summary = client.get("/api/conversations").json()[0]["latest_assessment"]
+    assert summary["total"] == 100 and summary["source"] == "human_review"
+    assert summary["provisional"] and summary["review_recommended_count"] == 1
+    assert summary["open_appeals"] == 0
+    changed = copy.deepcopy(CONVERSATION)
+    changed["messages"][-1]["text"] = "A genuinely different answer"
+    changed_id = import_one(client, changed)
+    summaries = {row["id"]: row["latest_assessment"] for row in client.get("/api/conversations").json()}
+    assert summaries[changed_id] is None and summaries[cid]["total"] == 100
+    # A newer failed attempt must stay visible, not borrow the earlier grade.
+    with app.state.store.session.begin() as session:
+        latest = Job(batch_id=job["batch_id"], conversation_id=cid, checklist_id=checklist_id,
+                     cache_key="queue-test-failed-attempt", status="failed", record={"error": "test failure"})
+        session.add(latest)
+        session.flush()
+        latest_id = latest.id
+    summaries = {row["id"]: row["latest_assessment"] for row in client.get("/api/conversations").json()}
+    assert summaries[cid]["id"] == latest_id and summaries[cid]["status"] == "failed"
+    assert summaries[cid]["total"] is None
+    assert client.get(f"/api/jobs/{job['id']}").json()["record"] == original
+    assert len(TestOnlyEvaluator.calls) == 1
+
+
 def test_failure_is_visible_and_explicit_retry_is_a_new_attempt(tmp_path):
     settings = Settings(api_key="test-only", ledger_path=tmp_path / "usage.sqlite3", max_spend=1)
     app = create_app(settings=settings, database_path=tmp_path / "app.sqlite3", evaluator_factory=FailingTestEvaluator)

@@ -135,3 +135,22 @@ existing authorization or an explicit final authorization if not already given.
 - Independent review now checks every configured criterion, including confident
   full-credit decisions and material changes in certainty. Custom flag display
   and reviewer-selected appeal evidence were corrected.
+
+## Final quality push, starting 07:00 local
+
+The 65/65 numerical DEV export is a completed baseline, not evidence of a 95–100
+competition score. The organizer's primary criterion is adequacy on unseen
+conversations; its control also replaces a criterion through the interface.
+
+| Order | Work and completion gate | Spending |
+|---|---|---|
+| 1 — by 07:30 | Correct demonstrated reasoning/representation issues: reconstruct actual requests before grades, require a real dependency for missing-detail deductions, judge omission severity by its practical effect, and allow earlier explanatory context alongside an actual later response. Preserve old contracts and reports. | Offline implementation |
+| 2 — by 08:00 | One frozen fresh challenge batch: both sides of clarification necessity, actor/verification boundaries, real omissions versus implied answers, and a changed custom scale. Check actual rationales and evidence, not only matching values. Preserve all failures; any follow-up must target an observed failure class. | At most $0.55 under the existing cumulative cap |
+| 3 — by 09:00 | Complete the real reviewer journey: latest-revision queue with real result states, preserved uncertainty on appeals, retained call recording links, and source/checklist changes that reach the actual assessment. Rehearse the required five-minute sequence with genuine saved outputs. | Offline, except the already budgeted fresh check |
+| 4 — when control data arrive | Freeze source inputs and the selected checklist, process the actual ten control conversations once, inspect consequential uncertainty/disagreements, and export exact original IDs. Do not fill missing outputs with DEV grades. | Size the actual input before reserving the remaining authorization |
+| 5 — by 11:35, hard stop 11:50 | Confirm runnable source, final result files, model/all-call cost documentation and the final commit. Complete required repository publication and organizer handoff under the user's authorization. | No model call |
+
+The useful human contribution is the actual control transcripts and any replacement
+criterion as soon as the organizers provide them. No hidden-label accuracy claim
+can be substantiated before those results are judged. The development gate is a
+small independent AI-authored behavioral check, not organizer Ground Truth.

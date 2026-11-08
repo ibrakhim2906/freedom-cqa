@@ -1,0 +1,73 @@
+{
+  "version": "delivery-unseen-v1",
+  "frozen_at_utc": "2026-11-08T02:08:09.105693+00:00",
+  "fixture_sha256": "62d4aa631cdbcdfbaff7de93f5cdd87ebbed2e959df7db01147638553af5dffb",
+  "checklist_path": "checklists/freedom-reviewed-016.json",
+  "checklist_sha256": "be7850faf658a5df749f3c8fdf746cc6fb2fca0642f1c2adfea0e7bb8a9b66f3",
+  "case_count": 8,
+  "primary_case_count": 6,
+  "custom_case_count": 2,
+  "exact_judgments": 25,
+  "provenance": "Fresh wording and hypothetical facts authored independently by assessment-review subagent before provider evaluation. Author has seen prior development failures; core author has not received actual case wording or labels. AI-authored provisional references, not independent expert or organizer Ground Truth.",
+  "author_review": "Each decisive label checked against supplied source, hypothetical policy and frozen checklist. No separate external reviewer or human adjudicator is claimed.",
+  "inference_boundary": "Only case.evaluator_input() (Conversation) plus frozen checklist_override enter inference. Case IDs, expectations, families, tags, this manifest and prior outputs stay outside. Neutral Conversation IDs disclose no labels.",
+  "paid_api_calls": 0,
+  "families": [
+    {
+      "family": "unseen-clarification-necessity",
+      "case_ids": [
+        "delivery-unseen-101",
+        "delivery-unseen-102"
+      ],
+      "split_policy": "Keep contrasted counterparts together; never split a family between development and held-out sets."
+    },
+    {
+      "family": "unseen-verification-subject",
+      "case_ids": [
+        "delivery-unseen-103",
+        "delivery-unseen-104"
+      ],
+      "split_policy": "Keep contrasted counterparts together; never split a family between development and held-out sets."
+    },
+    {
+      "family": "unseen-independent-settings",
+      "case_ids": [
+        "delivery-unseen-105",
+        "delivery-unseen-106"
+      ],
+      "split_policy": "Keep contrasted counterparts together; never split a family between development and held-out sets."
+    },
+    {
+      "family": "unseen-custom-handoff",
+      "case_ids": [
+        "delivery-unseen-107",
+        "delivery-unseen-108"
+      ],
+      "split_policy": "Keep contrasted counterparts together; never split a family between development and held-out sets."
+    }
+  ],
+  "complete_reference_vectors": {
+    "delivery-unseen-105": 100.0,
+    "delivery-unseen-106": 84.62,
+    "delivery-unseen-107": 100.0,
+    "delivery-unseen-108": 50.0
+  },
+  "prospective_exclusions": [
+    {
+      "case_ids": [
+        "delivery-unseen-101",
+        "delivery-unseen-102"
+      ],
+      "reason": "Only declared clarification decisions and first routing consultation are exact references. No full-score accuracy or cancellation consultation ordinal is claimed."
+    },
+    {
+      "case_ids": [
+        "delivery-unseen-103",
+        "delivery-unseen-104"
+      ],
+      "reason": "Only identity and critical conduct are exact references; other judgments are outside exact agreement."
+    }
+  ],
+  "evaluation_plan": "Run all8 once with one current assessor, frozen overrides and bounded budget. Report first/final completion, all25 exact judgments (failed or unresolved is not correct), critical misses/false flags, both custom outputs and full-score error only for4 complete vectors. Inspect evidence/roles and unsupported claims. Preserve failures and later reruns separately; tuning ends unseen status.",
+  "limits": "Small source-deducible behavioral challenge, not population accuracy or95–100 certification. No model calls or result records created."
+}

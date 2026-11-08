@@ -334,3 +334,84 @@ def test_v3_same_grade_with_new_material_uncertainty_requires_review(source):
     paraphrase = deepcopy(second_wire)
     paraphrase["judgments"]["help"]["missing_information"] = "Eligibility of this error for the proposed support route."
     assert disagreement_ids(second, decode(json.dumps(paraphrase), *source), ids, *source) == []
+
+
+def test_v3_reconciles_requests_before_grades_without_changing_legacy_order(source):
+    instructions, _, schema, _ = prepare(*source)
+    assert "request_coverage before choosing criterion grades" in instructions
+    assert "made it necessary. A field that is merely common or useful" in instructions
+    assert list(schema["properties"]) == schema["required"] == [
+        "contract_version", "catalog_fingerprint", "request_coverage", "judgments", "scope_notes"]
+    for version in [LEGACY_CONTRACT_VERSION, V2_CONTRACT_VERSION]:
+        legacy = schema_for(*source, contract_version=version)
+        assert list(legacy["properties"]) == legacy["required"] == [
+            "contract_version", "catalog_fingerprint", "judgments", "request_coverage", "scope_notes"]
+
+
+def test_v3_prior_explanation_can_support_later_confirmation_but_cannot_answer_or_withdraw_it_alone(source):
+    conversation, checklist = source
+    raw = conversation.model_dump()
+    raw["messages"][0]["text"] = "Please cancel the previous investigation."
+    raw["messages"][5]["text"] = "So you will send this report error to support?"
+    raw["messages"].append({"id": "m7", "timestamp": "00:07", "speaker": "operator", "text": "Yes."})
+    conversation = Conversation.model_validate(raw)
+    wire = wire_for(conversation, checklist)
+    request = wire["request_coverage"][0]
+    request.update(request="Confirm the investigation commitment.",
+        question_span_ids=[span(conversation, checklist, "dialogue", "m6")],
+        answer_span_ids=[span(conversation, checklist, "dialogue", "m4"),
+                         span(conversation, checklist, "dialogue", "m7")],
+        explanation="The later Yes confirms the earlier explanation of the next step.")
+    result = decode(json.dumps(wire), conversation, checklist)
+    assert result.evaluation.request_coverage[0].answer_message_ids == ["m4", "m7"]
+    for version in [LEGACY_CONTRACT_VERSION, V2_CONTRACT_VERSION]:
+        legacy = deepcopy(wire)
+        legacy["contract_version"] = version
+        if version == LEGACY_CONTRACT_VERSION:
+            for judgment in legacy["judgments"].values():
+                judgment["deduction"] = None
+        with pytest.raises(ValueError, match="cannot precede the request"):
+            decode(json.dumps(legacy), conversation, checklist)
+    request["answer_span_ids"] = [span(conversation, checklist, "dialogue", "m4")]
+    with pytest.raises(ValueError, match="requires an operator response at or after"):
+        decode(json.dumps(wire), conversation, checklist)
+    request.update(status="withdrawn", answer_span_ids=[],
+        withdrawal_span_ids=[span(conversation, checklist, "dialogue", "m1")])
+    with pytest.raises(ValueError, match="cannot precede the request"):
+        decode(json.dumps(wire), conversation, checklist)
+
+
+def test_v3_unanswered_request_can_cite_failed_response_without_claiming_success(source):
+    conversation, checklist = source
+    raw = conversation.model_dump()
+    raw["messages"][3]["text"] = "I will investigate the billing error instead."
+    raw["messages"][4]["text"] = "A billing investigation was recorded."
+    raw["messages"][5]["text"] = "The report error is still unresolved."
+    conversation = Conversation.model_validate(raw)
+    wire = wire_for(conversation, checklist)
+    wire["judgments"]["help"].update(answer="none", factual_basis="not_required", factual_support_span_ids=[],
+        explanation="The operator investigated billing instead of the requested report error.")
+    request = wire["request_coverage"][0]
+    request.update(status="unanswered", omission={"start_message_id": "m3", "end_message_id": "m6"},
+        explanation="The linked response concerns another problem; the requested report investigation remains unaddressed.")
+    result = decode(json.dumps(wire), conversation, checklist)
+    assert result.evaluation.judgments[1].answer == "none"
+    assert result.evaluation.request_coverage[0].status == "unanswered"
+    assert result.evaluation.request_coverage[0].answer_message_ids == ["m4"]
+    for version in [LEGACY_CONTRACT_VERSION, V2_CONTRACT_VERSION]:
+        legacy = deepcopy(wire)
+        legacy["contract_version"] = version
+        if version == LEGACY_CONTRACT_VERSION:
+            legacy["judgments"]["hello/custom"]["deduction"] = None
+            legacy["judgments"]["help"]["deduction"] = {
+                "rule_span_id": span(conversation, checklist, "rule", "help"),
+                "defect": wire["judgments"]["help"]["explanation"], "overlap_note": "A distinct failure to address the request."}
+        with pytest.raises(ValueError, match="cannot claim an operator answer"):
+            decode(json.dumps(legacy), conversation, checklist)
+    request["omission"]["end_message_id"] = "m5"
+    with pytest.raises(ValueError, match="through the final message"):
+        decode(json.dumps(wire), conversation, checklist)
+    request.update(status="withdrawn", omission=None,
+        withdrawal_span_ids=[span(conversation, checklist, "dialogue", "m6")])
+    with pytest.raises(ValueError, match="cannot claim an operator answer"):
+        decode(json.dumps(wire), conversation, checklist)

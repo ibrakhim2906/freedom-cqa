@@ -119,7 +119,7 @@ export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReferenc
     {assessment?.conditional && <div className={styles.warning} data-testid="conditional-assessment"><b>Conditional snapshot assessment</b>
       <p>Assumed product scope: {assessment.scope} · Source snapshot as of {assessment.as_of}.</p>
       <p>Actual conversation date: {job.evidence_context?.temporal.occurred_on || job.conversation.content.occurred_on || 'unknown'}. This review does not verify historical policy applicability.</p>
-      {assessment.rationale && <p>{assessment.rationale}</p>}</div>}
+      {assessment.rationale && <details><summary>Assessment assumptions and provenance</summary><p>{assessment.rationale}</p></details>}</div>}
     {job.status === 'queued' && <div className={styles.card}><p>This conversation is waiting in the evaluation queue.</p><button onClick={onCancel}>Cancel queued evaluation</button></div>}
     {job.status === 'running' && <div className={styles.card} role="status"><p>Reading the conversation and checking the selected criteria…</p><p className={styles.muted}>The evaluation continues if you leave this page.</p></div>}
     {job.record?.error && <div role="alert" className={styles.error} style={{marginTop: 14}}><b>{failureTitle(job.record.error)}</b>

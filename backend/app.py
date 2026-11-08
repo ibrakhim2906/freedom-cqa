@@ -120,8 +120,41 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
     @app.get("/api/conversations")
     async def conversations():
         with store.session() as session:
-            return [document_view(d) for d in session.scalars(select(Document).where(Document.kind == "conversation")
-                                                            .order_by(Document.created_at.desc()))]
+            # The queue represents exact source revisions. Never attach an older
+            # revision's successful result to a changed, unevaluated transcript.
+            latest_job = (select(Job.id).where(Job.conversation_id == Document.id)
+                          .order_by(Job.created_at.desc(), Job.id.desc()).limit(1)
+                          .correlate(Document).scalar_subquery())
+            rows = session.execute(select(Document, Job).outerjoin(Job, Job.id == latest_job)
+                .where(Document.kind == "conversation").order_by(Document.created_at.desc())).all()
+            job_ids = [job.id for _, job in rows if job is not None]
+            appeals_by_job = {}
+            if job_ids:
+                for appeal in session.scalars(select(Appeal).where(Appeal.job_id.in_(job_ids))):
+                    appeals_by_job.setdefault(appeal.job_id, []).append(appeal)
+            checklist_ids = {job.checklist_id for _, job in rows if job is not None and job.status == "completed"}
+            checklists = {doc.id: Checklist.model_validate(doc.content) for doc in session.scalars(
+                select(Document).where(Document.id.in_(checklist_ids)))} if checklist_ids else {}
+            result = []
+            for doc, job in rows:
+                value = document_view(doc)
+                value["latest_assessment"] = None
+                if job is not None:
+                    appeals = appeals_by_job.get(job.id, [])
+                    effective = (effective_result(job, checklists[job.checklist_id], appeals)
+                                 if job.status == "completed" else None)
+                    score = effective["score"] if effective else {}
+                    review_ids = set(score.get("unresolved_criteria", [])) | set(
+                        score.get("review_recommended_criteria", []))
+                    value["latest_assessment"] = {
+                        "id": job.id, "status": job.status, "created_at": job.created_at,
+                        "total": score.get("total"), "provisional": score.get("provisional", False),
+                        "review_recommended_count": len(review_ids),
+                        "open_appeals": sum(a.status == "open" for a in appeals),
+                        "source": effective["source"] if effective else None,
+                    }
+                result.append(value)
+            return result
 
     @app.get("/api/conversations/{document_id}")
     async def conversation(document_id: str):

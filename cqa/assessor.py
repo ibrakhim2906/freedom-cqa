@@ -166,6 +166,19 @@ is missing. If checklist wording calls for needs_review solely for uncertainty,
 this contract instead requires a scored decision with the uncertainty recorded;
 keep the checklist's substantive behavior, severity and applicability rules.
 
+Reconcile the customer's actual requested outcomes and late questions in
+request_coverage before choosing criterion grades. For each criterion, establish
+applicability from its exact condition before judging the operator's behavior.
+A later poor response does not retroactively change what was known initially.
+If a missing detail justifies a deduction, identify the actual answer or action
+that depended on it and why the rule, source evidence or meaning of that action
+made it necessary. A field that is merely common or useful in the domain is not
+automatically a prerequisite. Determine an omission's severity from its practical
+effect on the expressed request and the configured level descriptions, rather
+than the mere presence of another question. Read the whole relevant exchange for
+equivalent or implied rubric behaviors; require particular words or a separate
+stage only when the configured rule requires them. Preserve explicit timing rules.
+
 Each decision must satisfy its own configured rule. The same event may affect
 multiple criteria when each rule covers it; explain each connection. Respect
 criteria that combine clarity, content, process or other dimensions, as well as
@@ -204,6 +217,15 @@ A stated goal with resources currently in an incompatible location can establish
 such an obstacle without the customer literally asking for step-by-step guidance.
 Do not erase that real obstacle merely because a related eligibility question was
 answered; equally, do not invent an obstacle from a generic capability question.
+For a repeated or clarifying request, cite the actual later operator response.
+Earlier operator spans may also support that response as context, but an earlier
+answer alone does not resolve a later explicit request. A withdrawal must follow
+the request it cancels.
+For an unanswered request, answer_span_ids may link actual operator responses
+or failed/wrong-target attempts that explain why the request remains unresolved.
+Those links are response evidence, not proof of a successful answer. Preserve
+status=unanswered and the complete through-end omission interval. Withdrawn
+requests must not claim operator answer/response links.
 
 Use factual_basis for the decisive basis of THIS grade:
 - not_required: observable conduct/omission determines the grade without resolving
@@ -310,12 +332,18 @@ def schema_for(conversation, checklist, *, contract_version=CONTRACT_VERSION):
             properties = dict(list(properties.items())[:6] +
                 [("deduction", _nullable({"$ref": "#/$defs/deduction"}))] + list(properties.items())[6:])
             decisions[criterion.id] = _object(properties)
-    schema = _object({
+    properties = {
         "contract_version": {"type": "string", "enum": [contract_version]},
         "catalog_fingerprint": {"type": "string", "enum": [catalog.fingerprint]},
         "judgments": _object(decisions),
         "request_coverage": _array({"$ref": "#/$defs/request"}), "scope_notes": _array(text),
-    })
+    }
+    if contract_version == CONTRACT_VERSION:
+        # Reconcile the source requests before emitting decisions. Historical
+        # contracts retain their original property/required order verbatim.
+        properties = {key: properties[key] for key in (
+            "contract_version", "catalog_fingerprint", "request_coverage", "judgments", "scope_notes")}
+    schema = _object(properties)
     # One shared enum avoids multiplying hundreds of source IDs by every field
     # and criterion. Role/ownership restrictions are enforced during resolution.
     schema["$defs"] = {
@@ -517,12 +545,18 @@ def validate_native(native, conversation, checklist):
         if not question:
             raise ValueError("A request must cite its customer source")
         first = min(order[x.message_id] for x in question)
-        if any(order[x.message_id] < first for x in answers + withdrawal):
+        if any(order[x.message_id] < first for x in withdrawal):
+            raise ValueError("Answer/withdrawal cannot precede the request")
+        if contract_version == CONTRACT_VERSION:
+            if answers and not any(order[x.message_id] >= first for x in answers):
+                raise ValueError("A later request requires an operator response at or after it")
+        elif any(order[x.message_id] < first for x in answers):
             raise ValueError("Answer/withdrawal cannot precede the request")
         status = item["status"]
         if status in {"answered", "next_step", "partial"} and not answers:
             raise ValueError("An answer/next-step judgment requires actual operator evidence")
-        if status in {"unanswered", "withdrawn"} and answers:
+        if answers and (status == "withdrawn" or
+                        status == "unanswered" and contract_version != CONTRACT_VERSION):
             raise ValueError("Unanswered/withdrawn requests cannot claim an operator answer")
         if (status == "withdrawn") != bool(withdrawal):
             raise ValueError("Only an explicitly withdrawn request uses withdrawal evidence")

@@ -65,6 +65,21 @@ of correctness.
 Historical engines and results remain preserved under their original contracts.
 See [delivery results](docs/DELIVERY_RESULTS.md) for observed behavior and limits.
 
+## Model and measured cost
+
+The delivery uses **OpenAI `gpt-6.1-sol`**, medium reasoning, on the standard service
+tier. Across the initial 65 DEV assessments, all 70 paid attempts (including
+mechanical repairs) cost an estimated **$3.21**, or **$0.049 per conversation**.
+The later 22 difficult reassessments, including corrections and failed attempts,
+averaged **$0.081 per conversation**. These are observed local token-based estimates,
+not a fixed price or provider invoice; transcript length and output size vary.
+
+Standard mode normally makes one assessment call. Independent review adds a
+blind assessment and, on disagreement, an adjudication; each stage can require
+one bounded mechanical repair. The application records the combined cost of all
+attempts and enforces the selected batch budget and existing cumulative cap.
+Saved-result inspection, source navigation and human appeals incur no model call.
+
 ## Actual checks
 
 The new compact core completed eight live development evaluations on the first
@@ -82,8 +97,18 @@ assessor and submission validation. The frontend build and desktop/mobile browse
 walkthrough pass. The final DEV file contains **65/65 numerical assessments, 65 ok and 0 errors**.
 It preserves 43 prior numerical results and uses 22 v3 reassessments under the
 explicit team-selected policy snapshot. Earlier outputs and failed attempts
-remain preserved. Numerical coverage does not establish expert accuracy. One
-discovery judgment remains disputed and has a saved review request.
+remain preserved. Numerical coverage does not establish expert accuracy. A known
+unsupported prerequisite deduction was corrected by a general rule change and one
+predeclared reassessment; its earlier result and review request remain in history.
+
+A separate fresh eight-case challenge delivered seven first-pass valid results
+and 24/25 frozen expected decisions. The remaining model output was rejected for
+citing an unsuccessful response under an unanswered request; a general
+representation fix now validates that exact saved output without changing its
+grades. The first-run failure remains recorded. One matching Kazakh label is
+linguistically ambiguous, so these are provisional AI-authored checks. A new
+three-level criterion pair changed the same conversation from **100 to 50**;
+the actual explanations, evidence and scores were preserved in the UI and export.
 
 ## CLI and submission
 
