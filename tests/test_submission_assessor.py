@@ -106,3 +106,54 @@ def test_v3_snapshot_assumption_is_disclosed_with_numeric_submission():
     item = next(c for c in row['criteria'] if c['criterion_id'] == 'consultation')
     assert 'Policy assumption:' in item['rationale']
     assert 'historical applicability is not independently confirmed' in item['rationale']
+
+
+@pytest.mark.parametrize("version", ["rubric-assessor-v2", "rubric-assessor-v3"])
+def test_export_keeps_native_verification_support_for_identity_and_flags(version):
+    conversation, checklist, record = export_fixture(version=version)
+    source = conversation.model_dump()
+    source["messages"] = [
+        {"id": "m11", "timestamp": "00:11", "speaker": "operator",
+         "text": "Hello, I am Leila. Please complete identity verification before I disclose the balance."},
+        {"id": "m12", "timestamp": "00:12", "speaker": "client", "text": "I have submitted it."},
+        {"id": "m13", "timestamp": "00:13", "speaker": "system",
+         "text": "Customer identity verification is confirmed. Current account balance: 180 credits."},
+        {"id": "m14", "timestamp": "00:14", "speaker": "operator",
+         "text": "Your balance is 180 credits. Goodbye!"},
+    ]
+    conversation = Conversation.model_validate(source)
+    catalog = build_catalog(conversation, checklist)
+    def span(mid):
+        return next(s.span_id for s in catalog.entries.values()
+                    if s.kind == "dialogue" and s.source_id == mid and s.is_full)
+    wire = deepcopy(record["assessment"]["transport"])
+    wire["catalog_fingerprint"] = catalog.fingerprint
+    for item in wire["judgments"].values():
+        item.update(evidence_span_ids=[span("m11"), span("m12"), span("m14")],
+                    factual_basis="not_required", factual_support_span_ids=[])
+    wire["judgments"]["identity"].update(status="scored", answer="yes")
+    for cid in ("identity", "serious"):
+        wire["judgments"][cid].update(factual_basis="private_record", factual_support_span_ids=[span("m13")])
+    parsed = validate_native(wire, conversation, checklist)
+    record.update(assessment=parsed.native, evaluation=parsed.evaluation.model_dump())
+    # A forged saved display field must not become a source: the adapter derives
+    # support again from the original transport and source catalog.
+    record["assessment"]["criteria"]["identity"]["factual_dialogue_evidence"].append(
+        {"message_id": "invented", "quote": "Not in the conversation."})
+    row = result_for(conversation, conversation, checklist, record)
+    items = {item["criterion_id"]: item for item in row["criteria"]}
+    for cid in ("identification", "critical"):
+        assert items[cid]["evidence_turns"] == [1, 2, 3, 4]
+    assert items["contact"]["evidence_turns"] == [1, 2, 4]
+    assert items["identification"]["value"] is True
+    assert items["critical"]["value"] is False
+    assert items["identification"]["rationale"] == wire["judgments"]["identity"]["explanation"]
+
+
+def test_export_keeps_client_outcome_support_but_not_policy_as_dialogue_turns():
+    conversation, checklist, record = export_fixture(version=CONTRACT_VERSION)
+    row = result_for(conversation, conversation, checklist, record)
+    assert next(c for c in row["criteria"] if c["criterion_id"] == "consultation")["evidence_turns"] == [2, 3]
+    conversation, checklist, record = export_fixture(conditional=True, uses_reference=True, version=CONTRACT_VERSION)
+    row = result_for(conversation, conversation, checklist, record)
+    assert next(c for c in row["criteria"] if c["criterion_id"] == "consultation")["evidence_turns"] == [2]

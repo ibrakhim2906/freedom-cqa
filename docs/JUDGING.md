@@ -3,9 +3,9 @@
 Source: organizer announcement supplied by the user in chat on 2026-11-07.
 This records the announcement; no numeric weights or comparison formula were supplied.
 
-Latest user-confirmed execution arrangement: judges clone and run the repository
-after the submission deadline, using their own unseen inputs. The team does not
-need to wait for or produce those control results before submitting.
+Latest user-confirmed execution arrangement: the control dataset is released at
+11:00; judges also clone and run the submitted repository after the deadline.
+Run the frozen candidate on the released inputs and preserve the resulting export.
 
 ## Selection process
 

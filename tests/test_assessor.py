@@ -123,6 +123,28 @@ def test_operator_promise_and_client_report_cannot_become_independent_private_tr
         decode(json.dumps(wire), *source)
 
 
+def test_mixed_support_keeps_operator_conduct_alongside_independent_support(source):
+    wire = wire_for(*source)
+    item = wire["judgments"]["help"]
+    item.update(factual_basis="mixed_sources", factual_support_span_ids=[
+        span(*source, "reference", "guide"), span(*source, "dialogue", "m4"),
+        span(*source, "dialogue", "m5")])
+    result = decode(json.dumps(wire), *source)
+    assert result.evaluation.judgments[1].answer == "done"
+    assert {e["message_id"] for e in result.native["criteria"]["help"]["factual_dialogue_evidence"]} == {"m4", "m5"}
+    wire["contract_version"] = V2_CONTRACT_VERSION
+    with pytest.raises(ValueError, match="wrong source role"):
+        decode(json.dumps(wire), *source)
+
+
+def test_operator_claim_and_policy_alone_do_not_establish_independent_mixed_support(source):
+    wire = wire_for(*source)
+    wire["judgments"]["help"].update(factual_basis="mixed_sources", factual_support_span_ids=[
+        span(*source, "reference", "guide"), span(*source, "dialogue", "m4")])
+    with pytest.raises(ValueError, match="independent client/system"):
+        decode(json.dumps(wire), *source)
+
+
 def test_reference_verification_keeps_scope_and_date_checks(source):
     conversation, checklist = source
     wire = wire_for(*source)

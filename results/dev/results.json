@@ -2891,6 +2891,7 @@
           "evidence_turns": [
             11,
             12,
+            13,
             14
           ]
         },
@@ -2904,6 +2905,7 @@
             19,
             22,
             24,
+            25,
             26
           ]
         },
@@ -3432,8 +3434,10 @@
           "rationale": "The operator addressed selection among similarly named instruments using the known ticker, explained the next purchase-form step, and respected the customer's wish to review without submitting. The customer confirmed finding and opening the instrument. No separate material question remained unanswered; a full trading tutorial was not requested.",
           "evidence_turns": [
             11,
+            12,
             13,
             16,
+            17,
             18
           ]
         },
@@ -4037,6 +4041,8 @@
           "value": 20,
           "rationale": "The operator gave a concrete next step directly addressing the reported blocker: use a different login when the app rejects the previous one as taken. Its appropriateness follows from the customer's reported registration obstacle, without needing to establish why the old login remains unavailable. The request to speak with a human was also fulfilled. The customer's later comment about expecting to wait was an acknowledgment, not a separate unanswered question about a retention period. Full credit is supported for an appropriate next step; successful registration is not established or required here.",
           "evidence_turns": [
+            1,
+            5,
             10,
             11,
             12
@@ -4465,6 +4471,7 @@
             21,
             23,
             26,
+            27,
             28,
             29,
             30
@@ -5335,7 +5342,9 @@
           "rationale": "Запрос касался конкретного клиентского поручения, поэтому идентификация применима. Оператор запросил ФИО, идентификационные сведения и код на привязанный телефон, затем прямо подтвердил успешную идентификацию. Сведения о принятии и текущей обработке поручения сообщил после этого подтверждения. До него конкретные конфиденциальные сведения о поручении оператором не раскрыты.",
           "evidence_turns": [
             40,
+            41,
             42,
+            44,
             49,
             54,
             58,

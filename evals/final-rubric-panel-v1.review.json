@@ -1,0 +1,359 @@
+{
+  "kind": "frozen_final_rubric_panel_review",
+  "status": "FROZEN before candidate inference; references and source-equivalence independently AI-reviewed; no organizer/expert labels claimed",
+  "created_at_utc": "2026-11-08T03:23:10.045416+00:00",
+  "fixture_path": "evals/final-rubric-panel-v1.jsonl",
+  "fixture_sha256": "d850a2f66a360dc47591c717fe6b16e1ad259aedce88eda00ed2700cfa9797c3",
+  "normalized_suite_sha256": "d4fe76e29160e24e9bdc5db6b48082781da31c39ba53df708d7971c1d42480ba",
+  "primary_source_path": "evals/final-rubric-primary-v1.sources.jsonl",
+  "primary_source_sha256": "0c516743b24a074e879bbed1bf0348d184e3391f393557079607b1437b599e94",
+  "checklist_path": "checklists/freedom-reviewed-016.json",
+  "checklist_sha256": "be7850faf658a5df749f3c8fdf746cc6fb2fca0642f1c2adfea0e7bb8a9b66f3",
+  "reference_review": {
+    "agreement": "64/64 status-answer pairs and 8/8 totals agree",
+    "provenance": "Two independently authored AI reference reviews before candidate inference; not organizer Ground Truth or independent human-expert accuracy.",
+    "reviewers": [
+      {
+        "path": "artifacts/rubric-panel/reference-a.json",
+        "sha256": "280409d2a6f18aa8edbf74331c14f87987151cd07aa68da8fdbb28983d1ef99e",
+        "reviewer": "assessment-review subagent; independent reference A"
+      },
+      {
+        "path": "artifacts/rubric-panel/reference-b.json",
+        "sha256": "9ac663077bc85f0592933824ef6a026c19b385f2a43b6497552788a959d3f8a7",
+        "reviewer": "Independent reference reviewer B (/root/product_ui), AI source/rubric review; not organizer or expert ground truth"
+      }
+    ]
+  },
+  "candidate": {
+    "prompt_version": "rubric-assessor-v3-7332f3e2dfe4",
+    "prompt_sha256": "7332f3e2dfe4d777d72fe53db1af51dc1c99f8255281a1b7769da1b3a008111c",
+    "strategy": "assessor",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "medium",
+    "max_output_tokens": 6000,
+    "repair_attempts": 0,
+    "concurrency": 2,
+    "timeout_seconds": 120.0,
+    "service_tier": "default",
+    "batch_budget_usd": 1.5,
+    "evaluator_source_sha256": "cc2f8d398d4c59710db4b1d6f3bc009bb6148cb8c8b632341b3b22060712c074",
+    "paid_api_calls_before_freeze": 0
+  },
+  "denominators": {
+    "primary_accuracy_conversations": 8,
+    "primary_reference_judgments": 64,
+    "translation_variants": 4,
+    "translation_invariance_comparisons": 32,
+    "irrelevant_paraphrases": 2,
+    "paraphrase_invariance_comparisons": 16,
+    "identical_repeats": 3,
+    "repeat_invariance_comparisons": 24,
+    "total_evaluations": 17,
+    "rule": "Only the eight primary cases enter primary MAE/criterion agreement. Variants/repeats assess robustness separately; do not report 136 labels as independent primary accuracy."
+  },
+  "inference_boundary": "Only TestCase.evaluator_input() (Conversation) and the embedded exact checklist enter prepare(). TestCase ID/family/tags/expectations and this review manifest never enter inference. Repeats retain identical Conversation IDs and full content; only external TestCase IDs differ.",
+  "case_order": [
+    "panel-401",
+    "panel-402",
+    "panel-403",
+    "panel-404",
+    "panel-405",
+    "panel-406",
+    "panel-407",
+    "panel-408",
+    "panel-409",
+    "panel-410",
+    "panel-411",
+    "panel-412",
+    "panel-413",
+    "panel-414",
+    "panel-415",
+    "panel-416",
+    "panel-417"
+  ],
+  "cases": [
+    {
+      "test_case_id": "panel-401",
+      "conversation_id": "rpb-401",
+      "kind": "primary",
+      "base_primary_test_case_id": "panel-401",
+      "language": "EN",
+      "conversation_sha256": "1893670f568135ab713d2df019dee1febb5a2b5c67218696f9b9056c0e0cca88",
+      "prepared_request_sha256": "33bd7c50e86da353ca96c14854d6f701066d050404706865dcc9cccf9428ea88",
+      "api_request_fingerprint": "1c4eeb05c637bf1e9f58722cc29a50f7be0461f992f2a3d3486ceaf146cec5ed"
+    },
+    {
+      "test_case_id": "panel-402",
+      "conversation_id": "rpb-402",
+      "kind": "primary",
+      "base_primary_test_case_id": "panel-402",
+      "language": "EN",
+      "conversation_sha256": "72180f2c47a70a772fe81697bf5848b04c3bffcecd9566ba18f214a585dc339f",
+      "prepared_request_sha256": "841da9bb59e8fa5315cb3f8089e9c2e789c912233e5cac40c0fdeeba0527ce49",
+      "api_request_fingerprint": "9e25d2179f6dd19f962ab6c34f3ed89002db388d1170ab71f9602203144bf0b6"
+    },
+    {
+      "test_case_id": "panel-403",
+      "conversation_id": "rpb-403",
+      "kind": "primary",
+      "base_primary_test_case_id": "panel-403",
+      "language": "RU",
+      "conversation_sha256": "b53de510ca952d56c3479a06ed1b65ccace60c8864c3c3422a866926c329f24a",
+      "prepared_request_sha256": "d94637a1c1df49c8f27445857e89c7a01a4d577c5ef7c0af23995cf8db5c7033",
+      "api_request_fingerprint": "e14d44829d1af03ff2f271083e0af320d75874a4cc2e062719d9934919acae36"
+    },
+    {
+      "test_case_id": "panel-404",
+      "conversation_id": "rpb-404",
+      "kind": "primary",
+      "base_primary_test_case_id": "panel-404",
+      "language": "RU",
+      "conversation_sha256": "6d188d5e2311537e446ca621d6950c6f64109ff10a269d9428a281c53c472788",
+      "prepared_request_sha256": "9e4bb072251592aa75f4b64668f03291bba3326c4613a964dd91b2ff923c31b6",
+      "api_request_fingerprint": "f0ae2a171a4a215162362e88202efd25dda9aa7e214512545dbd44cc50d31df8"
+    },
+    {
+      "test_case_id": "panel-405",
+      "conversation_id": "rpb-405",
+      "kind": "primary",
+      "base_primary_test_case_id": "panel-405",
+      "language": "KZ",
+      "conversation_sha256": "39a962cc9f6cc1ab2061c060c9c0cf720db3dffa7c0adc608ae1256504c96b2c",
+      "prepared_request_sha256": "57e1162d45da793763a780e4b183d7fcf15b4722f45a43c509f616faf9a02d36",
+      "api_request_fingerprint": "6d6e5aba3e4185cc78a9c73b558652cc9e6a66b97dde6a838749daf35dfbd15f"
+    },
+    {
+      "test_case_id": "panel-406",
+      "conversation_id": "rpb-406",
+      "kind": "primary",
+      "base_primary_test_case_id": "panel-406",
+      "language": "KZ",
+      "conversation_sha256": "b2529e737a48e0d6d3acb4d958dddcffbc088794955236262d41bff8f5595c15",
+      "prepared_request_sha256": "2c9407c92b1786fc8bb6eb437203753814842549547a6c9510f726c5ed9e3c3c",
+      "api_request_fingerprint": "68993e042da88dedc579adaf5799089474c06637e1734f3d59c5ce528ddef008"
+    },
+    {
+      "test_case_id": "panel-407",
+      "conversation_id": "rpb-407",
+      "kind": "primary",
+      "base_primary_test_case_id": "panel-407",
+      "language": "EN",
+      "conversation_sha256": "adb7e655ece7cbf6c46503246d2b617a17b2e59a0105152ebc06781dd3c5173b",
+      "prepared_request_sha256": "916aef7428fe6ae5d733c63852aec6fa27cec6720c92478365fcba5083b5d24e",
+      "api_request_fingerprint": "c0ea43440eb592eb17cf9119fe2188c16a0cc711c9515d827c53459363bc6fdd"
+    },
+    {
+      "test_case_id": "panel-408",
+      "conversation_id": "rpb-408",
+      "kind": "primary",
+      "base_primary_test_case_id": "panel-408",
+      "language": "EN",
+      "conversation_sha256": "e31f43901be54419d3d7c42b7f33e4ff52ebf85602c7a442a8c7362e7edffa40",
+      "prepared_request_sha256": "278da617bd886190c387db3bcda7d94aae437237a65d6c5affd996b4ed480769",
+      "api_request_fingerprint": "bdc27ba4db6d52ff8bbeaca8ab13a4a28b1b8cf48f004d22cad3938b91f0da60"
+    },
+    {
+      "test_case_id": "panel-409",
+      "conversation_id": "rpb-409",
+      "kind": "translation",
+      "base_primary_test_case_id": "panel-401",
+      "language": "RU",
+      "conversation_sha256": "bafb3c0142701e6f8dec467038007df7879e2d7f7b6f5d9b9269eff4f7a09ea3",
+      "prepared_request_sha256": "b63922ac2a7d543c787a935cb2b277da28ce0b3801ad5e38d1ec93d20e9974f1",
+      "changed_message_ids": [
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5",
+        "m6",
+        "m7",
+        "m8"
+      ],
+      "api_request_fingerprint": "aff8f39cf1c2c9b04d88a6891bab115ee015670a07adb6e9e4dfa067f6bd4fa0"
+    },
+    {
+      "test_case_id": "panel-410",
+      "conversation_id": "rpb-410",
+      "kind": "translation",
+      "base_primary_test_case_id": "panel-402",
+      "language": "RU",
+      "conversation_sha256": "637a1d59fcd8d4d6728e710c5644b11e006d9d7234fa265958c2df832ae54014",
+      "prepared_request_sha256": "f9416a2d1fd1ee4d03ce85741d7cb17ff269ab61166de93c5f84651e26ee8bf6",
+      "changed_message_ids": [
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5",
+        "m6",
+        "m7",
+        "m8"
+      ],
+      "api_request_fingerprint": "e900dc67c61a72f062232132b4c3b3ae78ec5cc9abb454f6f971b89e40da38f5"
+    },
+    {
+      "test_case_id": "panel-411",
+      "conversation_id": "rpb-411",
+      "kind": "translation",
+      "base_primary_test_case_id": "panel-401",
+      "language": "KZ",
+      "conversation_sha256": "3b565abc5f47650f86d951eef7d29e606bdf652b92d6d2080bed78f99cdd0ce3",
+      "prepared_request_sha256": "2bcfca54e94c329dbdc8005ff044ed47045510beebf0c763d6c99ce34d5e2adb",
+      "changed_message_ids": [
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5",
+        "m6",
+        "m7",
+        "m8"
+      ],
+      "api_request_fingerprint": "91a8121aeb1c606827796a18eea6849cc56a90402cf52974b1dc0e0916c4fa2d"
+    },
+    {
+      "test_case_id": "panel-412",
+      "conversation_id": "rpb-412",
+      "kind": "translation",
+      "base_primary_test_case_id": "panel-402",
+      "language": "KZ",
+      "conversation_sha256": "78070db756f39034029553d737c5afcb1e871a4d95e4762cb4e566951c429bbe",
+      "prepared_request_sha256": "9f83873f403e9012c6edcbfd0710b515aa2150b4b547ac361ba80a859ee2c2e4",
+      "changed_message_ids": [
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5",
+        "m6",
+        "m7",
+        "m8"
+      ],
+      "api_request_fingerprint": "b2f97328adba1ee9077f2078ad993347b5f5ecadc53fee210e2c4e2366577e56"
+    },
+    {
+      "test_case_id": "panel-413",
+      "conversation_id": "rpb-413",
+      "kind": "irrelevant_paraphrase",
+      "base_primary_test_case_id": "panel-403",
+      "language": "RU",
+      "conversation_sha256": "c8629a8875b8ddb1b83581d9cd50a5cf5a77f7eb28d85cec229de9adf2d35c1a",
+      "prepared_request_sha256": "374eb3fd1fc5797408f21bdc77d00fd959ff1e8801f3357d2303e2fa61da33ff",
+      "changed_message_ids": [
+        "m1",
+        "m7"
+      ],
+      "api_request_fingerprint": "4d6c8083851b326ddf1f16e071e9f5f07e5091ce48483ae01753116170c7ef9b"
+    },
+    {
+      "test_case_id": "panel-414",
+      "conversation_id": "rpb-414",
+      "kind": "irrelevant_paraphrase",
+      "base_primary_test_case_id": "panel-408",
+      "language": "EN",
+      "conversation_sha256": "b7c37043f9e9621674e610cc044d62a4885e5a921052452cc15e384a2023ef1a",
+      "prepared_request_sha256": "e20ffc07b58f4d61b8ebd618353353a8afbd4b1a23f11caf0d456ef2992f8058",
+      "changed_message_ids": [
+        "m3",
+        "m5"
+      ],
+      "api_request_fingerprint": "d5080a0731a422f0d5f4fb0aaaf5f3864167dd5a0aded5ef09bc632c324698f0"
+    },
+    {
+      "test_case_id": "panel-415",
+      "conversation_id": "rpb-403",
+      "kind": "identical_repeat",
+      "base_primary_test_case_id": "panel-403",
+      "language": "RU",
+      "conversation_sha256": "b53de510ca952d56c3479a06ed1b65ccace60c8864c3c3422a866926c329f24a",
+      "prepared_request_sha256": "d94637a1c1df49c8f27445857e89c7a01a4d577c5ef7c0af23995cf8db5c7033",
+      "api_request_fingerprint": "e14d44829d1af03ff2f271083e0af320d75874a4cc2e062719d9934919acae36"
+    },
+    {
+      "test_case_id": "panel-416",
+      "conversation_id": "rpb-405",
+      "kind": "identical_repeat",
+      "base_primary_test_case_id": "panel-405",
+      "language": "KZ",
+      "conversation_sha256": "39a962cc9f6cc1ab2061c060c9c0cf720db3dffa7c0adc608ae1256504c96b2c",
+      "prepared_request_sha256": "57e1162d45da793763a780e4b183d7fcf15b4722f45a43c509f616faf9a02d36",
+      "api_request_fingerprint": "6d6e5aba3e4185cc78a9c73b558652cc9e6a66b97dde6a838749daf35dfbd15f"
+    },
+    {
+      "test_case_id": "panel-417",
+      "conversation_id": "rpb-401",
+      "kind": "identical_repeat",
+      "base_primary_test_case_id": "panel-401",
+      "language": "EN",
+      "conversation_sha256": "1893670f568135ab713d2df019dee1febb5a2b5c67218696f9b9056c0e0cca88",
+      "prepared_request_sha256": "33bd7c50e86da353ca96c14854d6f701066d050404706865dcc9cccf9428ea88",
+      "api_request_fingerprint": "1c4eeb05c637bf1e9f58722cc29a50f7be0461f992f2a3d3486ceaf146cec5ed"
+    }
+  ],
+  "variant_source_review": {
+    "status": "APPROVED: all six variants reviewed; final Kazakh clarification confirmed before inference",
+    "source_only_path": "artifacts/rubric-panel/variants-draft.sources.jsonl",
+    "source_only_sha256": "95065ef7e5d17814e0ca0d9309bbd0d31e43077acfe60f450eb5bd2be855f7f8",
+    "translation_policy": "Translate every message text and scenario-policy text; preserve all message IDs, roles, order, timestamps, account/worker IDs, quantities, month, reference metadata, scope and dates. Proper name Rowan is transliterated consistently. The original sources and references remain unchanged.",
+    "paraphrase_policy": "Only the listed bot/customer message texts change. All operator statements, system events, policy, roles, order, facts, dates and identifiers remain unchanged; no new emotion, success, failure or request is introduced.",
+    "reviews": [
+      {
+        "reviewer": "/root/product_ui; AI source-equivalence review",
+        "reviewed_source_sha256": "5246c9cc7c704c92a83888b8af951b10f72c6b7d64bd1119925a4eb455c39b41",
+        "conclusion": "All six variants preserve facts, roles/order, requested outcomes, quantities, scope/date and policy meaning. Both paraphrases are nonmaterial. No reference label changes recommended.",
+        "pre_freeze_clarification": {
+          "conversation_ids": [
+            "rpb-411",
+            "rpb-412"
+          ],
+          "field": "references[0].text",
+          "before": "Оператор оны жарияламас бұрын",
+          "after": "Оператор бұл мәліметті бермес бұрын",
+          "reason": "Avoid interpreting disclosure narrowly as public publication; the revised wording covers providing the information to the customer.",
+          "applied": true
+        }
+      },
+      {
+        "reviewer": "/root/product_ui; AI source-equivalence review",
+        "reviewed_fixture_sha256": "d850a2f66a360dc47591c717fe6b16e1ad259aedce88eda00ed2700cfa9797c3",
+        "conclusion": "Confirmed final wording in rpb-411/412 means before providing this information; preserves broad disclosure prerequisite, before/after verification, staff MFA distinction and missing receipt request. No reference-label changes."
+      }
+    ],
+    "author": "Core-assessor implementation agent; AI-authored variants, not independently authored from the implementation"
+  },
+  "interpretive_boundary": "Retain rpb-406 empathy=yes exactly as agreed, while disclosing reviewer B's alternative interpretation. Do not remove the case, silently substitute no, or describe agreement as certainty about this boundary.",
+  "freeze_requirements": [
+    "No sources, labels, order or settings changed after the freeze. Preserve all first attempts and later runs separately.",
+    "Only eight primary cases enter primary accuracy; variants/repeats are separate robustness checks.",
+    "Fresh evaluator calls for identical repeats; no product-cache reuse."
+  ],
+  "reporting": "Report primary total-score error, exact status-answer agreement and high-impact flags on the eight primary cases. Report language, paraphrase and repeat invariance separately. Count failed/unresolved determinate predictions as incorrect, disclose missing numerical totals, and inspect all explanations/evidence; correct labels alone do not establish semantic quality.",
+  "frozen_at_utc": "2026-11-08T03:37:39.722301+00:00",
+  "prepared_hash_serialization": "SHA256 of UTF-8 json.dumps(prepare(conversation, checklist), ensure_ascii=False, sort_keys=True, separators=(comma,colon)); includes instructions, payload string, schema and output cap.",
+  "primary_reference_totals": {
+    "panel-401": 88.24,
+    "panel-402": 59.41,
+    "panel-403": 90.0,
+    "panel-404": 65.5,
+    "panel-405": 46.15,
+    "panel-406": 69.23,
+    "panel-407": 84.62,
+    "panel-408": 84.62
+  },
+  "reference_qualifications": [
+    {
+      "test_case_id": "panel-406",
+      "qualifications": [
+        {
+          "criterion_id": "empathy",
+          "severity": "interpretive_boundary",
+          "selected_answer": "yes",
+          "alternative_answer": "no",
+          "note": "If 'relevant practical help' is interpreted to require objectively correct advice, m4's destructive instruction could be treated as an inadequate response to the receipt concern. I select Yes because the frozen rule explicitly separates other-criterion mistakes from empathy and the operator respectfully identifies and addresses the exact concern without a separate dismissal. The client-authored insult cannot supply an operator empathy violation. This is a rubric-boundary qualification, not evidence that the wrong advice is acceptable."
+        }
+      ]
+    }
+  ]
+}

@@ -1,38 +1,39 @@
 # Measured performance
 
-Measured on 8 November 2026 with **OpenAI `gpt-6.1-sol`, medium reasoning**. These are development measurements, not organizer Ground Truth or a predicted competition score.
+Measured on 8 November 2026 with **OpenAI `gpt-6.1-sol`, medium reasoning**. These are development measurements against declared AI-reviewed references, not organizer Ground Truth or a predicted competition score.
 
-| Check | Observed result |
+## Latest behavioral check
+
+The [frozen 17-case panel](../evals/final-rubric-panel-v1.jsonl) has eight primary conversations, four translations, two irrelevant paraphrases and three identical repeats. Two AI reviewers independently agreed on all 64 primary decisions before inference. Its [freeze manifest](../evals/final-rubric-panel-v1.review.json) records sources, settings, hashes and an empathy-boundary qualification for case406.
+
+| Measurement | Observed result |
 |---|---|
-| Official DEV export | **65/65 numerical results; 65 ok, 0 errors** |
-| Material uncertainty | 20 DEV assessments retain explicit qualifications |
-| Fresh behavioral challenge | 8 attempts; 7 first-pass valid outputs |
-| Declared reference decisions | 24/25 delivered matches; failed output counts as incorrect |
-| Complete reference vectors | Mean absolute score error 0 across four vectors |
-| Changed custom criterion | Same conversation changes from 100 to 50 on an actual 0/1/2 scale |
-| Fresh challenge latency | Median 15.89 s; p95 21.41 s per assessment |
-| Fresh challenge cost | $0.329345 total, including the failed attempt; $0.041 per attempted assessment |
-| Targeted long-call reassessment | One valid result; 64.61 s; estimated $0.103776 |
+| First run, without automatic retries | **15/17 valid assessments**, two validation failures |
+| Primary reference decisions, failures counted incorrect | **56/64**; seven of eight primary conversations completed |
+| Primary score error on completed cases | MAE **0**, seven conversations; failed case excluded from MAE only |
+| Controlled language agreement | **32/32** decisions across four RU/KZ translations |
+| Paraphrase / repeat comparison | **8/16** and **16/24** delivered comparisons; failed base/variant counts as missing |
+| First-run latency | Median **20.05s**, p95 **27.51s** per assessment |
+| First-run estimated cost | **$0.848159**, including both failures; $0.050 per attempt |
+| Fresh targeted check after correction | **3/3 valid; 24/24 decisions matched**, $0.177401 |
 
-## What the measurements mean
+Both failures used valid operator-conduct quotations alongside applicable policy and independent customer/system evidence. The validator incorrectly rejected the additional operator role. The correction accepts that combination while still requiring independent customer/system support; an operator's claim alone cannot verify policy or private state. The targeted check included both failed cases and a disclosure-violation control.
 
-The fresh fixture and its labels are in [delivery-unseen-v1.jsonl](../evals/delivery-unseen-v1.jsonl) and its [review manifest](../evals/delivery-unseen-v1.review.json). Labels were authored before inference. They are provisional AI-reviewed references; one matching Kazakh consultation label has a linguistic ambiguity. Translations, repeated inputs and small authored samples do not establish population accuracy.
+Offline revalidation of all 17 saved responses succeeds without changing any model grade, status or explanation. Their eight primary vectors match all64 references with MAE0; translation, paraphrase and repeat decisions also match. This is **offline replay**, not a new17/17first-pass run. The original run used `7332f3e2dfe4`; the corrected candidate and three fresh checks use `042dd1f149fb`. Source review found no definite semantic grade error across the136 raw decisions, with the predeclared empathy interpretation still qualified.
 
-That batch used `rubric-assessor-v3-d6013d521311`. Its rejected response cited an unsuccessful operator reply for an unanswered request. The current `7332f3e2dfe4` representation accepts that saved response with its original grades and unanswered status intact; the reported first-pass result remains **7/8**. The later long-call check used the current version. No failed attempt was overwritten or counted as a fresh successful call.
+## DEV results and product behavior
 
-The DEV export preserves 43 v2/reviewed015 results and 22 v3/reviewed016 results. Numerical completion is not measured agreement with expert grades. Conditional knowledge assumptions and remaining uncertainty are retained in the exported rationale.
+- [Official DEV export](../results/dev/results.json): **65/65 numerical results,65ok,0errors**;20 assessments retain material uncertainty. These are completed assessments, not measured expert agreement.
+- DEV preserves43 v2/reviewed015 and22 v3/reviewed016 assessments. Conditional policy assumptions remain explicit in their rationales.
+- A source audit restored nine omitted factual-support evidence turns across five DEV conversations. All65 totals and520 grade/rationale pairs stayed unchanged.
+- An earlier fresh custom-criterion pair changed the same conversation from100 to50 on a configured0/1/2 scale. Actual judgments, explanations and scores survived API/UI/full-export inspection.
+- Exact source navigation, immutable revisions, appeals, recalculation, visible failures and saved-result persistence were exercised. An actual supplied call recording played; model assessments still use transcripts, not audio.
+- Isolated Windows and Linux installs built and served an empty workspace with current defaults and no private development files. The UI continues to receive usability improvements; a clean install does not substitute for an independent user study.
 
-## Cost and review depth
+## Cost and limitations
 
-The initial 65 DEV assessments used 70 attempts, including repairs, at an estimated **$3.21 total / $0.049 per conversation**. The later 22 difficult reassessments and corrections averaged **$0.081 per conversation**. Costs vary with transcript length, output length and retries; local token-based estimates may differ from provider billing.
+The initial65 DEV assessments used70 attempts at approximately **$3.21 / $0.049 per conversation**. Later difficult reassessments averaged about$0.081 per conversation. A long-call correction took64.61s and$0.103776. Costs depend on input/output length and retries; local estimates can differ from provider billing.
 
-Standard mode normally uses one assessment call. Independent review adds a blind assessment of every criterion and, on disagreement, adjudication. Each stage permits at most one mechanical repair by default. All attempts count against the configured batch and cumulative spending caps. Opening saved results, navigating evidence and resolving a human appeal make no model call.
+Standard mode normally uses one assessment call. Independent review adds a blind assessment of every criterion and, on disagreement, adjudication. Mechanical repairs are bounded; all calls count against batch and cumulative spending limits. Inspecting saved results and resolving a human appeal make no model calls.
 
-## Product checks
-
-- Actual generated judgments, rationales and scores survived API, UI and full-export inspection unchanged.
-- Criterion changes, exact evidence highlighting, immutable source revisions, appeals and score recalculation were exercised.
-- An actual supplied call recording opened its external player and playback advanced without a media error. The model still evaluates transcripts, not audio.
-- Isolated Windows and Linux installs built and served the application with empty storage, current defaults and no private development files.
-
-Raw development runs and runtime databases remain local and ignored by Git. The required available result artifact is [results/dev/results.json](../results/dev/results.json).
+The samples are small and authored; controlled translations and repeats are not independent accuracy samples. Policy applicability, noisy transcripts and rubric-boundary judgments remain sources of uncertainty. The 11:00 control dataset has not yet been evaluated. Raw runs and runtime databases remain local and ignored by Git.

@@ -2,7 +2,7 @@
 
 The team name is **polygon**, configured in `config/submission.json`. The required available DEV artifact is [results/dev/results.json](../results/dev/results.json): all 65 original conversation IDs, 65 numerical results and no error records.
 
-The current judging arrangement is that organizers clone and run the repository after 12:00 with their own inputs. No unseen control output is fabricated in advance. The adapter also supports `--split prod` when the actual ten control conversations and their saved assessments are supplied.
+The control dataset is expected at 11:00; judges also clone and run the repository after 12:00. Export the actual control assessments with `--split prod` once those inputs are supplied. Keep their original conversation IDs and source text.
 
 ## Field mapping
 

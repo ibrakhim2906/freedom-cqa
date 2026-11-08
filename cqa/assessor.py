@@ -235,7 +235,9 @@ Use factual_basis for the decisive basis of THIS grade:
 - policy_reference: applicable supplied references establish the needed policy fact.
 - private_record: authoritative system evidence establishes the specific private state.
 - mixed_sources: applicable references AND client/system evidence jointly support
-  the needed conclusion. State the exact scope of each premise.
+  the needed conclusion. Operator quotations may additionally establish what the
+  operator said or did, but cannot replace the independent client/system support
+  or verify their own claims about policy or private state. State each premise's scope.
 - unverified: missing information or an explicit assessment assumption could change
   the grade. Still select the best-supported allowed answer with status=scored.
   Name the precise gap and assessment assumption in missing_information, explain
@@ -486,7 +488,15 @@ def validate_native(native, conversation, checklist):
         elif basis == "mixed_sources":
             if not reference_ids or not dialogue_ids:
                 raise ValueError("Mixed support requires both references and independent dialogue")
-            factual_dialogue = dialogue(dialogue_ids, {"client", "system"})
+            if contract_version == CONTRACT_VERSION:
+                if not any(catalog.entries[sid].role in {"client", "system"} for sid in dialogue_ids):
+                    raise ValueError("Mixed support requires independent client/system evidence")
+                # A cited response can establish observed operator conduct alongside
+                # policy and independent outcome/context evidence. It cannot alone
+                # turn the operator's assertion into independently verified truth.
+                factual_dialogue = dialogue(dialogue_ids, {"client", "system", "operator"})
+            else:
+                factual_dialogue = dialogue(dialogue_ids, {"client", "system"})
         else:
             if reference_ids or not dialogue_ids:
                 raise ValueError("The selected factual basis requires dialogue evidence")

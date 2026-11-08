@@ -81,6 +81,12 @@ def result_for(original, evaluated, checklist, record):
         # Retain original array positions, including bot/client/system events. A
         # checked omission span is meaningful evidence when no positive quote exists.
         cited = [e.message_id for e in j.evidence + j.counterevidence] or j.checked_message_ids
+        if validated_native is not None:
+            # Native factual support can establish verification or an outcome
+            # separately from the quoted operator conduct. Revalidated dialogue
+            # sources belong in the export; policy references are not turn numbers.
+            cited = cited + [e["message_id"] for e in
+                             validated_native["criteria"][cid]["factual_dialogue_evidence"]]
         rationale = j.explanation
         if numeric_assessment and j.uncertainty:
             rationale += " Review recommended; this is a best-supported provisional grade. Missing information: " + j.uncertainty
