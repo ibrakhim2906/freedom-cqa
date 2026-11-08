@@ -2,9 +2,33 @@
 
 Measured on 8 November 2026 with **OpenAI `gpt-6.1-sol`, medium reasoning**. These are development measurements against declared AI-reviewed references, not organizer Ground Truth or a predicted competition score.
 
-## Russian checklist 017 release comparison
+## Current release: checklist 018
 
-The release candidate now selects the Russian **`1-reviewed-017`** checklist
+The API, CLI and control preparation share **`1-reviewed-018`**. Its only semantic
+change from 017 clarifies that a farewell is judged by its role in context, not
+by a required fixed phrase. Recap or further help is still required; mid-call
+thanks and speech after disconnection cannot substitute for a customer farewell.
+The evaluator prompt and scoring arithmetic are unchanged.
+
+Validation completed **14/14 cases**: ten reused diagnostics, three known boundary
+cases and one unlabelled 75-turn organizer DEV call. All **103/103 clear configured
+reference judgments** matched; one ambiguous closing remained explicitly uncertain.
+All 112 judgments and their explanations were independently reviewed against the
+source by an AI reviewer; all fourteen native validations and score replays passed.
+These are reused development examples, not a new holdout, human reference grades
+or an estimate of organizer accuracy. See the [compact report](../evals/checklist018-validation.results.json).
+
+The initial batch completed thirteen and skipped the long call before submission
+because of its conservative budget reservation: **$0.830591**. The unchanged
+skipped input then completed in a separate run: **$0.101033**, **37.269 seconds**.
+Combined cost was **$0.931624**. Both reports and the skip are retained. The long
+call scored **87.5, provisional**; closing cites the final recap and functional
+farewell, while unclear introduction and unsupported policy details remain qualified.
+It has no reference grade, so no accuracy or MAE is claimed for it.
+
+## Historical Russian checklist 017 comparison
+
+The earlier release candidate selected the Russian **`1-reviewed-017`** checklist
 through one shared default for the API, CLI and control preparation. The evaluator
 prompt remains **`rubric-assessor-v3-963619247384`**. Version 016 and its historical
 results remain available unchanged. Translation changes the model input, so its
@@ -23,15 +47,15 @@ or organizer-label accuracy**. See the [compact 017 results](../evals/checklist0
 | Aggregate score error | MAE **0**, nine eligible conversations |
 | Unknown closing opportunity | Remains explicitly uncertain; excluded from strict agreement and score MAE |
 | Native source validation and score replay | **10/10 passed** |
-| Additional known boundary cases | **2/3 completed**; **16/16** judgments matched on those two |
-| Additional boundary source validation and score replay | **2/2 passed** |
+| Additional known boundary cases | **3/3 completed**; **24/24** judgments matched |
+| Additional boundary source validation and score replay | **3/3 passed** |
 | Ten-case comparison cost and p95 latency | **$0.621349**, **22.77 s** |
-| Two completed boundary cases | **$0.132105** estimated cost |
+| Three completed boundary cases | **$0.202244** estimated cost |
 
-Independent source review covered all 80 comparison judgments and the 16 completed
-boundary judgments, including their explanations. It found no definite grading
-error or matching grade with an unsupported explanation. The two completed
-boundary cases check customer versus employee verification, private disclosure,
+Independent source review covered all 80 comparison judgments and the 24 boundary
+judgments, including their explanations. It found no definite grading error or
+matching grade with an unsupported explanation. The three boundary cases check
+customer versus employee verification, private disclosure,
 corrected wrong advice, and a coworker farewell that must not count as closing
 with the customer. These are reused synthetic cases, including a 17-turn call;
 they do not establish general long-call performance or performance without policy
@@ -41,16 +65,53 @@ The third boundary case, `panel-404`, was first skipped at the local budget
 boundary. Four separately recorded requests then received HTTP 429
 `credit_balance_exhausted` and returned no assessment: the completion,
 after-top-up, after-delay and funded attempts. Each is recorded as
-`provider_rejected` with settled cost **$0**. That case is still incomplete, and
-**3/3 is not claimed**. The total recorded cost of the 017 comparison and boundary
-attempts so far is **$0.753454**. Any later successful attempt must retain this
-history and be reported separately.
+`provider_rejected` with settled cost **$0**. After provider funds became available,
+a separately recorded final attempt completed: **8/8** reference judgments,
+**65.5** total, **$0.070139**, **25.212 s**. Source validation and score replay passed;
+the budget skip and all four rejections remain in the report. Diagnostic and
+boundary costs total **$0.823593**.
+
+### Separate unlabelled long-call check
+
+A reused **75-turn** Russian organizer DEV call, `p4-ru-005`, completed with its
+original conversation and nine-reference context preserved: **$0.110169**,
+**55.766 s**, **4,113 of 6,000** output tokens. Native source validation and score
+replay passed. Review covered all eight judgments and six substantive requests,
+including the late passport/residence-permit question. No completed deletion,
+customer verification or policy confirmation was invented.
+
+The result is **81.25, provisional**, compared with the older saved **84.62**.
+Needs clarification changed from N/A to Yes because the registration telephone
+was treated as a missing task detail. Lookup necessity is not independently
+established, but later document-choice clarification also supports applicability;
+the PDF does not uniquely settle this boundary. Closing changed from Yes to provisional No:
+the operator thanked the caller, but the status of that terminal phrase as a
+farewell and the noisy final turn remain interpretive. This is **not evidence of
+identical behavior**. Contact, consultation and closing retain uncertainty; the
+supplied policy snapshot does not establish registration-reset procedures,
+document-selection rules, hours or deadlines for this call.
+
+There are no reference labels for this call, so no accuracy or MAE is reported.
+The earlier 016 result also used an older evaluator prompt
+(`rubric-assessor-v3-6b3b408afe50`); the two changed decisions cannot be attributed
+solely to translation. This one qualitative check is separate from the synthetic
+agreement figures. Total cost including it is **$0.933762**.
+
+A matched **016 run using the current prompt and exactly the same saved source
+and context** then completed: **87.5**, **$0.106196**, **55.189 s**, with source
+validation and score replay passed. Both current-prompt runs choose needs Yes;
+the only answer/status difference is closing. Version 016 treats the final
+thanks as a functional farewell; 017 chose provisional No. This one pair does not
+establish a unique correct label or a deterministic translation effect. It
+motivates a general farewell interpretation check while leaving the ambiguous
+needs rule unchanged. Total including this separate matched comparison is
+**$1.039958**.
 
 ## Release validation snapshot
 
-At the 8 November release checkpoint, **899 Python tests**, **42 Node tests** and
-**4 browser integrity tests** passed; Ruff also passed. These counts describe the
-checked source snapshot, not a guarantee for later changes. The offline Python
+At the 8 November release checkpoint, **902 Python tests**, **42 Node tests** and
+**5 browser integrity tests** passed; Ruff also passed. These counts describe the
+final 018 source snapshot, not a guarantee for later changes. The offline Python
 suite includes accepted-appeal score recalculation and preservation of historical
 assessment snapshots.
 
@@ -69,6 +130,16 @@ workflow's appeal was **rejected**, so the second score stayed **50**; it does n
 claim a live accepted-appeal recalculation. The first browser-test attempt failed
 on a locator; the corrected test passed without another model call. This is a
 configuration and persistence check, not another accuracy benchmark.
+
+A final browser check used an isolated copy of the real saved-data database with
+checklist 018 and the serious-error filter loaded. It displayed exactly twelve
+current conversations with a positive effective official flag; all twelve reasons
+matched the saved assessments. Badge navigation opened the correct result and
+highlighted its source. All non-read API requests were blocked: zero attempted
+mutations, model calls or browser errors occurred. Original database rows, copied
+records and the spending ledger remained unchanged. The older server on port 8010
+was not restarted because automatic approval rejected stopping it; the final
+verified instance used a separate database on port 8014.
 
 ## Earlier frozen evaluation with checklist 016
 

@@ -19,7 +19,7 @@ def test_shipped_example_references_are_usable_under_its_actual_scope():
 
 
 def test_prepared_demo_policy_citations_only_use_applicable_supplied_references():
-    checklist = load_checklist(ROOT / "checklists/freedom-reviewed-017.json")
+    checklist = load_checklist()
     conversation, record = prepared_demo(checklist)
     usable = {item["reference_id"] for item in record["evidence_context"]["references"] if item["usable"]}
     sources = {reference.id: reference.text for reference in conversation.references}

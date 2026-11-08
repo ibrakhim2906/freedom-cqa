@@ -79,6 +79,21 @@ def conversation_display_title(content: dict) -> str:
     return f"{channel} {language_name}" if language_name else channel
 
 
+def serious_error_summary(checklist, effective):
+    """Only a resolved official flag can confirm or clear a serious error."""
+    summary = {"serious_error": None, "serious_error_reason": None}
+    if checklist is None or effective is None:
+        return summary
+    criterion = next((c for c in checklist.criteria if c.id == "serious" and c.kind == "flag"), None)
+    if criterion is None or {level.value for level in criterion.levels} != {"yes", "no"}:
+        return summary
+    judgment = next((j for j in effective["judgments"] if j["criterion_id"] == "serious"), None)
+    if (judgment is None or judgment["status"] != "scored" or judgment["answer"] not in {"yes", "no"}
+            or effective["score"].get("flags", {}).get("serious") != judgment["answer"]):
+        return summary
+    return {"serious_error": judgment["answer"] == "yes", "serious_error_reason": judgment["explanation"]}
+
+
 def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator):
     settings = settings or Settings.load()
     store = Store(database_path or Path(os.environ.get("CQA_APP_DB", str(ROOT / "data/runtime/app.sqlite3"))))
@@ -208,6 +223,7 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
                         "open_appeals": sum(a.status == "open" for a in appeals),
                         "source": effective["source"] if effective else None,
                         "is_demo": bool((job.record or {}).get("demo")),
+                        **serious_error_summary(checklists.get(job.checklist_id), effective),
                     }
                 result.append(value)
             return result

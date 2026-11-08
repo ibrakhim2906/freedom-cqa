@@ -12,6 +12,19 @@ from cqa.scoring import calculate_score
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_farewell_clarification_preserves_all_other_rules_and_scoring():
+    previous = load_checklist(ROOT / "checklists/freedom-reviewed-017.json").model_dump()
+    current = load_checklist(ROOT / "checklists/freedom-reviewed-018.json").model_dump()
+    assert current["version"] == "1-reviewed-018"
+    current["version"] = previous["version"]
+    old_closing = next(c for c in previous["criteria"] if c["id"] == "closing")
+    new_closing = next(c for c in current["criteria"] if c["id"] == "closing")
+    assert new_closing["instruction"].startswith(old_closing["instruction"] + "\n\n")
+    assert len(new_closing["instruction"]) > len(old_closing["instruction"])
+    new_closing["instruction"] = old_closing["instruction"]
+    assert current == previous
+
+
 @pytest.fixture(scope="module")
 def editions():
     return tuple(load_checklist(ROOT / f"checklists/freedom-reviewed-{version}.json") for version in ("016", "017"))

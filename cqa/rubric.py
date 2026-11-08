@@ -4,7 +4,7 @@ from pathlib import Path
 from .models import Checklist, Criterion, Level
 from .settings import ROOT
 
-DEFAULT_CHECKLIST_PATH = Path("checklists/freedom-reviewed-017.json")
+DEFAULT_CHECKLIST_PATH = Path("checklists/freedom-reviewed-018.json")
 
 
 def official_checklist():

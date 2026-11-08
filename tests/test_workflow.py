@@ -235,6 +235,71 @@ def test_queue_summary_tracks_exact_revision_latest_attempt_and_effective_review
     assert len(TestOnlyEvaluator.calls) == 1
 
 
+def test_serious_error_summary_tracks_effective_appeal_without_rewriting_original(setup):
+    client, app, _, _ = setup
+    checklist = copy.deepcopy(CHECKLIST)
+    checklist["criteria"].append({"id": "serious", "title": "Грубые ошибки", "kind": "flag", "weight": 0,
+        "instruction": "Flag a serious error only when explicitly established.",
+        "levels": [{"value": "yes", "fraction": 0, "description": "Serious error established"},
+                   {"value": "no", "fraction": 0, "description": "No serious error established"}]})
+    cid, checklist_id = import_one(client), save_checklist(client, checklist)
+    job = wait_for_job(client, run(client, cid, checklist_id)["job_ids"][0])
+    original = copy.deepcopy(job["record"])
+    summary = client.get("/api/conversations").json()[0]["latest_assessment"]
+    assert summary["serious_error"] is True
+    assert summary["serious_error_reason"] == "TEST ONLY: source-specific explanation"
+    assert summary["total"] == 33.33  # Flags never change the weighted grade.
+    appeal = client.post(f"/api/jobs/{job['id']}/appeals", json={"criterion_id": "serious",
+        "author": "Reviewer", "reason": "Review the serious-error finding", "message_ids": ["agent-1"]}).json()
+    assert client.get("/api/conversations").json()[0]["latest_assessment"]["serious_error"] is True
+    revised = next(j for j in job["effective"]["judgments"] if j["criterion_id"] == "serious") | {
+        "answer": "no", "explanation": "Human review found no established serious error."}
+    response = client.post(f"/api/appeals/{appeal['id']}/resolve", json={"decision": "accept",
+        "reviewer": "QA", "rationale": "The quoted reply does not establish a serious error.",
+        "expected_revision": 0, "judgment": revised})
+    assert response.status_code == 200, response.text
+    summary = client.get("/api/conversations").json()[0]["latest_assessment"]
+    assert summary["serious_error"] is False and summary["source"] == "human_review"
+    assert summary["serious_error_reason"] == revised["explanation"]
+    assert summary["total"] == 33.33
+    assert client.get(f"/api/jobs/{job['id']}").json()["record"] == original
+
+    changed = copy.deepcopy(CONVERSATION)
+    changed["messages"][-1]["text"] = "A different source revision"
+    new_id = import_one(client, changed)
+    rows = {row["id"]: row for row in client.get("/api/conversations").json()}
+    assert rows[new_id]["latest_assessment"] is None
+    # A newer failed attempt is unknown, never a cleared or inherited serious flag.
+    with app.state.store.session.begin() as session:
+        failed = Job(batch_id=job["batch_id"], conversation_id=cid, checklist_id=checklist_id,
+                     cache_key="serious-failed", status="failed", record={"error": "test failure"})
+        session.add(failed)
+    rows = {row["id"]: row for row in client.get("/api/conversations").json()}
+    assert rows[cid]["latest_assessment"]["status"] == "failed"
+    assert rows[cid]["latest_assessment"]["serious_error"] is None
+    assert rows[cid]["latest_assessment"]["serious_error_reason"] is None
+
+
+def test_serious_error_summary_does_not_infer_a_flag_from_scores_or_unresolved_labels():
+    from backend.app import serious_error_summary
+    from cqa.models import Checklist
+
+    checklist = Checklist.model_validate(CHECKLIST)
+    effective = {"judgments": [{"criterion_id": "serious", "status": "scored", "answer": "yes",
+        "explanation": "Test finding"}], "score": {"total": 100, "flags": {"serious": "yes"}}}
+    assert serious_error_summary(checklist, effective)["serious_error"] is None
+    flag = {"id": "serious", "title": "Serious", "kind": "flag", "weight": 0, "instruction": "Test flag",
+            "levels": [{"value": "yes", "fraction": 0, "description": "Yes"},
+                       {"value": "no", "fraction": 0, "description": "No"}]}
+    for update in [{}, {"kind": "binary"}, {"id": "custom-flag"}]:
+        candidate = Checklist.model_validate(CHECKLIST | {"criteria": [flag | update]})
+        assert serious_error_summary(candidate, effective)["serious_error"] is (True if not update else None)
+    checklist = Checklist.model_validate(CHECKLIST | {"criteria": [flag]})
+    effective["judgments"][0].update(status="needs_review", answer=None)
+    assert serious_error_summary(checklist, effective)["serious_error"] is None
+    assert serious_error_summary(checklist, None)["serious_error"] is None
+
+
 def test_failure_is_visible_and_explicit_retry_is_a_new_attempt(tmp_path):
     settings = Settings(api_key="test-only", ledger_path=tmp_path / "usage.sqlite3", max_spend=1)
     app = create_app(settings=settings, database_path=tmp_path / "app.sqlite3", evaluator_factory=FailingTestEvaluator)

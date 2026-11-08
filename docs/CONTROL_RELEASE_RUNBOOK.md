@@ -5,7 +5,7 @@ conversations in `results/prod/results.json`, the 65 DEV results in
 `results/dev/results.json`, and **commit plus push to the submitted public repository
 before 12:00**. A local file or local commit is insufficient.
 
-This runbook currently pins `freedom-reviewed-017`. The preparation script derives
+This runbook currently pins `freedom-reviewed-018`. The preparation script derives
 its checklist from `cqa.rubric.DEFAULT_CHECKLIST_PATH` and checks the exact snapshot
 against the application default. If the release owner adopts another version,
 update and verify that explicit pin before using these commands. Do not silently mix
@@ -69,7 +69,7 @@ also records source/request fingerprints and freezes its own adjacent suite copy
 Below, replace `APPROVED_CAP` with that numeric dollar cap.
 
 ```powershell
-uv run --frozen python -m cqa.cli benchmark --cases-file artifacts/control-20261108/input.jsonl --strategy assessor --model gpt-6.1-sol --checklist checklists/freedom-reviewed-017.json --repair-attempts 0 --concurrency 1 --budget-usd APPROVED_CAP --output artifacts/control-20261108/first-pass.json
+uv run --frozen python -m cqa.cli benchmark --cases-file artifacts/control-20261108/input.jsonl --strategy assessor --model gpt-6.1-sol --checklist checklists/freedom-reviewed-018.json --repair-attempts 0 --concurrency 1 --budget-usd APPROVED_CAP --output artifacts/control-20261108/first-pass.json
 ```
 
 The command makes paid calls. Inspect progress by reading the saved report, not by
@@ -86,7 +86,7 @@ proof of expert agreement. Do not describe a CLI `complete: false` run as 10/10.
 ## 4. Export and validate the original automatic results
 
 ```powershell
-uv run --frozen python -m scripts.export_submission --source data/private/prod-source.json --report artifacts/control-20261108/first-pass.json --checklist checklists/freedom-reviewed-017.json --split prod --output results/prod/results.json
+uv run --frozen python -m scripts.export_submission --source data/private/prod-source.json --report artifacts/control-20261108/first-pass.json --checklist checklists/freedom-reviewed-018.json --split prod --output results/prod/results.json
 ```
 
 Export is offline. It revalidates the saved source/checklist/native assessment and
@@ -137,14 +137,17 @@ removing failed conversations.
 
 Ensure reviewed application changes are committed separately if not already frozen.
 Then stage only the two intended result files, inspect the staged changes, and push
-to the existing submitted remote/branch:
+to the submitted repository's default branch, currently `main`. The working
+branch is `codex/impressive-cqa-delivery`, so pushing only `HEAD` by its branch
+name would not update the branch judges clone by default. Use a normal
+fast-forward push to `main`; never force an update over remote changes:
 
 ```powershell
 git diff --check
 git add -- results/dev/results.json results/prod/results.json
 git diff --cached --stat
 git commit -m "Add organizer control evaluation results"
-git push origin HEAD
+git push origin HEAD:main
 ```
 
 Open the actual submitted public repository and verify both result paths on the pushed

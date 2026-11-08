@@ -192,3 +192,45 @@ test('reselecting a conversation keeps its result and cancelling review setup wr
   await expect(page.getByTestId('score').locator('strong')).toHaveText('50')
   expect(writes).toEqual([]); expect(errors).toEqual([])
 })
+
+test('serious-error filter uses the current revision and opens its exact saved explanation', async ({page}) => {
+  const {writes, errors} = await fixture(page)
+  const reason = 'Оператор предложил перевести деньги на личный счёт.'
+  const flagged = {...latest, latest_assessment: {...summary, serious_error: true, serious_error_reason: reason}}
+  const previousPositive = {...older, id: 'history-positive', external_id: 'changed-source',
+    latest_assessment: {...summary, id: 'historical-positive-job', serious_error: true, serious_error_reason: reason}}
+  const changedSource = {...unassessed, id: 'changed-source-latest', external_id: 'changed-source'}
+  const failed = {...latest, id: 'failed-source', external_id: 'failed-source',
+    latest_assessment: {...summary, id: 'failed-job', status: 'failed', total: null, serious_error: null}}
+  const cleared = {...latest, id: 'cleared-source', external_id: 'cleared-source',
+    latest_assessment: {...summary, id: 'cleared-job', serious_error: false}}
+  await page.route('**/api/conversations', route => route.fulfill({json: [flagged, older, unassessed,
+    previousPositive, changedSource, failed, cleared]}))
+  const saved = savedJob()
+  const serious = {criterion_id: 'serious', status: 'scored', answer: 'yes', explanation: reason,
+    evidence: [{message_id: 'm2', quote: messages[1].text}], counterevidence: [], checked_message_ids: ['m2'], uncertainty: null}
+  const flagCriterion = {id: 'serious', title: 'Грубые ошибки', instruction: 'Отметьте явно установленную грубую ошибку.',
+    kind: 'flag', weight: 0, na_condition: null, channel_guidance: {}, levels: [
+      {value: 'yes', fraction: 0, description: 'Грубая ошибка выявлена'},
+      {value: 'no', fraction: 0, description: 'Грубая ошибка не выявлена'}]}
+  const flaggedJob = {...saved,
+    checklist: {...saved.checklist, content: {...saved.checklist.content, criteria: [...saved.checklist.content.criteria, flagCriterion]}},
+    effective: {...saved.effective, judgments: [...saved.effective.judgments, serious], score: {...saved.effective.score, flags: {serious: 'yes'}}},
+    record: {...saved.record, evaluation: {...saved.record.evaluation, judgments: [...saved.record.evaluation.judgments, serious]}}}
+  await page.route('**/api/jobs/job-new', route => route.fulfill({json: flaggedJob}))
+  await page.goto('/')
+  const queue = page.getByRole('complementary', {name: 'Список диалогов'})
+  await queue.getByRole('button', {name: 'Фильтры', exact: true}).click()
+  await queue.getByLabel('Фильтр по статусу').selectOption('serious')
+  await expect(queue.locator('[data-testid^="queue-revision-"]')).toHaveCount(1)
+  await expect(queue).toContainText('Отсутствие оценки или сбой проверки не означает отсутствия ошибок.')
+  const badge = page.getByTestId('queue-revision-doc-new').getByRole('button', {name: /^Грубая ошибка — открыть обоснование/})
+  await expect(badge).toContainText(reason)
+  await badge.click()
+  const criterion = page.getByTestId('criterion-serious')
+  await criterion.getByText('Обоснование и цитаты', {exact: true}).click()
+  await expect(criterion).toContainText(reason)
+  await page.getByText('Сведения и выгрузка', {exact: true}).click()
+  await expect(page.getByRole('link', {name: 'Скачать результат и историю пересмотра'})).toHaveAttribute('href', '/api/jobs/job-new/export')
+  expect(writes).toEqual([]); expect(errors).toEqual([])
+})

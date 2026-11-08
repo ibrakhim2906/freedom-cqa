@@ -12,7 +12,7 @@ from backend.storage import Appeal, Batch, Job
 from cqa.models import Evaluation
 from cqa.rubric import load_checklist
 from cqa.scoring import calculate_score
-from cqa.settings import ROOT, Settings
+from cqa.settings import Settings
 
 
 def forbidden_factory():
@@ -47,7 +47,7 @@ def demo_client(tmp_path):
 
 
 def test_prepared_demo_uses_valid_quotes_and_calculates_875_from_70_of_80():
-    checklist = load_checklist(ROOT / "checklists/freedom-reviewed-017.json")
+    checklist = load_checklist()
     conversation, record = prepared_demo(checklist)
     evaluation = Evaluation.model_validate(record["evaluation"])
     score = calculate_score(evaluation, checklist)

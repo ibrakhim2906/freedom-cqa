@@ -7,15 +7,18 @@ validated version available until a proposed replacement has its own recorded
 comparison. Passing arithmetic or display tests alone does not establish
 behavioral equivalence.
 
-The current release candidate uses `freedom-reviewed-017`, selected once through
-`cqa.rubric.DEFAULT_CHECKLIST_PATH`. Its comparison against 016 completed all ten
-diagnostic cases: 79 unambiguous judgments matched, all 80 operational
-answer/status/uncertainty flags and all totals matched the 016 run, and the
-ambiguous closing remained explicitly qualified. Source decoding and score
-replay passed for all ten. This reused panel is promotion evidence, not new
-held-out accuracy. Additional boundary verification remains part of the final
-release decision. Version 016 remains available explicitly for historical
-reproduction or rollback; do not reinterpret its saved results as 017 results.
+The release uses `freedom-reviewed-018`, selected through
+`cqa.rubric.DEFAULT_CHECKLIST_PATH`. It preserves 017 except for a general
+clarification that farewell is a function of the closing exchange, not a required
+fixed phrase. The unchanged evaluator completed thirteen reused diagnostic and
+boundary cases plus one unlabelled 75-turn DEV call. All **103 clear configured
+reference judgments** matched; the ambiguous closing remained qualified. All
+fourteen native source validations and score replays passed. The long call was
+first skipped by budget reservation, then completed separately; neither attempt
+was hidden. See [the measured report](../evals/checklist018-validation.results.json).
+This is bounded promotion evidence, not new held-out or organizer-label accuracy.
+Versions 016 and 017 remain available unchanged for historical reproduction or
+rollback. Existing DEV results have not been relabeled or replaced.
 
 ## Promote a candidate
 

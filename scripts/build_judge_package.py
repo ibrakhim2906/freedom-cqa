@@ -14,6 +14,7 @@ REQUIRED_FILES = (
     "docs/JUDGE_QUICKSTART.md", "docs/WORKFLOW.md", "docs/PERFORMANCE.md",
     "docs/SUBMISSION_FORMAT.md", "docs/RUSSIAN_CHECKLIST_017.md",
     "checklists/freedom-reviewed-016.json", "checklists/freedom-reviewed-017.json",
+    "checklists/freedom-reviewed-018.json",
     "references/fbroker-platform-20261107.json", "references/freedom-global-products-20261107.json",
     "examples/judge-example.json", "config/submission.json",
     "scripts/start-local.ps1", "scripts/start-local.sh", "scripts/launch_judge.py",

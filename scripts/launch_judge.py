@@ -22,6 +22,7 @@ def verify_package(root: Path) -> None:
     files = manifest.get("files", {})
     required = {"frontend/dist/index.html", "backend/app.py", "cqa/settings.py",
                 "checklists/freedom-reviewed-016.json", "checklists/freedom-reviewed-017.json",
+                "checklists/freedom-reviewed-018.json",
                 "examples/judge-example.json"}
     if not required.issubset(files):
         raise ValueError("В пакете не хватает обязательных файлов. Распакуйте полный ZIP заново.")

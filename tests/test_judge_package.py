@@ -48,6 +48,7 @@ def test_package_allowlist_excludes_local_settings_data_and_sources(candidate, t
         assert "Freedom CQA/frontend/dist/assets/app.js" in names
         assert "Freedom CQA/checklists/freedom-reviewed-016.json" in names
         assert "Freedom CQA/checklists/freedom-reviewed-017.json" in names
+        assert "Freedom CQA/checklists/freedom-reviewed-018.json" in names
         assert "Freedom CQA/docs/RUSSIAN_CHECKLIST_017.md" in names
         assert not any(b"DO NOT SHIP" in archive.read(name) for name in names)
         manifest = json.loads(archive.read("Freedom CQA/judge-package.json"))

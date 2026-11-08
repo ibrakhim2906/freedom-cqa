@@ -1,0 +1,132 @@
+{
+  "measured_at_utc": "2026-11-08T05:45:35.745397+00:00",
+  "candidate": "1-reviewed-018",
+  "prompt_version": "rubric-assessor-v3-963619247384",
+  "instructions_sha256": "96361924738484385c9b5d893a57eda38e8bb38698453d0c2a98d989baf4de43",
+  "evaluator_source_sha256": "d5d3d4ddfa977cf66225bb1be9e5fe03bb7d125aaf85cf2d4cd5e3bb65d157cf",
+  "checklist": {
+    "id": "freedom-chat-quality",
+    "version": "1-reviewed-018",
+    "path": "checklists/freedom-reviewed-018.json",
+    "sha256": "a471ed3f8cfc1dcf4ba545538fc41bd2cfd11517a0bc3cc875a4e13b756c89a0"
+  },
+  "change": "Only a general functional-farewell paragraph was appended to017 closing; no fixed farewell wording required, recap/further-help still required, mid-conversation thanks/private colleague speech/garbled post-disconnect text do not automatically count. Weights, options, other criteria and evaluator prompt unchanged.",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "medium",
+  "repair_attempts": 0,
+  "provenance": "Reused AI-authored synthetic references plus one reused unlabelled organizer DEV call; not fresh held-out evidence, organizer labels or human Ground Truth.",
+  "diagnostic_comparison": {
+    "selected": 10,
+    "completed": 10,
+    "clear_reference_judgments_matched": 79,
+    "clear_reference_judgments_checked": 79,
+    "mean_total_absolute_error": 0,
+    "mae_cases": 9,
+    "native_source_validations_passed": 10,
+    "score_replays_passed": 10,
+    "source_semantic_judgments_reviewed": 80,
+    "ambiguous_judgment": {
+      "case_id": "fresh-v1-ru-03",
+      "criterion_id": "closing",
+      "answer": "no",
+      "uncertainty_preserved": true,
+      "excluded_from_unique_label_agreement_and_total_mae": true
+    }
+  },
+  "known_boundary_checks": {
+    "selected": 3,
+    "completed": 3,
+    "reference_judgments_matched": 24,
+    "reference_judgments_checked": 24,
+    "mean_total_absolute_error": 0,
+    "mae_cases": 3,
+    "native_source_validations_passed": 3,
+    "score_replays_passed": 3,
+    "source_semantic_judgments_reviewed": 24
+  },
+  "long_call_qualitative_check": {
+    "case_id": "p4-ru-005",
+    "source": "organizer DEV",
+    "label_provenance": "unlabelled",
+    "messages": 75,
+    "references": 9,
+    "completed": true,
+    "expectations_count": 0,
+    "total": 87.5,
+    "provisional": true,
+    "uncertain_criteria": [
+      "contact",
+      "consultation"
+    ],
+    "source_judgments_reviewed": 8,
+    "request_coverage_items_reviewed": 6,
+    "native_source_validation": "passed",
+    "score_replay": "passed",
+    "source_and_context_unchanged_from_017": true,
+    "closing_answer": "yes",
+    "closing_basis": "Final document-action confirmation and a terminal thanks that functions as farewell; garbled post-disconnect turn not used.",
+    "interpretive_limits": [
+      "Telephone-lookup necessity is not independently established; later document clarification can support needs Yes. No unique reference label.",
+      "Correctness of registration reset, document rules, hours/deadlines remains unverified and explicit.",
+      "No audio analyzed."
+    ],
+    "comparators": {
+      "older_prompt_016_total": 84.62,
+      "same_current_prompt_016_total": 87.5,
+      "same_current_prompt_017_total": 81.25,
+      "same_current_prompt_016_017_needs": "yes",
+      "same_current_prompt_016_closing": "yes",
+      "same_current_prompt_017_closing": "no_with_uncertainty"
+    },
+    "estimated_known_cost_usd": 0.101033,
+    "latency_seconds": 37.269,
+    "output_tokens": 3123,
+    "max_output_tokens": 6000
+  },
+  "execution_provenance": {
+    "initial_batch": {
+      "selected": 14,
+      "completed": 13,
+      "failed": 0,
+      "skipped_budget": 1,
+      "skipped_case_id": "p4-ru-005",
+      "skip_was_before_model_submission": true,
+      "estimated_known_cost_usd": 0.830591,
+      "p95_latency_seconds": 21.981
+    },
+    "separate_unchanged_long_call": {
+      "selected": 1,
+      "completed": 1,
+      "failed": 0,
+      "skipped_budget": 0,
+      "estimated_known_cost_usd": 0.101033
+    },
+    "combined_unique_cases_completed": 14,
+    "combined_estimated_known_cost_usd": 0.931624
+  },
+  "independent_review": {
+    "source_judgments_reviewed": 112,
+    "native_source_validations_passed": 14,
+    "score_replays_passed": 14,
+    "selected_span_occurrences_validated": 545,
+    "definite_grade_errors_under_configured_rubric": [],
+    "unsupported_rationale_with_matching_grade": [],
+    "recommendation": "Accept for promotion with the stated evidence limits; historical016/017 remain available."
+  },
+  "historical_preservation": "No historical assessment, checklist snapshot,original 65 DEV totals or 520 grade/rationale pairs rewritten.",
+  "raw_report_sha256": {
+    "checklist018-validation-results.json": "3b3c43fa5b915468c77221d3efd697c185c7db6caf8688e9a171277fd91d5374",
+    "checklist018-longcall-results.json": "83c84c4cda02e3de66883793c8ef40e76bd2a8d33a933f0426e66c67ea82b176"
+  },
+  "saved_suite_sha256": {
+    "checklist018-validation-results.suite.jsonl": "0a1f4082871b1ede8abaf864e1b4158cfb3a53f11d99f08fb83d2331ced31ad7",
+    "checklist018-longcall-results.suite.jsonl": "ecca74fff33920337457e47352480abb6d8f549dbb659c6250d2d783d327c787"
+  },
+  "limitations": [
+    "103 clear configured-reference decisions are79 diagnostic + 24 boundary; do not pool the ambiguous closing or unlabelled call into accuracy.",
+    "R016 corrected-error 15 is an explicit user-authorized team calibration beyond PDF 15 = secondary detail omitted, not organizer Ground Truth.",
+    "One stochastic long-call comparison does not establish deterministic behavior or general long-call accuracy.",
+    "Native citation validation establishes exact source selection, not semantic truth.",
+    "The initial 14-case batch completed 13 and skipped 1; the 14th completed in a separate recorded run."
+  ]
+}

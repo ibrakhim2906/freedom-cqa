@@ -31,6 +31,7 @@ export function ConversationQueue({conversations, selected, current, onSelect, o
       && (!assessmentFilter || (assessmentFilter === 'unassessed' && assessment === null)
         || (assessmentFilter === 'review' && !!assessment && (assessment.review_recommended_count > 0 || (assessment.open_appeals || 0) > 0))
         || (assessmentFilter === 'completed' && assessment?.status === 'completed')
+        || (assessmentFilter === 'serious' && assessment?.status === 'completed' && assessment.serious_error === true)
         || (assessmentFilter === 'active' && !!assessment && ['queued', 'running'].includes(assessment.status))
         || (assessmentFilter === 'failed' && !!assessment && ['failed', 'interrupted', 'cancelled'].includes(assessment.status)))
   })
@@ -69,6 +70,11 @@ export function ConversationQueue({conversations, selected, current, onSelect, o
           onClick={() => onOpenAssessment(assessment.id, c.id)}><span>{savedLabel}</span>{assessment.is_demo && <small>Учебный разбор</small>}{assessment.status === 'completed' && assessment.provisional && <small>Нужен пересмотр</small>}<Icon name="arrow" size={13}/></button>
           : <span className={styles.unassessed}>{savedLabel}</span>}
         </div>
+        {assessment?.status === 'completed' && assessment.serious_error === true && <button className={styles.seriousError}
+          aria-label={`Грубая ошибка — открыть обоснование ${c.external_id}, версия ${c.content_hash.slice(0, 7)}`}
+          onClick={() => onOpenAssessment(assessment.id, c.id)}>
+          <b>Грубая ошибка</b><span>{assessment.serious_error_reason || 'Открыть обоснование в сохранённой оценке'}</span>
+        </button>}
         <div className={styles.rowFooter}>
         {(!!assessment?.review_recommended_count || !!assessment?.open_appeals) && <div className={styles.reviewSummary}>
           {!!assessment.review_recommended_count && <span title={`Пунктов для пересмотра: ${assessment.review_recommended_count}`}>Требуют внимания: {assessment.review_recommended_count}</span>}
@@ -92,8 +98,9 @@ export function ConversationQueue({conversations, selected, current, onSelect, o
     <div id={filtersId} hidden={!filtersOpen} className={styles.filters}>
       <label>Язык<select aria-label="Фильтр по языку" value={language} onChange={e => setLanguage(e.target.value)}><option value="">Все языки</option>{languages.map(l => <option key={l} value={l}>{l}</option>)}</select></label>
       <label>Тип диалога<select aria-label="Фильтр по типу диалога" value={channel} onChange={e => setChannel(e.target.value)}><option value="">Все типы</option><option value="agent chat">Чат</option><option value="voice call">Звонок</option></select></label>
-      <label className={styles.assessmentFilter}>Статус<select aria-label="Фильтр по статусу" value={assessmentFilter} onChange={e => setAssessmentFilter(e.target.value)}><option value="">Все статусы</option><option value="review">Требуют внимания</option><option value="unassessed">Без оценки</option><option value="completed">Проверено</option><option value="active">В очереди или на проверке</option><option value="failed">Ошибка или остановка</option></select></label>
+      <label className={styles.assessmentFilter}>Статус<select aria-label="Фильтр по статусу" value={assessmentFilter} onChange={e => setAssessmentFilter(e.target.value)}><option value="">Все статусы</option><option value="serious">С грубыми ошибками</option><option value="review">Требуют внимания</option><option value="unassessed">Без оценки</option><option value="completed">Проверено</option><option value="active">В очереди или на проверке</option><option value="failed">Ошибка или остановка</option></select></label>
     </div>
+    {assessmentFilter === 'serious' && <p className={styles.queueHint}>Показаны грубые ошибки по последней проверке текущей версии диалога. Прежние оценки доступны в истории версий. Отсутствие оценки или сбой проверки не означает отсутствия ошибок.</p>}
     <div className={styles.queueSelection}><label><input ref={all} type="checkbox" disabled={!visible.length} checked={visible.length > 0 && selectedVisible === visible.length} onChange={e => toggleVisible(e.target.checked)}/> Выбрать показанные</label>
       {selected.length ? <button className={styles.quiet} onClick={() => onSelect([])} aria-label="Снять выделение диалогов">Снять выбор ({selected.length})</button> : <span aria-live="polite">Найдено: {matching.length}</span>}</div>
     {selected.length > selectedVisible && <p className={styles.queueHint}>Выбранных версий за пределами списка: {selected.length - selectedVisible}. Они скрыты фильтрами или находятся в свёрнутой истории.</p>}

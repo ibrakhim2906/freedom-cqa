@@ -47,15 +47,15 @@
       "panel-404"
     ],
     "selected": 3,
-    "completed": 2,
-    "complete": false,
-    "completed_reference_judgments_matched": 16,
-    "completed_reference_judgments_checked": 16,
+    "completed": 3,
+    "complete": true,
+    "completed_reference_judgments_matched": 24,
+    "completed_reference_judgments_checked": 24,
     "mean_total_absolute_error_on_completed_cases": 0,
-    "mae_cases": 2,
-    "native_source_validations_passed": 2,
-    "score_replays_passed": 2,
-    "source_semantic_judgments_reviewed": 16,
+    "mae_cases": 3,
+    "native_source_validations_passed": 3,
+    "score_replays_passed": 3,
+    "source_semantic_judgments_reviewed": 24,
     "definite_grade_errors": [],
     "unsupported_explanations_with_matching_grade": [],
     "initial_run": {
@@ -78,8 +78,8 @@
       },
       {
         "case_id": "panel-404",
-        "status": "pending_successful_assessment",
-        "score": null,
+        "status": "completed",
+        "score": 65.5,
         "history": [
           {
             "status": "skipped_budget",
@@ -112,11 +112,17 @@
             "ledger_call_id": 782,
             "error": "api_http_429",
             "api_error_code": "credit_balance_exhausted"
+          },
+          {
+            "status": "completed",
+            "report": "artifacts/release-hardening/checklist017-boundary-final-check.json",
+            "ledger_call_id": 783
           }
-        ]
+        ],
+        "judgments_matched": 8
       }
     ],
-    "scope_limit": "The completed 17-turn Russian synthetic call is not evidence of general long-call performance. All selected cases include supplied policy context.",
+    "scope_limit": "The reused 17-turn Russian synthetic calls are not evidence of general long-call performance. All selected cases include supplied policy context.",
     "panel404_submitted_attempts": [
       {
         "report": "artifacts/release-hardening/checklist017-boundary-completion.json",
@@ -167,10 +173,23 @@
         "assessment_returned": false
       }
     ],
-    "panel404_provider_rejected_attempts": 4
+    "panel404_provider_rejected_attempts": 4,
+    "estimated_known_cost_usd": 0.202244,
+    "panel404_successful_attempt": {
+      "report": "artifacts/release-hardening/checklist017-boundary-final-check.json",
+      "started_at_utc": "2026-11-08T05:34:50.802060+00:00",
+      "ledger_call_id": 783,
+      "status": "completed",
+      "score": 65.5,
+      "judgments_matched": 8,
+      "estimated_known_cost_usd": 0.070139,
+      "latency_seconds": 25.212,
+      "native_source_validation": "passed",
+      "score_replay": "passed"
+    }
   },
-  "combined_estimated_known_cost_usd": 0.753454,
-  "status": "017 is the aligned release candidate. Two of three extra boundary checks completed; the remaining case awaits a successful separately recorded attempt.",
+  "combined_estimated_known_cost_usd": 0.933762,
+  "status": "017 is the aligned release candidate. Ten reused diagnostic cases and all three known boundary cases completed. One unlabelled75-turn DEV call also completed with two interpretive decisions changed from the older016 assessment; it is reported separately from agreement metrics.",
   "historical_preservation": "016 remains explicitly loadable; historical checklist snapshots, 65 DEV totals and 520 grade/rationale pairs are not rewritten.",
   "raw_report_sha256": {
     "checklist017-comparison.json": "8fade5d30321598e0179bb0fd7a6ca31856857f645d6aa3ea2a34541993522a9",
@@ -178,12 +197,115 @@
     "checklist017-boundary-completion.json": "b593837a91ab85a9060ef3047c004a62c45ba763f3a225533cce35ceaa9c37fe",
     "checklist017-boundary-after-topup.json": "32c199ef93038b12ef0046a834a61cb20a3a56215ab8c829428812c8b4caa710",
     "checklist017-boundary-after-delay.json": "8ff89d08de44f314cfee66035d498a604e2e35e38578d91a3f64f6c35d4af03b",
-    "checklist017-boundary-funded.json": "1a76bd182e020f9f5c43a6a37f031c1875f239c3d8185e0e747135fb8348ba0d"
+    "checklist017-boundary-funded.json": "1a76bd182e020f9f5c43a6a37f031c1875f239c3d8185e0e747135fb8348ba0d",
+    "checklist017-boundary-final-check.json": "89e190fc8178db8186491df026ea4904056a06145a302c10933299a6c096cc75",
+    "checklist017-longcall-results.json": "c51bbe05942bc284625479b4dcac42060d1b2ad968ec4121a3a386313eb5f042",
+    "checklist016-longcall-current-prompt-results.json": "3352a59196e00ba13222a7591d7ea353fb2cde7b57742e6c008172665aff739b"
   },
   "limitations": [
     "Report diagnostic and boundary results separately; no pooled fresh-accuracy claim.",
     "Exact quotations/source selection checks do not replace semantic review.",
     "Successful diagnostic behavior does not guarantee identical outputs on new conversations."
   ],
-  "updated_at_utc": "2026-11-08T05:28:44.839601+00:00"
+  "updated_at_utc": "2026-11-08T05:41:30.582674+00:00",
+  "long_call_qualitative_check": {
+    "case_id": "p4-ru-005",
+    "source": "organizer DEV",
+    "label_provenance": "unlabelled",
+    "selected": 1,
+    "completed": 1,
+    "messages": 75,
+    "references": 9,
+    "expectations_count": 0,
+    "same_conversation_and_reference_context_as_prior": true,
+    "native_source_validations_passed": 1,
+    "score_replays_passed": 1,
+    "source_judgments_reviewed": 8,
+    "request_coverage_items_reviewed": 6,
+    "definite_source_contradictions": [],
+    "ambiguous_or_interpretive_criteria": [
+      "needs",
+      "closing"
+    ],
+    "total": 81.25,
+    "provisional": true,
+    "uncertain_criteria": [
+      "contact",
+      "consultation",
+      "closing"
+    ],
+    "prior_total": 84.62,
+    "prior_prompt_version": "rubric-assessor-v3-6b3b408afe50",
+    "current_prompt_version": "rubric-assessor-v3-963619247384",
+    "observed_changes": [
+      {
+        "criterion_id": "needs",
+        "prior": {
+          "status": "not_applicable",
+          "answer": null
+        },
+        "current": {
+          "status": "scored",
+          "answer": "yes"
+        },
+        "prior_uncertainty": false,
+        "current_uncertainty": false
+      },
+      {
+        "criterion_id": "closing",
+        "prior": {
+          "status": "scored",
+          "answer": "yes"
+        },
+        "current": {
+          "status": "scored",
+          "answer": "no"
+        },
+        "prior_uncertainty": false,
+        "current_uncertainty": true
+      }
+    ],
+    "interpretation": "Lookup necessity is not independently established, but later document-choice clarification can support needsYes; the original PDF does not uniquely settle this applicability boundary. Closing remains interpretive because terminal thanks may function as farewell without a separate fixed phrase.",
+    "estimated_known_cost_usd": 0.110169,
+    "latency_seconds": 55.766,
+    "output_tokens": 4113,
+    "max_output_tokens": 6000,
+    "limitations": [
+      "A reused unlabelled actual DEV conversation; no accuracy or MAE metric is defined.",
+      "The older016 saved assessment used a different evaluator prompt, so differences cannot be attributed solely to translation.",
+      "No audio analyzed. Conditional policy snapshot and ASR limitations remain explicit."
+    ],
+    "source_support_concerns": [
+      {
+        "criterion_id": "needs",
+        "finding": "Both016 and017 with the same current prompt chooseYes. The telephone-lookup premise is not independently established by the supplied policy, but the later document-choice clarification provides additional support for applicability. The PDF does not uniquely adjudicate this boundary; do not claim N/A is uniquely correct or change needs to force this example."
+      },
+      {
+        "criterion_id": "closing",
+        "finding": "The PDF does not require a separate fixed goodbye. A terminal thanks-for-contact after further help can function as farewell. CurrentNo remains provisional, not uniquely established."
+      }
+    ],
+    "matched_current_prompt_016_comparison": {
+      "same_source_and_context": true,
+      "same_prompt_version": "rubric-assessor-v3-963619247384",
+      "native_source_validation": "passed",
+      "score_replay": "passed",
+      "total": 87.5,
+      "needs": "yes",
+      "closing": "yes",
+      "uncertain_criteria": [
+        "contact",
+        "consultation",
+        "management"
+      ],
+      "estimated_known_cost_usd": 0.106196,
+      "latency_seconds": 55.189,
+      "answer_status_differences_from017": [
+        "closing"
+      ],
+      "interpretation": "NeedsYes is shared. The closing answer differs under the same prompt; this single stochastic pair motivates a general semantic-farewell review, not a unique accuracy label."
+    }
+  },
+  "diagnostic_and_boundary_estimated_known_cost_usd": 0.823593,
+  "total_including_matched016_comparison_usd": 1.039958
 }
