@@ -212,4 +212,4 @@ The initial 65 DEV assessments used 70 attempts at approximately **$3.21 / $0.04
 
 Standard mode normally uses one assessment call. Independent review adds a blind assessment of every criterion and, on disagreement, adjudication. Mechanical repairs are bounded; all calls count against batch and cumulative spending limits. Inspecting saved results and resolving a human appeal make no model calls.
 
-The samples are small and authored; controlled translations and repeats are not independent accuracy samples. Policy applicability, noisy transcripts and rubric-boundary judgments remain sources of uncertainty. The 11:00 control dataset has not yet been evaluated. Raw runs and runtime databases remain local and ignored by Git.
+The samples are small and authored; controlled translations and repeats are not independent accuracy samples. Policy applicability, noisy transcripts and rubric-boundary judgments remain sources of uncertainty. The actual ten FBroker control chats completed with the frozen evaluator and are published in `results/prod/results.json`; their Ground Truth accuracy remains unknown. Raw runs and runtime databases remain local and ignored by Git.
