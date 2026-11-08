@@ -403,3 +403,21 @@ discovery alongside management. The final version passed its frozen contrasts,
 known-source regressions, designated repeats and organizer partial-label checks and
 is now default. Weights, allowed levels and earlier judgments were not overwritten.
 See [complete validation evidence](BOUNDARY_VALIDATION_RESULTS.md).
+
+
+## R016: corrected prerequisite with completed recovery
+
+On2026-11-08 the user explicitly selected **15/20 for consultation** when an
+incorrect prerequisite or key instruction is corrected before the customer acts
+and the request is ultimately resolved without an established remaining consequence.
+The earlier question mistakenly used a 30-point scale; the user subsequently
+confirmed 15/20 on the actual checklist scale.
+
+Saved as `freedom-reviewed-016.json` and now the default for new evaluations.
+An independent unresolved request, still-wrong key advice or harmful consequence
+can justify a lower level. Recovery and factual correctness must be supported.
+Other criteria keep their own independently evidenced findings.
+
+This is an explicit user calibration, not organizer Ground Truth. Existing015
+records and the frozen49-label acceptance count remain unchanged. The DEV run
+started under015 and retains that exact checklist and its original outcomes.

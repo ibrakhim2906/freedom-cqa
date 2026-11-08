@@ -22,6 +22,7 @@ from cqa.models import Checklist, Conversation, Reference
 from cqa.rubric import load_checklist
 from cqa.settings import ROOT, Settings
 
+from .comparison import compare_evaluations
 from .contracts import (
     AppealRequest,
     ImportRequest,
@@ -100,7 +101,7 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
             configured = True
         except ValueError:
             configured = False
-        return {"api_key_configured": configured, "model": settings.model, "strategy": "grounded",
+        return {"api_key_configured": configured, "model": settings.model, "strategy": settings.strategy,
                 "default_checklist": {"id": load_checklist().id, "version": load_checklist().version},
                 "ledger": workflow.ledger.summary(), "worker_concurrency": 1,
                 "audio_analysis_available": False}
@@ -240,6 +241,22 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
                 "usable": reference_applicable(ref, conversation, derive_dates=True),
                 "rejection_reasons": reference_rejection_reasons(ref, conversation, derive_dates=True)}
                 for ref in sources.values()]}
+
+    @app.get("/api/jobs/{job_id}/comparison-candidates")
+    async def comparison_candidates(job_id: str):
+        with store.session() as session:
+            job = require(session, Job, job_id)
+            source = session.get(Document, job.conversation_id)
+            candidates = session.scalars(select(Job).join(Document, Job.conversation_id == Document.id).where(
+                Document.kind == "conversation", Document.external_id == source.external_id,
+                Job.id != job_id, Job.status == "completed").order_by(Job.created_at.desc()).limit(100))
+            return [job_view(candidate) for candidate in candidates]
+
+    @app.get("/api/jobs/{job_id}/compare")
+    async def compare_saved(job_id: str, baseline: str):
+        before = await job_detail(baseline)
+        after = await job_detail(job_id)
+        return compare_evaluations(before, after)
 
     @app.get("/api/jobs/{job_id}/export")
     async def export(job_id: str):

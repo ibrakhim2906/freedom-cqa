@@ -12,7 +12,7 @@ from .grounding import evidence_context_for, select_reference_context
 from .ledger import BudgetExceeded, Ledger
 from .metrics import compare_case, summarize
 from .rubric import load_checklist
-from .settings import DEFAULT_STRATEGY, ROOT, Settings
+from .settings import ROOT, Settings
 
 
 def save_report(path, rows, metadata, ledger):
@@ -23,6 +23,9 @@ def save_report(path, rows, metadata, ledger):
 
 async def benchmark(args):
     settings = Settings.load(args.model)
+    if getattr(args, "repair_attempts", None) is not None:
+        settings = replace(settings, repair_attempts=args.repair_attempts)
+        settings.validate()
     if args.concurrency is not None:
         settings = replace(settings, concurrency=args.concurrency)
         settings.validate()
@@ -63,12 +66,13 @@ async def benchmark(args):
                     group_limit=args.budget_usd)
     before = ledger.committed()
     ceiling = settings.max_spend
-    strategy = getattr(args, "strategy", DEFAULT_STRATEGY)
+    strategy = getattr(args, "strategy", None) or settings.strategy
     evaluator = Evaluator(settings, ledger, ceiling, strategy=strategy)
     metadata = {"started_at": datetime.now(UTC).isoformat(),
                 "suite": "case-file" if args.cases_file else args.suite,
                 "model": settings.model, "reasoning_effort": settings.effort, "strategy": strategy,
                 "max_output_tokens": settings.max_output_tokens, "concurrency": settings.concurrency,
+                "repair_attempts": settings.repair_attempts,
                 "timeout_seconds": settings.timeout,
                 "run_budget_usd": args.budget_usd, "lifetime_committed_before_usd": before,
                 "budget_group": budget_group,
@@ -128,9 +132,10 @@ def main():
     run.add_argument("--case", action="append")
     run.add_argument("--cases-file", help="Frozen JSONL diagnostics; expectations stay outside inference")
     run.add_argument("--concurrency", type=int, help="Override local concurrency (1-8) for this run")
+    run.add_argument("--repair-attempts", type=int, choices=[0, 1], help="0 makes one attempt without reserving automatic repair")
     run.add_argument("--limit", type=int)
     run.add_argument("--model")
-    run.add_argument("--strategy", choices=["direct", "evidence-first", "grounded"], default=DEFAULT_STRATEGY)
+    run.add_argument("--strategy", choices=["direct", "evidence-first", "grounded", "assessor", "assessor-reviewed"])
     run.add_argument("--checklist")
     run.add_argument("--reference-pack", help="Explicit scoped reference bundle; no implicit product/entity selection")
     run.add_argument("--reference-scope")

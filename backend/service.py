@@ -26,7 +26,16 @@ class Workflow:
     def config(self):
         return {"model": self.settings.model, "effort": self.settings.effort,
                 "max_output_tokens": self.settings.max_output_tokens, "timeout": self.settings.timeout,
-                "strategy": "grounded", "core_source_sha256": self.core_hash}
+                "repair_attempts": self.settings.repair_attempts,
+                "strategy": self.settings.strategy, "core_source_sha256": self.core_hash}
+
+    def schema_for(self, conversation, checklist, strategy=None):
+        strategy = strategy or self.settings.strategy
+        if strategy in {"assessor", "assessor-reviewed"}:
+            from cqa.assessor import prepare
+            return prepare(conversation, checklist)[2]
+        grounded = strategy == "grounded"
+        return schema_for(conversation, checklist, grounded=grounded, source_contract=grounded)
 
     async def start(self):
         interrupted_groups = set()
@@ -58,6 +67,7 @@ class Workflow:
 
     def enqueue(self, request, *, retry_of=None):
         body = request.model_dump()
+        chosen_config = self.config() | {"strategy": request.strategy or self.settings.strategy}
         with self.store.session.begin() as session:
             previous = session.scalar(select(Batch).where(Batch.request_id == request.request_id))
             if previous:
@@ -75,9 +85,9 @@ class Workflow:
                 if doc is None or doc.kind != "conversation":
                     raise ValueError("Selected conversation revision does not exist")
                 conversation = Conversation.model_validate(doc.content)
-                key = digest({"conversation_revision": doc.id, "config": self.config(),
+                key = digest({"conversation_revision": doc.id, "config": chosen_config,
                     "input": fingerprint(conversation, checklist, grounded=True),
-                    "schema": schema_for(conversation, checklist, grounded=True, source_contract=True)})
+                    "schema": self.schema_for(conversation, checklist, chosen_config["strategy"])})
                 existing = session.scalar(select(Job).where(Job.cache_key == key,
                     Job.status.in_(["queued", "running"] if request.force else ["queued", "running", "completed"]))
                     .order_by(Job.created_at.desc()).limit(1))
@@ -91,7 +101,7 @@ class Workflow:
             if request.budget_usd > self.settings.max_spend:
                 raise ValueError("Batch budget exceeds the configured lifetime limit")
             batch = Batch(request_id=request.request_id, request_hash=digest(body),
-                          budget=request.budget_usd, config=self.config())
+                          budget=request.budget_usd, config=chosen_config)
             session.add(batch)
             session.flush()
             job_ids = []
@@ -123,6 +133,8 @@ class Workflow:
         if not ids:
             return
         settings = replace(self.settings, model=config["model"], effort=config["effort"],
+                           repair_attempts=config.get("repair_attempts", 1),
+                           strategy=config.get("strategy", "grounded"),
                            max_output_tokens=config["max_output_tokens"], timeout=config["timeout"])
         grouped_ledger = Ledger(settings.ledger_path, settings.max_spend, budget_group=batch_id, group_limit=budget)
         evaluator = None

@@ -15,6 +15,7 @@ class RunRequest(StrictModel):
     request_id: str = Field(min_length=1, max_length=100)
     budget_usd: float = Field(gt=0, le=20, allow_inf_nan=False)
     force: bool = False
+    strategy: Literal["assessor", "assessor-reviewed"] | None = None
 
 
 class RetryRequest(StrictModel):

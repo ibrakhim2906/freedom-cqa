@@ -8,6 +8,7 @@ export function newCriterion(): Criterion {
 export function ChecklistEditor({value, onChange, onSave, busy}: {value: Checklist; onChange: (c: Checklist) => void; onSave: () => void; busy: boolean}) {
   const change = (i: number, patch: Partial<Criterion>) => onChange({...value, criteria: value.criteria.map((c, n) => n === i ? {...c, ...patch} : c)})
   return <div className={styles.editor}>
+    <div className={styles.editorActions}><div><b>{value.criteria.length} configured criteria</b><span>Save a new version to use these changes in an evaluation.</span></div><button onClick={() => onChange({...value, criteria: [...value.criteria, newCriterion()]})}>Add criterion</button><button className={styles.primary} disabled={busy} onClick={onSave}>Save checklist version</button></div>
     <div className={styles.row}><label>Checklist ID<input value={value.id} onChange={e => onChange({...value, id: e.target.value})}/></label>
       <label>Version<input value={value.version} onChange={e => onChange({...value, version: e.target.value})}/></label>
       <label>Title<input value={value.title} onChange={e => onChange({...value, title: e.target.value})}/></label></div>
@@ -27,6 +28,5 @@ export function ChecklistEditor({value, onChange, onSave, busy}: {value: Checkli
       <div className={styles.row}><button onClick={() => change(i, {levels: [...c.levels, {value: `level-${c.levels.length + 1}`, fraction: 0.5, description: ''}]})}>Add level</button>
         <button onClick={() => onChange({...value, criteria: value.criteria.filter((_, n) => n !== i)})}>Remove criterion</button></div>
     </fieldset>)}
-    <div className={styles.row}><button onClick={() => onChange({...value, criteria: [...value.criteria, newCriterion()]})}>Add criterion</button><button disabled={busy} onClick={onSave}>Save checklist version</button></div>
   </div>
 }

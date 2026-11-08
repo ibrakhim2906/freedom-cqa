@@ -7,6 +7,10 @@ import {ChecklistEditor, newCriterion} from './Checklists'
 import {AppealForm, ResolveForm} from './ReviewForms'
 import {ReferenceContext} from './ReferenceContext'
 import styles from './App.module.css'
+import {Icon} from './Icon'
+import {ConversationQueue} from './ConversationQueue'
+import {Recording} from './Recording'
+import {AssessmentComparison} from './AssessmentComparison'
 
 function sourceHighlights(text: string, kind: 'dialogue'|'reference', sourceId: string,
   items: ({quote: string} & CitationSelection)[]) {
@@ -46,6 +50,7 @@ function App() {
   const [checklistId, setChecklistId] = useState(''), [config, setConfig] = useState<Config>()
   const [conversation, setConversation] = useState<ConversationDetail>(), [job, setJob] = useState<JobDetail>(), [jobs, setJobs] = useState<JobRow[]>([])
   const [selected, setSelected] = useState<string[]>([]), [budget, setBudget] = useState('1.00')
+  const [strategy, setStrategy] = useState<'assessor'|'assessor-reviewed'>('assessor')
   const [error, setError] = useState(''), [notice, setNotice] = useState(''), [busy, setBusy] = useState(false)
   const [importText, setImportText] = useState(''), [showImport, setShowImport] = useState(false)
   const [focus, setFocus] = useState<{ids: string[]; items?: Evidence[]}>({ids: []})
@@ -101,6 +106,7 @@ function App() {
         if (cancelled || !result) return
         setBatch(result)
         if (result.jobs.some(j => !terminal.has(j.status))) timer = setTimeout(poll, 1500)
+        else setNotice(`Batch finished: ${result.jobs.filter(j => j.status === 'completed').length} completed, ${result.jobs.filter(j => ['failed', 'interrupted'].includes(j.status)).length} failed${result.jobs.some(j => j.status === 'cancelled') ? `, ${result.jobs.filter(j => j.status === 'cancelled').length} cancelled` : ''}.`)
       } catch (e) {if (!cancelled) setError((e as Error).message)}
     }
     void poll(); return () => {cancelled = true; clearTimeout(timer)}
@@ -118,7 +124,7 @@ function App() {
   }
   async function run(ids: string[], force = false) {
     await act(async () => {
-      const result = await api<BatchResult>('/evaluations', {conversation_ids: ids, checklist_id: checklistId, request_id: crypto.randomUUID(), budget_usd: Number(budget), force})
+      const result = await api<BatchResult>('/evaluations', {conversation_ids: ids, checklist_id: checklistId, request_id: crypto.randomUUID(), budget_usd: Number(budget), strategy, force})
       setBatchId(result.batch_id || ''); setBatch(undefined)
       if (result.job_ids[0]) {const j = await api<JobDetail>(`/jobs/${result.job_ids[0]}`); setConversationId(j.conversation_id); setJobId(j.id)}
       setNotice(result.reused.length === result.job_ids.length ? 'Loaded saved or already active evaluations. No new job was submitted.' : `Queued ${result.job_ids.length - result.reused.length} real API evaluations; reused ${result.reused.length}.`)
@@ -135,9 +141,10 @@ function App() {
   const referenceHighlight = reference?.quote ? sourceHighlights(reference.ref.text, 'reference', reference.ref.id,
     [{quote: reference.quote, ...reference.selection}]) : undefined
   return <div className={styles.app}>
-    <header className={styles.header}><div><h1>Freedom CQA</h1><span>Conversation evaluation & review</span></div>
-      <nav>{['conversations','checklists','history'].map(v => <button key={v} className={view === v ? styles.active : ''} onClick={() => setView(v)}>{v === 'history' ? 'Evaluation history' : v[0].toUpperCase() + v.slice(1)}</button>)}</nav>
-      <div className={styles.account}>{config ? <><b>{config.api_key_configured ? 'API configured' : 'API key missing'}</b><span>{dollars(config.ledger.lifetime_committed_usd)} / {dollars(config.ledger.lifetime_limit_usd)} local limit</span></> : 'Connecting…'}</div>
+    <header className={styles.header}>
+      <div className={styles.brand}><div className={styles.brandMark} aria-hidden="true">F</div><div><span className={styles.brandName}>FREEDOM<span>CQA</span></span><span className={styles.brandSubtitle}>Conversation intelligence</span></div></div>
+      <nav aria-label="Main navigation">{(['conversations','checklists','history'] as const).map(v => <button key={v} className={view === v ? styles.active : ''} aria-current={view === v ? 'page' : undefined} onClick={() => setView(v)}><Icon name={v === 'conversations' ? 'chat' : v === 'checklists' ? 'settings' : 'history'} size={16}/>{v === 'history' ? 'Evaluation history' : v[0].toUpperCase() + v.slice(1)}</button>)}</nav>
+      <div className={styles.account}>{config ? <><div><b>{config.api_key_configured ? 'API configured' : 'API key missing'}</b><span>{dollars(config.ledger.lifetime_committed_usd)} / {dollars(config.ledger.lifetime_limit_usd)} local limit</span></div><div className={styles.avatar}><Icon name="shield" size={16}/></div></> : 'Connecting…'}</div>
     </header>
     {error && <div role="alert" className={styles.error}>{error}<button onClick={() => setError('')}>Dismiss</button></div>}
     {notice && <div role="status" className={styles.notice}>{notice}</div>}
@@ -148,25 +155,26 @@ function App() {
       {editor ? <ChecklistEditor value={editor} onChange={setEditor} busy={busy} onSave={() => act(async () => {const saved = await api<ChecklistRow>('/checklists', editor); await refresh(); setChecklistId(saved.id); setEditor(undefined); setNotice('Saved a new immutable checklist version.')})}/> :
         checklists.find(c => c.id === checklistId)?.content.criteria.map(c => <article className={styles.card} key={c.id}><h3>{c.title} <small>{c.weight} points · {c.kind}</small></h3><p>{c.instruction}</p><p>{c.levels.map(l => `${l.value}: ${l.description}`).join(' · ')}</p>{c.na_condition && <p>N/A only when: {c.na_condition}</p>}</article>)}
     </section> : view === 'history' ? <History onSelect={chooseJob}/> : <>
-      <div className={styles.toolbar}><button onClick={() => setShowImport(!showImport)}>Import conversations</button>
+      <section className={styles.intro}><div><div className={styles.eyebrow}>Quality workspace</div><h1>Conversation review</h1><p>Evaluate the conversation. Follow the evidence. Record the decision.</p></div>
+        <div className={styles.stats} aria-label="Workspace overview"><div className={styles.stat}><strong>{conversations.length}</strong><span>Conversations</span></div><div className={styles.stat}><strong>{conversations.filter(c => c.channel === 'voice call').length}</strong><span>Call transcripts</span></div><div className={styles.stat}><strong>{new Set(conversations.map(c => c.language)).size}</strong><span>Languages</span></div><div className={styles.stat}><strong>{selected.length}</strong><span>Selected</span></div></div></section>
+      <div className={styles.toolbar}><button onClick={() => setShowImport(!showImport)}><Icon name="upload" size={15}/>Import conversations</button>
         <select aria-label="Evaluation checklist" value={checklistId} onChange={e => setChecklistId(e.target.value)}>{checklists.map(c => <option key={c.id} value={c.id}>{c.title} · {c.version}</option>)}</select>
+        <label className={styles.depthControl}><span>Assessment depth</span><select aria-label="Assessment depth" aria-describedby={strategy === 'assessor-reviewed' ? 'assessment-depth-help' : undefined} value={strategy} onChange={e => setStrategy(e.target.value as 'assessor'|'assessor-reviewed')}><option value="assessor">Standard</option><option value="assessor-reviewed">Independent review</option></select></label>
         <label>Batch budget $<input aria-label="Batch budget" type="number" min="0.01" step="0.01" value={budget} onChange={e => setBudget(e.target.value)}/></label>
-        <button disabled={busy || !selected.length || !checklistId} onClick={() => run(selected)}>Evaluate selected ({selected.length})</button></div>
+        <button className={styles.primary} disabled={busy || !selected.length || !checklistId} onClick={() => run(selected)}><Icon name="play" size={14}/>Evaluate selected ({selected.length})</button>
+        {strategy === 'assessor-reviewed' && <p id="assessment-depth-help" className={styles.depthHint}>New evaluations use additional model calls within the batch budget. Disagreements may still require human review.</p>}</div>
       {showImport && <section className={styles.importBox}><h2>Import JSON or JSONL</h2><p>Canonical conversations, organizer DEV responses, arrays and diagnostic JSONL are supported. Only conversation data enters evaluation.</p>
         <input aria-label="Conversation file" type="file" accept=".json,.jsonl,application/json" onChange={e => {const file = e.target.files?.[0]; if (file) file.text().then(setImportText).catch(e => setError(e.message))}}/>
         <textarea aria-label="Conversation JSON" rows={9} value={importText} onChange={e => setImportText(e.target.value)} placeholder='{"id":"conversation-1","channel":"agent chat","language":"EN","messages":[…]}'/>
         <button disabled={busy || !importText.trim()} onClick={importNow}>Import</button></section>}
-      {batch && <div className={styles.batch}><b>Batch: {batch.jobs.filter(j => terminal.has(j.status)).length}/{batch.jobs.length} finished</b><span>{dollars(batch.committed_usd)} committed / {dollars(batch.budget_usd)} budget</span>{batch.jobs.map(j => <button key={j.id} onClick={() => chooseJob(j)}>{j.id.slice(0, 7)} · {j.status}</button>)}</div>}
-      <main className={styles.workspace}><aside className={styles.sidebar}><h2>Conversations ({conversations.length})</h2>
-        <label><input type="checkbox" checked={selected.length > 0 && selected.length === conversations.length} onChange={e => setSelected(e.target.checked ? conversations.map(c => c.id) : [])}/> Select all</label>
-        {conversations.map(c => <div key={c.id} className={`${styles.conversationRow} ${conversationId === c.id ? styles.selected : ''}`}><input aria-label={`Select ${c.external_id}`} type="checkbox" checked={selected.includes(c.id)} onChange={e => setSelected(old => e.target.checked ? [...old, c.id] : old.filter(id => id !== c.id))}/>
-          <button onClick={() => chooseConversation(c.id)}><b>{c.external_id}</b><span>{c.language} · {c.channel} · {c.message_count} messages</span><small>Revision {c.content_hash.slice(0, 7)} · {date(c.created_at)}</small></button></div>)}
-        {!conversations.length && <p>Import conversations to begin. No prepared evaluations are loaded.</p>}</aside>
-        <section className={styles.transcript}>{source ? <><div className={styles.sectionHeading}><h2>{source.external_id}</h2><span>{source.language} · {source.channel}</span></div>
-          <div className={styles.row}><button onClick={() => {setImportText(JSON.stringify(source.content, null, 2)); setShowImport(true)}}>Edit / import new revision</button><button disabled={busy} onClick={() => run([source.id])}>Evaluate this revision</button></div>
+      {batch && <div className={styles.batch} role="status"><div className={styles.batchHead}><Icon name="list" size={17}/><div><b>Batch: {batch.jobs.filter(j => terminal.has(j.status)).length}/{batch.jobs.length} finished</b><br/><span>{dollars(batch.committed_usd)} committed / {dollars(batch.budget_usd)} budget</span></div><progress aria-label="Evaluation batch progress" value={batch.jobs.filter(j => terminal.has(j.status)).length} max={batch.jobs.length || 1}/></div>{batch.jobs.map(j => <button key={j.id} onClick={() => chooseJob(j)}><span className={styles.status} data-status={j.status}>{j.status}</span>{j.id.slice(0, 7)}</button>)}</div>}
+      <main className={styles.workspace}>
+        <ConversationQueue conversations={conversations} selected={selected} current={conversationId} onSelect={setSelected} onChoose={chooseConversation}/>
+        <section className={styles.transcript}>{source ? <><div className={styles.sectionHeading}><div><div className={styles.panelLabel}>Source transcript</div><h2>{source.external_id}</h2><span><Icon name={source.channel === 'voice call' ? 'call' : 'chat'} size={12}/>{source.channel === 'voice call' ? 'Voice call' : 'Agent chat'} · {source.content.messages.length} messages</span></div><span className={styles.pill}>{source.language}</span></div>
+          <div className={styles.transcriptActions}><button onClick={() => {setImportText(JSON.stringify(source.content, null, 2)); setShowImport(true)}}>Edit / import new revision</button><button disabled={busy} onClick={() => run([source.id])}>Evaluate this revision</button></div>
           <ReferenceContext key={source.id} source={source} onApplied={async id => {await refresh(); setSelected(old => [...new Set(old.map(selectedId => selectedId === source.id ? id : selectedId))]); chooseConversation(id)}} onError={setError}/>
-          {source.metadata.recording_url && <a href={safeLink(source.metadata.recording_url)} target="_blank" rel="noreferrer">Open original recording</a>}
-          {source.channel === 'voice call' && <p className={styles.muted}>Transcript assessment only. Audio, diction and pronunciation have not been analyzed.</p>}
+          {source.metadata.recording_url && <Recording key={source.metadata.recording_url} url={source.metadata.recording_url}/>}
+          {source.channel === 'voice call' && !source.metadata.recording_url && <p className={styles.muted}>Transcript assessment only. No recording link is available; voice quality has not been analyzed.</p>}
           {source.content.messages.map(m => {
             const selected = (focus.items || []).filter(item => item.message_id === m.id)
             const highlight = sourceHighlights(m.text, 'dialogue', m.id, selected)
@@ -176,9 +184,9 @@ function App() {
             </article>
           })}
           {source.content.references.length > 0 && <details><summary>Attached reference material ({source.content.references.length})</summary>{source.content.references.map(ref => <button key={ref.id} onClick={() => setReference({ref})}>{ref.id}</button>)}</details>}
-        </> : <div className={styles.empty}><h2>Choose a conversation</h2><p>Import a file, select a checklist version and run the real evaluator.</p></div>}</section>
-        <section className={styles.results}><div className={styles.row}><h2>Assessment</h2><select aria-label="Saved evaluation" value={jobId} onChange={e => setJobId(e.target.value)}><option value="">Choose a saved evaluation</option>{jobs.map(j => <option key={j.id} value={j.id}>{date(j.created_at)} · {j.status} · {j.id.slice(0, 7)}</option>)}</select></div>
-          {job ? <Assessment job={job} busy={busy} onRetry={retry} onCancel={() => act(async () => {await api(`/jobs/${job.id}/cancel`, {}); await refreshJob()})} onEvidence={evidence} onReference={(ref, quote, selection) => setReference({ref, quote, selection})} onAppeal={setAppealCriterion} onResolve={setResolveAppeal}/> : <p className={styles.empty}>Run an evaluation or select a saved result. Loading a saved result makes no API call.</p>}
+        </> : <div className={styles.empty}><div className={styles.emptyIcon}><Icon name="chat" size={24}/></div><h2>Choose a conversation</h2><p>Select a conversation from the queue to read its source transcript and review its assessment.</p>{!conversations.length && <button onClick={() => setShowImport(true)}><Icon name="upload" size={14}/>Import conversations</button>}</div>}</section>
+        <section className={styles.results}><div className={styles.resultsHeader}><div className={styles.panelLabel}>Quality assessment</div><h2>Evidence & decisions</h2><select aria-label="Saved evaluation" value={jobId} onChange={e => setJobId(e.target.value)}><option value="">Choose a saved evaluation</option>{jobs.map(j => <option key={j.id} value={j.id}>{date(j.created_at)} · {j.status} · {j.id.slice(0, 7)}</option>)}</select>{job && <p className={styles.muted} style={{marginBottom: 0}}>Evaluated with: {job.checklist.title} · {job.checklist.version}</p>}</div>
+          {job ? <><AssessmentComparison key={job.id} job={job} jobs={jobs}/><Assessment job={job} busy={busy} onRetry={retry} onCancel={() => act(async () => {await api(`/jobs/${job.id}/cancel`, {}); await refreshJob()})} onEvidence={evidence} onReference={(ref, quote, selection) => setReference({ref, quote, selection})} onAppeal={setAppealCriterion} onResolve={setResolveAppeal}/></> : <div className={styles.empty}><div className={styles.emptyIcon}><Icon name="list" size={25}/></div><h2>Ready for assessment</h2><p>{source ? 'Evaluate this conversation or open a saved assessment above. Every decision links back to its source evidence.' : 'Choose a conversation to evaluate it against your saved checklist.'}</p><small>Opening saved results makes no API call.</small></div>}
         </section></main></>}
     {reference && <div className={styles.overlay}><section className={styles.dialog}><button className={styles.close} onClick={() => setReference(undefined)}>Close reference</button><h2>{reference.ref.id}</h2><p>{reference.ref.provenance}</p>
       <p>Scope: {reference.ref.scope || 'Explicitly supplied facts'} · {referenceDate(reference.ref)}</p>
@@ -195,6 +203,6 @@ function History({onSelect}: {onSelect: (j: JobRow) => void}) {
   const [jobs, setJobs] = useState<JobRow[]>([]), [error, setError] = useState('')
   useEffect(() => {api<JobRow[]>('/jobs').then(setJobs).catch(e => setError(e.message))}, [])
   return <section className={styles.page}><h2>Evaluation history</h2>{error && <p role="alert">{error}</p>}<p>Every new attempt and human review is preserved. Opening a saved result does not call the API.</p>
-    <table><thead><tr><th>Created</th><th>Evaluation</th><th>Status</th><th>Human revisions</th><th>Action</th></tr></thead><tbody>{jobs.map(j => <tr key={j.id}><td>{date(j.created_at)}</td><td>{j.id.slice(0, 8)}</td><td>{j.status}</td><td>{j.review_revision}</td><td><button onClick={() => onSelect(j)}>Open result</button></td></tr>)}</tbody></table>{!jobs.length && <p>No evaluations yet.</p>}</section>
+    <table><thead><tr><th>Created</th><th>Evaluation</th><th>Status</th><th>Human revisions</th><th>Action</th></tr></thead><tbody>{jobs.map(j => <tr key={j.id}><td>{date(j.created_at)}</td><td>{j.id.slice(0, 8)}</td><td><span className={styles.status} data-status={j.status}>{j.status}</span></td><td>{j.review_revision}</td><td><button onClick={() => onSelect(j)}>Open result</button></td></tr>)}</tbody></table>{!jobs.length && <p>No evaluations yet.</p>}</section>
 }
 export default App

@@ -1,211 +1,113 @@
 # Freedom CQA
 
-Conversation Quality Analytics prototype for the Freedom Broker hackathon.
+A conversation-quality review workspace for Freedom Broker: evaluate an operator,
+inspect the evidence, resolve an appeal, and compare results after a checklist change.
+Supports Russian, Kazakh and English chats and supplied call transcripts.
 
-Status: the local React/FastAPI workflow is implemented: conversation import,
-versioned checklists, real evaluations, evidence inspection, saved results and
-appeals with preserved AI/human history. The benchmark CLI remains available.
+## Run
 
-The current [source contract v5](docs/SOURCE_CONTRACT_V5.md) derives review links
-from explicit source relations and requires negative proofs to match the full
-assertion scope. Historical results and frozen expectations remain preserved.
-The [six-case manual rerun](docs/MANUAL_DIAGNOSTICS_V4.md) records five strict
-passes, one retained rejection and remaining semantic qualifications, at $0 API
-cost. These diagnostics do not establish production accuracy or reliability.
-
-An isolated [lean candidate](docs/LEAN_EVALUATOR.md) was compared on six fresh
-frozen cases using Sol 6.1 medium. [The comparison](docs/LEAN_EVALUATOR_COMPARISON_RESULTS.md)
-records 1/6 lean versus 3/6 current first-pass valid outputs. The candidate is
-smaller but is not promoted; all failures remain visible and API cost is $0.
-
-## Run the application
+Python 3.12+, Node.js and pnpm are required. From the repository root:
 
 ```powershell
+Copy-Item .env.example .env
+# Set OPENAI_API_KEY locally in .env. Never commit the key.
 ./scripts/start-local.ps1
 ```
 
-Open **http://127.0.0.1:8000**. Configure the backend key in the ignored `.env` first.
-See [workflow, startup and verification details](docs/WORKFLOW.md) for imports,
-reference context, spending limits, review decisions and remaining limitations.
+Open http://127.0.0.1:8000. No account registration is required for the local demo.
+The server serves the compiled React application and API together.
 
-The [official product-facts research](docs/OFFICIAL_PRODUCT_FACTS.md) adds a scoped,
-optional reference pack integrated with [scope/date preview, immutable evaluation inputs and appeals](docs/WORKFLOW.md).
-[Five complete assessment reviews](docs/COMPLETE_ASSESSMENT_REVIEW.md)
-show how those facts affect useful judgments while preserving genuine deductions
-and unresolved evidence. These are conditional manual reviews, not new benchmark results.
+Set `CQA_MAX_SPEND_USD` to your authorized cumulative local spending limit.
+`CQA_STRATEGY=assessor` selects the compact evaluator. The interface offers
+**Independent review** for additional source-based checking within the selected
+batch budget. Every new evaluation uses the actual model API; there is no offline
+score fallback. Opening a saved result or resolving an appeal does not call a model.
 
-The [six-case acceptance suite](docs/OFFICIAL_FACTS_ACCEPTANCE_V1.md) freezes all
-48 provisional expected judgments before paid inference. Verify the pinned inputs,
-sources and label isolation for free with `uv run python -m scripts.verify_official_acceptance`.
-The [first authorized real run](docs/OFFICIAL_FACTS_ACCEPTANCE_V1_RESULTS.md)
-produced four valid assessments and two strict evidence-contract failures. It cost
-$0.5133 using provider-reported tokens and cache-aware pricing. The original
-expectations and freeze remain unchanged.
+## Review workflow
 
-## Evaluator quick start
+1. **Import** organizer JSON, canonical JSON or JSONL. Original roles and timestamps
+   are preserved; changed conversations become new saved revisions.
+2. **Choose a checklist** or save a new version with edited criteria, weights,
+   permitted levels and N/A conditions. New criteria enter actual model requests.
+3. **Evaluate** the selected conversations. Follow persisted progress and explicit
+   failures. Standard and Independent review are separate, budgeted choices.
+4. **Inspect** criterion decisions, weighted points, material uncertainty, source
+   evidence and serious-error flags. Evidence clicks highlight original text.
+5. **Appeal** a criterion and record the reviewer's decision and reason. Original
+   AI findings remain intact; the effective score is recalculated in code.
+6. **Compare** saved assessments to see actual score, decision, source and checklist
+   changes. Export the complete review history or organizer-format results.
 
-```powershell
-uv sync --dev
-# Configure OPENAI_API_KEY in the Git-ignored .env file.
-uv run cqa check-config
-uv run pytest -q
-# Optional billable single-case check; use a fresh output filename.
-uv run cqa benchmark --cases-file evals/core-anchors-v4.jsonl --case core-language-wrong --concurrency 1 --budget-usd 0.20 --output artifacts/benchmark/new-run.json
-```
+The queue supports search and language/channel filters. Calls retain recording
+links; direct audio-file URLs can play in the workspace. Current model assessments
+use transcripts and do not claim to assess diction or pronunciation from audio.
 
-See [benchmark setup, data provenance, and result interpretation](docs/BENCHMARK.md).
-There is no offline evaluation fallback.
+## Evaluator
 
-New evaluations use the grounded evaluator and versioned
-[reviewed checklist](checklists/freedom-reviewed-015.json). The
-[rubric journal](docs/RUBRIC_DECISIONS.md) distinguishes accepted decisions from
-the documented team interpretation R013. The original
-`checklists/freedom-v1.json` remains available through `--checklist` for comparisons.
-The [internal 100-point product rubric](docs/SOLUTION_GRADING_RUBRIC.md) distinguishes
-our engineering targets from the organizer's actual selection priorities.
+The compact `rubric-assessor-v3` core reads the complete source and configured
+rubric. It returns criterion decisions, explanations, immutable evidence selections,
+request coverage and material missing information. Code resolves exact quotations,
+derives deduction records, validates sources and computes the final score.
 
-The latest [claim-dependency and corrected-advice checks](docs/CLAIM_DEPENDENCY_RESULTS.md)
-recover the four frozen organizer validation failures while preserving real
-deductions and unresolved evidence. The focused checks cost $1.69 including the
-baseline; they do not establish organizer Ground Truth accuracy. The preceding
-[65-case review](docs/ORGANIZER_65_REVIEW.md) remains preserved unchanged.
+It distinguishes an appropriate proposed next step from completed backend work.
+Unknown facts are not treated as verified or automatically converted to failures.
+Each applicable criterion receives the model's most defensible configured grade.
+Missing information remains visible as a review recommendation beside the numeric
+score. No zero, midpoint or maximum is inserted as a fallback. Historical v1/v2
+records preserve their original abstention semantics.
 
-The subsequent [offline source audit](docs/EXISTING_RESULTS_AUDIT.md) reviews all
-65 source/result pairs and the supplied materials without paid calls or score
-changes. Its [missing-facts inventory](docs/MISSING_FACTS_INVENTORY.md) separates
-24 reusable evidence topics from case labels and team interpretation choices.
+Independent review makes a blind source-based assessment of every configured
+criterion, including confident full-credit decisions. Disagreements can go to source-based adjudication; every attempt and its
+cost remain recorded. An unavailable review does not erase a valid primary result
+or masquerade as a completed review. Agreement between model passes is not proof
+of correctness.
 
-The [evidence-context and semantic-coverage implementation](docs/EVIDENCE_CONTEXT_COVERAGE_RESULTS.md)
-adds source-date provenance, grading-rule evidence, explicit answer support and
-inspectable source exclusions. It passed local compatibility and rejection checks
-without paid API calls; live model quality and provider acceptance remain untested.
+Historical engines and results remain preserved under their original contracts.
+See [delivery results](docs/DELIVERY_RESULTS.md) for observed behavior and limits.
 
-The first real run is recorded in [baseline results](docs/BASELINE_RESULTS.md),
-with [all-run coverage and spending](docs/BENCHMARK_RUN_SUMMARY.md) and
-[reference-label review notes](docs/REFERENCE_REVIEW.md). These metrics are
-development diagnostics, not organizer Ground Truth accuracy.
+## Actual checks
 
-The [updated-rubric benchmark](docs/CALIBRATED_BENCHMARK_RESULTS.md) covers 117 real
-API evaluations, a 24-case same-input control, and targeted checks. It reports
-criterion agreement separately from score error and the loss of numeric coverage.
+The new compact core completed eight live development evaluations on the first
+attempt, matching all 49 predeclared determinate decisions. These cover six
+RU/KZ/EN scenarios and a two-version custom criterion. One correction-policy ordinal
+was excluded before inference because the supplied rule is ambiguous.
 
-The [core workflow experiment](docs/CORE_EXPERIMENT_RESULTS.md) adds 14 fresh
-diagnostic conversations, actual-request repeat checks, and transparent score bounds
-for unresolved criteria. The experimental two-call evidence-first strategy added
-cost without improving the tested judgments and was not promoted.
-The report preserves a 6.93-point repeated-score drift and the remaining source
-and reference limitations; passing the local anchors is not organizer accuracy.
+Two additional independently reviewed runs confirmed the selected consequential
+criteria. These small assistant-authored cases also helped diagnose the earlier candidate;
+they are regression evidence, not
+organizer Ground Truth accuracy or a promised competition score.
 
-The [grounded validation results](docs/GROUNDED_VALIDATION_RESULTS.md) complete the
-earlier [interrupted candidate comparison](docs/GROUNDING_AND_OVERLAP_RESULTS.md).
-The single-call grounded evaluator is now the default, with scoped references,
-factual-claim citations and rule-linked deductions. The report preserves the
-organizer example that needs review, reduced numeric coverage, costs and limits.
-The legacy mode remains available through `--strategy direct` with an older checklist.
+A focused integration check covers imports, job persistence, appeals, the compact
+assessor and submission validation. The frontend build and desktop/mobile browser
+walkthrough pass. The final DEV file contains **65/65 numerical assessments, 65 ok and 0 errors**.
+It preserves 43 prior numerical results and uses 22 v3 reassessments under the
+explicit team-selected policy snapshot. Earlier outputs and failed attempts
+remain preserved. Numerical coverage does not establish expert accuracy. One
+discovery judgment remains disputed and has a saved review request.
 
-The [semantic review](docs/SEMANTIC_REVIEW.md) distinguishes suspected evaluator
-mistakes from ambiguous labels. Original datasets remain frozen;
-[structured review notes](evals/label-review-v2.json) do not override their expectations.
-The [next evaluator experiment](docs/NEXT_EVALUATOR_EXPERIMENT.md) explains why a
-full rewrite is not currently justified and how to compare substantive alternatives.
-`uv run python -m scripts.prepare_human_review` prepares private source-based review
-items without model predictions or paid API calls; existing review files are preserved.
-
-To compare a frozen custom diagnostic file with bounded concurrency:
+## CLI and submission
 
 ```powershell
-uv run cqa benchmark --cases-file evals/review-v2.jsonl --concurrency 1 --budget-usd 0.40 --output artifacts/benchmark/my-review-run.json
+uv run cqa benchmark --cases-file evals/delivery-acceptance-v1.jsonl --strategy assessor --budget-usd 1.50 --output artifacts/my-check.json
+uv run cqa benchmark --suite organizer --strategy assessor --budget-usd 3.50 --output artifacts/my-dev-run.json
 ```
 
-Each new evaluation is billable. Reopening saved results should reuse the saved
-evaluation when web persistence is implemented. Observed organizer averages before
-the semantic comparison were approximately $0.026/chat and $0.046/call transcript,
-excluding hosting and audio transcription; longer inputs and repairs cost more.
+Organizer DEV input belongs in ignored `data/private/dev.json`. Credentials,
+private conversations, recordings and runtime databases are excluded from Git.
+Each benchmark saves its exact input snapshot and original failures. Never reuse
+an output filename to overwrite a prior result.
 
-## Product goal
+[Control-run instructions](docs/CONTROL_RUN.md) prepare the actual ten unseen
+inputs when received; no PROD results have been fabricated.
 
-Let a quality reviewer configure a checklist, evaluate an operator's conversation,
-inspect the evidence behind each judgment, and resolve appeals with a preserved
-decision history. Support Russian, Kazakh, and English.
+[Submission format](docs/SUBMISSION_FORMAT.md) documents the required JSON1.0 files,
+original turn numbering, weights and errors. [Workflow details](docs/WORKFLOW.md)
+cover persistence, evidence and human review. [Delivery plan](docs/DELIVERY_1150_PLAN.md)
+records the 11:50 deadline and work allocation.
 
-## Agreed design principles
+## Architecture
 
-- Evaluate the meaning of the saved criterion against the actual conversation.
-- Preserve speaker attribution and original timestamps.
-- Produce criterion-specific judgments, explanations, and evidence references.
-- Use code for validation and score calculation.
-- Keep insufficient evidence distinct from not applicable and from a failed criterion.
-- Show unresolved evaluation failures explicitly; do not substitute generic judgments.
-- Preserve checklist versions, original evaluations, and human review decisions.
-- Verify the final displayed assessment using paraphrases and controlled evidence changes.
-- Use the real API evaluation path; there is no offline evaluation fallback.
-
-## Selected stack
-
-React, TypeScript, Vite, and CSS Modules for the frontend; Python, FastAPI, and
-Pydantic for the backend; SQLite with SQLAlchemy for storage; OpenAI API for
-evaluation; pytest and Playwright for testing. The initial benchmark uses
-gpt-6.1-sol at medium reasoning; final model selection remains open.
-
-See [the stack and evaluation policy](docs/STACK.md) for responsibilities, failure
-handling, and the first implementation milestone.
-
-## Selection priorities
-
-Accuracy against organizer Ground Truth on 10 unseen transcripts is the main
-top-50 selection criterion. Functionality, usability, genuine analysis of new
-inputs, and diversity of technical approaches also inform selection.
-See [the organizer announcement](docs/JUDGING.md); no official numeric weights
-have been supplied.
-
-## Development environment
-
-Use the Windows-native desktop agent and this Windows checkout initially.
-The earlier browser/computer-use limitation with a WSL-hosted project has not
-been verified as resolved in this session. WSL is available for targeted commands
-if useful. The selected stack and unresolved implementation choices are recorded
-in [the stack document](docs/STACK.md).
-
-## Materials and open questions
-
-- The student guide and Freedom introduction have been reviewed.
-- Access to the DEV API was verified: 65 conversations were returned.
-- The official eight-criterion checklist has been supplied and reviewed.
-- All 65 DEV transcripts have been inspected; see [the data audit](docs/DATA_AUDIT.md).
-- See [the evaluation design for discussion](docs/EVALUATION_DESIGN.md), including
-  the organizer's chat/call clarification and our own test-dataset strategy.
-- Sample rubrics discussed in chat are illustrative, not official scoring rules.
-- Keep dataset records, call recordings, signed API URLs, and credentials outside Git.
-- The guide requests a public repository for submission; this repository starts private.
-
-## Progress
-
-See [the progress checklist](docs/PROGRESS.md). The application and CLI share the
-grounded evaluator and scorer. The local browser workflow has been exercised
-through real API calls and reference-backed human review.
-
-The current [evidence contract](docs/EVIDENCE_CONTRACT_V2.md) strictly separates
-answer proof, omission context and claim observations. The updated evaluator
-has [a six-case live result](docs/EVIDENCE_CONTRACT_V2_LIVE_RESULTS.md): six valid
-first-attempt assessments and 48/48 frozen provisional judgments matched. The
-frozen baseline and prior API results remain unchanged; broader reliability is
-tested in a [fresh repeated-run experiment](docs/FRESH_REPEAT_V1_RESULTS.md).
-That run failed its reliability gate: 18/24 first-pass and 22/24 final valid outputs;
-evidence-chain and compound-counterfactual precision also remain open.
-
-The subsequent [source-span and atomic-proof implementation](docs/SOURCE_SPANS_AND_ATOMIC_PROOFS.md)
-addresses those mechanisms offline: source-selected citations, canonical observation
-text and explicit proof dependencies. Its live reliability remains unmeasured;
-the historical benchmark above has not been replaced or rescored.
-
-[Three subsequent manual diagnostics](docs/MANUAL_DIAGNOSTICS_V2.md) exposed two
-remaining contract failures and a qualified sequencing audit without API spending.
-One response passed strict validation and two were rejected; these results are
-not a production API benchmark or a new accuracy claim.
-
-The [v4 source contract](docs/SOURCE_CONTRACT_V4.md) removes duplicated group
-citations, couples observations to proofs and clarifies sequencing audits. In the
-[Sol6.1medium manual rerun](docs/MANUAL_DIAGNOSTICS_V3.md), two initial responses
-validate; the organizer call validates after one separately recorded model repair.
-Remaining proof-scope and interpretation qualifications are retained. No API
-inference was used and historical results remain unchanged.
+React + TypeScript + CSS Modules; FastAPI + Pydantic; SQLite/SQLAlchemy; real model
+API calls with bounded repair and persistent spending accounting. Scoring and
+N/A normalization are deterministic. The local worker uses one server process.
+The local demonstration has self-identified reviewers, not authenticated roles.

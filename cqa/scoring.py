@@ -165,9 +165,11 @@ def validate_audit(result, conversation, checklist, *, require_audit):
 def calculate_score(result: Evaluation, checklist: Checklist):
     judgments = {j.criterion_id: j for j in result.judgments}
     earned, applicable = Decimal(0), Decimal(0)
-    unresolved, flags, contributions = [], {}, []
+    unresolved, recommended, flags, contributions = [], [], {}, []
     for criterion in checklist.criteria:
         judgment = judgments[criterion.id]
+        if judgment.status != "needs_review" and judgment.uncertainty:
+            recommended.append(criterion.id)
         if criterion.kind == "flag":
             flags[criterion.id] = judgment.answer if judgment.status == "scored" else judgment.status
             continue
@@ -188,7 +190,8 @@ def calculate_score(result: Evaluation, checklist: Checklist):
     total = None
     if applicable and not unresolved:
         total = float((100 * earned / applicable).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
-    return {"total": total, "provisional": bool(unresolved), "unresolved_criteria": unresolved,
+    return {"total": total, "provisional": bool(unresolved or recommended), "unresolved_criteria": unresolved,
+            **({"review_recommended_criteria": recommended} if recommended else {}),
             "applicable_weight": float(applicable), "earned_points": float(earned),
             "flags": flags, "contributions": contributions,
             "score_bounds": score_bounds(result, checklist)}
@@ -206,10 +209,10 @@ def score_bounds(result: Evaluation, checklist: Checklist):
     mandatory, optional = [], []
     for criterion in checklist.criteria:
         judgment = judgments[criterion.id]
-        if criterion.kind == "flag" or judgment.status == "not_applicable":
+        if criterion.kind == "flag" or (judgment.status == "not_applicable" and not judgment.uncertainty):
             continue
         weight = Decimal(str(criterion.weight))
-        if judgment.status == "scored":
+        if judgment.status == "scored" and not judgment.uncertainty:
             level = next(x for x in criterion.levels if x.value == judgment.answer)
             fixed_points += weight * Decimal(str(level.fraction))
             fixed_weight += weight
@@ -233,4 +236,4 @@ def score_bounds(result: Evaluation, checklist: Checklist):
 
     return {"lower": extremum(False), "upper": extremum(True),
             "no_numeric_score_possible": fixed_weight == 0 and not mandatory,
-            "meaning": "Envelope of allowed unresolved outcomes, including N/A where permitted; not confidence."}
+            "meaning": "Envelope of allowed uncertain outcomes, including N/A where permitted; not confidence."}

@@ -1,0 +1,91 @@
+{
+  "kind": "predeclared_delivery_acceptance_ai_authored_not_organizer_gt",
+  "frozen_before_generation": true,
+  "primary_cases": 6,
+  "primary_exact_judgments": 47,
+  "primary_complete_vectors": 5,
+  "custom_cases": 2,
+  "custom_exact_judgments": 2,
+  "suite_sha256": "8c44e441cfeef0ab6d37cd6bc0e97719a889c2274a7a2f36ee8e4513ec491f32",
+  "checklist_path": "checklists/freedom-reviewed-015.json",
+  "checklist_sha256": "cfe941a135e0cff404d1c2aca1bcd49716f678b4fce813398fd31be0f6607f9f",
+  "reference_review": "Author reviewed each criterion against reviewed015 and explicit source evidence before any generation. Not independently human-adjudicated. Further source-only independent review, if performed, must occur before freeze consumption.",
+  "families": {
+    "delivery-verification-order": "EN chat pair; correct consultation is preserved across the confidential-disclosure violation, including independent identity and management deductions.",
+    "delivery-answer-implication": "RU chat pair; complete implicit answer versus real omission and explicit ignored complaint. This pair deliberately changes multiple relevant facts, not a single-variable experiment.",
+    "delivery-prerequisite-recovery": "KZ call pair; correct progressive clarification versus premature dependent advice, followed by explicit correction and authoritative no-harm recovery. Both include genuinely unavailable private approval state with a valid investigation next step.",
+    "delivery-custom-checklist-change": "Identical complete conversation under channel-only versus channel-and-deadline criterion. Must remain together and be reported separately from the official-rubric primary set."
+  },
+  "excluded_before_generation": [
+    {
+      "case_id": "delivery-kz-corrected-prerequisite",
+      "criterion_id": "consultation",
+      "reason": "Reviewed015 does not uniquely settle how to grade an incorrect key instruction explicitly withdrawn before use, with verified correct recovery and no established remaining consequence. Do not claim a definite ordinal winner. All source-grounded correction, residual-consequence and prerequisite findings remain mandatory.",
+      "acceptable_behavior": "Preserve the original error, later correction and verified Q/support submissions, distinguish submission from approval, and explain the temporal treatment. An ordinal selected with an explicit defensible interpretation or a specific needs_review decision is not exact-label credit."
+    }
+  ],
+  "semantic_checks": [
+    {
+      "case_ids": [
+        "delivery-en-verification-first"
+      ],
+      "check": "No false identity failure or confidentiality flag. Do not treat verification as missing customer-need information."
+    },
+    {
+      "case_ids": [
+        "delivery-en-verification-late"
+      ],
+      "check": "Preserve identity No, management7 and serious Yes while the accurate content answers retain consultation20. Later confirmation does not erase the earlier breach."
+    },
+    {
+      "case_ids": [
+        "delivery-ru-implied-complete"
+      ],
+      "check": "The explicit full-year dates and single-file instruction answer the annual possibility question without a standalone yes."
+    },
+    {
+      "case_ids": [
+        "delivery-ru-omission-complaint"
+      ],
+      "check": "Annual export remains an open substantial request. m4 neutral reminder alone is not an empathy violation; m6 explicit ignored/lost-time complaint is. Do not invent a management defect merely from the content omission."
+    },
+    {
+      "case_ids": [
+        "delivery-kz-progressive-clarification",
+        "delivery-kz-corrected-prerequisite"
+      ],
+      "check": "Acknowledge that private approval state is unavailable. The operator explicitly declines to assert approval and supplies the policy-approved investigation next step. Do not manufacture approval or require completed approval to credit that next step."
+    },
+    {
+      "case_ids": [
+        "delivery-kz-corrected-prerequisite"
+      ],
+      "check": "Preserve needs No and management7 after correction. Evidence of correct Q submission does not erase the premature country-specific answer. Original false R guidance, correction chronology and authoritative no-R-action log remain visible."
+    },
+    {
+      "case_ids": [
+        "delivery-custom-channel",
+        "delivery-custom-channel-and-time"
+      ],
+      "check": "Same input produces Yes under version1 and No under version2; no hardcoded eight-criterion contract or prepared answer substitution."
+    }
+  ],
+  "predeclared_gate": {
+    "primary_completion": "All six complete as usable source-grounded assessments, including an explicit localized review if genuinely warranted; report numeric coverage separately.",
+    "exact_labels": "All47 determinate primary status/answer pairs and both custom decisions must match for this small diagnostic gate. Report any disagreement; do not repair expectations after seeing outputs.",
+    "evidence": "No invented citations, actor substitution, unsupported serious flag, missed explicit breach, erased legitimate deduction or fabricated private-state certainty. Review all full assessments.",
+    "repeats": "If time/budget permits, repeat one case from each of the three primary families once with identical inputs/settings. Report all changed criteria and full-vector drift, including the excluded ordinal separately. Repeats are not new independent cases.",
+    "comparison": "Run saved baseline and candidate on the same frozen source/checklist; report both first-pass and final bounded-repair outcomes. Do not retroactively count repairs as first-pass success.",
+    "score_error": "Compute total-score MAE only on five complete primary reference vectors; count failures/provisional totals as missing coverage, not zero-error exclusions. Custom pair scores reported separately.",
+    "cost": "Report every initial request and repair, including failed attempts, with tokens, cost and end-to-end latency.",
+    "promotion": "A semantic high-impact failure blocks claiming success regardless of exact-label average. This six-case gate is necessary diagnostic evidence, not statistical proof of95–100 quality."
+  },
+  "limitations": [
+    "Six small fictional primary cases; only two voice-call transcripts, no audio or ASR stress.",
+    "Provisional AI-authored expectations, not organizer Ground Truth or independent expert accuracy.",
+    "No claim that this suite measures the true natural distribution or all domain facts.",
+    "One consultation ordinal excluded prospectively; never include its selected result in exact agreement or full-score MAE."
+  ],
+  "label_isolation": "Model input is only case.conversation plus case.checklist_override or frozen reviewed015. Never include expectations, tags, family, this review, or acceptance outcomes. Model source IDs are synthetic identifiers, not answer keys.",
+  "pre_inference_source_id_revision": "Before any generation, descriptive primary conversation IDs were replaced with delivery-source-001 through006; TestCase IDs remain outside model payload. Root confirmed no generation had started. No transcript, policy, expectation or criterion changed."
+}

@@ -65,6 +65,7 @@ test('real import → evaluate → evidence → appeal → persistence → custo
     await page.getByLabel('Reviewed answer').selectOption('20')
     await page.getByLabel('Reviewer name').fill('QA workflow validation')
     await page.getByLabel('Decision rationale').fill('Verified against the official fbroker.kz profile-update guide, valid for the declared fbroker-kz-platform context on 2026-11-07. The selected source gives the same mobile navigation path.')
+    await page.getByLabel('Use message m2', {exact: true}).selectOption('support')
     await page.getByRole('checkbox', {name: /^fbroker-profile-20261107/}).check()
     await page.getByRole('checkbox', {name: /I reviewed the criterion/}).check()
     await page.getByRole('button', {name: 'Save review decision', exact: true}).click()

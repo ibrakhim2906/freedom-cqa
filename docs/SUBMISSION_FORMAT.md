@@ -80,3 +80,21 @@ The command prints ok/error coverage and performs no Git operation or publicatio
 Final submission still needs a complete DEV run, the unreleased PROD source/run,
 coverage/error review, correct public repository access, and a final commit/push.
 No final results files were fabricated just to populate those paths.
+
+
+## Numerical assessment policy (v3)
+
+At the user's explicit direction, v3 produces a configured numerical judgment
+for every applicable criterion, with missing information recorded alongside it.
+An `ok` v3 submission may contain a provisional numerical assessment: its
+rationale explicitly identifies uncertainty and any assumed policy snapshot.
+It does not claim historical policy applicability or private account truth is
+verified. The original v1/v2 abstention behavior is preserved for old records.
+Provider/validation failures still remain errors; no substitute score is invented.
+
+Frozen case-level checklist overrides are honored. `--completion-report` may
+replace only never-submitted budget skips. `--reassessment-report` explicitly
+replaces previously unscored assessments after a grading-policy/input revision;
+it cannot silently replace an existing numerical result. Original transcripts
+must match, earlier reports remain intact, and new source/context/checklist
+versions remain recorded in the actual model records.

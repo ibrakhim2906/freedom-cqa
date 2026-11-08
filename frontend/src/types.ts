@@ -57,7 +57,7 @@ export type ConversationRow = {id: string; external_id: string; content_hash: st
   channel: string; language: string; message_count: number; reference_count: number}
 export type ConversationDetail = ConversationRow & {content: Conversation; metadata: {recording_url?: string}}
 export type ChecklistRow = {id: string; external_id: string; version: string; content_hash: string; title: string; content: Checklist}
-export type Score = {total: number|null; provisional: boolean; flags: Record<string,string>; unresolved_criteria: string[];
+export type Score = {total: number|null; provisional: boolean; flags: Record<string,string>; unresolved_criteria: string[]; review_recommended_criteria?: string[];
   score_bounds: {lower: number|null; upper: number|null}; contributions: {criterion_id: string; status: string; points: number|null}[]}
 export type Appeal = {id: string; job_id: string; criterion_id: string; author: string; reason: string; message_ids: string[];
   proposed: {status: Judgment['status']; answer: string|null}|null; status: string; created_at: string;
@@ -72,12 +72,17 @@ export type JobDetail = JobRow & {conversation: ConversationDetail; checklist: C
   record: {evaluation: {judgments: Judgment[]; scope_notes: string[]; request_coverage: RequestCoverage[];
     factual_claims: FactualClaim[];
     assertion_groups?: AssertionGroup[]|null; source_citations?: SourceCitationAudit|null;
-    deductions: {criterion_id: string; rule_quote: string; defect: string; overlap_note: string}[]};
-    score: Score; error: string|null; model: string; prompt_version: string; workflow_version: string; response_id: string;
+    deductions: {criterion_id: string; rule_quote: string; defect: string; overlap_note: string}[]}|null;
+    score: Score|null; error: string|null; model: string; prompt_version: string; workflow_version: string; response_id: string|null;
     usage: {estimated_cost_usd: number; input_tokens: number; output_tokens: number}|null;
     attempt_count: number; latency_seconds: number; billing_state?: string; validation_reason?: string;
     repair_skipped?: string; error_detail?: string; budget_required_usd?: number; budget_available_usd?: number;
-    assessment_context?: AssessmentContext}|null}
+    assessment_context?: AssessmentContext;
+    review?: {status: 'confirmed'|'adjudicated'|'needs_human_review'|'review_failed'|'budget_limited'|'not_required'; criterion_ids: string[]; disagreements: string[]; changed_criteria: string[]; coverage_disagreement?: boolean; reviewer_limitations?: Record<string,string>; error?: string};
+    assessment?: {contract_version: string; transport?: {judgments: Record<string, {evidence_span_ids: string[]; counterevidence_span_ids: string[]; factual_support_span_ids: string[]}>};
+      source_selections?: Record<string, SourceSpanLocation & {quote: string}>;
+      criteria: Record<string, {factual_basis: string; review_warnings: string[];
+      reference_evidence: ReferenceEvidence[]; factual_dialogue_evidence: Evidence[]; uses_conditional_reference: boolean}>}}|null}
 export type Config = {api_key_configured: boolean; model: string; strategy: string;
   default_checklist: {id: string; version: string};
   ledger: {lifetime_committed_usd: number; lifetime_limit_usd: number}}

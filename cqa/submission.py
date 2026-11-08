@@ -38,12 +38,35 @@ def result_for(original, evaluated, checklist, record):
             raise ValueError("Submission checklist weights and allowed levels must match the organizer")
     if record.get("status") != "completed" or not record.get("evaluation"):
         return error_result(original.id, record.get("error") or "No completed model assessment available")
-    if evidence_context_for(evaluated)["assessment"]["conditional"] or (
-        record.get("assessment_context") or {}).get("conditional"):
+    native = record.get("assessment")
+    assessor_record = (record.get("strategy") in {"assessor", "assessor-reviewed"}
+                       or str(record.get("claim_contract_version", "")).startswith("rubric-assessor-"))
+    conditional = evidence_context_for(evaluated)["assessment"]["conditional"] or (
+        record.get("assessment_context") or {}).get("conditional")
+    if conditional and native is None and not assessor_record:
         return error_result(original.id,
             "Conditional snapshot review does not establish historical applicability; use the full review export")
     result = Evaluation.model_validate(record["evaluation"])
-    validate_evaluation(result, evaluated, checklist, require_audit=True)
+    validated_native = None
+    if native is not None or assessor_record:
+        from .assessor import validate_native
+
+        if not isinstance(native, dict) or native.get("contract_version") not in {
+            "rubric-assessor-v1", "rubric-assessor-v2", "rubric-assessor-v3"
+        }:
+            raise ValueError("Assessor submission requires its supported native assessment contract")
+        validated = validate_native(native, evaluated, checklist)
+        if validated.evaluation != result:
+            raise ValueError("Saved evaluation disagrees with the validated native assessment")
+        validated_native = validated.native
+    else:
+        validate_evaluation(result, evaluated, checklist, require_audit=True)
+    numeric_assessment = bool(validated_native and validated_native["contract_version"] == "rubric-assessor-v3")
+    if conditional and not numeric_assessment and (validated_native is None or any(
+        item["uses_conditional_reference"] for item in validated_native["criteria"].values()
+    )):
+        return error_result(original.id,
+            "Conditional snapshot review does not establish historical applicability; use the full review export")
     unresolved = [j.criterion_id for j in result.judgments if j.status == "needs_review"]
     if unresolved:
         return error_result(original.id, "Unresolved judgments require review, not N/A: " + ", ".join(unresolved))
@@ -58,7 +81,15 @@ def result_for(original, evaluated, checklist, record):
         # Retain original array positions, including bot/client/system events. A
         # checked omission span is meaningful evidence when no positive quote exists.
         cited = [e.message_id for e in j.evidence + j.counterevidence] or j.checked_message_ids
-        criteria.append({"criterion_id": public_id, "value": value, "rationale": j.explanation,
+        rationale = j.explanation
+        if numeric_assessment and j.uncertainty:
+            rationale += " Review recommended; this is a best-supported provisional grade. Missing information: " + j.uncertainty
+        if numeric_assessment and conditional and validated_native["criteria"][cid]["uses_conditional_reference"]:
+            context = evidence_context_for(evaluated)["assessment"]
+            rationale += (" Policy assumption: evaluated against the supplied " + str(context.get("scope")) +
+                          " snapshot as of " + str(context.get("as_of")) +
+                          "; historical applicability is not independently confirmed.")
+        criteria.append({"criterion_id": public_id, "value": value, "rationale": rationale,
                          "evidence_turns": sorted({positions[mid] for mid in cited})})
     return {"conversation_id": original.id, "status": "ok", "criteria": criteria,
             "score": {"final_score": score["total"], "critical_flag": judgments["serious"].answer == "yes"}}
