@@ -157,7 +157,7 @@
       "language": "ru",
       "channel": "agent chat",
       "score": 84.62,
-      "reference_total": 84.62,
+      "reference_total": null,
       "score_mae_eligible": false,
       "decisions": {
         "contact": {
@@ -200,7 +200,8 @@
           "answer": "no",
           "uncertain": false
         }
-      }
+      },
+      "illustrative_total_assuming_closing_no": 84.62
     },
     {
       "case_id": "fresh-v1-ru-04",

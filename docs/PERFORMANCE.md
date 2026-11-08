@@ -4,7 +4,7 @@ Measured on 8 November 2026 with **OpenAI `gpt-6.1-sol`, medium reasoning**. The
 
 ## Latest frozen candidate
 
-Candidate **`rubric-assessor-v3-963619247384`** clarifies closing summaries, task identifiers versus identity verification, and opening turns split across call-transcript fragments. The saved checklist, scoring arithmetic and historical assessments are unchanged. New explanations are in Russian; evidence quotations retain their original language.
+Candidate **`rubric-assessor-v3-963619247384`** clarifies closing summaries, task identifiers versus identity verification, and opening turns split across call-transcript fragments. The saved checklist, scoring arithmetic and historical assessments are unchanged. All inspected explanations in the twelve fresh assessments were in Russian; evidence quotations retained their original language.
 
 The [new ten-case set](../evals/fresh-release-v2.jsonl) contains four RU, three KZ and three EN conversations, including two synthetic call transcripts. An independent AI reviewer labelled all eight criteria from source before seeing the author's labels; another reviewed the four boundary criteria. The evaluator was frozen before the root reviewer read the cases. See the [reference provenance](../evals/fresh-release-v2.review.json) and [compact measured results](../evals/fresh-release-v2.results.json).
 
@@ -14,7 +14,7 @@ The [new ten-case set](../evals/fresh-release-v2.jsonl) contains four RU, three 
 | Unambiguous reference judgments | **79/79 matched** |
 | Aggregate score error | MAE **0**, nine eligible conversations |
 | Ambiguous closing | Provisional No with explicit uncertainty; excluded from strict agreement and score MAE |
-| Two preselected identical repeats | **16/16** answer/status/uncertainty decisions and both totals unchanged |
+| Two preselected identical repeats | **16/16** answer/status/uncertainty-flag comparisons and both totals unchanged |
 | Exact source validation and score replay | **12/12 assessments**, including repeats |
 | Main-run latency | Median **19.06 s**, p95 **25.13 s** |
 | Main-run cost | **$0.582992**, about $0.058 per conversation |
