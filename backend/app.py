@@ -33,6 +33,7 @@ from .contracts import (
     RunRequest,
 )
 from .custom_references import register_custom_reference_routes
+from .dataset_presets import apply_fbroker_preset
 from .demo import open_demo
 from .importing import parse_import
 from .recordings import matching_recording
@@ -172,6 +173,7 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
         except ValueError:
             configured = False
         return {"api_key_configured": configured, "model": settings.model, "strategy": settings.strategy,
+                "import_presets": ["fbroker"],
                 "default_checklist": {"id": ui_checklist.id, "version": ui_checklist.version},
                 "ledger": workflow.ledger.summary(), "worker_concurrency": 1,
                 "audio_analysis_available": False}
@@ -179,6 +181,8 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
     @app.post("/api/conversations/import")
     async def import_conversations(body: ImportRequest):
         parsed = parse_import(body.content)
+        if body.reference_preset == "fbroker":
+            parsed = apply_fbroker_preset(body.content, parsed)
         rows, created = [], 0
         with store.session.begin() as session:
             for conversation, extra in parsed:

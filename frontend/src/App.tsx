@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react'
+import {useCallback, useEffect, useMemo, useState} from 'react'
 import type {Appeal, BatchResult, Checklist, ChecklistRow, CitationSelection, Config, ConversationDetail, ConversationRow, Evidence, HighlightRange, JobDetail, JobRow, Reference} from './types'
 import {api} from './api'
 import {Assessment, Highlighted} from './Assessment'
@@ -73,6 +73,13 @@ function App() {
   const [runIds, setRunIds] = useState<string[]>([])
   const [retryReview, setRetryReview] = useState(false)
   const [importFileName, setImportFileName] = useState('')
+  const isFBrokerImport = useMemo(() => {
+    try {
+      const payload = JSON.parse(importText)
+      const group = payload?.data?.dataset_group_id ?? payload?.dataset_group_id
+      return typeof group === 'string' && group.trim().toLowerCase() === 'fbroker'
+    } catch {return false}
+  }, [importText])
   const [importMode, setImportMode] = useState<'text'|'file'>('text')
   const [showSetup, setShowSetup] = useState(false)
   const [importedIds, setImportedIds] = useState<string[]>([])
@@ -155,12 +162,22 @@ function App() {
     setConversationId(j.conversation_id); setJobId(j.id); setDetailTab(reviewLayout()); setView('conversations'); setNotice('')
   }
   function evidence(items: Evidence[], ids: string[] = []) {setDetailTab(old => old === 'split' ? 'split' : 'transcript'); setReference(undefined); setFocus({ids: items.length ? [...new Set(items.map(e => e.message_id))] : ids, items})}
-  async function importNow(content: string = importText) {
+  async function importNow(content: string = importText, referencePreset?: 'fbroker') {
     await act(async () => {
-      const result = await api<{created: number; reused: number; conversations: ConversationRow[]}>('/conversations/import', {content})
-      await refresh(); chooseConversation(result.conversations[0].id); setSelected([result.conversations[0].id]); setShowImport(false); setImportText('')
+      const result = await api<{created: number; reused: number; conversations: ConversationRow[]}>('/conversations/import', {content, ...(referencePreset ? {reference_preset: referencePreset} : {})})
+      const fresh = await refresh()
+      const ids = [...new Set(result.conversations.map(c => c.id))]
+      chooseConversation(result.conversations[0].id)
+      setSelected(referencePreset ? ids : [result.conversations[0].id])
+      if (referencePreset) {
+        const main = fresh.lists.find(c => c.external_id === fresh.cfg.default_checklist.id && c.version === fresh.cfg.default_checklist.version)
+        if (main) setChecklistId(main.id)
+        setStrategy('assessor')
+      }
+      setShowImport(false); setImportText('')
       setImportedIds([...new Set(result.conversations.map(c => c.id))]); setView('conversations')
-      setImportFileName(''); setNotice(`Данные загружены. Добавлено: ${result.created}, уже сохранено: ${result.reused}. ${result.conversations.length > 1 ? 'Открыт первый диалог. ' : ''}Нажмите «Начать проверку» вверху диалога.`)
+      if (referencePreset) setNotice(`FBroker загружен: ${ids.length} диалогов. Подключены 9 документов на 07.11.2026; продукт и дата приняты как допущение. Все загруженные диалоги выбраны. Нажмите «Проверить выбранные».`)
+      setImportFileName(''); if (!referencePreset) setNotice(`Данные загружены. Добавлено: ${result.created}, уже сохранено: ${result.reused}. ${result.conversations.length > 1 ? 'Открыт первый диалог. ' : ''}Нажмите «Начать проверку» вверху диалога.`)
     })
   }
   async function tryExample() {
@@ -288,6 +305,11 @@ function App() {
       {importFileName && <p className={styles.fileReady}><Icon name="check" size={16}/>{importFileName} готов к загрузке</p>}
       <details open={!!importText && !importFileName}><summary>Или вставьте JSON</summary><textarea aria-label="Диалоги в формате JSON" rows={8} value={importText} onChange={e => {setImportText(e.target.value); setImportFileName('')}} placeholder="Вставьте JSON или JSONL"/></details>
       {error && <p role="alert" className={styles.error}>{error}</p>}
+      {isFBrokerImport && config?.import_presets?.includes('fbroker') && <section aria-label="Быстрая настройка FBroker" className={styles.context}>
+        <b>FBroker: загрузить и подключить документы</b>
+        <p>9 справочных документов на 07.11.2026 и основной чек-лист. Продукт FFG и дата источников принимаются как допущение; исходный текст и время реплик сохраняются. Оплата начинается только после запуска проверки.</p>
+        <button className={styles.primary} disabled={busy} onClick={() => importNow(importText, 'fbroker')}>Загрузить FBroker с документами</button>
+      </section>}
       <div className={styles.dialogFooter}><button onClick={() => setShowImport(false)}>Отмена</button><button className={styles.primary} disabled={busy || !importText.trim()} onClick={() => importNow()}>{busy ? 'Загрузка…' : 'Загрузить'}</button></div></>}
       {importMode === 'text' && error && <p role="alert" className={styles.error}>{error}</p>}
     </Modal>}

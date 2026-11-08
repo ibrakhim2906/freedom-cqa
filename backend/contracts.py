@@ -7,6 +7,7 @@ from cqa.models import Judgment, Reference, StrictModel
 
 class ImportRequest(StrictModel):
     content: str = Field(min_length=1, max_length=10_000_000)
+    reference_preset: Literal["fbroker"] | None = None
 
 
 class RunRequest(StrictModel):

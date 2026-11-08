@@ -89,7 +89,7 @@ export type JobDetail = JobRow & {conversation: ConversationDetail; checklist: C
       source_selections?: Record<string, SourceSpanLocation & {quote: string}>;
       criteria: Record<string, {factual_basis: string; review_warnings: string[];
       reference_evidence: ReferenceEvidence[]; factual_dialogue_evidence: Evidence[]; uses_conditional_reference: boolean}>}}|null}
-export type Config = {api_key_configured: boolean; model: string; strategy: string;
+export type Config = {import_presets?: string[]; api_key_configured: boolean; model: string; strategy: string;
   default_checklist: {id: string; version: string};
   ledger: {lifetime_committed_usd: number; lifetime_limit_usd: number}}
 export type BatchResult = {batch_id: string|null; job_ids: string[]; reused: string[]}
