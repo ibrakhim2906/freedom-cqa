@@ -1,91 +1,31 @@
-# Technology stack and evaluation policy
+# Architecture
 
-Status: selected on 2026-11-07 and now implemented with locked Python/frontend
-dependencies. The React workspace, FastAPI service, SQLite/SQLAlchemy storage,
-evaluation queue and appeal history are working locally. See WORKFLOW.md for
-the real-browser validation and current limitations.
+| Layer | Implementation |
+|---|---|
+| Interface | React, TypeScript, Vite, CSS Modules |
+| API and worker | Python, FastAPI; one persistent local worker |
+| Storage | SQLite and SQLAlchemy |
+| Contracts | Pydantic and JSON Schema |
+| Evaluator | OpenAI `gpt-6.1-sol`, medium reasoning; rubric-assessor-v3 |
+| Verification | Focused pytest and Playwright checks; frozen behavioral fixtures |
 
-## Selected stack
+## Assessment path
 
-| Layer | Choice | Responsibility |
-| --- | --- | --- |
-| Frontend | React, TypeScript, Vite | Checklist editor, transcript viewer, evidence navigation, evaluation results, and appeals. |
-| Styling | CSS Modules | Component-scoped styles for the review workspace. |
-| Backend | Python, FastAPI | Conversation import, evaluation jobs, score calculation, persistence, and review endpoints. |
-| Data contracts | Pydantic | Validate checklist definitions, evaluation output, evidence references, and API payloads. |
-| Storage | SQLite, SQLAlchemy | Store conversations, immutable checklist versions, evaluation attempts/results, and appeal decisions. |
-| AI provider | OpenAI API through a small provider adapter | Generate substantive criterion judgments and conversation-specific explanations with evidence references. |
-| Testing | pytest and Playwright | Scoring and API checks, evaluation behavior checks, and complete browser workflows. |
-| Initial environment | Windows-native development | Keep the checkout and runtime on Windows while verifying local browser/computer-use access. |
+The saved conversation, applicable references and chosen checklist produce a criterion-specific schema. The model reconciles actual requests, applies the configured rules and selects source spans. Code resolves exact quotes, validates references and allowed answers, calculates weights/N/A normalization, and saves the result with its runtime identity.
 
-The frontend builds to HTML, CSS, and JavaScript. Keep its API boundary explicit
-and its structure suitable for later adaptation to a Dynamics 365 HTML component.
+Optional independent review sees the complete source without the primary answer. It checks every criterion, including confident passes. Disagreements may receive source-based adjudication. Failed or budget-limited review does not masquerade as agreement or erase a valid primary result.
 
-Use one repository with separate frontend and backend directories. Initially,
-target a single application service that serves the compiled frontend and API,
-with persistent storage for SQLite. Local development can run separate frontend
-and backend processes.
+Input and checklist hashes prevent reuse across changed content. Prompt/schema versions, response identifiers, attempts, token usage, latency and estimated costs remain attached to saved evaluations. Older contract modules are retained to validate historical results; they are not the default evaluator.
 
-## AI integration
+The browser displays the generated rationale and source selections. It does not replace them with generic category text. Human review creates a distinct effective result while preserving the original AI record.
 
-- Send the selected, versioned checklist and actual conversation to the evaluator.
-- Preserve speaker roles and original timestamps; give messages stable IDs.
-- Use Structured Outputs for machine-readable criterion results.
-- Preserve model-produced explanations in the displayed result; do not replace
-  them with canned text based on a category or score.
-- Validate allowed values, required fields, and evidence references in code.
-  Passing these checks does not establish semantic correctness.
-- Calculate weights, N/A redistribution, and rounding in code according to the
-  supplied official checklist. Its serious-error flag is separate from the total.
-- Start with one model call per conversation covering the checklist. Add targeted
-  verification only if development measurements show improved evaluation quality.
-- Record model identity, checklist/prompt versions, token usage, latency, and
-  estimated cost for each attempt.
+## Boundaries
 
-The initial tested model is gpt-6.1-sol at medium reasoning. Final model selection
-still needs comparisons on varied Russian, Kazakh, and English cases with better
-reviewed criterion labels; the initial diagnostics are AI-authored and provisional.
-The official checklist and subsequent organizer clarification are now available.
-For calls, adapt communication assessment to spoken interaction. Audio can add
-evidence for pace, diction, and pronunciation; transcripts alone cannot establish
-those properties. The supplied audio URLs need playback resolution before use.
+- No canned successful assessments or fallback numerical grades replace a failed model call.
+- Transcript/reference content is evidence, not instructions to the evaluator.
+- Structural validity does not establish semantic correctness.
+- Unverified facts do not automatically become false; numerical judgments retain material uncertainty.
+- Calls are transcript-assessed; supplied recording access is a reviewer feature.
+- Keys remain server-side in environment variables or the ignored `.env`.
 
-## Required runtime behavior: no offline evaluation fallback
-
-This is an explicit user requirement.
-
-- API errors produce a visible failed evaluation with retry available.
-- Malformed output or invalid evidence references are rejected. A bounded retry
-  can be attempted; unresolved failures remain visible for human review.
-- If the available conversation/reference material cannot establish a criterion,
-  mark it unresolved and keep the total provisional. Distinguish this from an
-  observed omission, an actual failed criterion, and a justified N/A decision.
-- Do not substitute predefined ratings, generic explanations, keyword-based
-  judgments, offline model results, or prepared demo results for a failed API call.
-- Display saved evaluations with their original provenance, timestamp, and
-  checklist version. Do not present them as fresh evaluations of changed inputs.
-- Synthetic responses are permitted in isolated automated tests only. They must
-  never be presented by the application as genuine evaluations.
-
-## First implementation milestone
-
-Open one conversation, evaluate one editable criterion through the real API,
-inspect its explanation and evidence, change the criterion, and reevaluate.
-Check paraphrases, speaker attribution changes, evidence removal, and irrelevant
-changes against the final displayed judgment. Expand to the complete checklist
-after this behavior is established.
-
-The main selection priority is accuracy on unseen transcripts against organizer
-Ground Truth; see [the organizer's selection criteria](JUDGING.md).
-
-## Open implementation choices
-
-- Broader model comparisons are incomplete. The tested default remains Sol at
-  medium reasoning. The authorized lifetime cap is $9.427742; usage is preserved
-  across CLI and application calls, independently of the account balance.
-- Approved reference procedures and verified audio playback/access.
-- Dependency versions, deployment target, and persistent-volume configuration.
-- Browser/computer-use verification in the actual Windows setup.
-
-Credentials stay in backend environment variables or a Git-ignored local `.env`.
-Do not place API keys in frontend code, tracked files, test fixtures, or logs.
+The frontend compiles to ordinary HTML, CSS and JavaScript with an API boundary suitable for later embedding. The current application is a local single-process prototype, with self-identified reviewers and no hosted authentication layer.

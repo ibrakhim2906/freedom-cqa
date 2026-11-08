@@ -66,39 +66,17 @@ snapshot review** if that source snapshot is to be used. The separate assessment
 context never rewrites the actual date/scope and never finalizes original historical
 applicability. A snapshot review does not widen normal policy validity intervals.
 
-No pack was automatically attached to the organizer corpus. No evaluator request
-was sent, so provider acceptance, new output quality and response-length effects
-remain untested. This step improves the supplied evidence, not a measured benchmark
-accuracy figure.
+Selected DEV reassessments used an explicit conditional snapshot context. This
+assumption appears in their saved assessment and export; it does not establish the
+actual historical entity or policy date. Current measured results and limitations
+are in [PERFORMANCE.md](PERFORMANCE.md).
 
-The integration is documented in [WORKFLOW.md](WORKFLOW.md). Offline tests capture
-the real evaluator's request preparation through import, context selection and
-queueing, and check frozen context through caching, retries, appeals and export.
-No case-specific grading branch, score override or new expected organizer label was
-introduced. No paid test establishes the new prompt's inference quality yet.
+## Source records
 
-## Artifacts and verification
+- [Official source catalog](../audits/official-product-sources-20261107.json): 18 source cards, retrieval provenance and topic limitations.
+- [Reference pack](../references/freedom-global-products-20261107.json): nine reusable summaries supplied only when explicitly selected.
+- [Manual fact reviews](../audits/product-fact-reviews-v1.json): separate development reviews, never loaded as evaluator inputs.
 
-- [Official source catalog](../audits/official-product-sources-20261107.json): 18 reusable source cards, nine topic dispositions, no scores.
-- [Complete review notes](../audits/product-fact-reviews-v1.json): five case-specific manual reviews, separate from runtime inputs.
-- [Readable end-to-end review](COMPLETE_ASSESSMENT_REVIEW.md): all eight criteria, unresolved issues, coaching and appeal dispositions.
-- `artifacts/product-research-v1/raw/`: private exact source snapshots, including the official PDF and decoded public margin article.
-- `artifacts/product-research-v1/complete-assessment-reviews.json`: private joined originals, frozen results and conditional manual arithmetic.
-
-Run the offline verification with:
-
-```powershell
-uv run python -m scripts.review_product_facts
-```
-
-The check validates source hashes, source IDs and quotes' length, all five complete
-vectors and message roles, allowed rubric values and arithmetic. It confirms the
-original source/result/checklist hashes and checks that missing/mismatched entity
-and date still reject references. It does not mechanically prove semantic entailment.
-
-The targeted offline grounding/context/payload/workflow suite passed **65 tests**.
-A read-only check of the running application's reference-pack endpoint confirmed
-that the new pack is listed. No source conversation was edited or evaluation started.
-
-The usage ledger remained **548 rows, latest call 548, settled sum $19.694328**.
-Incremental API cost for this research and review: **$0**.
+Exact source snapshots remain in ignored local artifacts. The review workflow
+preserves the source conversation, selected reference context and assessment
+version separately. See [WORKFLOW.md](WORKFLOW.md) for the application flow.

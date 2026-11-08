@@ -3,6 +3,10 @@
 Source: organizer announcement supplied by the user in chat on 2026-11-07.
 This records the announcement; no numeric weights or comparison formula were supplied.
 
+Latest user-confirmed execution arrangement: judges clone and run the repository
+after the submission deadline, using their own unseen inputs. The team does not
+need to wait for or produce those control results before submitting.
+
 ## Selection process
 
 The principal criterion for top-50 selection is accuracy of AI conversation

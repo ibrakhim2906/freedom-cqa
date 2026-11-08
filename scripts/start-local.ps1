@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop'
 $taskRepository = Split-Path -Parent $PSScriptRoot
 Push-Location -LiteralPath $taskRepository
 try {
-    uv sync --dev
+    uv sync --locked --no-dev
     if ($LASTEXITCODE -ne 0) { throw 'Python dependency installation failed' }
     Push-Location -LiteralPath (Join-Path $taskRepository 'frontend')
     try {
@@ -12,5 +12,6 @@ try {
         pnpm run build
         if ($LASTEXITCODE -ne 0) { throw 'Frontend build failed' }
     } finally { Pop-Location }
-    uv run cqa-serve --port $Port
+    uv run --locked --no-dev cqa-serve --port $Port
+    if ($LASTEXITCODE -ne 0) { throw 'Application server exited with an error' }
 } finally { Pop-Location }
