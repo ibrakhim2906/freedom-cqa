@@ -11,6 +11,7 @@ from pathlib import Path
 
 from sqlalchemy import select
 
+from backend.recordings import matching_recording
 from backend.storage import Batch, Job, Store, digest, now
 from cqa.datasets import load_cases
 from cqa.models import Evaluation
@@ -105,7 +106,12 @@ def import_report(report_path, database_path, checklist_path=None):
                     reused.append(jobs[0].id)
                     ids.append({"case_id": case.id, "job_id": jobs[0].id, "status": jobs[0].status})
                     continue
-                source_doc, _ = store.document(session, "conversation", case.conversation.model_dump())
+                source_content = case.conversation.model_dump()
+                recording = matching_recording(session, source_content)
+                extra = ({"recording_url": recording["url"],
+                          "recording_source_revision_id": recording["source_revision_id"],
+                          "recording_origin": recording["origin"]} if recording else None)
+                source_doc, _ = store.document(session, "conversation", source_content, extra)
                 checklist_doc, _ = store.document(session, "checklist", checklist.model_dump())
                 batch = Batch(request_id=import_key, request_hash=request_hash, budget=0.0, config={
                     "imported_from_report": str(report_path), "report_sha256": report_hash,

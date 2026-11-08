@@ -175,10 +175,10 @@ function App() {
           onOpenAssessment={(id, revisionId) => {setConversationId(revisionId); setJobId(id); setNotice('')}}/>
         <section className={styles.transcript}>{source ? <><div className={styles.sectionHeading}><div><div className={styles.panelLabel}>Source transcript</div><h2>{source.external_id}</h2><span><Icon name={source.channel === 'voice call' ? 'call' : 'chat'} size={12}/>{source.channel === 'voice call' ? 'Voice call' : 'Agent chat'} · {source.content.messages.length} messages</span></div><span className={styles.pill}>{source.language}</span></div>
           <div className={styles.transcriptActions}><button onClick={() => {setImportText(JSON.stringify({...source.content,
-            ...(source.metadata.recording_url ? {recording_url: source.metadata.recording_url} : {})}, null, 2)); setShowImport(true)}}>Edit / import new revision</button><button disabled={busy} onClick={() => run([source.id])}>Evaluate this revision</button></div>
+            ...((source.metadata.recording_url || source.resolved_recording?.url) ? {recording_url: source.metadata.recording_url || source.resolved_recording?.url} : {})}, null, 2)); setShowImport(true)}}>Edit / import new revision</button><button disabled={busy} onClick={() => run([source.id])}>Evaluate this revision</button></div>
           <ReferenceContext key={source.id} source={source} onApplied={async id => {await refresh(); setSelected(old => [...new Set(old.map(selectedId => selectedId === source.id ? id : selectedId))]); chooseConversation(id)}} onError={setError}/>
-          {source.metadata.recording_url && <Recording key={source.metadata.recording_url} url={source.metadata.recording_url}/>}
-          {source.channel === 'voice call' && !source.metadata.recording_url && <p className={styles.muted}>Transcript assessment only. No recording link is available; voice quality has not been analyzed.</p>}
+          {(source.metadata.recording_url || source.resolved_recording?.url) && <Recording key={source.metadata.recording_url || source.resolved_recording?.url} url={(source.metadata.recording_url || source.resolved_recording?.url)!}/>}
+          {source.channel === 'voice call' && !(source.metadata.recording_url || source.resolved_recording?.url) && <p className={styles.muted}>Transcript assessment only. No recording link is available; voice quality has not been analyzed.</p>}
           {source.content.messages.map(m => {
             const selected = (focus.items || []).filter(item => item.message_id === m.id)
             const highlight = sourceHighlights(m.text, 'dialogue', m.id, selected)

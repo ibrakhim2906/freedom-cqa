@@ -32,6 +32,7 @@ from .contracts import (
     RunRequest,
 )
 from .importing import parse_import
+from .recordings import matching_recording
 from .service import Workflow, effective_result, validate_human_revision
 from .storage import Appeal, Batch, Document, Job, Store, now
 
@@ -74,7 +75,7 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
             raise HTTPException(404, "Record not found")
         return row
 
-    def document_view(doc, detail=False):
+    def document_view(doc, detail=False, session=None):
         value = {"id": doc.id, "external_id": doc.external_id, "version": doc.version,
                  "content_hash": doc.content_hash, "created_at": doc.created_at}
         if doc.kind == "conversation":
@@ -84,6 +85,9 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
             value.update(title=doc.content["title"], content=doc.content)
         if detail:
             value.update(content=doc.content, metadata=doc.extra)
+            if doc.kind == "conversation":
+                value["resolved_recording"] = (matching_recording(session, doc.content)
+                    if session is not None and not (doc.extra or {}).get("recording_url") else None)
         return value
 
     def appeal_view(appeal):
@@ -162,7 +166,7 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
             doc = require(session, Document, document_id)
             if doc.kind != "conversation":
                 raise HTTPException(404, "Conversation not found")
-            return document_view(doc, True)
+            return document_view(doc, True, session)
 
     @app.get("/api/reference-packs")
     async def reference_packs():
@@ -199,10 +203,10 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
             doc = require(session, Document, document_id)
             revised = reference_candidate(doc, body, require_usable=True)
             if revised == Conversation.model_validate(doc.content):
-                return document_view(doc, True)
+                return document_view(doc, True, session)
             new_doc, _ = store.document(session, "conversation", revised.model_dump(),
                                        doc.extra | {"reference_parent_revision_id": doc.id})
-            return document_view(new_doc, True)
+            return document_view(new_doc, True, session)
 
     @app.get("/api/checklists")
     async def checklists():
@@ -250,7 +254,7 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
             conversation_doc, checklist_doc = session.get(Document, job.conversation_id), session.get(Document, job.checklist_id)
             appeals = list(session.scalars(select(Appeal).where(Appeal.job_id == job_id).order_by(Appeal.created_at)))
             conversation = Conversation.model_validate(conversation_doc.content)
-            return {**job_view(job), "record": job.record, "conversation": document_view(conversation_doc, True),
+            return {**job_view(job), "record": job.record, "conversation": document_view(conversation_doc, True, session),
                     "runtime": session.get(Batch, job.batch_id).config,
                     "checklist": document_view(checklist_doc, True), "appeals": [appeal_view(a) for a in appeals],
                     "evidence_context": (job.record or {}).get("evidence_context") or evidence_context_for(conversation),

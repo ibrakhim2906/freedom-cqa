@@ -57,7 +57,8 @@ export type ConversationRow = {id: string; external_id: string; content_hash: st
   channel: string; language: string; message_count: number; reference_count: number;
   latest_assessment?: {id: string; status: string; total: number|null; provisional: boolean;
     review_recommended_count: number; open_appeals?: number; created_at?: string}|null}
-export type ConversationDetail = ConversationRow & {content: Conversation; metadata: {recording_url?: string}}
+export type ConversationDetail = ConversationRow & {content: Conversation; metadata: {recording_url?: string};
+  resolved_recording?: {url: string; source_revision_id: string; origin: 'matching_source_revision'}|null}
 export type ChecklistRow = {id: string; external_id: string; version: string; content_hash: string; title: string; content: Checklist}
 export type Score = {total: number|null; provisional: boolean; flags: Record<string,string>; unresolved_criteria: string[]; review_recommended_criteria?: string[];
   score_bounds: {lower: number|null; upper: number|null}; contributions: {criterion_id: string; status: string; points: number|null}[]}

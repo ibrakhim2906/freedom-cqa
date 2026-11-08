@@ -154,3 +154,33 @@ The useful human contribution is the actual control transcripts and any replacem
 criterion as soon as the organizers provide them. No hidden-label accuracy claim
 can be substantiated before those results are judged. The development gate is a
 small independent AI-authored behavioral check, not organizer Ground Truth.
+
+## Current execution plan — user clarification at 08:00
+
+The user clarifies that **judges clone and run the repository after 12:00**, using
+their own sets to decide qualification for pitching. This supersedes the earlier
+assumption that our team receives and processes control conversations before the
+deadline. Do not wait for that dataset or fabricate a pre-submitted PROD file.
+Deliver a reproducible, configurable system by **11:50**, with ten minutes of buffer.
+
+| Local time | Work | Concrete outcome |
+|---|---|---|
+| 08:10–08:40 | In parallel: prepare eight challenging complete-reference cases with independent reference review; audit startup from clean tracked source. | A reviewable frozen evaluation panel and identified first-run blockers. |
+| 08:40–09:00 | If the prepared allocation is authorized, run the bounded 17-evaluation panel once. Preserve every output and inspect full rationales/evidence. | A criterion-level error list, language/change/repeat results and exact cost. |
+| 09:00–10:00 | Fix demonstrated error classes and actual startup/import/criterion-edit failures. Recheck only affected behavior; keep a separate record of follow-up runs. | One selected final core; no speculative architecture replacement. |
+| 10:00–10:45 | Clean-install and exercise the actual judge path: configure credentials, import new JSON, save a changed rubric, assess, inspect evidence, appeal and export. | Runnable repository independent of this machine's private data, saved database and environment. |
+| 10:45–11:20 | Finish README/model/cost notes, required available results, repository access and final handoff instructions. | A concrete submission candidate; any needed publication authorization concerns that exact candidate. |
+| 11:20–11:50 | Verify final commit/remote state and startup instructions; fix only submission blockers. | Judge-ready version frozen by11:50. |
+| 11:50–12:00 | Buffer for handoff or access problems. | No planned feature work. |
+
+The final internal score protocol is `evals/final-rubric-panel-v1.plan.json`:
+eight primary cases, four controlled translations, two irrelevant paraphrases and
+three identical repeats. Primary accuracy uses64 judgments, not duplicate-counted
+translations. No paid run is authorized by creating the plan. Expected assessment
+cost is approximately$0.68–$1.36, subject to actual prepared inputs; the user's
+existing cumulative cap and account balance are separate constraints.
+
+Actual supplied-call playback has now been verified through its original external
+player. Recording links on benchmark-imported revisions are recovered only from
+an unambiguous original revision with identical source messages, without rewriting
+saved inference inputs or judgments.
