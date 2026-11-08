@@ -2,7 +2,7 @@
 
 The team name is **polygon**, configured in `config/submission.json`. The required available DEV artifact is [results/dev/results.json](../results/dev/results.json): all 65 original conversation IDs, 65 numerical results and no error records.
 
-The control dataset is expected at 11:00; judges also clone and run the repository after 12:00. Export the actual control assessments with `--split prod` once those inputs are supplied. Keep their original conversation IDs and source text.
+The actual FBroker control submission is available at [results/prod/results.json](../results/prod/results.json): ten original chats, ten successful results and 80 criteria. It uses the frozen checklist 018 and original automatic assessments. SWAP is saved privately and has not been evaluated or included in PROD.
 
 ## Field mapping
 

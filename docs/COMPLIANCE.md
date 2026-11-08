@@ -2,8 +2,8 @@
 
 Audited against the three supplied PDFs on 8 November 2026. The application,
 exporter and existing DEV submission have been checked against the requirements
-below. **Final delivery remains incomplete until the actual ten control dialogues
-are processed and both result files are committed and pushed before stop-code.**
+below. The actual ten FBroker control dialogues completed with the frozen release;
+both required result files are included in this submission.
 This document records implementation and delivery evidence; it does not certify
 agreement with the organizers' undisclosed reference grades.
 
@@ -116,12 +116,12 @@ all 65 selected saved model records reproduced that file exactly. The same DEV
 payload was verified on public `main`; 48 focused submission/preflight tests passed.
 These checks establish format and provenance, not organizer Ground Truth agreement.
 
-**Remaining delivery:** obtain the real control group when released, process all
-ten conversations, export and validate `results/prod/results.json`, and commit
-**and push** both required files plus the intended final application changes to
-the submitted public repository before stop-code. A local file or local commit
-is insufficient. The appendix defines release after 23 hours and stop-code after
-24 hours; follow the organizer's actual schedule. Use the
-[control release runbook](CONTROL_RELEASE_RUNBOOK.md), preserve every attempt,
-and verify the pushed commit and both paths. No DEV subset or prepared example
-counts as a control result.
+**Control submission:** all ten actual FBroker chats completed in one attempt each
+with checklist 018 and the frozen evaluator. The [PROD file](../results/prod/results.json)
+contains ten successful results and 80 criteria. Independent verification checked
+327 full-transcript evidence positions, allowed N/A values, types, exact original
+automatic judgments and recalculated scores. Cost was $0.761700. The unchanged DEV
+file remains included. These are completion and format checks, not Ground Truth
+accuracy. One consultation interpretation remains debatable and is retained for
+review; automatic submission scores were not manually changed. SWAP was saved
+privately, without evaluation or inclusion in PROD.
