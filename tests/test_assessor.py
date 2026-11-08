@@ -2,6 +2,7 @@ import json
 from copy import deepcopy
 
 import pytest
+from jsonschema import Draft202012Validator
 
 from cqa.assessor import (
     CONTRACT_VERSION,
@@ -206,7 +207,9 @@ def test_v2_binary_failure_derives_deduction_without_accepting_failed_v1(source)
 def test_schema_uses_provider_subset_and_json_object_integrity(source):
     schema = schema_for(*source)
     assert "deduction" not in schema["$defs"]
-    assert all("deduction" not in d["properties"] for d in schema["properties"]["judgments"]["properties"].values())
+    for decision in schema["properties"]["judgments"]["properties"].values():
+        assert len(decision["anyOf"]) == 2
+        assert all("deduction" not in branch["properties"] for branch in decision["anyOf"])
     forbidden = {"allOf", "contains", "uniqueItems", "if", "then", "else", "default"}
 
     def visit(node):
@@ -228,6 +231,50 @@ def test_schema_uses_provider_subset_and_json_object_integrity(source):
     wire["judgments"]["hello/custom"].update(status="not_applicable", answer=None)
     with pytest.raises(ValueError, match="schema rejection"):
         decode(json.dumps(wire), *source)
+
+
+@pytest.mark.parametrize("support", ["counterevidence_only", "evidence", "checked_interval", "evidence_and_interval"])
+def test_v3_generation_schema_requires_evidence_or_checked_scope_for_clear_flag(source, support):
+    conversation, checklist = source
+    changed = checklist.model_dump()
+    changed["criteria"].append({"id": "risk/custom", "title": "Risk", "instruction": "Flag an insult.",
+        "kind": "flag", "weight": 0, "levels": [
+            {"value": "flagged", "fraction": 0, "description": "An insult is present."},
+            {"value": "clear", "fraction": 0, "description": "No insult is found."}]})
+    checklist = Checklist.model_validate(changed)
+    wire = wire_for(conversation, checklist)
+    item = deepcopy(wire["judgments"]["hello/custom"])
+    item.update(answer="clear", explanation="No insulting operator language was found.",
+        evidence_span_ids=[span(conversation, checklist, "dialogue", "m2")]
+            if support in {"evidence", "evidence_and_interval"} else [],
+        counterevidence_span_ids=[span(conversation, checklist, "dialogue", "m4")],
+        omission={"start_message_id": "m1", "end_message_id": "m6"}
+            if support in {"checked_interval", "evidence_and_interval"} else None)
+    wire["judgments"]["risk/custom"] = item
+
+    schema = prepare(conversation, checklist)[2]
+    assert Draft202012Validator(schema).is_valid(wire) is (support != "counterevidence_only")
+    if support == "counterevidence_only":
+        with pytest.raises(ValueError):
+            decode(json.dumps(wire), conversation, checklist)
+    else:
+        result = decode(json.dumps(wire), conversation, checklist)
+        assert result.evaluation.judgments[-1].answer == "clear"
+
+    # Generation constraints for preserved historical contracts do not change;
+    # their semantic decoder still rejects an unsupported judgment.
+    for version in [LEGACY_CONTRACT_VERSION, V2_CONTRACT_VERSION]:
+        legacy = deepcopy(wire)
+        legacy["contract_version"] = version
+        if version == LEGACY_CONTRACT_VERSION:
+            for judgment in legacy["judgments"].values():
+                judgment["deduction"] = None
+        assert Draft202012Validator(schema_for(conversation, checklist, contract_version=version)).is_valid(legacy)
+        if support == "counterevidence_only":
+            with pytest.raises(ValueError, match="requires actual dialogue evidence or checked omission scope"):
+                decode(json.dumps(legacy), conversation, checklist)
+        else:
+            assert decode(json.dumps(legacy), conversation, checklist).evaluation.judgments[-1].answer == "clear"
 
 
 def test_conditional_reference_is_recorded_only_for_the_criterion_using_it(source):
@@ -269,8 +316,8 @@ def test_current_prompt_respects_combined_custom_criterion_and_arbitrary_levels(
     source_texts = ["".join(part["text"] for part in entry["parts"])
                     for entry in json.loads(payload)["source_span_catalog"]["sources"]]
     assert combined["instruction"] in source_texts
-    assert schema["properties"]["judgments"]["properties"]["help"]["properties"]["answer"]["enum"] == [
-        "A", "B", "C", None]
+    for branch in schema["properties"]["judgments"]["properties"]["help"]["anyOf"]:
+        assert branch["properties"]["answer"]["enum"] == ["A", "B", "C", None]
     assert LEGACY_PROMPT_HASH == "ca63a00b421bf2746b118db21f56d97b979bd5b5f7ffab2f39b45b87645923e9"
     assert V2_PROMPT_HASH.startswith("7284db5c62ef")
     assert PROMPT_VERSION.startswith("rubric-assessor-v3-")
@@ -337,9 +384,10 @@ def test_v3_requires_configured_answers_including_custom_flags_and_rejects_abste
     result = decode(json.dumps(wire), conversation, checklist)
     assert calculate_score(result.evaluation, checklist)["flags"] == {"risk/custom": "escalate"}
     schema = schema_for(conversation, checklist)
-    binary = schema["properties"]["judgments"]["properties"]["hello/custom"]["properties"]
-    assert binary["status"]["enum"] == ["scored"]
-    assert binary["answer"]["enum"] == ["present", "absent"]
+    for branch in schema["properties"]["judgments"]["properties"]["hello/custom"]["anyOf"]:
+        binary = branch["properties"]
+        assert binary["status"]["enum"] == ["scored"]
+        assert binary["answer"]["enum"] == ["present", "absent"]
     wire["judgments"]["hello/custom"].update(status="needs_review", answer=None)
     with pytest.raises(ValueError, match="schema rejection"):
         decode(json.dumps(wire), conversation, checklist)

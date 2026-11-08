@@ -197,6 +197,11 @@ For an unanswered or partial request, check through the final message. For every
 below-maximum answer, explain the specific configured criterion violation and
 why any overlapping deduction is justified. The application derives deductions
 from these explanations; do not invent another deduction field.
+EVERY judgment, including full credit, N/A and a negative violation flag, must
+select dialogue evidence OR provide the actual checked start/end message interval
+in omission. Counterevidence alone does not supply this required support. When
+reporting that no prohibited behavior occurred, use the complete relevant checked
+conversation interval; this records the inspected scope, not an invented violation.
 
 Cover material customer requests in request_coverage, preserving separate late
 requests and the actual operator's answers. question_span_ids and withdrawal_span_ids
@@ -270,6 +275,13 @@ closing opportunity affects only the decisions that depend on it: choose their
 best-supported configured outcomes and retain the precise uncertainty. Do not
 require universal documentary proof for ordinary narrow claims or useful next
 steps. Source identity alone does not establish semantic support.
+
+Write all reader-facing explanations, request descriptions, scope notes,
+missing-information notes and review warnings in clear, natural Russian.
+Use concise professional wording suitable for a nontechnical quality reviewer.
+Keep JSON keys, enum values, configured answer values, identifiers and source
+selections unchanged. Evidence quotations must remain verbatim in their original
+language; never translate or paraphrase a quotation.
 """
 LEGACY_PROMPT_HASH = hashlib.sha256(LEGACY_SYSTEM.encode()).hexdigest()
 V2_PROMPT_HASH = hashlib.sha256(V2_SYSTEM.encode()).hexdigest()
@@ -334,6 +346,16 @@ def schema_for(conversation, checklist, *, contract_version=CONTRACT_VERSION):
             properties = dict(list(properties.items())[:6] +
                 [("deduction", _nullable({"$ref": "#/$defs/deduction"}))] + list(properties.items())[6:])
             decisions[criterion.id] = _object(properties)
+        elif contract_version == CONTRACT_VERSION:
+            # Require the support already enforced by resolution during generation
+            # too. A negative flag still needs evidence or its checked source scope.
+            # Complete nested objects use the provider's supported anyOf subset;
+            # historical contracts retain their original schema verbatim.
+            properties = decisions[criterion.id]["properties"]
+            decisions[criterion.id] = {"anyOf": [
+                _object(properties | {"evidence_span_ids": _array(span) | {"minItems": 1}}),
+                _object(properties | {"omission": interval}),
+            ]}
     properties = {
         "contract_version": {"type": "string", "enum": [contract_version]},
         "catalog_fingerprint": {"type": "string", "enum": [catalog.fingerprint]},

@@ -23,6 +23,29 @@ Offline revalidation of all 17 saved responses succeeds without changing any mod
 
 ## DEV results and product behavior
 
+### Pre-control reliability correction
+
+Two independent AI reviewers assessed six selected DEV conversations from source
+before seeing the saved judgments. The substantive deductions were supported;
+remaining disagreements involved rubric boundaries, account-selection details and
+noisy speech. This was a diagnostic audit, not a random accuracy benchmark or
+human Ground Truth.
+
+A fresh long-call assessment failed because its negative serious-error flag had
+neither dialogue evidence nor a checked interval. The v3 generation schema now
+requires either nonempty evidence or a checked interval for every judgment,
+including negative flags. Source-role and exact-evidence validation remain in
+place. The previously failing call then completed in a fresh request without a
+retry ($0.097856, 39.14s). That check used a 5,000-token ceiling to preserve the
+control budget; the application default remains 6,000. The two runs interpreted
+an unclear introduction differently and both disclosed uncertainty, so successful
+validation does not establish stable expert-level accuracy. Original outputs and
+the DEV submission were not replaced.
+
+All 65 selected saved assessments still validate, with all 520 grade/rationale
+pairs and 65 totals unchanged. The integrated Python suite passed 805 tests.
+Local evidence is preserved under ignored `artifacts/precontrol-audit/`.
+
 - [Official DEV export](../results/dev/results.json): **65/65 numerical results, 65 ok, 0 errors**; 20 assessments retain material uncertainty. These are completed assessments, not measured expert agreement.
 - DEV preserves 43 v2/reviewed015 and 22 v3/reviewed016 assessments. Conditional policy assumptions remain explicit in their rationales.
 - A source audit restored nine omitted factual-support evidence turns across five DEV conversations. All 65 totals and 520 grade/rationale pairs stayed unchanged.
