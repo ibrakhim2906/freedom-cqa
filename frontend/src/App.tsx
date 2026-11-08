@@ -173,6 +173,7 @@ function App() {
         const main = fresh.lists.find(c => c.external_id === fresh.cfg.default_checklist.id && c.version === fresh.cfg.default_checklist.version)
         if (main) setChecklistId(main.id)
         setStrategy('assessor')
+        setBudget(Math.min(20, Math.max(1, ids.length * 0.15)).toFixed(2))
       }
       setShowImport(false); setImportText('')
       setImportedIds([...new Set(result.conversations.map(c => c.id))]); setView('conversations')
@@ -321,9 +322,11 @@ function App() {
       <details className={styles.reviewOptions} open={retryReview || undefined}><summary>Параметры проверки</summary>
         {!retryReview && <><label>Режим проверки<select aria-label="Режим проверки" value={strategy} onChange={e => setStrategy(e.target.value as 'assessor'|'assessor-reviewed')}><option value="assessor">Обычная проверка</option><option value="assessor-reviewed">С независимой перепроверкой</option></select></label>
         <p>{strategy === 'assessor-reviewed' ? 'Независимая перепроверка помогает выявить спорные выводы, но увеличивает расходы. Некоторые вопросы всё равно могут потребовать вашего решения.' : 'Диалог проверяется по всем критериям выбранного чек-листа. Выводы сопровождаются цитатами из диалога.'}</p></>}
-        <label>Лимит расходов, USD<input aria-label="Лимит расходов на проверку" type="number" min="0.01" step="0.01" value={budget} onChange={e => setBudget(e.target.value)}/></label>
-        {config && <p>Из общего лимита {dollars(config.ledger.lifetime_limit_usd)} использовано {dollars(config.ledger.lifetime_committed_usd)}.</p>}
       </details>
+      <label>Лимит расходов, USD<input aria-label="Лимит расходов на проверку" type="number" min="0.01" max="20" step="0.01" value={budget} onChange={e => setBudget(e.target.value)}/></label>
+      {config && <p>Доступно в общем лимите приложения: <b>{dollars(remainingAllowance)}</b>.</p>}
+      {Number(budget) > remainingAllowance && <p className={styles.warning}>Выбранный лимит группы превышает доступный общий лимит. Часть проверок может не запуститься. Проверьте общий лимит или выберите меньше диалогов.</p>}
+      {runIds.length > 1 && <p className={styles.muted}>Лимит общий для всей группы. Слишком маленький лимит может остановить её до завершения всех проверок; это потолок расходов, а не точная цена.</p>}
       <p className={styles.costSummary}>{retryReview ? 'Повторная платная проверка' : strategy === 'assessor-reviewed' ? 'Независимая перепроверка' : 'Обычная проверка'} · Лимит расходов: <b>{new Intl.NumberFormat('ru-RU', {style: 'currency', currency: 'USD'}).format(Number(budget) || 0)}</b><br/><span>{retryReview ? 'Предыдущий результат сохранится. Будут использованы прежние критерии и режим проверки.' : 'Совпадающие сохранённые результаты используются без дополнительной оплаты.'}</span></p>
       <p className={styles.muted}>Проверка короткого диалога обычно занимает несколько десятков секунд. Длинные диалоги требуют больше времени.</p>
       {savedReview && <p className={styles.savedReviewLink}>По этому чек-листу уже есть результат от {date(savedReview.created_at)}. <button onClick={() => {setRunIds([]); chooseJob(savedReview)}}>Открыть сохранённый результат</button><small>Бесплатный просмотр с исходными параметрами и выводами.</small></p>}
