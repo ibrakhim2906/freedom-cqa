@@ -1,4 +1,4 @@
-"""Prepare the ten actual organizer PROD conversations offline; never creates model results."""
+"""Prepare ten control inputs offline, or explicitly rehearse with DEV; never creates model results."""
 
 import argparse
 import hashlib
@@ -30,13 +30,21 @@ def object_sha(value):
     return sha(json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode())
 
 
-def prepare(source, output):
+def prepare(source, output, *, split="prod"):
+    if split not in {"prod", "rehearsal"}:
+        raise ValueError("Preparation split must be prod or rehearsal")
     source, output = source.resolve(), output.resolve()
     if output.suffix != ".jsonl" or not output.is_relative_to((ROOT / "artifacts").resolve()):
         raise ValueError("Output must be a .jsonl file inside this checkout's ignored artifacts/")
     raw_source = source.read_bytes()
     content = raw_source.decode("utf-8-sig")
     payload = json.loads(content)
+    envelope = payload.get("data", payload) if isinstance(payload, dict) else {}
+    source_group = envelope.get("dataset_group_id") if isinstance(envelope, dict) else None
+    if isinstance(payload, dict) and payload.get("isSuccess") is False:
+        raise ValueError("Organizer response reports failure; no control input was prepared")
+    if split == "prod" and str(source_group or "").upper() == "DEV":
+        raise ValueError("DEV cannot be labelled PROD; use --split rehearsal for an offline rehearsal")
     if isinstance(payload, dict) and "data" in payload:
         rows = payload["data"].get("records", []) if isinstance(payload["data"], dict) else []
     elif isinstance(payload, dict) and "records" in payload:
@@ -45,7 +53,7 @@ def prepare(source, output):
         rows = payload if isinstance(payload, list) else [payload]
     parsed = parse_import(content)  # Also applies with_source_date only when source timestamps establish it.
     if len(parsed) != 10 or len({c.id for c, _ in parsed}) != 10:
-        raise ValueError("Actual organizer PROD input must contain exactly ten unique conversation IDs")
+        raise ValueError("Control preparation requires exactly ten unique conversation IDs")
 
     pack_path = ROOT / "references/freedom-global-products-20261107.json"
     checklist_path = ROOT / "checklists/freedom-reviewed-016.json"
@@ -96,8 +104,8 @@ def prepare(source, output):
         })
     raw_input = "".join(c.model_dump_json() + "\n" for c in cases).encode()
     manifest = {
-        "version": "control-run-input-1", "split": "prod", "paid_api_calls": 0,
-        "source": {"path": str(source), "sha256": sha(raw_source)},
+        "version": "control-run-input-1", "split": split, "paid_api_calls": 0,
+        "source": {"path": str(source), "sha256": sha(raw_source), "dataset_group_id": source_group},
         "reference_pack": {"path": pack_path.relative_to(ROOT).as_posix(), "sha256": sha(pack_raw)},
         "checklist": {"path": checklist_path.relative_to(ROOT).as_posix(), "sha256": sha(checklist_raw),
                       "id": checklist.id, "version": checklist.version, "embedded_in_each_case": True},
@@ -125,16 +133,17 @@ def prepare(source, output):
             with path.open("xb") as target:
                 target.write(raw)
     return {"input": str(output), "manifest": str(manifest_path), "conversations": len(cases),
-            "input_sha256": sha(raw_input), "paid_api_calls": 0, "results_created": False}
+            "split": split, "input_sha256": sha(raw_input), "paid_api_calls": 0, "results_created": False}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=Path, required=True, help="Actual ten-case organizer PROD JSON")
     parser.add_argument("--output", type=Path, required=True, help="New ignored artifacts/...jsonl path")
+    parser.add_argument("--split", choices=["prod", "rehearsal"], default="prod")
     args = parser.parse_args()
     try:
-        print(json.dumps(prepare(args.source, args.output), indent=2))
+        print(json.dumps(prepare(args.source, args.output, split=args.split), indent=2))
     except (ValueError, OSError) as error:
         parser.exit(2, str(error) + "\n")
 

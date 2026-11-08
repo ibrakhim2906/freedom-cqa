@@ -216,7 +216,8 @@ def test_real_attempt_boundary_preserves_rejected_output_and_releases_allowance(
         expected = decode_span_evaluation(json.dumps(current_wire), conversation, checklist)
         validate_evaluation(expected, conversation, checklist, require_audit=True)
         ledger = Ledger(tmp_path / "ledger.sqlite3", 1, budget_group="run", group_limit=1)
-        evaluator = Evaluator(Settings(api_key="fictional-test"), ledger, 1)
+        # This frozen response uses the historical source-span contract.
+        evaluator = Evaluator(Settings(api_key="fictional-test"), ledger, 1, strategy="grounded")
         def response(text):
             return SimpleNamespace(id="test-only", model="test-only", output_text=text, status="completed",
                                    usage=SimpleNamespace(input_tokens=100, output_tokens=100))

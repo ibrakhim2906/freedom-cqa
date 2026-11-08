@@ -48,7 +48,10 @@ class CapturingPreparationEvaluator:
         pass
 
     async def evaluate(self, conversation, checklist):
-        prepared = Evaluator._prepare(SimpleNamespace(grounded=True, settings=self.settings), conversation, checklist)
+        mode = SimpleNamespace(grounded=self.settings.strategy == "grounded",
+                               assessor=self.settings.strategy in {"assessor", "assessor-reviewed"},
+                               settings=self.settings)
+        prepared = Evaluator._prepare(mode, conversation, checklist)
         type(self).captures.append({"conversation": conversation.model_dump(),
                                    "payload": json.loads(prepared[1]), "instructions": prepared[0]})
         result = Evaluation(judgments=[Judgment(criterion_id=c.id, status="scored", answer=c.levels[0].value,
