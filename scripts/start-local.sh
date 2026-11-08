@@ -72,6 +72,9 @@ elif [ ! -f .env ]; then fail '.env существует, но это не фа�
 printf '%s\n' '[2/4] Устанавливаем зависимости Python по lock-файлу (при необходимости uv скачает Python)...'
 uv sync --locked --no-dev || fail 'Не удалось подготовить Python. Проверьте ошибку выше и соединение. Если lock-файл не поддерживается, обновите uv по инструкции установки.'
 uv run --no-sync --no-dev python -c '
+import sys
+sys.stdout.reconfigure(encoding="utf-8")
+sys.stderr.reconfigure(encoding="utf-8")
 from cqa.settings import Settings
 settings = Settings.load()
 try:

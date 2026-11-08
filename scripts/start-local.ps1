@@ -74,6 +74,9 @@ try {
     uv sync --locked --no-dev
     if ($LASTEXITCODE -ne 0) { throw 'Не удалось подготовить Python. Проверьте ошибку выше и соединение. Если lock-файл не поддерживается, обновите uv по инструкции установки.' }
     $taskKeyCheck = @'
+import sys
+sys.stdout.reconfigure(encoding="utf-8")
+sys.stderr.reconfigure(encoding="utf-8")
 from cqa.settings import Settings
 settings = Settings.load()
 try:

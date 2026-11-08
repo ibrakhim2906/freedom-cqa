@@ -160,3 +160,27 @@ def test_prebuilt_package_does_not_need_or_run_node_and_pnpm(launcher):
     assert result.returncode == 0, result.stdout + result.stderr
     assert "Node.js и pnpm не требуются" in result.stdout
     assert tree_snapshot(project) == before
+
+
+@pytest.mark.parametrize("configured", [False, True])
+@pytest.mark.parametrize("name", ["start-local.ps1", "start-local.sh"])
+def test_actual_key_warning_survives_windows_legacy_output_encoding(tmp_path, configured, name):
+    import sys
+
+    source = (ROOT / "scripts" / name).read_text(encoding="utf-8")
+    if name.endswith("ps1"):
+        check = source.split("$taskKeyCheck = @'\n", 1)[1].split("\n'@", 1)[0]
+    else:
+        check = source.split("uv run --no-sync --no-dev python -c '\n", 1)[1].split("\n'", 1)[0]
+    environment = {key: value for key, value in os.environ.items()
+                   if not key.startswith(("CQA_", "OPENAI_"))}
+    environment.update(PYTHONIOENCODING="cp1252", PYTHONUTF8="0",
+                       OPENAI_API_KEY="test-only-never-used" if configured else "")
+    # Run the launcher's actual configuration check, not a fake tool stub.
+    check = "import sys;sys.path.insert(0," + repr(str(ROOT)) + ");\n" + check
+    result = subprocess.run([sys.executable, "-c", check], cwd=tmp_path, env=environment,
+                            capture_output=True, timeout=15, check=False)
+    assert result.returncode == 0, result.stderr.decode("utf-8", errors="replace")
+    output = result.stdout.decode("utf-8")
+    assert ("Ключ API настроен" if configured else "Ключ API не задан") in output
+    assert "test-only-never-used" not in output
