@@ -1,0 +1,189 @@
+{
+  "measured_at_utc": "2026-11-08T05:19:48.074340+00:00",
+  "candidate": "rubric-assessor-v3-963619247384",
+  "checklist": {
+    "id": "freedom-chat-quality",
+    "version": "1-reviewed-017",
+    "path": "checklists/freedom-reviewed-017.json",
+    "sha256": "b40218aab3afb5bdddd6014461ae111b97cd7638b9d3861546ddfd4e57343392"
+  },
+  "baseline_checklist": "1-reviewed-016",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "medium",
+  "repair_attempts": 0,
+  "provenance": "Reused AI-authored synthetic diagnostic and boundary cases with prior source-only AI reviews; not new held-out evidence, organizer labels or human Ground Truth.",
+  "diagnostic_comparison": {
+    "fixture": "evals/fresh-release-v2.jsonl",
+    "selected": 10,
+    "completed": 10,
+    "failed": 0,
+    "skipped_budget": 0,
+    "clear_reference_judgments_matched": 79,
+    "clear_reference_judgments_checked": 79,
+    "same_as016_answer_status_uncertainty_flags": 80,
+    "compared_to016": 80,
+    "same_totals_as016": 10,
+    "mean_total_absolute_error": 0,
+    "mae_cases": 9,
+    "excluded_ambiguous_judgment": {
+      "case_id": "fresh-v1-ru-03",
+      "criterion_id": "closing",
+      "reason": "Closing opportunity and capture completeness unknown. ProvisionalNo retains explicit uncertainty; excluded from strict unique-label agreement and aggregate-score MAE."
+    },
+    "native_source_validations_passed": 10,
+    "score_replays_passed": 10,
+    "source_semantic_judgments_reviewed": 80,
+    "definite_grade_errors": [],
+    "unsupported_explanations_with_matching_grade": [],
+    "estimated_known_cost_usd": 0.621349,
+    "median_latency_seconds": 18.709,
+    "p95_latency_seconds": 22.77
+  },
+  "additional_boundary_checks": {
+    "fixture": "evals/final-rubric-panel-v1.jsonl",
+    "selected_case_ids": [
+      "panel-402",
+      "panel-403",
+      "panel-404"
+    ],
+    "selected": 3,
+    "completed": 2,
+    "complete": false,
+    "completed_reference_judgments_matched": 16,
+    "completed_reference_judgments_checked": 16,
+    "mean_total_absolute_error_on_completed_cases": 0,
+    "mae_cases": 2,
+    "native_source_validations_passed": 2,
+    "score_replays_passed": 2,
+    "source_semantic_judgments_reviewed": 16,
+    "definite_grade_errors": [],
+    "unsupported_explanations_with_matching_grade": [],
+    "initial_run": {
+      "completed": 2,
+      "skipped_budget": 1,
+      "estimated_known_cost_usd": 0.132105
+    },
+    "cases": [
+      {
+        "case_id": "panel-402",
+        "status": "completed",
+        "score": 59.41,
+        "judgments_matched": 8
+      },
+      {
+        "case_id": "panel-403",
+        "status": "completed",
+        "score": 90.0,
+        "judgments_matched": 8
+      },
+      {
+        "case_id": "panel-404",
+        "status": "pending_successful_assessment",
+        "score": null,
+        "history": [
+          {
+            "status": "skipped_budget",
+            "report": "artifacts/release-hardening/checklist017-boundary-results.json"
+          },
+          {
+            "status": "failed",
+            "report": "artifacts/release-hardening/checklist017-boundary-completion.json",
+            "ledger_call_id": 779,
+            "error": "api_http_429",
+            "api_error_code": "credit_balance_exhausted"
+          },
+          {
+            "status": "failed",
+            "report": "artifacts/release-hardening/checklist017-boundary-after-topup.json",
+            "ledger_call_id": 780,
+            "error": "api_http_429",
+            "api_error_code": "credit_balance_exhausted"
+          },
+          {
+            "status": "failed",
+            "report": "artifacts/release-hardening/checklist017-boundary-after-delay.json",
+            "ledger_call_id": 781,
+            "error": "api_http_429",
+            "api_error_code": "credit_balance_exhausted"
+          },
+          {
+            "status": "failed",
+            "report": "artifacts/release-hardening/checklist017-boundary-funded.json",
+            "ledger_call_id": 782,
+            "error": "api_http_429",
+            "api_error_code": "credit_balance_exhausted"
+          }
+        ]
+      }
+    ],
+    "scope_limit": "The completed 17-turn Russian synthetic call is not evidence of general long-call performance. All selected cases include supplied policy context.",
+    "panel404_submitted_attempts": [
+      {
+        "report": "artifacts/release-hardening/checklist017-boundary-completion.json",
+        "started_at_utc": "2026-11-08T05:18:06.025224+00:00",
+        "ledger_call_id": 779,
+        "status": "failed",
+        "error": "api_http_429",
+        "api_error_code": "credit_balance_exhausted",
+        "billing_state": "provider_rejected",
+        "settled_cost_usd": 0,
+        "estimated_known_cost_usd": 0,
+        "assessment_returned": false
+      },
+      {
+        "report": "artifacts/release-hardening/checklist017-boundary-after-topup.json",
+        "started_at_utc": "2026-11-08T05:19:53.618892+00:00",
+        "ledger_call_id": 780,
+        "status": "failed",
+        "error": "api_http_429",
+        "api_error_code": "credit_balance_exhausted",
+        "billing_state": "provider_rejected",
+        "settled_cost_usd": 0,
+        "estimated_known_cost_usd": 0,
+        "assessment_returned": false
+      },
+      {
+        "report": "artifacts/release-hardening/checklist017-boundary-after-delay.json",
+        "started_at_utc": "2026-11-08T05:25:18.861251+00:00",
+        "ledger_call_id": 781,
+        "status": "failed",
+        "error": "api_http_429",
+        "api_error_code": "credit_balance_exhausted",
+        "billing_state": "provider_rejected",
+        "settled_cost_usd": 0,
+        "estimated_known_cost_usd": 0,
+        "assessment_returned": false
+      },
+      {
+        "report": "artifacts/release-hardening/checklist017-boundary-funded.json",
+        "started_at_utc": "2026-11-08T05:27:09.525471+00:00",
+        "ledger_call_id": 782,
+        "status": "failed",
+        "error": "api_http_429",
+        "api_error_code": "credit_balance_exhausted",
+        "billing_state": "provider_rejected",
+        "settled_cost_usd": 0,
+        "estimated_known_cost_usd": 0,
+        "assessment_returned": false
+      }
+    ],
+    "panel404_provider_rejected_attempts": 4
+  },
+  "combined_estimated_known_cost_usd": 0.753454,
+  "status": "017 is the aligned release candidate. Two of three extra boundary checks completed; the remaining case awaits a successful separately recorded attempt.",
+  "historical_preservation": "016 remains explicitly loadable; historical checklist snapshots, 65 DEV totals and 520 grade/rationale pairs are not rewritten.",
+  "raw_report_sha256": {
+    "checklist017-comparison.json": "8fade5d30321598e0179bb0fd7a6ca31856857f645d6aa3ea2a34541993522a9",
+    "checklist017-boundary-results.json": "b6ebbd2df64603813bf6754aea67b02e5451d082b98876c5328b4583b2466643",
+    "checklist017-boundary-completion.json": "b593837a91ab85a9060ef3047c004a62c45ba763f3a225533cce35ceaa9c37fe",
+    "checklist017-boundary-after-topup.json": "32c199ef93038b12ef0046a834a61cb20a3a56215ab8c829428812c8b4caa710",
+    "checklist017-boundary-after-delay.json": "8ff89d08de44f314cfee66035d498a604e2e35e38578d91a3f64f6c35d4af03b",
+    "checklist017-boundary-funded.json": "1a76bd182e020f9f5c43a6a37f031c1875f239c3d8185e0e747135fb8348ba0d"
+  },
+  "limitations": [
+    "Report diagnostic and boundary results separately; no pooled fresh-accuracy claim.",
+    "Exact quotations/source selection checks do not replace semantic review.",
+    "Successful diagnostic behavior does not guarantee identical outputs on new conversations."
+  ],
+  "updated_at_utc": "2026-11-08T05:28:44.839601+00:00"
+}

@@ -1,44 +1,143 @@
-# Evaluation and review workflow
+# Порядок работы
 
-Start the application using the [README](../README.md). The browser interface and API are served together on localhost; no account registration is required.
+Запустите приложение по [README](../README.md). Для первого знакомства
+подойдёт [короткий сценарий проверки](JUDGE_QUICKSTART.md). Регистрация
+в приложении не требуется: интерфейс и сервер работают локально.
 
-## Import and assess
+Для бесплатного знакомства нажмите **«Открыть пример»**. Откроется
+**«Учебный разбор»** с подготовленной вручную оценкой **87,5 из 100**,
+обоснованиями и цитатами. Ключ и вызов модели для него не нужны.
+Это демонстрационный материал, а не ответ модели или эталон организаторов.
+Его оценка доступна только для просмотра; пересмотр применяется к результатам
+настоящей проверки своих диалогов.
 
-1. Import organizer JSON (`data.records`), canonical conversation JSON, or JSONL. Original speaker roles and timestamps are preserved.
-2. Select the saved checklist. To change a criterion, edit its wording, answer type, weight, levels or N/A condition and save a **new version**.
-3. Select conversations and a batch budget. Standard runs one assessment; Independent review adds a blind review of all criteria and adjudication for disagreements.
-4. Open the result to inspect criterion answers, weighted contributions, explanations, evidence and material uncertainty.
+## Загрузите диалоги
 
-The default checklist is reviewed016 and the evaluator is `assessor`. Changed source content becomes a new immutable revision. The queue shows the newest revision for each conversation; expand history to inspect older sources and their actual saved results. A new or failed revision never borrows another revision's grade.
+Нажмите **«Загрузить данные»**. В режиме **«Вставить текст»** выберите тип
+и язык диалога. Каждое сообщение начинайте с `Клиент:`, `Оператор:`, `Бот:`
+или `Система:`. Перед ролью можно указать время, например `[00:15] Клиент:`.
+Продолжения на следующих строках, в том числе текст с двоеточиями, остаются
+в той же реплике, пока не встретится новая роль.
+Откройте **«Проверить перед загрузкой»**, просмотрите все сообщения и выберите
+**«Добавить диалог»**. Приложение сохраняет реплики и не придумывает
+отсутствующие отметки времени. Повторная загрузка того же диалога не создаёт
+лишнюю копию.
 
-## Evidence and recordings
+Для готового набора данных переключитесь на **«Загрузить файл»**.
+Поддерживаются JSON и JSONL: файлы организаторов с `data.records`, отдельный
+диалог, массив диалогов или один полный диалог на строку. CSV не поддерживается.
+За одну загрузку файла можно добавить от 1 до 1 000 диалогов. Текст, роли
+участников и отметки времени сохраняются без изменений.
 
-Evidence links highlight exact original text, including repeated quotations. Omission decisions identify the interval checked. N/A has its own explanation and redistributes applicable weights; the serious-error flag remains separate from the total.
+Загрузка не вызывает модель. Откроется первый диалог; остальные можно
+выделить и проверить кнопкой **«Проверить выбранные»**. Новая проверка своих
+данных требует ключа и отдельного подтверждения запуска.
 
-Call recordings open their supplied player; direct audio-file URLs may play inline. A recording link can be recovered from an original revision only when conversation ID, channel, language and every source message match, and the matching URL is unambiguous. The origin revision remains identifiable. Existing saved inputs are not rewritten.
+Изменённый текст сохраняется как новая версия. В списке показана последняя
+версия каждого диалога; предыдущие доступны в истории версий. У каждой
+версии свои результаты: новый диалог или неудачная проверка не получают
+оценку из старой версии.
 
-Model evaluations use the supplied transcripts. They do not claim to assess pronunciation or intonation from unavailable audio.
+## Настройте критерии
 
-## Knowledge context and numerical uncertainty
+В разделе **«Критерии оценки»** выберите чек-лист. **«Создать копию»**
+создаёт отдельный личный чек-лист с пометкой «— копия» в названии;
+основной остаётся доступен без изменений. В копии можно изменить
+инструкции, названия пунктов, их вес, варианты ответов
+и исключения. Откройте нужный критерий по его названию: остальные можно
+оставить свёрнутыми. **«Максимум баллов»** задаёт полный результат за критерий,
+а **«Баллы за ответ»** — результат каждого варианта. При изменении максимума
+баллы ответов меняются пропорционально. Для нового набора используйте **«Создать чек-лист»**.
+**«Сохранить чек-лист»** сохраняет копию как первую версию отдельного чек-листа;
+дальнейшие изменения сохраняются в новых версиях. Прежние результаты сохраняют
+свои исходные правила. Если есть ошибки, выберите пункт в их списке, чтобы
+перейти к нужному полю. В общих указаниях можно использовать несколько строк.
+Создание и редактирование чек-листов бесплатны.
 
-Optional reference packs are scoped and dated. Preview applicability before attaching a pack as a new source revision. An explicitly selected snapshot is an assumption, not proof that its rules applied historically.
+В диалоге нажмите **«Начать проверку»**, а для уже проверенного диалога —
+**«Параметры проверки»**. Выберите чек-лист, проверьте лимит расходов
+и подтвердите запуск. Для первого знакомства достаточно обычной проверки.
+Независимая перепроверка добавляет ещё одну оценку и при расхождениях —
+дополнительный разбор. Повторные попытки тоже входят в расходы.
+Указанный лимит — верхняя граница, а не ожидаемая стоимость.
 
-Every applicable criterion in the current assessor receives a supported allowed answer. Missing information remains visible beside the numerical grade. Bounds show possible configured outcomes, not a confidence interval. Older unscored assessments preserve their historical status.
+Для нового результата нужны действующий ключ, доступ к модели, средства
+у провайдера и достаточный локальный лимит. В **«Настройке и помощи»**
+можно проверить состояние приложения. Наличие ключа не подтверждает,
+что провайдер примет запрос.
 
-## Appeal and review
+## Изучите результат
 
-1. Appeal a criterion with a comment and relevant source messages.
-2. The reviewer confirms or replaces the judgment and records a reason.
-3. Replacement evidence must be selected explicitly; disputed evidence is not copied automatically.
-4. Existing uncertainty is retained by default. Clearing it requires an explicit decision and explanation of what resolved it.
-5. The application recalculates the score while preserving the original AI assessment and the review history.
+В **«Результате проверки»** указаны чек-лист и статус: **«Итоговая оценка»**,
+**«Предварительная оценка»** или отсутствие оценки. Предварительный результат
+означает, что остались неподтверждённые сведения или вопросы к решению.
+Прочитайте пояснение у соответствующего пункта.
 
-Reviewer names are self-identifications in this local prototype, not authenticated roles. Stale concurrent decisions are rejected rather than overwriting a newer review.
+Откройте **«Обоснование и цитаты»** и нажмите на цитату. Точный фрагмент
+будет выделен в **«Тексте диалога»**. Режим **«Рядом с диалогом»** показывает
+текст и результат одновременно. В подробностях доступны проверенные
+сообщения, противоречащие цитаты, справочные документы и исходный разбор.
 
-## Compare, export and reopen
+Флаги показываются отдельно от итогового балла. Если пункт неприменим,
+его вес исключается из расчёта. Например, в учебном разборе 70 из 80 доступных
+баллов дают 87,5 из 100: 70 ÷ 80 × 100. Сохранённые старые результаты без числовой
+оценки не заменяются новыми значениями.
 
-Compare saved results across source or checklist revisions. Changes to source, context and criteria are identified separately. Full export includes original source/checklist snapshots, model output, effective reviewed judgments and appeal history. The organizer adapter exports the original AI assessment under the required fixed schema; see [submission format](SUBMISSION_FORMAT.md).
+Если у звонка есть ссылка на запись, её можно открыть; прямые ссылки
+на аудиофайлы иногда воспроизводятся встроенным плеером. Проверка всё равно
+использует текст, а не качество голоса. Недостающая ссылка может быть взята
+из старой версии только при полном совпадении идентификатора, типа, языка
+и всех сообщений, если ссылка единственная. Исходные данные не переписываются.
 
-Saved-result inspection and human reviews do not call the model. Jobs, sources and appeals persist in `data/runtime/app.sqlite3`; usage accounting persists in `data/runtime/usage.sqlite3`. Failures remain visible and have an explicit retry action. An interrupted request with unknown billing retains its reservation.
+## Добавьте документы или запросите пересмотр
 
-Use one backend process for this local worker. The spending cap is separate from the provider's account balance; reopening the app does not reset either.
+В **«Сведениях о диалоге и справочных материалах»** доступны документы
+с ограничениями по продукту и датам. В разделе **«Справочные документы»**
+нажмите **«Добавить свой документ»**. Можно загрузить один или несколько
+файлов через **«Загрузить TXT или MD»** либо вставить **«Название документа»**
+и **«Текст документа»**. Для следующего материала есть **«Добавить ещё документ»**.
+Текст из PDF или Word скопируйте в поле вручную.
+
+Название и текст обязательны. В разделе **«Источник, тема и даты»** можно
+указать ссылку, сведения об источнике, область применения и даты. Пустые
+значения остаются неизвестными; предупреждение объясняет ограничения.
+Ссылка сама по себе не загружает текст источника. Сначала проверьте применимость,
+затем нажмите **«Прикрепить документы»**. Сохранится версия диалога со всеми
+приложенными материалами; прежние данные и результаты останутся доступны.
+Документы с явно несовместимыми датами или областью применения не становятся
+подходящими только из-за загрузки. Выбор документов на определённую
+дату — явное допущение, а не доказательство того, что правила действовали
+в день разговора.
+
+Прикрепление документов не вызывает модель. Для оценки с новым набором
+материалов отдельно запустите проверку сохранённой версии диалога.
+
+У результата настоящей проверки своих данных кнопка **«Запросить пересмотр»**
+позволяет указать причину несогласия
+и подтверждающие сообщения. В разделе запросов откройте
+**«Запрос на пересмотр»** и сохраните решение с обоснованием. Цитаты для
+нового решения выбираются заново. Замечание о недостающих сведениях
+сохраняется, пока проверяющий явно не подтвердит, что выяснил их, и не
+объяснит, как это было сделано.
+
+После принятого изменения балл пересчитывается. Исходная автоматическая
+оценка и история решений сохраняются. Имя проверяющего вводится вручную.
+Если за время работы другой проверяющий уже изменил решение, устаревшее
+изменение будет отклонено. Ручной пересмотр не вызывает модель.
+
+## Вернитесь к результатам и скачайте их
+
+Откройте **«Историю оценок»** или **«Сохранённые результаты»** внутри диалога.
+Сравнение показывает, что изменилось в тексте, документах и чек-листе.
+**«Сведения и выгрузка»** позволяет скачать полный результат: исходные
+данные и критерии, действующие оценки по пунктам и историю пересмотра.
+Выгрузка для организаторов использует исходную автоматическую оценку
+и фиксированную схему — см. [описание формата](SUBMISSION_FORMAT.md).
+
+Диалоги, задания и запросы сохраняются в `data/runtime/app.sqlite3`,
+учёт расходов — в `data/runtime/usage.sqlite3`. Ошибки остаются видны;
+повторная проверка запускается отдельно и может потребовать оплаты.
+Если запрос прерван и его стоимость неизвестна, резерв расходов сохраняется.
+
+Перезапуск приложения не обнуляет локальный лимит или баланс провайдера.
+Исходные тексты и сохранённые обоснования показываются на языке оригинала.

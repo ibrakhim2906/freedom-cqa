@@ -9,7 +9,8 @@ from fastapi.testclient import TestClient
 from backend.app import create_app
 from backend.recordings import matching_recording
 from backend.storage import Document, Job, Store, digest
-from cqa.models import Checklist, Conversation, Evaluation, Judgment, TestCase as Case
+from cqa.models import Checklist, Conversation, Evaluation, Judgment
+from cqa.models import TestCase as Case
 from cqa.scoring import calculate_score
 from cqa.settings import Settings
 from scripts.import_saved_assessments import import_report, sha

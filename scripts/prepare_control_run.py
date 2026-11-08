@@ -5,10 +5,10 @@ import hashlib
 import json
 from pathlib import Path
 
-from backend.importing import parse_import
+from backend.importing import parse_import, validate_source_envelope
 from cqa.grounding import evidence_context_for, select_reference_context
 from cqa.models import TestCase
-from cqa.rubric import load_checklist
+from cqa.rubric import DEFAULT_CHECKLIST_PATH, load_checklist
 from cqa.settings import ROOT
 
 SCOPE = "freedom-finance-global-platform"
@@ -41,9 +41,9 @@ def prepare(source, output, *, split="prod"):
     payload = json.loads(content)
     envelope = payload.get("data", payload) if isinstance(payload, dict) else {}
     source_group = envelope.get("dataset_group_id") if isinstance(envelope, dict) else None
-    if isinstance(payload, dict) and payload.get("isSuccess") is False:
-        raise ValueError("Organizer response reports failure; no control input was prepared")
-    if split == "prod" and str(source_group or "").upper() == "DEV":
+    validate_source_envelope(payload)
+    source_groups = [source_group, payload.get("dataset_group_id") if isinstance(payload, dict) else None]
+    if split == "prod" and any(str(group or "").strip().upper() == "DEV" for group in source_groups):
         raise ValueError("DEV cannot be labelled PROD; use --split rehearsal for an offline rehearsal")
     if isinstance(payload, dict) and "data" in payload:
         rows = payload["data"].get("records", []) if isinstance(payload["data"], dict) else []
@@ -56,11 +56,11 @@ def prepare(source, output, *, split="prod"):
         raise ValueError("Control preparation requires exactly ten unique conversation IDs")
 
     pack_path = ROOT / "references/freedom-global-products-20261107.json"
-    checklist_path = ROOT / "checklists/freedom-reviewed-016.json"
+    checklist_path = ROOT / DEFAULT_CHECKLIST_PATH
     pack_raw, checklist_raw = pack_path.read_bytes(), checklist_path.read_bytes()
     checklist = load_checklist()
-    if checklist.version != "1-reviewed-016" or checklist != load_checklist(checklist_path):
-        raise ValueError("This control-run procedure requires the reviewed016 default checklist")
+    if checklist != load_checklist(checklist_path):
+        raise ValueError("Control preparation must use the exact application default checklist snapshot")
     if len(json.loads(pack_raw)["references"]) != 9:
         raise ValueError("Expected the existing nine-reference official snapshot")
 

@@ -4,6 +4,8 @@ from pathlib import Path
 from .models import Checklist, Criterion, Level
 from .settings import ROOT
 
+DEFAULT_CHECKLIST_PATH = Path("checklists/freedom-reviewed-017.json")
+
 
 def official_checklist():
     def binary(cid, title, weight, instruction, na=None, kind="binary"):
@@ -66,7 +68,7 @@ def official_checklist():
 
 
 def load_checklist(path: str | Path | None = None):
-    target = Path(path) if path else ROOT / "checklists/freedom-reviewed-016.json"
+    target = Path(path) if path else ROOT / DEFAULT_CHECKLIST_PATH
     return Checklist.model_validate_json(target.read_text(encoding="utf-8"))
 
 

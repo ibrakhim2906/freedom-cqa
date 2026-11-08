@@ -1,9 +1,14 @@
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useId, useRef, useState} from 'react'
 import type {ConversationRow} from './types'
 import {Icon} from './Icon'
 import {date} from './format'
+import {scoreNumber} from './scorePresentation'
 import {groupConversationRevisions} from './conversationRevisions'
-import styles from './App.module.css'
+import styles from './ConversationQueue.module.css'
+
+function conversationTitle(c: ConversationRow) {
+  return c.display_title?.trim() || `${c.channel === 'voice call' ? 'Звонок' : 'Чат'}${c.language.trim() ? ` · ${c.language.toUpperCase()}` : ''}`
+}
 
 export function ConversationQueue({conversations, selected, current, onSelect, onChoose, onOpenAssessment}: {
   conversations: ConversationRow[]; selected: string[]; current: string;
@@ -12,12 +17,16 @@ export function ConversationQueue({conversations, selected, current, onSelect, o
 }) {
   const [query, setQuery] = useState(''), [language, setLanguage] = useState(''), [channel, setChannel] = useState('')
   const [assessmentFilter, setAssessmentFilter] = useState(''), [expanded, setExpanded] = useState<string[]>([])
+  const [filtersOpen, setFiltersOpen] = useState(false)
+  const filtersId = useId(), historyId = useId()
+  const filterCount = [language, channel, assessmentFilter].filter(Boolean).length
+  const resetFilters = () => {setLanguage(''); setChannel(''); setAssessmentFilter('')}
   const all = useRef<HTMLInputElement>(null)
   const groups = groupConversationRevisions(conversations)
   const languages = [...new Set(groups.map(group => group.latest.language))].sort()
   const matching = groups.filter(({latest: c}) => {
     const assessment = c.latest_assessment
-    return c.external_id.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())
+    return [c.external_id, conversationTitle(c)].some(text => text.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()))
       && (!language || c.language === language) && (!channel || c.channel === channel)
       && (!assessmentFilter || (assessmentFilter === 'unassessed' && assessment === null)
         || (assessmentFilter === 'review' && !!assessment && (assessment.review_recommended_count > 0 || (assessment.open_appeals || 0) > 0))
@@ -39,46 +48,60 @@ export function ConversationQueue({conversations, selected, current, onSelect, o
     const visibleIds = new Set(visible.map(c => c.id))
     onSelect(checked ? [...new Set([...selected, ...visibleIds])] : selected.filter(id => !visibleIds.has(id)))
   }
-  function revisionRow(c: ConversationRow, latest: boolean) {
+  function revisionRow(c: ConversationRow, latest: boolean, group: typeof groups[number]) {
+    const showDetails = isExpanded(group)
     const assessment = c.latest_assessment
-    const savedLabel = assessment === undefined ? 'Assessment status unavailable' : assessment === null ? 'Not assessed'
-      : assessment.status === 'completed' ? assessment.total === null ? 'Saved · no numeric grade'
-        : `${assessment.total}/100${assessment.provisional ? ' · Provisional' : ''}`
-      : `Latest attempt: ${assessment.status}`
+    const savedLabel = assessment === undefined ? 'Статус недоступен' : assessment === null ? 'Без оценки'
+      : assessment.status === 'completed' ? assessment.total === null ? 'Проверено · без балла'
+        : `${scoreNumber(assessment.total)}/100`
+      : assessment.status === 'queued' ? 'В очереди' : assessment.status === 'running' ? 'Идёт проверка…'
+      : assessment.status === 'failed' ? 'Ошибка проверки' : assessment.status === 'interrupted' ? 'Проверка прервана'
+      : assessment.status === 'cancelled' ? 'Проверка отменена' : assessment.status
     return <div key={c.id} data-testid={`queue-revision-${c.id}`} className={`${styles.conversationRow} ${!latest ? styles.olderRevision : ''} ${current === c.id ? styles.selected : ''}`}>
-      <input aria-label={`Select ${c.external_id}${latest ? '' : ` revision ${c.content_hash.slice(0, 7)}`}`} type="checkbox" checked={picked.has(c.id)} onChange={e => onSelect(e.target.checked ? [...new Set([...selected, c.id])] : selected.filter(id => id !== c.id))}/>
+      <input aria-label={`Выбрать ${c.external_id}${latest ? '' : `, версия ${c.content_hash.slice(0, 7)}`}`} type="checkbox" checked={picked.has(c.id)} onChange={e => onSelect(e.target.checked ? [...new Set([...selected, c.id])] : selected.filter(id => id !== c.id))}/>
       <div className={styles.conversationBody}>
-        <button aria-current={current === c.id ? 'true' : undefined} onClick={() => onChoose(c.id)}><b>{c.external_id}</b>
-          <span><Icon name={c.channel === 'voice call' ? 'call' : 'chat'} size={11}/>{c.language} · {c.channel === 'voice call' ? 'Call' : 'Chat'} · {c.message_count} messages</span>
-          <small>{latest ? 'Latest' : 'Earlier'} revision {c.content_hash.slice(0, 7)} · {date(c.created_at)}</small>
+        <div className={styles.rowMain}>
+        <button className={styles.chooseConversation} title={conversationTitle(c)} aria-current={current === c.id ? 'true' : undefined} onClick={() => onChoose(c.id)}><b>{conversationTitle(c)}</b>
+          <span className={styles.conversationMeta}><Icon name={c.channel === 'voice call' ? 'call' : 'chat'} size={13}/>{c.channel === 'voice call' ? 'Звонок' : 'Чат'} · {c.language} · Сообщений: {c.message_count}</span>
         </button>
-        <span className={styles.queueAssessment} data-status={assessment?.status || 'unassessed'}>{savedLabel}</span>
-        {!!assessment?.review_recommended_count && <small className={styles.queueReview}>{assessment.review_recommended_count} review recommendation{assessment.review_recommended_count === 1 ? '' : 's'}</small>}
-        {!!assessment?.open_appeals && <small className={styles.queueReview}>{assessment.open_appeals} open appeal{assessment.open_appeals === 1 ? '' : 's'}</small>}
-        {assessment && <button className={styles.openAssessment} aria-label={`Open assessment for ${c.external_id} revision ${c.content_hash.slice(0, 7)}`} onClick={() => onOpenAssessment(assessment.id, c.id)}>{assessment.status === 'completed' ? 'Open saved result' : 'Open attempt'} <span aria-hidden="true">↗</span></button>}
+        {assessment ? <button className={styles.queueAssessment} data-status={assessment.status} data-provisional={assessment.provisional || undefined}
+          aria-label={`Открыть оценку ${c.external_id}, версия ${c.content_hash.slice(0, 7)}`} title={assessment.provisional ? 'Предварительная оценка: результат может измениться после пересмотра' : assessment.status === 'completed' ? 'Открыть сохранённый результат' : 'Посмотреть ход проверки'}
+          onClick={() => onOpenAssessment(assessment.id, c.id)}><span>{savedLabel}</span>{assessment.is_demo && <small>Учебный разбор</small>}{assessment.status === 'completed' && assessment.provisional && <small>Нужен пересмотр</small>}<Icon name="arrow" size={13}/></button>
+          : <span className={styles.unassessed}>{savedLabel}</span>}
+        </div>
+        <div className={styles.rowFooter}>
+        {(!!assessment?.review_recommended_count || !!assessment?.open_appeals) && <div className={styles.reviewSummary}>
+          {!!assessment.review_recommended_count && <span title={`Пунктов для пересмотра: ${assessment.review_recommended_count}`}>Требуют внимания: {assessment.review_recommended_count}</span>}
+          {!!assessment.open_appeals && <span>Открытых запросов: {assessment.open_appeals}</span>}
+        </div>}
+        {latest && <button className={styles.revisionToggle} aria-expanded={showDetails} aria-controls={`${historyId}-${group.latest.id}-meta ${historyId}-${group.latest.id}`} aria-label={group.revisions.length > 1 ? `История версий ${group.externalId}` : `Сведения о ${group.externalId}`}
+          onClick={() => setExpanded(old => showDetails ? old.filter(id => id !== group.externalId) : [...old, group.externalId])}>
+          {group.revisions.length > 1 ? `Версии (${group.revisions.length})` : 'Подробнее'}<span aria-hidden="true">{showDetails ? '−' : '+'}</span></button>}
+        </div>
+        <div id={`${historyId}-${c.id}-meta`} hidden={!showDetails} className={styles.revisionMeta}><span>Идентификатор: {c.external_id}</span><span>{latest ? 'Текущая' : 'Предыдущая'} версия <code>{c.content_hash.slice(0, 7)}</code></span><span>Загружено: {date(c.created_at)}</span></div>
       </div>
     </div>
   }
-  return <aside className={styles.sidebar} aria-label="Conversation queue">
-    <div className={styles.queueHeading}><h2>Conversation queue</h2><span className={styles.count}>{groups.length}</span></div>
-    <p className={styles.queueHint}>Latest revisions · {conversations.length} saved revisions in history</p>
-    <div className={styles.search}><Icon name="search" size={15}/><input type="search" aria-label="Search conversations" placeholder="Search conversation ID" value={query} onChange={e => setQuery(e.target.value)}/></div>
-    <div className={styles.filters}>
-      <select aria-label="Filter by language" value={language} onChange={e => setLanguage(e.target.value)}><option value="">All languages</option>{languages.map(l => <option key={l} value={l}>{l}</option>)}</select>
-      <select aria-label="Filter by channel" value={channel} onChange={e => setChannel(e.target.value)}><option value="">All channels</option><option value="agent chat">Chat</option><option value="voice call">Call</option></select>
-      <select className={styles.queueReviewFilter} aria-label="Filter by assessment" value={assessmentFilter} onChange={e => setAssessmentFilter(e.target.value)}><option value="">All assessments</option><option value="review">Review recommended / appeals</option><option value="unassessed">Not assessed</option><option value="completed">Completed</option><option value="active">Queued / running</option><option value="failed">Failed / stopped</option></select>
+  return <aside className={styles.sidebar} aria-label="Список диалогов">
+    <div className={styles.queueHeading}><h2>Диалоги</h2><span className={styles.count}>{groups.length}</span></div>
+    <div className={styles.search}><Icon name="search" size={16}/><input type="search" aria-label="Поиск диалогов" placeholder="Найти диалог" value={query} onChange={e => setQuery(e.target.value)}/></div>
+    <div className={styles.filterBar}>
+      <button className={styles.filterToggle} aria-expanded={filtersOpen} aria-controls={filtersId} onClick={() => setFiltersOpen(open => !open)}><Icon name="settings" size={14}/>Фильтры{filterCount > 0 && <span className={styles.filterCount}>{filterCount}</span>}<span aria-hidden="true">{filtersOpen ? '−' : '+'}</span></button>
+      {filterCount > 0 && <button className={styles.quiet} onClick={resetFilters}>Сбросить фильтры</button>}
     </div>
-    <div className={styles.queueSelection}><label><input ref={all} type="checkbox" disabled={!visible.length} checked={visible.length > 0 && selectedVisible === visible.length} onChange={e => toggleVisible(e.target.checked)}/> Select visible</label>
-      {selected.length ? <button className={styles.quiet} onClick={() => onSelect([])} aria-label="Clear conversation selection">Clear ({selected.length})</button> : <span>{matching.length} shown</span>}</div>
-    {selected.length > selectedVisible && <p className={styles.queueHint}>{selected.length - selectedVisible} selected revision(s) are hidden by filters or history.</p>}
+    <div id={filtersId} hidden={!filtersOpen} className={styles.filters}>
+      <label>Язык<select aria-label="Фильтр по языку" value={language} onChange={e => setLanguage(e.target.value)}><option value="">Все языки</option>{languages.map(l => <option key={l} value={l}>{l}</option>)}</select></label>
+      <label>Тип диалога<select aria-label="Фильтр по типу диалога" value={channel} onChange={e => setChannel(e.target.value)}><option value="">Все типы</option><option value="agent chat">Чат</option><option value="voice call">Звонок</option></select></label>
+      <label className={styles.assessmentFilter}>Статус<select aria-label="Фильтр по статусу" value={assessmentFilter} onChange={e => setAssessmentFilter(e.target.value)}><option value="">Все статусы</option><option value="review">Требуют внимания</option><option value="unassessed">Без оценки</option><option value="completed">Проверено</option><option value="active">В очереди или на проверке</option><option value="failed">Ошибка или остановка</option></select></label>
+    </div>
+    <div className={styles.queueSelection}><label><input ref={all} type="checkbox" disabled={!visible.length} checked={visible.length > 0 && selectedVisible === visible.length} onChange={e => toggleVisible(e.target.checked)}/> Выбрать показанные</label>
+      {selected.length ? <button className={styles.quiet} onClick={() => onSelect([])} aria-label="Снять выделение диалогов">Снять выбор ({selected.length})</button> : <span aria-live="polite">Найдено: {matching.length}</span>}</div>
+    {selected.length > selectedVisible && <p className={styles.queueHint}>Выбранных версий за пределами списка: {selected.length - selectedVisible}. Они скрыты фильтрами или находятся в свёрнутой истории.</p>}
     <div className={styles.queueItems}>{matching.map(group => <div key={group.externalId} className={styles.revisionGroup}>
-      {revisionRow(group.latest, true)}
-      {group.revisions.length > 1 && <button className={styles.revisionToggle} aria-expanded={isExpanded(group)} aria-label={`Revision history for ${group.externalId}`}
-        onClick={() => {if (isExpanded(group)) setExpanded(old => old.filter(id => id !== group.externalId))
-          else setExpanded(old => [...old, group.externalId])}}>{isExpanded(group) ? 'Hide' : 'Show'} {group.revisions.length - 1} earlier revision{group.revisions.length > 2 ? 's' : ''}</button>}
-      {isExpanded(group) && group.revisions.slice(1).map(c => revisionRow(c, false))}
+      {revisionRow(group.latest, true, group)}
+      <div id={`${historyId}-${group.latest.id}`} hidden={!isExpanded(group)}>{isExpanded(group) && group.revisions.slice(1).map(c => revisionRow(c, false, group))}</div>
     </div>)}</div>
-    {!visible.length && <div className={styles.empty}><Icon name="search" size={23}/><p>{conversations.length ? 'No conversations match these filters.' : 'Your review queue is empty. Import conversations to begin.'}</p>
-      {conversations.length > 0 && <button onClick={() => {setQuery(''); setLanguage(''); setChannel(''); setAssessmentFilter('')}}>Clear filters</button>}</div>}
+    {!visible.length && <div className={styles.empty}><Icon name="search" size={23}/><p>{conversations.length ? 'По вашему запросу ничего не найдено.' : 'Диалогов пока нет. Загрузите файл с данными.'}</p>
+      {conversations.length > 0 && <button onClick={() => {setQuery(''); resetFilters()}}>Сбросить поиск и фильтры</button>}</div>}
   </aside>
 }

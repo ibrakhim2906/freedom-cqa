@@ -1,5 +1,5 @@
-from cqa.rubric import load_checklist
-from cqa.settings import Settings
+from cqa.rubric import DEFAULT_CHECKLIST_PATH, load_checklist
+from cqa.settings import ROOT, Settings
 
 
 def test_fresh_checkout_uses_delivery_assessor_without_local_env(monkeypatch, tmp_path):
@@ -11,4 +11,4 @@ def test_fresh_checkout_uses_delivery_assessor_without_local_env(monkeypatch, tm
     assert settings.model == "gpt-6.1-sol" and settings.effort == "medium"
     assert settings.api_key == ""
     assert settings.ledger_path == tmp_path / "data/runtime/usage.sqlite3"
-    assert load_checklist().version == "1-reviewed-016"
+    assert load_checklist() == load_checklist(ROOT / DEFAULT_CHECKLIST_PATH)

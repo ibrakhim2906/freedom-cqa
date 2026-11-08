@@ -23,7 +23,9 @@ from cqa.span_transport import decode_span_evaluation
 def observed_failure():
     manifest = json.loads((ROOT / "evals/browser-acceptance-v1.json").read_text(encoding="utf-8"))
     conversation = Conversation.model_validate(manifest["conversations"][0])
-    checklist = load_checklist()
+    # The rejected provider payload quotes the rubric frozen in this source manifest.
+    # Replaying it against a later release default would test a different contract.
+    checklist = load_checklist(ROOT / "checklists" / f"{manifest['rubric']}.json")
     text = (ROOT / "tests/fixtures/missing-identity-audit.json").read_text(encoding="utf-8")
     result = decode_evaluation(text)
     return conversation, checklist, text, result

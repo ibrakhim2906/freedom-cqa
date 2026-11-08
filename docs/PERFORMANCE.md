@@ -2,7 +2,75 @@
 
 Measured on 8 November 2026 with **OpenAI `gpt-6.1-sol`, medium reasoning**. These are development measurements against declared AI-reviewed references, not organizer Ground Truth or a predicted competition score.
 
-## Latest frozen candidate
+## Russian checklist 017 release comparison
+
+The release candidate now selects the Russian **`1-reviewed-017`** checklist
+through one shared default for the API, CLI and control preparation. The evaluator
+prompt remains **`rubric-assessor-v3-963619247384`**. Version 016 and its historical
+results remain available unchanged. Translation changes the model input, so its
+behavior was measured separately; identical weights alone were not treated as
+proof of equivalent assessments.
+
+The comparison reused the ten synthetic conversations against their previously
+frozen references. It is **diagnostic comparison evidence, not a new held-out test
+or organizer-label accuracy**. See the [compact 017 results](../evals/checklist017-validation.results.json).
+
+| Measurement | Observed result |
+|---|---|
+| Reused ten-case comparison, no automatic retries | **10/10 completed** |
+| Unambiguous reference judgments | **79/79 matched** |
+| Comparison with 016 | **80/80** answer/status/uncertainty flags and all ten totals unchanged |
+| Aggregate score error | MAE **0**, nine eligible conversations |
+| Unknown closing opportunity | Remains explicitly uncertain; excluded from strict agreement and score MAE |
+| Native source validation and score replay | **10/10 passed** |
+| Additional known boundary cases | **2/3 completed**; **16/16** judgments matched on those two |
+| Additional boundary source validation and score replay | **2/2 passed** |
+| Ten-case comparison cost and p95 latency | **$0.621349**, **22.77 s** |
+| Two completed boundary cases | **$0.132105** estimated cost |
+
+Independent source review covered all 80 comparison judgments and the 16 completed
+boundary judgments, including their explanations. It found no definite grading
+error or matching grade with an unsupported explanation. The two completed
+boundary cases check customer versus employee verification, private disclosure,
+corrected wrong advice, and a coworker farewell that must not count as closing
+with the customer. These are reused synthetic cases, including a 17-turn call;
+they do not establish general long-call performance or performance without policy
+context.
+
+The third boundary case, `panel-404`, was first skipped at the local budget
+boundary. Four separately recorded requests then received HTTP 429
+`credit_balance_exhausted` and returned no assessment: the completion,
+after-top-up, after-delay and funded attempts. Each is recorded as
+`provider_rejected` with settled cost **$0**. That case is still incomplete, and
+**3/3 is not claimed**. The total recorded cost of the 017 comparison and boundary
+attempts so far is **$0.753454**. Any later successful attempt must retain this
+history and be reported separately.
+
+## Release validation snapshot
+
+At the 8 November release checkpoint, **899 Python tests**, **42 Node tests** and
+**4 browser integrity tests** passed; Ruff also passed. These counts describe the
+checked source snapshot, not a guarantee for later changes. The offline Python
+suite includes accepted-appeal score recalculation and preservation of historical
+assessment snapshots.
+
+A separate clean Windows source checkout passed **898 Python tests with one expected private-DEV skip**,
+**42 Node tests**, a fresh frontend build and no-key startup with checklist 017.
+Demo reference applicability, failed-envelope rejection, saved-result persistence
+and schema/full exports passed with no model requests. Credentials and private
+development data were excluded. Locked dependencies used available package caches;
+cold-cache network installation was not measured.
+
+A fresh browser workflow assessed the same conversation under two custom rule
+configurations and produced **100 then 50**, at a combined model cost of
+**$0.033017**. Evidence navigation, a cached read with **$0** additional spend,
+appeal handling and reload preserved the original assessment results. This
+workflow's appeal was **rejected**, so the second score stayed **50**; it does not
+claim a live accepted-appeal recalculation. The first browser-test attempt failed
+on a locator; the corrected test passed without another model call. This is a
+configuration and persistence check, not another accuracy benchmark.
+
+## Earlier frozen evaluation with checklist 016
 
 Candidate **`rubric-assessor-v3-963619247384`** clarifies closing summaries, task identifiers versus identity verification, and opening turns split across call-transcript fragments. The saved checklist, scoring arithmetic and historical assessments are unchanged. All inspected explanations in the twelve fresh assessments were in Russian; evidence quotations retained their original language.
 
@@ -57,7 +125,7 @@ validation does not establish stable expert-level accuracy. Original outputs and
 the DEV submission were not replaced.
 
 All 65 selected saved assessments still validate, with all 520 grade/rationale
-pairs and 65 totals unchanged. The integrated Python suite now passes 822 tests.
+pairs and 65 totals unchanged. At that checkpoint the integrated Python suite passed 822 tests.
 Local evidence is preserved under ignored `artifacts/precontrol-audit/`.
 
 - [Official DEV export](../results/dev/results.json): **65/65 numerical results, 65 ok, 0 errors**; 20 assessments retain material uncertainty. These are completed assessments, not measured expert agreement.

@@ -198,7 +198,8 @@ def effective_result(job, checklist, appeals, *, conversation=None):
             "score": calculate_score(reviewed, checklist),
             "assessment_context": (job.record.get("assessment_context") or
                 (evidence_context_for(conversation)["assessment"] if conversation is not None else None)),
-            "source": "human_review" if revisions else "ai_original", "accepted_revisions": len(revisions)}
+            "source": "human_review" if revisions else "prepared_demo" if (job.record or {}).get("demo") else "ai_original",
+            "accepted_revisions": len(revisions)}
 
 
 def validate_human_revision(job, checklist, conversation, appeals, replacement):

@@ -1,0 +1,23 @@
+.help { margin: 4px 0 12px; color: #425b4b; }
+.help > summary { font-size: 13px; width: fit-content; }
+.content { margin-top: 6px; padding: 16px; border: 1px solid #dce6df; border-radius: 8px; background: #f9fbf9; font-size: 13px; }
+.content p { color: #52675a; font-size: 13px; }
+.content .formula { color: #284d36; font-weight: 600; }
+.content ul { margin: 12px 0 16px; padding-left: 20px; }
+.content li + li { margin-top: 6px; }
+.example { padding-top: 14px; border-top: 1px solid #dce6df; }
+.exampleHeading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+.exampleHeading button { font-size: 12px; padding: 5px 9px; }
+.items { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.item { min-width: 0; padding: 12px; border: 1px solid #e0e7e2; border-radius: 7px; background: #fff; }
+.help .item label { display: flex; flex-direction: column; align-items: stretch; gap: 3px; margin: 10px 0; font-size: 12px; font-weight: 400; }
+.help input[type=range] { width: 100%; min-height: 24px; margin: 0; padding: 0; border: 0; background: transparent; accent-color: #26804b; cursor: pointer; }
+.points { font-size: 12px; color: #52675a; }
+.help .notApplicable { display: flex; flex-direction: row; align-items: center; gap: 8px; margin: 12px 0; font-size: 13px; font-weight: 400; }
+.help .notApplicable input { width: 15px; }
+.result { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; color: #285238; }
+.result span { color: #52675a; font-size: 12px; }
+@media (max-width: 500px) {
+  .content { padding: 12px; }
+  .items { grid-template-columns: 1fr; gap: 10px; }
+}

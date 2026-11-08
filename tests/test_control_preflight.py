@@ -6,6 +6,7 @@ import shutil
 import pytest
 
 from cqa.datasets import load_cases
+from cqa.rubric import DEFAULT_CHECKLIST_PATH
 from cqa.settings import ROOT
 from scripts import prepare_control_run as control
 
@@ -13,7 +14,7 @@ from scripts import prepare_control_run as control
 @pytest.fixture
 def workspace(tmp_path, monkeypatch):
     for name in ("references/freedom-global-products-20261107.json",
-                 "checklists/freedom-reviewed-016.json"):
+                 DEFAULT_CHECKLIST_PATH):
         target = tmp_path / name
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(ROOT / name, target)
@@ -31,8 +32,20 @@ def save(source, payload):
     source.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
 
 
-def test_dev_subset_cannot_be_prepared_as_prod(workspace):
+@pytest.mark.parametrize("group", ["DEV", "dev", " DEV "])
+def test_dev_subset_cannot_be_prepared_as_prod(workspace, group):
     source, output, payload = workspace
+    payload["data"]["dataset_group_id"] = group
+    save(source, payload)
+    with pytest.raises(ValueError, match="DEV cannot be labelled PROD"):
+        control.prepare(source, output)
+    assert not output.exists()
+
+
+def test_outer_dev_marker_cannot_be_hidden_by_a_nested_envelope(workspace):
+    source, output, payload = workspace
+    payload["dataset_group_id"] = "DEV"
+    payload["data"].pop("dataset_group_id")
     save(source, payload)
     with pytest.raises(ValueError, match="DEV cannot be labelled PROD"):
         control.prepare(source, output)
@@ -57,14 +70,32 @@ def test_explicit_rehearsal_preserves_original_turns_and_has_no_labels(workspace
     assert source.read_bytes() == original
 
 
-def test_failed_organizer_response_cannot_create_control_inputs(workspace):
+@pytest.mark.parametrize("nested", [False, True])
+def test_failed_organizer_response_cannot_create_control_inputs(workspace, nested):
     source, output, payload = workspace
-    payload["isSuccess"] = False
+    (payload["data"] if nested else payload)["isSuccess"] = False
     payload["data"]["dataset_group_id"] = "PROD"
     save(source, payload)
     with pytest.raises(ValueError, match="reports failure"):
         control.prepare(source, output)
     assert not output.exists()
+    assert not output.with_suffix(".manifest.json").exists()
+
+
+@pytest.mark.parametrize("nested", [False, True])
+def test_failed_response_preserves_existing_frozen_artifacts(workspace, nested):
+    source, output, payload = workspace
+    payload["data"]["dataset_group_id"] = "PROD"
+    (payload["data"] if nested else payload)["isSuccess"] = False
+    save(source, payload)
+    output.parent.mkdir(parents=True)
+    output.write_bytes(b"existing-input")
+    manifest = output.with_suffix(".manifest.json")
+    manifest.write_bytes(b"existing-manifest")
+    with pytest.raises(ValueError, match="reports failure"):
+        control.prepare(source, output)
+    assert output.read_bytes() == b"existing-input"
+    assert manifest.read_bytes() == b"existing-manifest"
 
 
 @pytest.mark.parametrize("field,value", [

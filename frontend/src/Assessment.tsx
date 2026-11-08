@@ -1,7 +1,12 @@
-import type {Appeal, Checklist, CitationSelection, ClaimOutcome, Evidence, HighlightRange, JobDetail, Reference, ReferenceEvidence} from './types'
+import {referenceTitle} from './CustomReferenceApi'
+import type {Appeal, CitationSelection, Evidence, HighlightRange, JobDetail, Reference, ReferenceEvidence} from './types'
 import styles from './App.module.css'
+import reviewStyles from './Assessment.module.css'
 import {date, dollars, terminal} from './format'
-import {Icon} from './Icon'
+import {ScoringHelp} from './ScoringHelp'
+import {criterionOutcome, criterionPoints, hasBooleanFlagScale, scoreNumber, scoreTotals} from './scorePresentation'
+import {GradeOverview} from './GradeOverview'
+import {failureAdvice, failureTitle} from './assessmentFailure'
 
 export function Highlighted({text, quote, ranges}: {text: string; quote?: string; ranges?: HighlightRange[]}) {
   if (ranges !== undefined) {
@@ -29,7 +34,7 @@ export function Highlighted({text, quote, ranges}: {text: string; quote?: string
 }
 export function EvidenceButtons({items, onClick}: {items: Evidence[]; onClick: (e: Evidence[]) => void}) {
   return <div className={styles.evidence}>{items.map((e, i) => <button key={i} onClick={() => onClick([e])}>{e.message_id}: “{e.quote}”</button>)}
-    {items.length > 1 && <button onClick={() => onClick(items)}>Show all cited spans</button>}</div>
+    {items.length > 1 && <button onClick={() => onClick(items)}>Показать сообщения с цитатами</button>}</div>
 }
 
 export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReference, onAppeal, onResolve}: {
@@ -38,7 +43,8 @@ export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReferenc
   onAppeal: (id: string) => void; onResolve: (a: Appeal) => void;
 }) {
   const effective = job.effective, checklist = job.checklist.content
-  const reviewCriteria = new Set([...(effective?.score.unresolved_criteria || []), ...(effective?.score.review_recommended_criteria || [])])
+  const reviewCriteria = new Set([...(effective?.score.unresolved_criteria || []), ...(effective?.score.review_recommended_criteria || []),
+    ...(effective?.judgments.filter(j => j.status === 'needs_review' || !!j.uncertainty?.trim()).map(j => j.criterion_id) || [])])
   const facts = job.record?.evaluation?.factual_claims || []
   const paths = new WeakMap<object, string>()
   function indexSourceObjects(value: unknown, path: (string|number)[] = []) {
@@ -85,6 +91,8 @@ export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReferenc
     onEvidence(items.map(item => ({...item, ...selectedSource(item)})), ids)
   }
   const assessment = effective?.assessment_context || job.record?.assessment_context || job.evidence_context?.assessment
+  const totals = effective ? scoreTotals(effective.score, checklist, effective.judgments) : null
+  const provisional = !!effective?.score.provisional || !!assessment?.conditional
   function omissionRange(start: string, end: string) {
     const messages = job.conversation.content.messages
     const first = messages.findIndex(m => m.id === start), last = messages.findIndex(m => m.id === end)
@@ -103,56 +111,58 @@ export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReferenc
       }
       target.scrollIntoView({block: 'center'})
       target.focus({preventScroll: true})
-    }}>{fact.claim} ({fact.status})</a> : <span>Unresolved fact reference: {id}</span>
+    }}>{fact.claim} ({statusLabel(fact.status)})</a> : <span>Ссылка на факт не найдена: {id}</span>
   }
   function referenceButtons(items: ReferenceEvidence[]) {
     return items.map((r, n) => <button key={n} onClick={() => {
       const ref = job.conversation.content.references.find(x => x.id === r.reference_id)
       if (ref) onReference(ref, r.quote, selectedSource(r))
-    }}>Reference: {r.reference_id} — {r.quote}</button>)
+    }}>Источник: {referenceTitle({id: r.reference_id}, job.conversation.metadata)} — {r.quote}</button>)
   }
-  function outcome(value: ClaimOutcome) {
-    return value.status === 'scored' ? value.answer : value.status.replaceAll('_', ' ')
-  }
-  return <>
-    <div className={styles.jobTop}><b className={styles.status} data-status={job.status} data-testid="job-status">{job.status}</b><span>{date(job.created_at)}</span></div>
-    {assessment?.conditional && <div className={styles.warning} data-testid="conditional-assessment"><b>Conditional snapshot assessment</b>
-      <p>Assumed product scope: {assessment.scope} · Source snapshot as of {assessment.as_of}.</p>
-      <p>Actual conversation date: {job.evidence_context?.temporal.occurred_on || job.conversation.content.occurred_on || 'unknown'}. This review does not verify historical policy applicability.</p>
-      {assessment.rationale && <details><summary>Assessment assumptions and provenance</summary><p>{assessment.rationale}</p></details>}</div>}
-    {job.status === 'queued' && <div className={styles.card}><p>This conversation is waiting in the evaluation queue.</p><button onClick={onCancel}>Cancel queued evaluation</button></div>}
-    {job.status === 'running' && <div className={styles.card} role="status"><p>Reading the conversation and checking the selected criteria…</p><p className={styles.muted}>The evaluation continues if you leave this page.</p></div>}
-    {job.record?.error && <div role="alert" className={styles.error} style={{marginTop: 14}}><b>{failureTitle(job.record.error)}</b>
-      <p>{failureAdvice(job.record.error)}</p>
-      {job.record.error_detail && <p>{job.record.error_detail}</p>}
-      {job.record.budget_required_usd != null && <p>This attempt requires an allowance of {dollars(job.record.budget_required_usd)}; available: {dollars(job.record.budget_available_usd || 0)}. This protects a first request and one possible repair; it is not an expected charge.</p>}
-      <details><summary>Failure details</summary><p>{job.record.error}</p>{job.record.validation_reason && <p>{job.record.validation_reason}</p>}{job.record.repair_skipped && <p>Repair was not submitted: {job.record.repair_skipped}.</p>}</details>
+  return <div className={reviewStyles.assessment}>
+    <div className={reviewStyles.topbar}>
+      <div className={styles.jobTop}><b className={styles.status} data-status={job.status} data-testid="job-status">{job.is_demo ? 'Учебный разбор' : statusLabel(job.status)}</b></div>
+      <details className={`${styles.jobDetails} ${reviewStyles.metadata}`}><summary>Сведения и выгрузка</summary><div className={styles.jobMeta}>
+        <span>Создано: {date(job.created_at)}</span>
+        <span>Чек-лист: {checklist.title} · {checklist.version}</span>
+        {job.record?.usage && <span>Модель: {job.record.model} · {dollars(job.record.usage.estimated_cost_usd)} · Попыток: {job.record.attempt_count} · {scoreNumber(job.record.latency_seconds)} с</span>}
+        <a href={`/api/jobs/${job.id}/export`}>Скачать результат и историю пересмотра</a>
+        {job.status === 'completed' && !job.is_demo && <button disabled={busy} onClick={onRetry}>Проверить ещё раз</button>}
+      </div></details>
+    </div>
+    {job.record?.demo && <div className={styles.notice} data-testid="prepared-demo"><b>Готовый пример · бесплатно</b><p>Этот учебный разбор подготовлен заранее: модель не вызывалась, API-ключ не нужен. Нажимайте на критерии и цитаты, чтобы разобраться в оценке. Проверку своих данных можно запустить отдельно.</p></div>}
+    {!effective && assessment?.conditional && <div className={`${styles.warning} ${reviewStyles.conditional}`} data-testid="conditional-assessment"><b>Результат зависит от допущений</b>
+      <p>Использованы сведения по теме «{assessment.scope}» на {assessment.as_of}. Не подтверждено, что они действовали на дату диалога.</p>
+      <details><summary>Посмотреть допущения</summary><p>Дата диалога: {job.evidence_context?.temporal.occurred_on || job.conversation.content.occurred_on || 'неизвестна'}.</p>{assessment.rationale && <p>{assessment.rationale}</p>}</details></div>}
+    {job.status === 'queued' && <div className={styles.card}><p>Ожидает начала проверки.</p><button onClick={onCancel}>Отменить проверку</button></div>}
+    {job.status === 'running' && <div className={styles.card} role="status"><p>Проверяем диалог по выбранному чек-листу…</p><p className={styles.muted}>Можно перейти на другую страницу — проверка продолжится.</p></div>}
+    {job.record?.error && <div role="alert" className={styles.error} style={{marginTop: 14}}><b>{failureTitle(job.record.error, job.record.api_error_code)}</b>
+      <p>{failureAdvice(job.record.error, job.record.api_error_code)}</p>
+      {job.record.budget_required_usd != null && <p>Для запуска нужно не менее {dollars(job.record.budget_required_usd)} доступного лимита; осталось {dollars(job.record.budget_available_usd || 0)}. Это лимит расходов, а не стоимость проверки.</p>}
+      <details><summary>Технические сведения</summary>{job.record.error_detail && <p>{job.record.error_detail}</p>}<p>{job.record.error}</p>{job.record.validation_reason && <p>{job.record.validation_reason}</p>}{job.record.repair_skipped && <p>Исправление ответа не запрашивалось: {job.record.repair_skipped}.</p>}</details>
     </div>}
-    <details className={styles.jobDetails}><summary>Assessment details & export</summary><div className={styles.jobMeta}>
-      <span>Checklist: {checklist.title} · {checklist.version}</span>
-      {job.record?.usage && <span>{job.record.model} · {dollars(job.record.usage.estimated_cost_usd)} · {job.record.attempt_count} attempt(s) · {job.record.latency_seconds}s</span>}
-      <a href={`/api/jobs/${job.id}/export`}>Export result and review history</a>
-      {job.status === 'completed' && <button disabled={busy} onClick={onRetry}>Run again (billable)</button>}
-    </div></details>
-    {terminal.has(job.status) && job.status !== 'completed' && <div className={styles.row} style={{marginTop: 12}}><button disabled={busy} onClick={onRetry}>Retry (billable)</button><span className={styles.muted}>The previous attempt is preserved.</span></div>}
+    {terminal.has(job.status) && job.status !== 'completed' && <div className={styles.row} style={{marginTop: 12}}><button disabled={busy} onClick={onRetry}>Повторить проверку</button><span className={styles.muted}>Предыдущие результаты сохранены.</span></div>}
     {effective && <>
-      <div className={`${styles.score} ${effective.score.provisional ? styles.scoreProvisional : ''}`} data-testid="score"><div className={styles.scoreNumber}><strong>{effective.score.total === null ? '—' : effective.score.total}</strong><span>{effective.score.total === null ? 'No numeric grade recorded' : 'out of 100 points'}</span></div>
-        <div className={styles.scoreInfo}><b>{effective.score.provisional ? effective.score.total === null ? 'Assessment requires review' : 'Provisional assessment' : assessment?.conditional ? 'Conditional result' : effective.source === 'human_review' ? 'Human-reviewed' : 'Saved AI assessment'}</b>
-          <span>{effective.source === 'human_review' ? `Human-reviewed · ${effective.accepted_revisions} accepted revision(s)` : 'Based on the saved checklist'}</span>
-          {effective.score.provisional && effective.score.score_bounds.lower !== null && effective.score.score_bounds.upper !== null && <span>Possible score range: {effective.score.score_bounds.lower}–{effective.score.score_bounds.upper}.</span>}
-          {reviewCriteria.size > 0 && <span>Review recommended for {reviewCriteria.size} {reviewCriteria.size === 1 ? 'criterion' : 'criteria'}. See the specific information needed below.</span>}
-          {effective.source === 'human_review' && <small>Original AI: {job.record?.score?.total ?? 'provisional'} · preserved</small>}
-        </div>
-      </div>
-      {job.record?.review && job.record.review.status !== 'not_required' && <div className={['confirmed', 'adjudicated'].includes(job.record.review.status) ? styles.notice : styles.warning} style={{margin: '10px 0'}}>
-        <b>{reviewLabel(job.record.review.status)}</b><p style={{marginBottom: 0}}>{job.record.review.criterion_ids.length} criteria {['confirmed', 'adjudicated'].includes(job.record.review.status) ? 'checked' : 'selected for review'}{job.record.review.changed_criteria.length ? ` · ${job.record.review.changed_criteria.length} decisions revised` : ''}.</p>
-        {!!job.record.review.disagreements.length && <details><summary>Review differences</summary><p>{job.record.review.disagreements.map(id => checklist.criteria.find(c => c.id === id)?.title || id).join('; ')}</p></details>}
-        {job.record.review.coverage_disagreement && <p>The independent review disagrees about which customer requests were answered. Review the source and request coverage before relying on the result.</p>}
-        {job.record.review.reviewer_limitations && Object.keys(job.record.review.reviewer_limitations).length > 0 && <details><summary>Limitations raised by the independent reviewer</summary>{Object.entries(job.record.review.reviewer_limitations).map(([id, note]) => <p key={id}><b>{checklist.criteria.find(c => c.id === id)?.title || id}:</b> {note}</p>)}</details>}
-        {job.record.review.error && <details><summary>Review details</summary><p>{job.record.review.error}</p></details>}
+      <GradeOverview effective={effective} checklist={checklist} provisional={provisional} reviewCriteria={reviewCriteria} originalTotal={job.record?.score?.total}/>
+      {totals && <div className={reviewStyles.gradeMath}>
+        {totals.weight <= 0 ? <p>Нет применимых критериев с ненулевым весом — итоговая оценка не рассчитывается.</p>
+          : totals.earned === null ? <p>Общая оценка сохранена, но подробный расчёт баллов недоступен.</p>
+          : effective.score.total === null ? <p>Пока выставлено {scoreNumber(totals.earned)} из {scoreNumber(totals.weight)} баллов. Итог появится после решения по оставшимся критериям.</p>
+          : <><p>Получено <b>{scoreNumber(totals.earned)} из {scoreNumber(totals.weight)} баллов</b> по применимым критериям.</p><span>Пересчёт на 100: {scoreNumber(totals.earned)} ÷ {scoreNumber(totals.weight)} × 100 = {scoreNumber(effective.score.total)}.</span></>}
       </div>}
-      <div className={styles.outcomeGrid}><span><b>{effective.judgments.length}</b> criteria</span><span><b>{effective.judgments.filter(j => j.status === 'not_applicable').length}</b> N/A</span><span><b>{reviewCriteria.size}</b> review recommended</span><span><b>{job.appeals.filter(a => a.status === 'open').length}</b> open appeals</span></div>
-      <ReviewPriorities effective={effective} checklist={checklist}/>
+      {(provisional || reviewCriteria.size > 0) && <div className={reviewStyles.reviewSummary} data-testid={assessment?.conditional ? 'conditional-assessment' : undefined}>
+        <p>{reviewCriteria.size > 0 ? `Нужно дополнительно проверить ${criteriaCount(reviewCriteria.size)}.` : effective.score.provisional ? 'Перед использованием оценки уточните отмеченные вопросы.' : ''}{assessment?.conditional ? ' Результат зависит от допущений об исходных данных.' : ''}</p>
+        {assessment?.conditional && <details><summary>Посмотреть допущения</summary><p>Использованы сведения по теме «{assessment.scope}» на {assessment.as_of}. Не подтверждено, что они действовали на дату диалога.</p><p>Дата диалога: {job.evidence_context?.temporal.occurred_on || job.conversation.content.occurred_on || 'неизвестна'}.</p>{assessment.rationale && <p>{assessment.rationale}</p>}</details>}
+      </div>}
+      <ScoringHelp/>
+      {job.record?.review && job.record.review.status !== 'not_required' && <div className={['confirmed', 'adjudicated'].includes(job.record.review.status) ? styles.notice : styles.warning} style={{margin: '10px 0'}}>
+        <b>{reviewLabel(job.record.review.status)}</b><p style={{marginBottom: 0}}>{['confirmed', 'adjudicated'].includes(job.record.review.status) ? 'Проверено критериев' : 'Критериев на проверке'}: {job.record.review.criterion_ids.length}{job.record.review.changed_criteria.length ? ` · Решений изменено: ${job.record.review.changed_criteria.length}` : ''}.</p>
+        {!!job.record.review.disagreements.length && <details><summary>Расхождения в проверках</summary><p>{job.record.review.disagreements.map(id => checklist.criteria.find(c => c.id === id)?.title || id).join('; ')}</p></details>}
+        {job.record.review.coverage_disagreement && <p>Повторная проверка дала другой вывод о том, на какие вопросы клиента ответили. Сверьте выводы с исходным диалогом.</p>}
+        {job.record.review.reviewer_limitations && Object.keys(job.record.review.reviewer_limitations).length > 0 && <details><summary>Замечания повторной проверки</summary>{Object.entries(job.record.review.reviewer_limitations).map(([id, note]) => <p key={id}><b>{checklist.criteria.find(c => c.id === id)?.title || id}:</b> {note}</p>)}</details>}
+        {job.record.review.error && <details><summary>Сведения о проверке</summary><p>{job.record.review.error}</p></details>}
+      </div>}
+      <div className={reviewStyles.summaryLine}><span>Всего критериев: {effective.judgments.length}</span>{effective.judgments.some(j => j.status === 'not_applicable') && <span>Не применяются: {effective.judgments.filter(j => j.status === 'not_applicable').length}</span>}{job.appeals.some(a => a.status === 'open') && <a href="#review-appeals">Запросов на пересмотр: {job.appeals.filter(a => a.status === 'open').length}</a>}</div>
       {effective.judgments.map(j => {
         const c = checklist.criteria.find(c => c.id === j.criterion_id)!
         const changed = job.appeals.some(a => a.criterion_id === j.criterion_id && a.status === 'accepted')
@@ -160,206 +170,188 @@ export function Assessment({job, busy, onRetry, onCancel, onEvidence, onReferenc
         const judgmentEvidence = original || j
         const native = job.record?.assessment?.criteria[j.criterion_id]
         const level = c.levels.find(level => level.value === j.answer)
-        const contribution = effective.score.contributions.find(item => item.criterion_id === j.criterion_id)
+        const pointSummary = criterionPoints(c, j, effective.score, totals?.weight || 0)
         const customFlag = c.kind === 'flag' && !hasBooleanFlagScale(c)
         const reviewRecommended = j.status === 'needs_review' || !!j.uncertainty?.trim() || reviewCriteria.has(j.criterion_id)
         const concern = reviewRecommended || (j.status === 'scored' && (c.kind === 'flag' ? !customFlag && j.answer === 'yes' : (level?.fraction ?? 0) < Math.max(...c.levels.map(l => l.fraction))))
-        const decision = j.status === 'not_applicable' ? 'N/A' : j.status === 'needs_review' ? 'Needs review' : c.kind === 'flag' ? j.answer : j.answer === 'yes' ? 'Yes' : j.answer === 'no' ? 'No' : j.answer
+        const decision = criterionOutcome(c, j)
+        const currentWarnings = native && !changed ? native.review_warnings : []
+        const conditionalItem = native && !changed && native.uses_conditional_reference
 
-        return <article id={`criterion-${j.criterion_id}`} tabIndex={-1} key={j.criterion_id} className={`${styles.card} ${styles.criterion} ${concern ? styles.criterionConcern : customFlag ? styles.criterionNeutral : j.status === 'scored' ? styles.criterionPass : ''}`} data-testid={`criterion-${j.criterion_id}`}>
-          <div className={styles.criterionHeader}><div><h3>{c.title}</h3><small>{changed ? 'Human review' : 'AI assessment'} · {c.kind === 'flag' ? 'Separate flag' : `${c.weight} weight`}{reviewRecommended && j.status === 'scored' ? ' · Review recommended' : ''}</small></div><div className={styles.criterionValue}>{decision}{c.kind !== 'flag' && contribution?.points != null && <small>{Number(contribution.points.toFixed(2))} weighted pts</small>}</div></div>
-          {customFlag && j.status === 'scored' && level && <p className={styles.flagMeaning}><span>Configured outcome:</span> {level.description}</p>}
-          <p>{j.explanation}</p>{j.uncertainty && <p className={styles.warning}><b>Review recommended: </b>{j.uncertainty}</p>}
-          <EvidenceButtons items={judgmentEvidence.evidence} onClick={citedEvidence}/>
-          {judgmentEvidence.counterevidence.length > 0 && <><small>Counterevidence</small><EvidenceButtons items={judgmentEvidence.counterevidence} onClick={citedEvidence}/></>}
-          <div className={styles.criterionActions}><button disabled={!j.checked_message_ids.length} onClick={() => onEvidence([], j.checked_message_ids)}>Show checked messages</button>
-            <button onClick={() => onAppeal(j.criterion_id)}>Appeal this judgment</button></div>
-          {native && <details><summary>{changed ? 'Original AI assessment basis' : 'Assessment basis'}{native.review_warnings.length ? ` · ${native.review_warnings.length} review notes` : ''}</summary><p>{basisLabel(native.factual_basis)}</p>
-            {native.uses_conditional_reference && <p className={styles.warning}>This decision uses a reference under the selected conditional assessment context.</p>}
-            {native.review_warnings.map((warning, n) => <p className={styles.warning} key={n}>{warning}</p>)}
-            {referenceButtons(native.reference_evidence)}
-            {!!native.factual_dialogue_evidence.length && <><small>Factual dialogue evidence</small><EvidenceButtons items={native.factual_dialogue_evidence} onClick={citedEvidence}/></>}
+        return <article id={`criterion-${j.criterion_id}`} tabIndex={-1} key={j.criterion_id} className={`${styles.card} ${styles.criterion} ${reviewStyles.criterion} ${concern ? styles.criterionConcern : customFlag ? styles.criterionNeutral : j.status === 'scored' ? styles.criterionPass : ''}`} data-testid={`criterion-${j.criterion_id}`}>
+          <div className={styles.criterionHeader}><div><h3>{c.title}</h3>{(changed || reviewRecommended) && <small>{changed ? 'Проверено специалистом' : 'Требует внимания'}</small>}</div><div className={styles.criterionValue}>{decision}</div></div>
+          <div className={reviewStyles.pointSummary}><b>{pointSummary.points}</b><span>{pointSummary.share}</span></div>
+          {customFlag && j.status === 'scored' && level && <p className={styles.flagMeaning}><span>Значение:</span> {level.description}</p>}
+          {(reviewRecommended || currentWarnings.length > 0 || conditionalItem) && <details className={reviewStyles.uncertainty} data-review-notes="true"><summary>{j.status === 'needs_review' ? 'Нужно решение — посмотреть причины' : 'Что нужно уточнить'}</summary>
+            {j.uncertainty && <p>{j.uncertainty}</p>}
+            {j.status === 'needs_review' && !j.uncertainty && <p>{j.explanation}</p>}
+            {currentWarnings.map((warning, n) => <p key={n}>{warning}</p>)}
+            {conditionalItem && <p>Решение опирается на справочные материалы с указанными выше допущениями.</p>}
+            {reviewRecommended && !j.uncertainty && j.status !== 'needs_review' && currentWarnings.length === 0 && !conditionalItem && <p>Для этого критерия рекомендована дополнительная проверка. Сопоставьте обоснование с цитатами.</p>}
           </details>}
-          <details><summary>Configured rule and original AI audit</summary><p>{c.instruction}</p>
+          <details className={reviewStyles.explanation} data-criterion-details="true"><summary>Обоснование и цитаты</summary>
+          <p>{j.explanation}</p>
+          {j.status === 'scored' && level && <p className={reviewStyles.ruleMeta}>Условие из чек-листа: {level.description}{c.kind !== 'flag' && <><br/>Начислено {scoreNumber(level.fraction * 100)}% от максимума за критерий.</>}</p>}
+          <EvidenceButtons items={judgmentEvidence.evidence} onClick={citedEvidence}/>
+          {judgmentEvidence.counterevidence.length > 0 && <><small>Цитаты, которые противоречат выводу</small><EvidenceButtons items={judgmentEvidence.counterevidence} onClick={citedEvidence}/></>}
+          <div className={styles.criterionActions}><button disabled={!j.checked_message_ids.length} onClick={() => onEvidence([], j.checked_message_ids)}>Показать проверенные сообщения</button>
+            {!job.is_demo && <button onClick={() => onAppeal(j.criterion_id)}>Запросить пересмотр</button>}</div>
+          {native && <details><summary>{changed ? 'На чём основана исходная проверка' : 'На чём основано решение'}{native.review_warnings.length ? ` · замечаний: ${native.review_warnings.length}` : ''}</summary><p>{basisLabel(native.factual_basis)}</p>
+            {native.uses_conditional_reference && <p className={styles.warning}>Это решение использует справочные материалы с допущениями, указанными для проверки.</p>}
+            {changed && native.review_warnings.map((warning, n) => <p className={styles.warning} key={n}>{warning}</p>)}
+            {referenceButtons(native.reference_evidence)}
+            {!!native.factual_dialogue_evidence.length && <><small>Подтверждающие цитаты</small><EvidenceButtons items={native.factual_dialogue_evidence} onClick={citedEvidence}/></>}
+          </details>}
+          <details><summary>Правило чек-листа и подробный разбор</summary><p>{c.instruction}</p>
             {job.record?.evaluation?.deductions.filter(d => d.criterion_id === c.id).map((d, i) => <div key={i}><blockquote>{d.rule_quote}</blockquote><p>{d.defect}</p><p>{d.overlap_note}</p></div>)}
             {facts.filter(f => f.criterion_ids.includes(c.id)).map((f, i) => <div className={styles.fact} key={i}
               id={`fact-${facts.indexOf(f)}-${checklist.criteria.indexOf(c)}`} tabIndex={-1}
               data-testid={f.claim_id ? `fact-${f.claim_id}` : undefined}>
-              <b>{f.status}</b><p>{f.claim}</p><p>{f.explanation}</p>
+              <b>{statusLabel(f.status)}</b><p>{f.claim}</p><p>{f.explanation}</p>
               {f.assertion_group_id && (() => {
                 const group = job.record?.evaluation?.assertion_groups?.find(g => g.group_id === f.assertion_group_id)
                 return group ? <details><summary>{group.composition === 'all_of'
-                  ? `Source statement contains ${group.claim_ids.length} separately assessed facts`
-                  : 'Source statement contains one assessed fact'}</summary>
-                  <p>Each fact keeps its own truth assessment and effect on the grade.</p>
+                  ? `В высказывании отдельно проверены факты: ${group.claim_ids.length}`
+                  : 'В высказывании проверен один факт'}</summary>
+                  <p>Достоверность каждого факта и его влияние на оценку рассмотрены отдельно.</p>
                   <EvidenceButtons items={group.operator_evidence} onClick={citedEvidence}/>
-                  {group.claim_ids.filter(id => id !== f.claim_id).map(id => <p key={id}>Related fact: {factReference(id)}</p>)}
+                  {group.claim_ids.filter(id => id !== f.claim_id).map(id => <p key={id}>Связанный факт: {factReference(id)}</p>)}
                 </details> : null
               })()}
-              {f.verification_scope && <p>Verification scope: {f.verification_scope.replaceAll('_', ' ')}</p>}
-              <small>Operator assertion</small><EvidenceButtons items={f.operator_evidence} onClick={citedEvidence}/>
-              {f.dialogue_evidence.length > 0 && <><small>Recorded dialogue evidence</small>
-                <p>Declared observation scope: {f.observation_scope?.replaceAll('_', ' ') || 'not recorded'}</p>
+              {f.verification_scope && <p>Что проверялось: {statusLabel(f.verification_scope)}</p>}
+              <small>Утверждение оператора</small><EvidenceButtons items={f.operator_evidence} onClick={citedEvidence}/>
+              {f.dialogue_evidence.length > 0 && <><small>Подтверждения в диалоге</small>
+                <p>Границы наблюдения: {f.observation_scope ? statusLabel(f.observation_scope) : 'не указаны'}</p>
                 {f.supported_proposition && (f.supported_proposition === f.claim
-                  ? <p>Observation targets this claim.</p>
-                  : <p>Declared observation proposition: {f.supported_proposition}</p>)}
+                  ? <p>Наблюдение относится к этому утверждению.</p>
+                  : <p>Что подтверждает наблюдение: {f.supported_proposition}</p>)}
                 <EvidenceButtons items={f.dialogue_evidence} onClick={citedEvidence}/></>}
               {!f.dialogue_evidence.length && f.supported_proposition && (f.supported_proposition === f.claim
-                ? <p>The supported proposition is this claim.</p>
-                : <p>Declared supported proposition: {f.supported_proposition}</p>)}
+                ? <p>Подтверждается именно это утверждение.</p>
+                : <p>Подтверждаемое утверждение: {f.supported_proposition}</p>)}
               {f.proof && <div data-testid={`proof-${f.claim_id || i}`}>
-                <b>{f.proof.relation === 'all_of' ? `All ${f.proof.required_premise_ids.length} proof premises are required` : 'Direct source proof'}</b>
+                <b>{f.proof.relation === 'all_of' ? `Для вывода нужны все основания: ${f.proof.required_premise_ids.length}` : 'Прямое подтверждение из источника'}</b>
                 <p>{f.proof.explanation}</p>
                 {f.proof.premises.map((p, n) => <div key={p.premise_id} data-testid={`premise-${f.claim_id || i}-${p.premise_id}`}>
-                  <p><b>Premise {n + 1}{f.proof?.required_premise_ids.includes(p.premise_id) ? ' · required' : ''}</b></p>
-                  {p.depends_on_claim_id ? <p>Requires {factReference(p.depends_on_claim_id)} to be {p.required_status}.</p>
-                    : <><p>{p.proposition === null ? 'Uses this claim.' : p.proposition}</p>
+                  <p><b>Основание {n + 1}{f.proof?.required_premise_ids.includes(p.premise_id) ? ' · обязательно' : ''}</b></p>
+                  {p.depends_on_claim_id ? <p>Связанный факт: {factReference(p.depends_on_claim_id)}. Требуемый статус: {statusLabel(p.required_status || '')}.</p>
+                    : <><p>{p.proposition === null ? 'Используется это утверждение.' : p.proposition}</p>
                       <EvidenceButtons items={p.evidence} onClick={citedEvidence}/>
                       {referenceButtons(p.reference_evidence)}
-                      {p.rule_evidence.map((r, key) => <div key={key}><small>Rule: {checklist.criteria.find(rule => rule.id === r.criterion_id)?.title || r.criterion_id}</small><blockquote>{r.quote}</blockquote></div>)}
+                      {p.rule_evidence.map((r, key) => <div key={key}><small>Правило: {checklist.criteria.find(rule => rule.id === r.criterion_id)?.title || r.criterion_id}</small><blockquote>{r.quote}</blockquote></div>)}
                     </>}
                 </div>)}
               </div>}
-              {!!f.context_evidence?.length && <><small>Customer/system context — not independent verification</small>
+              {!!f.context_evidence?.length && <><small>Контекст от клиента или системы; не является независимым подтверждением</small>
                 <EvidenceButtons items={f.context_evidence} onClick={citedEvidence}/></>}
               {referenceButtons(f.reference_evidence)}
-              {f.assessment?.correction && <div><b>Earlier advice explicitly corrected</b>
+              {f.assessment?.correction && <div><b>Предыдущая рекомендация явно исправлена</b>
                 <p>{f.assessment.correction.explanation}</p>
-                <p>Remaining consequence: {f.assessment.correction.remaining_consequence.replaceAll('_', ' ')}</p>
-                <small>Correction</small><EvidenceButtons items={f.assessment.correction.operator_evidence} onClick={citedEvidence}/>
-                <small>Independent outcome evidence</small><EvidenceButtons items={f.assessment.correction.outcome_evidence} onClick={citedEvidence}/>
+                <p>Оставшиеся последствия: {statusLabel(f.assessment.correction.remaining_consequence)}</p>
+                <small>Исправление</small><EvidenceButtons items={f.assessment.correction.operator_evidence} onClick={citedEvidence}/>
+                <small>Независимые подтверждения результата</small><EvidenceButtons items={f.assessment.correction.outcome_evidence} onClick={citedEvidence}/>
                 {referenceButtons(f.assessment.correction.reference_evidence)}
               </div>}
               {f.assessment?.impacts.filter(impact => impact.criterion_id === c.id).map(impact => <div key={impact.criterion_id}>
-                <p>Grade if this fact were true: <b>{outcome(impact.when_true)}</b> · if false: <b>{outcome(impact.when_false)}</b></p>
+                <p>Если факт верен: <b>{criterionOutcome(c, impact.when_true)}{impact.when_true.answer !== null && ` (ответ: ${impact.when_true.answer})`}</b>. Если неверен: <b>{criterionOutcome(c, impact.when_false)}{impact.when_false.answer !== null && ` (ответ: ${impact.when_false.answer})`}</b>.</p>
                 <p>{impact.explanation}</p>
-                {impact.fixed_claim_ids && <><small>Other facts held fixed for this comparison</small>
+                {impact.fixed_claim_ids && <><small>Другие факты, принятые неизменными для сравнения</small>
                   {impact.fixed_claim_ids.length ? <ul>{impact.fixed_claim_ids.map(id => <li key={id}>{factReference(id)}</li>)}</ul>
-                    : <p>No other related facts were declared.</p>}</>}
+                    : <p>Другие связанные факты не указаны.</p>}</>}
               </div>)}
             </div>)}
-            {changed && <p>These audits belong to the original AI result. The human decision is recorded below.</p>}
+            {changed && <p>Этот разбор относится к исходному автоматическому результату. Решение специалиста сохранено ниже.</p>}
+          </details>
           </details>
         </article>
       })}
-      <details className={styles.card}><summary>Customer request coverage · original AI analysis</summary>{job.record?.evaluation?.request_coverage.map((r, i) => {
+      {!!job.record?.evaluation?.request_coverage.length && <details className={`${styles.card} ${reviewStyles.secondary}`}><summary>На все ли вопросы клиента ответили?</summary>{job.record?.evaluation?.request_coverage.map((r, i) => {
         const support = r.support, omission = support?.omission
         const interval = omission ? omissionRange(omission.start_message_id, omission.end_message_id) : []
-        return <div key={i}><b>{r.status}: {r.request}</b><p>{r.explanation}</p>
-          <button onClick={() => onEvidence([], [...r.request_message_ids, ...r.answer_message_ids])}>Show linked request and operator turns</button>
+        return <div key={i}><b>{statusLabel(r.status)}: {r.request}</b><p>{r.explanation}</p>
+          <button onClick={() => onEvidence([], [...r.request_message_ids, ...r.answer_message_ids])}>Показать вопрос и ответы</button>
           {support && <>
-            {support.basis === 'none' ? <p>No operator answer recorded.</p> : <><p>{support.basis === 'withdrawn' ? 'Customer withdrawal evidence' : `Operator answer evidence (${support.basis.replaceAll('_', ' ')})`}</p>
+            {support.basis === 'none' ? <p>Ответ оператора не найден.</p> : <><p>{support.basis === 'withdrawn' ? 'Подтверждение того, что клиент снял вопрос' : `Подтверждение ответа оператора: ${statusLabel(support.basis)}`}</p>
               <EvidenceButtons items={support.evidence} onClick={citedEvidence}/></>}
-            {support.inference && <p>Answer inference: {support.inference}</p>}
-            {support.unresolved_aspects.length > 0 && <p>Still unanswered: {support.unresolved_aspects.join('; ')}</p>}
+            {support.inference && <p>Как сделан вывод об ответе: {support.inference}</p>}
+            {support.unresolved_aspects.length > 0 && <p>Осталось без ответа: {support.unresolved_aspects.join('; ')}</p>}
           </>}
-          {omission && <div><p>Interval checked for missing answer: {omission.start_message_id}–{omission.end_message_id}</p>
-            <button disabled={!interval.length} onClick={() => onEvidence([], interval)}>Show complete omission review interval</button>
-            <p>Context for the missing answer — not operator answer proof</p><EvidenceButtons items={omission.context_evidence} onClick={citedEvidence}/>
+          {omission && <div><p>Проверенный участок диалога: {omission.start_message_id}–{omission.end_message_id}</p>
+            <button disabled={!interval.length} onClick={() => onEvidence([], interval)}>Показать весь проверенный участок</button>
+            <p>Контекст пропущенного ответа; не подтверждает, что оператор ответил</p><EvidenceButtons items={omission.context_evidence} onClick={citedEvidence}/>
           </div>}
         </div>
-      })}</details>
+      })}</details>}
       {job.record?.evaluation?.scope_notes.map((n, i) => <p className={styles.muted} key={i}>{n}</p>)}
-      {job.evidence_context && <details className={styles.card}><summary>{job.evidence_context_origin === 'captured_with_request' ? 'Context captured with the assessment request' : 'Reconstructed context for inspection'}</summary>
-        {job.evidence_context_origin !== 'captured_with_request' && <p>The saved result has no captured reference context. This view uses the preserved input and current inspection rules; it does not establish which source eligibility information the original model received.</p>}
-        <p>Actual date: {job.evidence_context.temporal.occurred_on || 'unknown'} · {job.evidence_context.temporal.origin.replaceAll('_', ' ')}.</p>
-        <p>Assessment: {job.evidence_context.assessment.mode.replaceAll('_', ' ')} · {job.evidence_context.assessment.scope || 'scope unknown'} · {job.evidence_context.assessment.as_of || 'date unknown'}</p>
-        {job.evidence_context.assessment.pack_id && <p>Source pack: {job.evidence_context.assessment.pack_id} · {job.evidence_context.assessment.pack_sha256}</p>}
-        {job.evidence_context.references.map(r => <p key={r.reference_id}>{r.reference_id}: {r.usable ? 'Usable' : `Unavailable — ${r.rejection_reasons.join(', ').replaceAll('_', ' ')}`}</p>)}
+      {job.evidence_context && <details className={`${styles.card} ${reviewStyles.secondary}`}><summary>Источники и даты</summary>
+        {job.evidence_context_origin !== 'captured_with_request' && <p>В сохранённом результате нет сведений о том, какие источники были доступны при проверке. Здесь показаны исходные данные по текущим правилам просмотра; они не подтверждают, что именно было передано модели.</p>}
+        <p>Дата диалога: {job.evidence_context.temporal.occurred_on || 'неизвестна'} · {dateOriginLabel(job.evidence_context.temporal.origin)}.</p>
+        <p>Режим проверки: {job.evidence_context.assessment.mode === 'snapshot_review' ? 'По сведениям на выбранную дату' : 'На дату диалога'} · {job.evidence_context.assessment.scope || 'область не указана'} · {job.evidence_context.assessment.as_of || 'дата неизвестна'}</p>
+        {job.evidence_context.assessment.pack_id && <p>Набор источников: {job.evidence_context.assessment.pack_id} · {job.evidence_context.assessment.pack_sha256}</p>}
+        {job.evidence_context.references.map(r => <p key={r.reference_id}>{r.reference_id}: {r.usable ? 'Применим' : `Не применим: ${r.rejection_reasons.map(referenceReason).join('; ')}`}</p>)}
       </details>}
-      <h2 style={{marginTop: 24}}>Appeals & decisions ({job.appeals.length})</h2>{!job.appeals.length && <p className={styles.muted}>Use “Appeal this judgment” on a criterion to request a review. The original assessment is preserved.</p>}{job.appeals.map(a => <article key={a.id} className={styles.card} data-testid={`appeal-${a.criterion_id}`}>
-        <b>{a.criterion_id} · {a.status}</b><p>{a.author}: {a.reason}</p><button onClick={() => onEvidence([], a.message_ids)}>Show appeal evidence</button>
-        {a.status === 'open' ? <button onClick={() => onResolve(a)}>Review appeal</button> : <><p>{a.resolution?.reviewer}: {a.resolution?.rationale}</p><p>Before: {a.resolution?.before.answer ?? a.resolution?.before.status} → After: {a.resolution?.after.answer ?? a.resolution?.after.status}</p>
-          {a.resolution?.supporting_references?.map(ref => <button key={ref.id} onClick={() => onReference(ref)}>Review source: {ref.id}</button>)}</>}
+      {job.appeals.length > 0 && <h2 id="review-appeals" className={reviewStyles.appealsHeading}>Запросы на пересмотр ({job.appeals.length})</h2>}{job.appeals.map(a => <article key={a.id} className={styles.card} data-testid={`appeal-${a.criterion_id}`}>
+        <b>{checklist.criteria.find(c => c.id === a.criterion_id)?.title || a.criterion_id} · {statusLabel(a.status)}</b><p>{a.author}: {a.reason}</p><button onClick={() => onEvidence([], a.message_ids)}>Показать выбранные сообщения</button>
+        {a.status === 'open' ? <button onClick={() => onResolve(a)}>Рассмотреть запрос</button> : <><p>{a.resolution?.reviewer}: {a.resolution?.rationale}</p><p>Было: {a.resolution?.before.answer ?? statusLabel(a.resolution?.before.status || '')} → Стало: {a.resolution?.after.answer ?? statusLabel(a.resolution?.after.status || '')}</p>
+          {a.resolution?.supporting_references?.map(ref => <button key={ref.id} onClick={() => onReference(ref)}>Источник решения: {ref.id}</button>)}</>}
       </article>)}
-      <details className={styles.card}><summary>Original AI JSON & provenance</summary><p>Response: {job.record?.response_id} · Prompt: {job.record?.prompt_version}</p>
-        {job.record?.evaluation?.source_citations && <p>Source citations: {Object.keys(job.record.evaluation?.source_citations.selections).length} selections resolved from preserved originals. Quote text comes from the selected sources.</p>}
+      <details className={`${styles.card} ${reviewStyles.secondary}`}><summary>Техническая запись</summary><p>Ответ модели: {job.record?.response_id} · Версия инструкции: {job.record?.prompt_version}</p>
+        {job.record?.evaluation?.source_citations && <p>Цитат из сохранённых оригиналов: {Object.keys(job.record.evaluation?.source_citations.selections).length}. Текст цитат взят из выбранных источников.</p>}
         <pre>{JSON.stringify(job.record, null, 2)}</pre></details>
     </>}
-  </>
-}
-
-function hasBooleanFlagScale(criterion: Checklist['criteria'][number]) {
-  // Flag fractions are all zero and cannot identify the meaning of a custom value.
-  // Only the standard yes/no vocabulary has the existing active/inactive convention.
-  return criterion.kind === 'flag' && criterion.levels.length === 2
-    && criterion.levels.some(level => level.value === 'yes') && criterion.levels.some(level => level.value === 'no')
-}
-
-function ReviewPriorities({effective, checklist}: {effective: NonNullable<JobDetail['effective']>; checklist: Checklist}) {
-  const entries = effective.judgments.flatMap(judgment => {
-    const criterion = checklist.criteria.find(c => c.id === judgment.criterion_id)
-    if (!criterion) return []
-    const level = criterion.levels.find(level => level.value === judgment.answer)
-    const points = effective.score.contributions.find(c => c.criterion_id === criterion.id)?.points
-    const loss = judgment.status === 'scored' && criterion.kind !== 'flag' && level
-      ? Math.max(0, criterion.weight * Math.max(...criterion.levels.map(l => l.fraction)) - (points ?? criterion.weight * level.fraction)) : 0
-    return [{judgment, criterion, loss}]
-  })
-  const flags = entries.filter(e => hasBooleanFlagScale(e.criterion) && e.judgment.status === 'scored' && effective.score.flags[e.criterion.id] === 'yes')
-  const customFlags = entries.filter(e => e.criterion.kind === 'flag' && !hasBooleanFlagScale(e.criterion) && e.judgment.status === 'scored')
-  const reviewCriteria = new Set([...effective.score.unresolved_criteria, ...(effective.score.review_recommended_criteria || [])])
-  const unresolved = entries.filter(e => e.judgment.status === 'needs_review' || !!e.judgment.uncertainty?.trim() || reviewCriteria.has(e.criterion.id))
-  const deductions = entries.filter(e => e.loss > 0.00001).sort((a, b) => b.loss - a.loss)
-  const priorities = [
-    ...flags.map(e => ({...e, kind: 'flag', label: `Flagged finding · ${e.judgment.answer}`, reason: e.judgment.explanation})),
-    ...customFlags.map(e => ({...e, kind: 'custom-flag', label: `Flag answer: ${e.judgment.answer}`, reason: e.judgment.explanation})),
-    ...unresolved.map(e => ({...e, kind: 'review', label: e.judgment.status === 'scored' ? 'Review recommended' : 'Needs review', reason: e.judgment.uncertainty || e.judgment.explanation})),
-    ...deductions.slice(0, 3).map(e => ({...e, kind: 'deduction', label: `−${Number(e.loss.toFixed(2))} weighted pts`, reason: e.judgment.explanation})),
-  ]
-  function inspect(id: string) {
-    const target = document.getElementById(`criterion-${id}`)
-    target?.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'})
-    target?.focus({preventScroll: true})
-  }
-  function excerpt(text: string) {
-    const clean = text.replace(/\s+/g, ' ').trim()
-    if (clean.length <= 145) return clean
-    const cut = clean.slice(0, 145), space = cut.lastIndexOf(' ')
-    return cut.slice(0, space > 90 ? space : 145) + '…'
-  }
-  return <section className={styles.priorities} aria-label="Review priorities">
-    <div className={styles.priorityHeading}><Icon name="list" size={16}/><h3>Review priorities</h3><span>Current saved result</span></div>
-    {priorities.length ? priorities.map(item => <button key={`${item.kind}-${item.criterion.id}`} className={styles.priorityItem} data-priority={item.kind} onClick={() => inspect(item.criterion.id)}>
-      <span className={styles.priorityTitle}><b>{item.criterion.title}</b><small>{item.label}</small></span>
-      <span className={styles.priorityReason}>{excerpt(item.reason)}</span>
-    </button>) : <p className={styles.priorityClear}>No deductions or criteria recommended for review in this assessment.</p>}
-    {deductions.length > 0 && <p className={styles.priorityNote}>Showing {Math.min(3, deductions.length)} of {deductions.length} deductions by weighted point loss, before N/A normalization. Select a finding to inspect its evidence.</p>}
-    {(flags.length > 0 || customFlags.length > 0) && <p className={styles.priorityNote}>Flags are separate from the numeric score.{customFlags.length > 0 ? ' Custom flag answers retain their configured meaning; they are not classified as pass or fail.' : ''}</p>}
-  </section>
-}
-
-function failureTitle(code: string) {
-  if (code.includes('budget')) return 'Evaluation allowance reached'
-  if (code.includes('credit') || code.includes('quota')) return 'Model provider credits unavailable'
-  if (code.includes('invalid_evaluation') || code.includes('validation')) return 'The assessment could not be validated'
-  if (code.includes('connection') || code.includes('timeout')) return 'The model provider did not respond'
-  if (code.includes('restart') || code.includes('interrupted')) return 'This evaluation was interrupted'
-  return 'This evaluation did not complete'
-}
-function failureAdvice(code: string) {
-  if (code.includes('budget')) return 'Check the batch allowance and remaining local limit before retrying. No replacement score has been assigned.'
-  if (code.includes('credit') || code.includes('quota')) return 'Check the provider account balance before retrying. Previous results remain available.'
-  if (code.includes('invalid_evaluation') || code.includes('validation')) return 'The response did not meet the evidence or result requirements. Review the failure details, then explicitly retry if needed.'
-  if (code.includes('connection') || code.includes('timeout')) return 'Check connectivity and provider availability. A retry creates a new attempt and may incur a charge.'
-  if (code.includes('restart') || code.includes('interrupted')) return 'The service stopped before this attempt finished. Check its details before making a new billable attempt.'
-  return 'No assessment is available from this attempt. Review the details before retrying.'
+  </div>
 }
 
 function basisLabel(basis: string) {
   const labels: Record<string, string> = {
-    not_required: 'The decision follows from the conversation and checklist; no external factual verification is required.',
-    observed_interaction: 'The factual basis is an outcome observed in this conversation.',
-    observable_commitment: 'The operator made the stated commitment. This does not establish that a future action has completed.',
-    policy_reference: 'Applicable reference material supports the factual basis of this decision.',
-    private_record: 'An authoritative system record supports the relevant private account fact.',
-    mixed_sources: 'Conversation evidence and applicable reference material jointly support the decision.',
-    unverified: 'Material information is missing or unverified. Review is recommended; the recorded grade does not verify the missing information.',
+    not_required: 'Решение следует из диалога и чек-листа. Проверка по внешним источникам не требуется.',
+    observed_interaction: 'Решение основано на результате, который виден в диалоге.',
+    observable_commitment: 'Оператор дал указанное обещание. Это не подтверждает, что обещанное действие уже выполнено.',
+    policy_reference: 'Решение подтверждается применимыми справочными материалами.',
+    private_record: 'Факт о клиентском счёте подтверждается достоверной системной записью.',
+    mixed_sources: 'Решение подтверждается диалогом и применимыми справочными материалами.',
+    unverified: 'Существенные сведения отсутствуют или не проверены. Нужна дополнительная проверка; выставленная оценка не подтверждает недостающие сведения.',
   }
-  return labels[basis] || basis.replaceAll('_', ' ')
+  return labels[basis] || 'Основание не указано.'
 }
 function reviewLabel(status: string) {
-  const labels: Record<string, string> = {confirmed: 'Independent review agreed on grades', adjudicated: 'Independent review completed',
-    needs_human_review: 'Reviewer attention required', review_failed: 'Independent review could not complete', budget_limited: 'Independent review stopped at its allowance'}
-  return labels[status] || status.replaceAll('_', ' ')
+  const labels: Record<string, string> = {confirmed: 'Повторная проверка подтвердила оценки', adjudicated: 'Повторная проверка завершена',
+    needs_human_review: 'Нужна проверка специалиста', review_failed: 'Повторную проверку не удалось завершить', budget_limited: 'Повторная проверка остановлена из-за лимита'}
+  return labels[status] || 'Статус повторной проверки не указан'
+}
+
+function criteriaCount(count: number) {
+  const ending = count % 100 >= 11 && count % 100 <= 14 ? 'критериев' : count % 10 === 1 ? 'критерий' : count % 10 >= 2 && count % 10 <= 4 ? 'критерия' : 'критериев'
+  return `${count} ${ending}`
+}
+
+function statusLabel(status: string) {
+  const labels: Record<string, string> = {
+    completed: 'Проверка завершена', failed: 'Не удалось завершить', queued: 'В очереди', running: 'Выполняется проверка',
+    cancelled: 'Отменено', interrupted: 'Прервано', scored: 'Оценено', not_applicable: 'Не применяется', needs_review: 'Нужно решение',
+    supported: 'Подтверждено', contradicted: 'Опровергнуто', unverified: 'Не подтверждено',
+    answered: 'Ответ получен', partial: 'Ответ частичный', unanswered: 'Без ответа', next_step: 'Предложен следующий шаг', withdrawn: 'Клиент снял вопрос',
+    explicit: 'Прямой ответ', implied: 'Ответ следует из контекста', none: 'Не указано',
+    reported_state: 'Сообщение о состоянии', control_visible: 'Элемент интерфейса виден', action_completed: 'Действие выполнено',
+    task_completed: 'Задача выполнена', system_record: 'Системная запись', interaction: 'Ход диалога', policy: 'Правила и условия',
+    private_record: 'Клиентские данные', grading_rule: 'Правило оценки', commitment: 'Обещание оператора',
+    none_established: 'Не установлены', present: 'Сохраняются', uncertain: 'Неясны',
+    open: 'Ожидает решения', accepted: 'Пересмотр принят', rejected: 'Пересмотр отклонён',
+  }
+  return labels[status] || 'Статус не указан'
+}
+
+function dateOriginLabel(origin: string) {
+  const labels: Record<string, string> = {explicit: 'Указана в исходных данных', iso_timestamp_consensus: 'Определена по времени сообщений', conflict: 'В датах есть противоречия', unavailable: 'Не удалось определить по сообщениям'}
+  return labels[origin] || 'Источник даты не указан'
+}
+
+function referenceReason(reason: string) {
+  const labels: Record<string, string> = {
+    reference_context_scope_mismatch: 'тема не совпадает с выбранным контекстом', reference_context_scope_unconfirmed: 'тема выбранного контекста не подтверждена',
+    missing_scope: 'не указана область применения', scope_mismatch: 'не совпадает область применения', source_date_conflict: 'даты источников противоречат друг другу',
+    missing_assessment_date: 'не указана дата проверки', missing_occurrence_date: 'неизвестна дата диалога', snapshot_date_mismatch: 'не совпадает дата сведений',
+    before_validity_window: 'диалог состоялся до начала действия источника', after_validity_window: 'на дату диалога источник уже не действовал',
+  }
+  return labels[reason] || 'требуется уточнить применимость источника'
 }

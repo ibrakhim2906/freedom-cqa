@@ -298,6 +298,8 @@ def test_context_and_omission_fields_do_not_remove_independently_required_deduct
 @pytest.mark.parametrize("index", [0, 1])
 def test_recorded_failures_remain_rejected_and_explicit_test_encodings_preserve_grades(index):
     row = replay_rows()[index]
+    # The frozen official-facts-v1 provider responses quote reviewed015 verbatim.
+    checklist = load_checklist(Path(__file__).resolve().parents[1] / "checklists/freedom-reviewed-015.json")
     conversation = Conversation.model_validate(row["conversation"])
     original = row["rejected_coverage_v1_wire"]
     authored = row["authored_coverage_v2_wire"]
@@ -305,14 +307,14 @@ def test_recorded_failures_remain_rejected_and_explicit_test_encodings_preserve_
     with pytest.raises(ValueError):
         result = decode_evaluation(json.dumps(original), require_claim_dependencies=True,
                                    require_semantic_coverage=True)
-        validate_evaluation(result, conversation, load_checklist(), require_audit=True)
+        validate_evaluation(result, conversation, checklist, require_audit=True)
     with pytest.raises(ValueError):
         decode_evaluation(json.dumps(original), require_claim_dependencies=True,
                           require_semantic_coverage=True, require_evidence_contract=True)
     result = decode_evaluation(json.dumps(authored), require_claim_dependencies=True,
                                require_semantic_coverage=True, require_evidence_contract=True)
-    validate_evaluation(result, conversation, load_checklist(), require_audit=True)
-    assert calculate_score(result, load_checklist())["total"] == [76.92, 77.69][index]
+    validate_evaluation(result, conversation, checklist, require_audit=True)
+    assert calculate_score(result, checklist)["total"] == [76.92, 77.69][index]
     assert next(j for j in result.judgments if j.criterion_id == "consultation").answer == "10"
     if index:
         claim = result.factual_claims[0]

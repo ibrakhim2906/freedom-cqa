@@ -54,19 +54,20 @@ export type Conversation = {id: string; channel: string; language: string; messa
   speaker: string; text: string}[]; references: Reference[]; knowledge_scope?: string|null; occurred_on?: string|null;
   occurred_on_origin?: string|null; reference_context?: ReferenceSelectionContext|null}
 export type ConversationRow = {id: string; external_id: string; content_hash: string; created_at: string;
+  display_title?: string;
   channel: string; language: string; message_count: number; reference_count: number;
   latest_assessment?: {id: string; status: string; total: number|null; provisional: boolean;
-    review_recommended_count: number; open_appeals?: number; created_at?: string}|null}
+    review_recommended_count: number; open_appeals?: number; created_at?: string; is_demo?: boolean}|null}
 export type ConversationDetail = ConversationRow & {content: Conversation; metadata: {recording_url?: string};
   resolved_recording?: {url: string; source_revision_id: string; origin: 'matching_source_revision'}|null}
-export type ChecklistRow = {id: string; external_id: string; version: string; content_hash: string; title: string; content: Checklist}
-export type Score = {total: number|null; provisional: boolean; flags: Record<string,string>; unresolved_criteria: string[]; review_recommended_criteria?: string[];
+export type ChecklistRow = {id: string; external_id: string; version: string; content_hash: string; title: string; content: Checklist; created_at?: string}
+export type Score = {earned_points?: number; applicable_weight?: number; total: number|null; provisional: boolean; flags: Record<string,string>; unresolved_criteria: string[]; review_recommended_criteria?: string[];
   score_bounds: {lower: number|null; upper: number|null}; contributions: {criterion_id: string; status: string; points: number|null}[]}
 export type Appeal = {id: string; job_id: string; criterion_id: string; author: string; reason: string; message_ids: string[];
   proposed: {status: Judgment['status']; answer: string|null}|null; status: string; created_at: string;
   resolution: {reviewer: string; rationale: string; revision: number; before: Judgment; after: Judgment; supporting_references?: Reference[];
     assessment_context?: AssessmentContext}|null}
-export type JobRow = {id: string; batch_id: string; conversation_id: string; checklist_id: string; status: string;
+export type JobRow = {id: string; batch_id: string; conversation_id: string; checklist_id: string; status: string; is_demo?: boolean;
   review_revision: number; created_at: string; started_at: string|null; finished_at: string|null; retry_of: string|null}
 export type JobDetail = JobRow & {conversation: ConversationDetail; checklist: ChecklistRow; appeals: Appeal[];
   evidence_context?: EvidenceContext;
@@ -76,10 +77,11 @@ export type JobDetail = JobRow & {conversation: ConversationDetail; checklist: C
     factual_claims: FactualClaim[];
     assertion_groups?: AssertionGroup[]|null; source_citations?: SourceCitationAudit|null;
     deductions: {criterion_id: string; rule_quote: string; defect: string; overlap_note: string}[]}|null;
+    demo?: {version: string; prepared: boolean; label: string; description: string};
     score: Score|null; error: string|null; model: string; prompt_version: string; workflow_version: string; response_id: string|null;
     usage: {estimated_cost_usd: number; input_tokens: number; output_tokens: number}|null;
     attempt_count: number; latency_seconds: number; billing_state?: string; validation_reason?: string;
-    repair_skipped?: string; error_detail?: string; budget_required_usd?: number; budget_available_usd?: number;
+    repair_skipped?: string; error_detail?: string; api_error_code?: string|null; budget_required_usd?: number; budget_available_usd?: number;
     assessment_context?: AssessmentContext;
     review?: {status: 'confirmed'|'adjudicated'|'needs_human_review'|'review_failed'|'budget_limited'|'not_required'; criterion_ids: string[]; disagreements: string[]; changed_criteria: string[]; coverage_disagreement?: boolean; reviewer_limitations?: Record<string,string>; error?: string};
     assessment?: {contract_version: string; transport?: {judgments: Record<string, {evidence_span_ids: string[]; counterevidence_span_ids: string[]; factual_support_span_ids: string[]}>};

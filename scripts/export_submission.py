@@ -5,7 +5,7 @@ import json
 import os
 from pathlib import Path
 
-from backend.importing import parse_import
+from backend.importing import parse_import, validate_source_envelope
 from cqa.models import Checklist, Conversation
 from cqa.rubric import load_checklist
 from cqa.settings import ROOT
@@ -14,6 +14,23 @@ from cqa.submission import build_submission
 
 def read(path):
     return json.loads(path.read_text(encoding="utf-8-sig"))
+
+
+def validate_source_group(content, split):
+    """Reject an explicitly failed response or known DEV input labelled PROD."""
+    try:
+        payload = json.loads(content)
+    except json.JSONDecodeError:
+        return  # parse_import also supports JSONL; it validates that format below.
+    if not isinstance(payload, dict):
+        return
+    validate_source_envelope(payload)
+    envelope = payload.get("data")
+    groups = [payload.get("dataset_group_id")]
+    if isinstance(envelope, dict):
+        groups.append(envelope.get("dataset_group_id"))
+    if split == "prod" and any(str(group or "").strip().upper() == "DEV" for group in groups):
+        raise ValueError("DEV cannot be exported as PROD; use the actual organizer control dataset")
 
 
 def main():
@@ -35,7 +52,12 @@ def main():
     args = parser.parse_args()
     if args.correction_report and not (args.correction_reason or "").strip():
         parser.error("--correction-report requires an explicit --correction-reason")
-    conversations = [c for c, _ in parse_import(args.source.read_text(encoding="utf-8-sig"))]
+    source_content = args.source.read_text(encoding="utf-8-sig")
+    try:
+        validate_source_group(source_content, args.split)
+    except ValueError as error:
+        parser.error(str(error))
+    conversations = [c for c, _ in parse_import(source_content)]
     entries, reassessed_ids = {}, set()
     selected_reports = ([(p, "original") for p in args.report] +
                         [(p, "completion") for p in args.completion_report] +

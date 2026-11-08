@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import re
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -31,18 +32,60 @@ from .contracts import (
     RetryRequest,
     RunRequest,
 )
+from .custom_references import register_custom_reference_routes
+from .demo import open_demo
 from .importing import parse_import
 from .recordings import matching_recording
 from .service import Workflow, effective_result, validate_human_revision
 from .storage import Appeal, Batch, Document, Job, Store, now
 
 
+def conversation_display_title(content: dict) -> str:
+    """Use a short excerpt of the customer's request without changing its language."""
+    greetings = {
+        "hi", "hello", "hey", "hi there", "hello there", "good morning", "good afternoon", "good evening",
+        "здравствуйте", "здравствуй", "привет", "добрый день", "доброе утро", "добрый вечер", "алло",
+        "сәлем", "сәлеметсіз бе", "сәлеметсіздер ме", "қайырлы таң", "қайырлы күн", "қайырлы кеш",
+        "salom", "assalomu alaykum", "assalom alaykum", "hola", "buenos días", "buenas tardes", "buenas noches",
+        "olá", "oi", "bom dia", "boa tarde", "boa noite",
+        "yes", "no", "ok", "okay", "thanks", "thank you", "да", "нет", "хорошо", "спасибо", "рахмет",
+    }
+    placeholders = {
+        "inaudible", "unintelligible", "silence", "noise", "audio", "voice message", "image", "attachment",
+        "message deleted", "deleted message", "empty message", "call started", "call ended", "customer joined",
+        "неразборчиво", "неразборчивая речь", "тишина", "пауза", "шум", "аудио", "голосовое сообщение",
+        "изображение", "вложение", "сообщение удалено", "пустое сообщение", "звонок начат", "звонок завершён",
+    }
+    greeting_pattern = "(?:" + "|".join(re.escape(greeting) for greeting in greetings) + ")"
+    for message in content.get("messages", []):
+        if message.get("speaker") not in {"client", "customer"}:
+            continue
+        text = " ".join(message.get("text", "").split())
+        words = re.findall(r"[^\W_]+", text.casefold())
+        normalized = " ".join(words)
+        greeting_only = re.fullmatch(rf"{greeting_pattern}(?: {greeting_pattern})*", normalized)
+        if not any(character.isalpha() for character in text) or greeting_only or normalized in placeholders:
+            continue
+        # Keep words intact where possible, reserving one character for the ellipsis.
+        if len(text) > 110:
+            excerpt = text[:109]
+            if not text[109].isspace() and " " in excerpt:
+                excerpt = excerpt.rsplit(" ", 1)[0]
+            text = excerpt.rstrip() + "…"
+        return text
+    channel = "Звонок" if content.get("channel") == "voice call" else "Чат"
+    language = str(content.get("language") or "").strip().upper()
+    language_name = {"RU": "на русском", "KZ": "на казахском", "KK": "на казахском", "EN": "на английском"}.get(language, language)
+    return f"{channel} {language_name}" if language_name else channel
+
+
 def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator):
     settings = settings or Settings.load()
     store = Store(database_path or Path(os.environ.get("CQA_APP_DB", str(ROOT / "data/runtime/app.sqlite3"))))
     workflow = Workflow(store, settings, evaluator_factory)
+    ui_checklist = load_checklist()
     with store.session.begin() as session:
-        store.document(session, "checklist", load_checklist().model_dump())
+        store.document(session, "checklist", ui_checklist.model_dump())
 
     @asynccontextmanager
     async def lifespan(_):
@@ -80,6 +123,7 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
                  "content_hash": doc.content_hash, "created_at": doc.created_at}
         if doc.kind == "conversation":
             value.update(channel=doc.content["channel"], language=doc.content["language"],
+                         display_title=conversation_display_title(doc.content),
                          message_count=len(doc.content["messages"]), reference_count=len(doc.content.get("references", [])))
         else:
             value.update(title=doc.content["title"], content=doc.content)
@@ -90,13 +134,20 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
                     if session is not None and not (doc.extra or {}).get("recording_url") else None)
         return value
 
+    register_custom_reference_routes(app, store, document_view)
+
+    @app.post("/api/demo/open")
+    async def demo():
+        return open_demo(store, ui_checklist)
+
     def appeal_view(appeal):
         return {key: getattr(appeal, key) for key in ["id", "job_id", "criterion_id", "author", "reason", "message_ids",
                                                     "proposed", "status", "resolution", "created_at", "resolved_at"]}
 
     def job_view(job):
-        return {key: getattr(job, key) for key in ["id", "batch_id", "conversation_id", "checklist_id", "status",
-                                                 "retry_of", "review_revision", "created_at", "started_at", "finished_at"]}
+        return {**{key: getattr(job, key) for key in ["id", "batch_id", "conversation_id", "checklist_id", "status",
+                  "retry_of", "review_revision", "created_at", "started_at", "finished_at"]},
+                "is_demo": bool((job.record or {}).get("demo"))}
 
     @app.get("/api/config")
     async def config():
@@ -106,7 +157,7 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
         except ValueError:
             configured = False
         return {"api_key_configured": configured, "model": settings.model, "strategy": settings.strategy,
-                "default_checklist": {"id": load_checklist().id, "version": load_checklist().version},
+                "default_checklist": {"id": ui_checklist.id, "version": ui_checklist.version},
                 "ledger": workflow.ledger.summary(), "worker_concurrency": 1,
                 "audio_analysis_available": False}
 
@@ -156,6 +207,7 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
                         "review_recommended_count": len(review_ids),
                         "open_appeals": sum(a.status == "open" for a in appeals),
                         "source": effective["source"] if effective else None,
+                        "is_demo": bool((job.record or {}).get("demo")),
                     }
                 result.append(value)
             return result
@@ -322,6 +374,8 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
     async def submit_appeal(job_id: str, body: AppealRequest):
         with store.session.begin() as session:
             job = require(session, Job, job_id)
+            if (job.record or {}).get("demo"):
+                raise HTTPException(409, "Учебный разбор подготовлен заранее. Пересмотр доступен для результатов проверки ваших данных.")
             if job.status != "completed":
                 raise HTTPException(409, "Only a completed evaluation can be appealed")
             conversation = Conversation.model_validate(session.get(Document, job.conversation_id).content)
@@ -395,9 +449,13 @@ def create_app(*, settings=None, database_path=None, evaluator_factory=Evaluator
     if dist.exists():
         app.mount("/assets", StaticFiles(directory=dist / "assets"), name="assets")
 
+        @app.get("/favicon.svg")
+        async def favicon():
+            return FileResponse(dist / "favicon.svg", media_type="image/svg+xml")
+
         @app.get("/")
         async def index():
-            return FileResponse(dist / "index.html")
+            return FileResponse(dist / "index.html", headers={"Cache-Control": "no-cache"})
 
     return app
 

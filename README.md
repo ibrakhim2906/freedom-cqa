@@ -1,31 +1,57 @@
 # Freedom CQA
 
-A conversation-quality review workspace for Freedom Broker. Evaluate operator
-conversations, inspect source evidence, review disputed grades, and compare results
-after changing the checklist. Supports Russian, Kazakh and English chats and
-supplied call transcripts.
+Приложение для проверки качества клиентских диалогов: чатов и расшифровок
+звонков на русском, казахском и английском языках. Оно выставляет оценку по
+выбранному чек-листу, показывает обоснование и цитаты, позволяет изменить
+критерии и запросить пересмотр результата.
 
-## Setup
+**Для самостоятельной проверки начните с [краткой инструкции](docs/JUDGE_QUICKSTART.md).**
+В приложении раздел **«Настройка и помощь»** показывает состояние подключения
+и объясняет, как провести первую проверку.
 
-Use **Python 3.12 or newer**, **uv**, **Node.js 24**, and **pnpm 11.25.0**.
-The repository includes `uv.lock` and `frontend/pnpm-lock.yaml`; the launchers
-install locked dependencies, build the frontend, and start one local server.
-Run the commands below from the cloned repository root.
+## Запуск из исходного кода
 
-Copy `.env.example` to `.env` and set `OPENAI_API_KEY` in that local file.
-The key stays on the backend. The UI can start without a key; a valid key and
-provider credit are required when you choose **Evaluate**.
+Клонируйте репозиторий с GitHub и откройте его папку в терминале.
+Команды ниже выполняются из корня репозитория. Нужны **uv**, **Node.js 24 или новее**
+и **pnpm 11.25.0**. Подходящий Python версии 3.12 или новее установит `uv`.
+Первый запуск требует интернета для установки зависимостей и сборки интерфейса.
 
-**Windows — PowerShell**
+Сначала проверьте наличие инструментов. Эти команды ничего не устанавливают
+и не запускают сервер:
 
 ```powershell
-Copy-Item .env.example .env
-# Edit .env and set OPENAI_API_KEY.
+# Windows PowerShell
+./scripts/start-local.ps1 -CheckOnly
+```
+
+```sh
+# Linux
+sh scripts/start-local.sh --check
+```
+
+Если чего-то не хватает, команда покажет инструкцию. Такая проверка не
+подтверждает доступ к модели, наличие средств или доступность выбранного порта.
+
+Для платных проверок задайте `OPENAI_API_KEY` в локальном файле `.env`.
+Если файла ещё нет, скопируйте `.env.example`; существующий `.env` не заменяйте.
+Скрипт запуска также создаёт этот файл, если он отсутствует. Ключ хранится
+на сервере: его не нужно вводить в браузере или добавлять в набор данных.
+
+```powershell
+# Windows PowerShell
 ./scripts/start-local.ps1
 ```
 
-If your PowerShell policy prevents running a local script, use these same steps
-manually:
+```sh
+# Linux
+sh scripts/start-local.sh
+```
+
+Откройте [http://127.0.0.1:8000](http://127.0.0.1:8000). Другой порт можно
+указать так: `./scripts/start-local.ps1 -Port 8001` или
+`sh scripts/start-local.sh 8001`. После изменения `.env` перезапустите сервер.
+Не закрывайте терминал во время работы; для остановки нажмите Ctrl+C.
+Если PowerShell блокирует запуск скрипта, выполните те же шаги вручную:
 
 ```powershell
 uv sync --locked --no-dev
@@ -36,79 +62,82 @@ Pop-Location
 uv run --locked --no-dev cqa-serve
 ```
 
-**Linux — shell**
+Новая установка содержит основной чек-лист, но ещё не содержит диалогов.
+Кнопка **«Открыть пример»** загружает учебный диалог с готовым разбором бесплатно,
+без ключа. Для новой оценки своих данных нужны ключ и средства на счёте провайдера.
+Локальные базы создаются в `data/runtime/`. Закрытые рабочие данные и результаты
+предыдущих запусков для работы приложения не нужны.
 
-```sh
-cp .env.example .env
-# Edit .env and set OPENAI_API_KEY.
-sh scripts/start-local.sh
-```
+## Первое знакомство
 
-Open **http://127.0.0.1:8000**. Stop the server with **Ctrl+C**.
-For another port, use `./scripts/start-local.ps1 -Port 8001` on Windows or
-`sh scripts/start-local.sh 8001` on Linux.
+1. Нажмите **«Открыть пример»**. Откроется **«Учебный разбор»**: диалог,
+   справочная статья и подготовленная вручную оценка **87,5 из 100**.
+   Пример не вызывает модель и не требует ключа. Это демонстрационный разбор,
+   а не ответ модели или эталонная оценка организаторов.
+2. Откройте **«Обоснование и цитаты»** и нажмите на цитату: приложение выделит
+   её в исходном тексте. Режим **«Рядом с диалогом»** показывает оба окна.
+3. В разделе **«Критерии оценки»** нажмите **«Создать копию»**, откройте нужный
+   критерий и измените правило или баллы. Нажмите **«Сохранить чек-лист»**.
+   Копия станет отдельным личным чек-листом; основной сохранится без изменений.
+   Редактирование бесплатно; незаполненные поля будут указаны перед сохранением.
+4. Для настоящей проверки загрузите свой диалог, выберите чек-лист
+   и лимит расходов, затем нажмите **«Начать проверку»**. Здесь уже нужны
+   настроенный ключ и средства на счёте провайдера.
 
-A fresh checkout starts with an empty workspace and the supplied
-**reviewed-016 checklist**. It creates local databases under ignored
-`data/runtime/`; private datasets, prior runtime databases and generated artifacts
-are not needed to start it.
+Для своих данных нажмите **«Загрузить данные»** → **«Вставить текст»**.
+Укажите тип и язык диалога, вставьте сообщения с пометками `Клиент:`
+и `Оператор:`, затем откройте **«Проверить перед загрузкой»**, просмотрите
+все сообщения и нажмите **«Добавить диалог»**. Строки-продолжения, в том числе
+с двоеточиями, остаются внутри предыдущей реплики. Для готового JSON или JSONL выберите
+**«Загрузить файл»**. После загрузки выбран только первый диалог;
+проверка не запускается автоматически. Чтобы проверить несколько диалогов,
+выделите их и нажмите **«Проверить выбранные»**. Примеры есть
+в [краткой инструкции](docs/JUDGE_QUICKSTART.md).
 
-The default model is `gpt-6.1-sol` with medium reasoning and the compact
-`rubric-assessor-v3` evaluator. `.env.example` documents the model, timeout and
-spending settings in one place. `CQA_MAX_SPEND_USD` limits cumulative estimated
-API spending in this checkout; the UI also requires a budget for each batch.
-Restart the server after changing `.env`.
+Свои правила и справочные материалы можно приложить к диалогу: над его текстом
+сразу доступна кнопка **«Добавить свой документ»**. Нажмите её, загрузите TXT
+или MD либо вставьте название и текст. Область применения, источник и даты
+необязательны; неизвестные сведения не подставляются автоматически.
+**«Прикрепить документы»** сохраняет версию диалога без запуска модели.
 
-## Evaluate and review
+## Расходы и ограничения
 
-1. **Import** your JSON or JSONL conversations. Canonical conversations and organizer
-   `data.records` files are supported. Roles, timestamps and source text are preserved.
-2. **Choose a checklist** or save a new version with different criteria, instructions,
-   weights, levels or N/A conditions.
-3. **Evaluate** selected conversations and follow saved progress. Every new evaluation
-   uses the actual model API. Standard mode normally makes one assessment call;
-   **Independent review** adds a blind assessment and, when needed, adjudication.
-   Repairs and review calls count toward the batch budget.
-4. **Inspect** criterion grades, exact source evidence, weighted contributions,
-   uncertainty and serious-error flags. Evidence links highlight the original text.
-5. **Appeal** a criterion and record a review decision with its reasoning. The original
-   AI result remains preserved and the effective score is recalculated.
-6. **Compare or export** assessments, including results from changed checklists.
+По умолчанию используется `gpt-6.1-sol` с уровнем рассуждений medium.
+Настройки перечислены в `.env.example`. `CQA_MAX_SPEND_USD` задаёт общий лимит
+расчётных расходов для этой установки; у каждой группы диалогов есть свой
+лимит. Эти ограничения не пополняют баланс провайдера. Наличие ключа означает
+только, что он настроен, а не что запрос к модели уже успешно выполнен.
 
-The queue supports search and language/channel filters. Call recording links are
-preserved; direct audio files can play in the workspace. Model assessments use the
-supplied transcript and do not claim to evaluate pronunciation or diction from audio.
-Opening saved results, inspecting evidence and resolving appeals make no model calls.
+Обычная проверка, как правило, использует один запрос. Независимая перепроверка,
+исправление ответа модели и повторные попытки увеличивают расходы. Стоимость
+и время зависят от входных данных; [результаты замеров](docs/PERFORMANCE.md)
+не являются гарантией для нового запуска. Учебный разбор, просмотр сохранённых результатов,
+цитат и ручной пересмотр оценки не вызывают модель. Неизменившаяся проверка
+может использовать сохранённый результат.
 
-## How the assessment works
+При нехватке сведений оценка сопровождается пояснением. Отдельные отметки
+не прибавляют и не вычитают баллы. Звонки оцениваются по расшифровке:
+качество голоса, произношение и дикция не анализируются.
 
-The assessor reads the complete conversation and configured rubric, reconciles
-customer requests, then returns decisions with source selections and explanations.
-Code resolves quotations against immutable source text, validates the result, and
-computes weighted scores and N/A normalization. Serious-error flags stay separate
-from the numeric score.
+Интерфейс — на русском языке. Исходные диалоги, загруженные чек-листы,
+справочные документы и сохранённые обоснования показываются без перевода.
 
-Every applicable criterion receives a configured grade. Missing information remains
-visible beside that grade; an uncertain estimate is not presented as verified fact.
-The system distinguishes an appropriate next step from completed backend work and
-preserves the actual result of an unsuccessful or incomplete evaluation.
+Для проверки без обращения к модели из корня выполните `uv sync --frozen`,
+затем `uv run --frozen python -m pytest -q`. В папке `frontend` выполните
+`pnpm install --frozen-lockfile`, `node --test tests/*.test.mjs`,
+`pnpm run lint` и `pnpm run build`. Выбранная версия чек-листа и правила
+воспроизведения описаны в [конфигурации релиза](docs/RELEASE_CHECKLIST.md),
+результаты и ограничения — в [замерах](docs/PERFORMANCE.md).
 
-## Results and documentation
+## Документация
 
-- [Performance and limitations](docs/PERFORMANCE.md): measured quality checks,
-  latency, cost and remaining risks.
-- [DEV results](results/dev/results.json): organizer-format result file.
-- [Workflow guide](docs/WORKFLOW.md): supported imports, reference context, evidence,
-  appeals and persistence.
-- [Submission format](docs/SUBMISSION_FORMAT.md): result fields and scoring conventions.
-- [Technical stack](docs/STACK.md): application components and API choices.
+- [Краткая инструкция для проверки](docs/JUDGE_QUICKSTART.md).
+- [Подробный порядок работы](docs/WORKFLOW.md).
+- [Замеры и ограничения](docs/PERFORMANCE.md).
+- [Результаты DEV](results/dev/results.json) и [формат выгрузки](docs/SUBMISSION_FORMAT.md).
+- [Техническое устройство](docs/STACK.md).
 
-The reported development checks are not organizer Ground Truth accuracy or a
-promised competition score. Judges can run the application on fresh inputs and
-change the checklist through the same workflow.
-
-## Implementation
-
-React + TypeScript + CSS Modules; FastAPI + Pydantic; SQLite/SQLAlchemy; bounded
-model calls and persistent spending accounting. The local application uses
-self-identified reviewers and one server process.
+Внутренние замеры не являются точностью на эталонной разметке организаторов
+или обещанием конкурсного балла. В локальном прототипе имя проверяющего
+вводится вручную и не подтверждается учётной записью. Используйте один
+серверный процесс.

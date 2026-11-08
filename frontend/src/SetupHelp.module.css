@@ -1,0 +1,25 @@
+.help { color: #53695c; font-size: 13px; }
+.columns { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 28px; margin: 20px 0; }
+.columns > div { min-width: 0; }
+.readiness { margin: 18px 0; padding: 15px 18px; border: 1px solid #dce6df; border-radius: 10px; background: #f7faf8; }
+.heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.heading h3 { margin: 0; }
+.heading button { font-size: 12px; }
+.readiness ul { padding: 0; list-style: none; margin: 12px 0; }
+.readiness li { display: flex; justify-content: space-between; gap: 16px; padding: 6px 0; }
+.readiness b { color: #896025; font-weight: 600; }
+.readiness b[data-ok=true] { color: #276e43; }
+.readiness p { font-size: 12px; margin-bottom: 0; }
+.help details { border-top: 1px solid #e1e8e3; padding: 7px 0; }
+.help summary { font-size: 13px; }
+.help ol { padding-left: 22px; margin: 12px 0 16px; }
+.help li { margin-bottom: 11px; padding-left: 2px; }
+.readiness li { margin: 0; padding-left: 0; }
+.walkthrough { padding: 0 0 0 28px; border-left: 1px solid #e1e8e3; }
+.columns .readiness { margin-top: 0; }
+.actions { display: flex; gap: 7px; flex-wrap: wrap; }
+.actions button { font-size: 12px; }
+.actions button:first-child { background: #26804b; border-color: #26804b; color: white; }
+.problem { color: #9c4a37; }
+.help code { font-size: 12px; overflow-wrap: anywhere; }
+@media (max-width: 800px) { .columns { grid-template-columns: 1fr; gap: 20px; } .walkthrough { padding: 0; border: 0; } }
